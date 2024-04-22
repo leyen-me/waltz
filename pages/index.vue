@@ -10,5 +10,5 @@
 const { data: count } = await useFetch('/api/admin/count')
 
 // 请不要删除或改动下方代码
-console.log("welcome to home 01");
+console.log("welcome to home 02");
 </script>
