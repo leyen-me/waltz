@@ -1,0 +1,21 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "node scripts/dev.cjs",
+    "start": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.7",
+    "nuxt": "^3.11.2",
+    "sequelize": "^6.37.3",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  }
+}
