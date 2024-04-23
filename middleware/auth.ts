@@ -1,9 +1,9 @@
-import Cookies from "js-cookie";
-
 export default defineNuxtRouteMiddleware((to, from) => {
-  console.log(Cookies.get("token"));
-  
-  if (!Cookies.get("token")) {
+  const token = useCookie("token", {
+    default: () => "",
+    watch: false,
+  });
+  if (!token.value) {
     return navigateTo("/admin/login");
   }
 });
