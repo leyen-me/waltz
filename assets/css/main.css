@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Logo";
+  src: url("/assets/font/logo.ttf");
+}
+
+@font-face {
+  font-family: "Time";
+  src: url("/assets/font/time.otf");
+}
+
+html,
+body,
+#__nuxt {
+  background-color: #232323;
+  color: white;
+  height: 100%;
+}

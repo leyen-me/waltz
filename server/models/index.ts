@@ -22,6 +22,6 @@ sequelize.options.define = {
 };
 
 // 同步模型
-sequelize.sync({ force: true });
+
 
 export default sequelize;
