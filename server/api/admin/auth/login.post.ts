@@ -1,9 +1,9 @@
 import User from "@/server/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { secretKey } from "@/constans";
+import { secretKey } from "@/server/config";
 
-export default defineEventHandler(async (event) => {
+export default defineWrappedResponseHandler(async (event) => {
   // 账号/密码
   const { username, password } = await readBody(event);
 
@@ -16,16 +16,16 @@ export default defineEventHandler(async (event) => {
 
   // 没有用户
   if (!user) {
-    throw createError({ status: 500, message: "账号或密码错误" });
+    throw Error("账号或密码错误");
   }
 
   // 密码校验
   bcrypt.compare(password, user.password, (err, result) => {
     if (err) {
-      throw createError({ status: 500, message: "异常" });
+      throw Error("异常");
     } else {
       if (!result) {
-        throw createError({ status: 500, message: "账号或密码错误" });
+        throw Error("账号或密码错误");
       }
     }
   });
@@ -40,7 +40,6 @@ export default defineEventHandler(async (event) => {
     expiresIn: "24h",
   });
 
-  
   return {
     token,
   };

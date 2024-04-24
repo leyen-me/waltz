@@ -8,34 +8,25 @@
 
 <script setup lang="ts">
 import Cookies from 'js-cookie';
+import { usePostApi } from '~/utils/api';
+
 const username = ref("LEYEN")
 const password = ref("123456")
 
 const router = useRouter()
 
 const handleLogin = async () => {
-    const data = await useFetch('/api/admin/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({
+    try {
+        const { token } = await usePostApi('/api/admin/auth/login', {
             username: username.value,
             password: password.value
-        }),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-
-    const message = data.error.value && data.error.value.data.message
-    if (message) {
-        alert(message)
-        return
+        })
+        // 存储
+        Cookies.set("token", token)
+        // 回到主页
+        router.replace("/admin")
+    } catch (error: any) {
+        alert(error.message)
     }
-    const { token } = data.data.value
-
-    // 存储
-    Cookies.set("token", token)
-    // 回到主页
-    router.replace("/admin")
 }
-// login.post.ts
 </script>
