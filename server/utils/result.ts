@@ -1,9 +1,9 @@
 /**
- * defineOk({ msg:"xxx", data:"xxx" })
+ * defineOk({ code:"xxx", msg:"xxx", data:"xxx" })
  * @param param
  * @returns 
  */
-export const defineOk = <T>({ code = 200, msg = '', data }: MResponse<T>) => {
+export const defineOk = <T>({ code = 200, msg = 'ok', data }: MResponse<T>) => {
     return {
         code,
         msg,
@@ -12,7 +12,7 @@ export const defineOk = <T>({ code = 200, msg = '', data }: MResponse<T>) => {
 }
 
 /**
- * defineError({ msg:"xxx" })
+ * defineError({ code:"xxx", msg:"xxx" })
  * @param param
  * @returns 
  */

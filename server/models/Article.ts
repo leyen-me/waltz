@@ -45,5 +45,5 @@ Article.init(
 
 (async () => {
   // 每次运行都重新建表
-  await Article.sync({ force: true });
+  await Article.sync({ force: false });
 })();

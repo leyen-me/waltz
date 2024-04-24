@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  const token = event.headers.get("Authorization");
+  const token = event.headers.get("Authorization") || getQuery(event).Authorization as string;
   if (!token) {
     return defineError({ msg: "token为空" })
   }
