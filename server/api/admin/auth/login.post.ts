@@ -16,16 +16,17 @@ export default defineWrappedResponseHandler(async (event) => {
 
   // 没有用户
   if (!user) {
-    throw Error("账号或密码错误");
+    // throw Error("账号或密码错误");
+    return defineError({ msg: "账号或密码错误" });
   }
 
   // 密码校验
   bcrypt.compare(password, user.password, (err, result) => {
     if (err) {
-      throw Error("异常");
+      return defineError({ msg: "账号或密码错误" })
     } else {
       if (!result) {
-        throw Error("账号或密码错误");
+        return defineError({ msg: "账号或密码错误" })
       }
     }
   });
@@ -40,7 +41,9 @@ export default defineWrappedResponseHandler(async (event) => {
     expiresIn: "24h",
   });
 
-  return {
-    token,
-  };
+  return defineOk({
+    data: {
+      token
+    }
+  })
 });

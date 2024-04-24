@@ -1,4 +1,5 @@
 import type { EventHandler, EventHandlerRequest } from "h3";
+import { defineError } from "./result";
 
 /**
  * 全局异常处理，统一返回结果集
@@ -11,18 +12,8 @@ export const defineWrappedResponseHandler = <T extends EventHandlerRequest, D>(
   defineEventHandler<T>(async (event) => {
     try {
       const response = await handler(event);
-      const res: MResponse = {
-        code: 200,
-        data: response,
-        msg: "ok",
-      };
-      return res;
+      return response;
     } catch (err: any) {
-      const res: MResponse = {
-        code: 500,
-        data: null,
-        msg: err.message,
-      };
-      return res;
+      return defineError({ msg: err.message });
     }
   });

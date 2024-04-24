@@ -1,5 +1,5 @@
-type MResponse = {
-  code: number;
-  data: any;
-  msg: string;
+type MResponse<T> = {
+  code?: number;
+  data?: T;
+  msg?: string;
 };
