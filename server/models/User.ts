@@ -1,6 +1,6 @@
-import BaseModel from "./BaseModel";
+import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
-import sequelize from "./index";
+import sequelize from "../db";
 import bcrypt from "bcrypt";
 
 export default class User extends BaseModel {
