@@ -15,6 +15,7 @@ export const dbConfig: Options = {
   define: {
     underscored: true,
     charset: "utf8",
+    
   },
   pool: {
     max: 10,

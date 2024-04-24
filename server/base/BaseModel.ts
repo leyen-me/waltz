@@ -1,4 +1,4 @@
-import { Model } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 
 class BaseModel extends Model {
   declare id: number;
@@ -12,5 +12,7 @@ class BaseModel extends Model {
     return json;
   }
 }
+
+
 
 export default BaseModel;
