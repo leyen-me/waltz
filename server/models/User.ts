@@ -1,7 +1,6 @@
 import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
-import bcrypt from "bcrypt";
 
 export default class User extends BaseModel {
   declare username: string;
@@ -31,12 +30,11 @@ User.init(
 
 (async () => {
   // 每次运行都重新建表
-  await User.sync({ force: true });
+  await User.sync({ force: false });
 
   // 每次运行都重新新建用户
-  const salt = bcrypt.genSaltSync(10);
   const password = "123456";
-  const hashedPassword = bcrypt.hashSync(password, salt);
+  const hashedPassword = defineEncodeHash(password);
   await User.create({
     username: "LEYEN",
     password: hashedPassword,
