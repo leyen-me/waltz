@@ -7,7 +7,7 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  devtools: { enabled: true },
+  devtools: { enabled: false},
   pages: true,
   devServer: {
     host: "0.0.0.0",
