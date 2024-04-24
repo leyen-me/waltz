@@ -9,7 +9,7 @@ export const useGetApi = async (url: string) => {
       Authorization: token.value,
     },
   });
-  const res = _res.data.value as unknown as MResponse;
+  const res = _res.data.value as unknown as MResponse<any>;
   if (res.code !== 200) {
     throw Error(res.msg);
   }
@@ -29,7 +29,7 @@ export const usePostApi = async (url: string, data: any) => {
       Authorization: token.value,
     },
   });
-  const res = _res.data.value as unknown as MResponse;
+  const res = _res.data.value as unknown as MResponse<any>;
   if (res.code !== 200) {
     throw Error(res.msg);
   }
