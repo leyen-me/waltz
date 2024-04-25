@@ -5,7 +5,7 @@ import { secretKey } from "@/server/config";
 export default defineWrappedResponseHandler(async (event) => {
   // 账号/密码
   const { username, password } = await readBody(event);
-
+  
   // 判断数据库是否有该账号，有则取出
   const user = await User.findOne({
     where: {

@@ -13,21 +13,16 @@ export default defineNuxtConfig({
     host: "0.0.0.0",
     port: 3000,
   },
-  routeRules: {
-    "/api/**": {
-      cors: true,
-    },
-  },
   vite: {
     // 前后端分离
-    // 上线之后去除
+    // 上线之后删除server
     server: {
-      proxy: {
-        "/api": {
+      proxy: process.env.USERNAME === "wjc" ? {} : {
+        '/api': {
           target: "http://192.168.31.76:3000",
           changeOrigin: true,
         },
-      },
+      }
     },
   },
   runtimeConfig: {
