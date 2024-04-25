@@ -11,12 +11,12 @@ cmd.stdout.on("data", (data) => {
   let newContent = null;
   console.log(`${data}`);
   if (res) {
-    if (fileContent.includes("01")) {
-      newContent = fileContent.replace("01", "02");
-    } else if (fileContent.includes("02")) {
-      newContent = fileContent.replace("02", "01");
+    if (fileContent.includes("001")) {
+      newContent = fileContent.replace("001", "002");
+    } else if (fileContent.includes("002")) {
+      newContent = fileContent.replace("002", "001");
     } else {
-      console.log("没有01或者02");
+      console.log("没有001或者002");
     }
     fs.writeFileSync(filePath, newContent);
   }
