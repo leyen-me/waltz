@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     apiSecret: "123",
     // public中的键也可以在客户端使用
     public: {
-      apiBase: "/api",
+      apiBase: "http://192.168.31.76:3000/api",
     },
   },
 });
