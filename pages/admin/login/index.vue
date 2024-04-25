@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import Cookies from 'js-cookie';
-import { usePostApi } from '~/utils/api';
+import { useAdminLoginApi } from '@/api/admin/auth';
 
 const username = ref("LEYEN")
 const password = ref("123456")
@@ -17,7 +17,7 @@ const router = useRouter()
 
 const handleLogin = async () => {
     try {
-        const { token } = await usePostApi('/api/admin/auth/login', {
+        const { token } = await useAdminLoginApi({
             username: username.value,
             password: password.value
         })

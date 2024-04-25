@@ -1,3 +1,5 @@
+import { useAdminUserInfoApi } from "@/api/admin/user";
+
 /**
  * 后台管理路由守卫
  */
@@ -12,7 +14,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   // 请求一下INFO信息
   try {
-    await useGetApi("/api/admin/user/info");
+    await useAdminUserInfoApi();
   } catch (error) {
     return navigateTo("/admin/login");
   }

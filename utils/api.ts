@@ -1,4 +1,6 @@
-const useApi = async (url: string, options: any) => {
+import type { UseFetchOptions } from "#app";
+
+const useApi = async (url: string, options: UseFetchOptions<any>) => {
   const token = useCookie("token", {
     default: () => "",
     watch: false,
@@ -10,7 +12,6 @@ const useApi = async (url: string, options: any) => {
     },
     ...options,
   });
-
   const res = _res.data.value as unknown as MResponse<any>;
   if (res.code !== 200) {
     throw Error(res.msg);
@@ -18,4 +19,4 @@ const useApi = async (url: string, options: any) => {
   return res.data;
 };
 
-export default useApi
+export default useApi;
