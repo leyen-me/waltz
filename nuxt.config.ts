@@ -30,6 +30,11 @@ export default defineNuxtConfig({
       },
     },
   },
+  routeRules: {
+    "/api/**": {
+      cors: true
+    }
+  },
   runtimeConfig: {
     // 只在服务器端可用的私有键
     apiSecret: "123",
