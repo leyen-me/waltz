@@ -9,11 +9,11 @@ export default class User extends BaseModel {
 
 User.init(
   {
-    id: {
-      type: DataTypes.BIGINT,
-      primaryKey: true,
-      autoIncrement: true,
-    },
+    // id: {
+    //   type: DataTypes.BIGINT,
+    //   primaryKey: true,
+    //   autoIncrement: true,
+    // },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -25,12 +25,15 @@ User.init(
       comment: "密码",
     },
   },
-  { sequelize }
+  {
+    sequelize,
+    tableName: 'user',
+  }
 );
 
 (async () => {
   // 每次运行都重新建表
-  await User.sync({ force: false });
+  await User.sync({ force: true });
 
   // 每次运行都重新新建用户
   const password = "123456";

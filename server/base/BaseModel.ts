@@ -1,4 +1,4 @@
-import { Model } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import moment from "moment";
 
 class BaseModel extends Model {
@@ -13,7 +13,5 @@ class BaseModel extends Model {
     return json;
   }
 }
-
-
 
 export default BaseModel;

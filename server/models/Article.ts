@@ -40,10 +40,13 @@ Article.init(
       comment: "文章状态",
     },
   },
-  { sequelize }
+  {
+    sequelize,
+    tableName: 'article',
+  }
 );
 
 (async () => {
   // 每次运行都重新建表
-  await Article.sync({ force: false });
+  await Article.sync({ force: true });
 })();
