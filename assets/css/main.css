@@ -15,7 +15,9 @@
 html,
 body,
 #__nuxt {
-  background-color: #232323;
-  color: white;
   height: 100%;
 }
+
+/* 
+background-color: #232323;
+color: white; */
