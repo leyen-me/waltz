@@ -7,11 +7,16 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  devtools: { enabled: false},
+  devtools: { enabled: false },
   pages: true,
   devServer: {
     host: "0.0.0.0",
     port: 3000,
+  },
+  routeRules: {
+    "/api/**": {
+      cors: true
+    }
   },
   runtimeConfig: {
     // 只在服务器端可用的私有键
