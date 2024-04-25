@@ -14,7 +14,9 @@ export const dbConfig: Options = {
   timezone: "+08:00",
   define: {
     underscored: true,
+    freezeTableName: false,
     charset: "utf8mb4",
+    tableName: "t_"
   },
   pool: {
     max: 10,
