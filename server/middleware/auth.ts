@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
   const token = event.headers.get("Authorization") || getQuery(event).Authorization as string;
   if (!token) {
-    return defineError({ msg: "token为空" })
+    return defineError({ msg: "请先登录" })
   }
 
   try {

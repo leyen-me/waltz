@@ -1,5 +1,4 @@
 import User from "@/server/models/User";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { secretKey } from "@/server/config";
 
@@ -21,15 +20,7 @@ export default defineWrappedResponseHandler(async (event) => {
   }
 
   // 密码校验
-  bcrypt.compare(password, user.password, (err, result) => {
-    if (err) {
-      return defineError({ msg: "账号或密码错误" })
-    } else {
-      if (!result) {
-        return defineError({ msg: "账号或密码错误" })
-      }
-    }
-  });
+  await defineVerifyHash(password, user.password,"账号或密码错误")
 
   // 用户信息
   const userInfo = {
