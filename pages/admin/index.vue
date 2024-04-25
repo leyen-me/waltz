@@ -1,5 +1,5 @@
 <template>
-    后台管理
+    <span>后台管理</span>
 </template>
 
 <script setup lang="ts">

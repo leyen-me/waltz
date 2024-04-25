@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -15,8 +15,20 @@ export default defineNuxtConfig({
   },
   routeRules: {
     "/api/**": {
-      cors: true
-    }
+      cors: true,
+    },
+  },
+  vite: {
+    // 前后端分离
+    // 上线之后去除
+    server: {
+      proxy: {
+        "/api": {
+          target: "http://192.168.31.76:3000",
+          changeOrigin: true,
+        },
+      },
+    },
   },
   runtimeConfig: {
     // 只在服务器端可用的私有键
