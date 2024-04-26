@@ -11,7 +11,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (!token.value) {
     return navigateTo("/admin/login");
   }
-
   // 请求一下INFO信息
   try {
     await useAdminUserInfoApi();

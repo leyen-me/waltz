@@ -53,7 +53,7 @@ const userModel = User.initUser(sequelize);
 
 (async () => {
   // 每次运行都重新建表
-  await userModel.sync({ force: true });
+  await userModel.sync({ force: false });
 
   // 每次运行都重新新建用户
   const password = "123456";
@@ -63,4 +63,4 @@ const userModel = User.initUser(sequelize);
     username: "LEYEN",
     password: hashedPassword,
   });
-})();
+})

@@ -2,6 +2,6 @@
   "extends": "../.nuxt/tsconfig.server.json",
   "exclude": [
     "../scripts/**/*",
-    "../tailwind.config.js"
+    "../tailwind.config.js",
   ]
 }

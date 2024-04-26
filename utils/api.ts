@@ -13,6 +13,9 @@ const useApi = async (url: string, options: UseFetchOptions<any>) => {
     ...options,
   });
   const res = _res.data.value as unknown as MResponse<any>;
+  if (res === null) {
+    throw Error("请求错误，请检查网络或服务器");
+  }
   if (res.code !== 200) {
     throw Error(res.msg);
   }

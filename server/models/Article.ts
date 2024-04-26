@@ -49,5 +49,5 @@ const articleModel = Article.initArticle(sequelize) as typeof Article;
 
 (async () => {
   // 每次运行都重新建表
-  await articleModel.sync({ force: true });
-})();
+  await articleModel.sync({ force: false });
+})

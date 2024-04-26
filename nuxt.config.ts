@@ -1,6 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  css: ["~/assets/css/main.css"],
+  css: ["@/assets/css/main.css"],
+  modules: ["nuxt-primevue"],
+  primevue: {
+    components: {
+      include: "*",
+    },
+    options: {
+      ripple: true,
+    },
+  },
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -14,6 +23,9 @@ export default defineNuxtConfig({
     port: 3000,
   },
   routeRules: {
+    "/": { prerender: true },
+    "/blog/**": { isr: true },
+    "/admin/**": { ssr: false },
     "/api/**": {
       cors: true,
     },
@@ -24,7 +36,7 @@ export default defineNuxtConfig({
     server: {
       proxy: {
         "/api": {
-          target: "http://192.168.31.76:3000",
+          target: "http://192.168.57.227:3000",
           changeOrigin: true,
         },
       },

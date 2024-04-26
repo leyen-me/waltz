@@ -1,5 +1,5 @@
 <template>
-    <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 dark:bg-gray-900">
+    <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 dark:var(--surface-ground)">
         <div class="flex flex-col justify-center items-center sm:mx-auto sm:w-full sm:max-w-sm">
             <IconLogo class="text-indigo-500"></IconLogo>
             <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
@@ -11,8 +11,7 @@
                     <label for="email"
                         class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">账号</label>
                     <div class="mt-2">
-                        <input v-model.trim="username" autocomplete="email" required="true"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:text-white dark:bg-white/5 dark:ring-white/10" />
+                        <InputText class="w-full" type="text" v-model.trim="username" />
                     </div>
                 </div>
                 <div>
@@ -20,48 +19,36 @@
                         <label for="password"
                             class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">密码</label>
                         <div class="text-sm">
-                            <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">忘记密码?</a>
+                            <Button class="text-sm p-0" label="忘记密码?" link />
                         </div>
                     </div>
                     <div class="mt-2">
-                        <input v-model.trim="password" autocomplete="current-password" required="true"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:text-white dark:bg-white/5 dark:ring-white/10" />
+                        <InputText class="w-full" type="password" v-model.trim="password" toggleMask
+                            @keydown="handleKeyDown" />
                     </div>
                 </div>
                 <div>
-                    <button type="submit"
-                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        @click.prevent="handleLogin">登录</button>
+                    <Button label="登录" class="w-full" @click.prevent="handleLogin" />
                 </div>
             </form>
-
-            <p class="mt-10 text-center text-sm text-gray-500">
-                没有账号?
-                {{ ' ' }}
-                <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">开始注册</a>
+            <p class="mt-10 text-sm text-gray-500 flex items-center justify-center">
+                <span>没有账号?</span>
+                <Button class="text-sm py-0 px-2" label="开始注册" link />
             </p>
         </div>
     </div>
-
-    <!-- 
-            <p class="mt-10 text-center text-sm text-gray-400">
-                没有账号?
-                {{ ' ' }}
-                <a href="#" class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">开始注册</a>
-            </p>
-        </div>
-    </div> -->
-
 </template>
 
 <script setup lang="ts">
 import Cookies from 'js-cookie';
 import { useAdminLoginApi } from '@/api/admin/auth';
+import { useToast } from 'primevue/usetoast';
 
 const username = ref("")
 const password = ref("")
 
 const router = useRouter()
+const toast = useToast();
 
 const handleLogin = async () => {
     try {
@@ -74,7 +61,13 @@ const handleLogin = async () => {
         // 回到主页
         router.replace("/admin")
     } catch (error: any) {
-        alert(error.message)
+        toast.add({ severity: 'error', summary: '错误', detail: error.message, life: 3000 })
+    }
+}
+
+const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Enter") {
+        handleLogin()
     }
 }
 </script>
