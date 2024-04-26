@@ -15,7 +15,6 @@ export default defineWrappedResponseHandler(async (event) => {
 
   // 没有用户
   if (!user) {
-    // throw Error("账号或密码错误");
     return defineError({ msg: "账号或密码错误" });
   }
 

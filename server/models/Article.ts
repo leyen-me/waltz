@@ -13,6 +13,11 @@ export default class Article extends BaseModel {
 
   static initArticle(sequelize: Sequelize): typeof Article {
     const modelAttributes = {
+      categoryId: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        comment: "文章分类",
+      },
       title: {
         type: DataTypes.STRING,
         allowNull: false,

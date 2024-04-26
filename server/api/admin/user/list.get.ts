@@ -1,6 +1,8 @@
-import User from "@/server/models/User";
+import UserService from '@/server/service/UserService';
+
+const userService = new UserService();
 
 export default defineWrappedResponseHandler(async () => {
-  const user = await User.findAll();
-  return defineOk({ data: user });
+    const result = await userService.getAllUsers();
+    return defineOk({ data: result });
 });

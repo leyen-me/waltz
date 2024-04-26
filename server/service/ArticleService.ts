@@ -7,7 +7,7 @@ export default class ArticleService extends BaseService<Article> {
         super(Article);
     }
 
-    async page(query: BaseQuery): Promise<{ data: Article[]; meta: any }> {
+    async selectPage(query: ArticleQuery): Promise<{ data: Article[]; meta: any }> {
         return this.page(query);
     }
 
@@ -38,10 +38,10 @@ export default class ArticleService extends BaseService<Article> {
     }
 
     async getArticleById(articleId: number | string): Promise<Article | null> {
-        return Article.findByPk(articleId);
+        return await Article.findByPk(articleId);
     }
 
     async getAllArticles(): Promise<Article[]> {
-        return Article.findAll();
+        return await Article.findAll();
     }
 }
