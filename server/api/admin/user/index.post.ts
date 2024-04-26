@@ -1,10 +1,9 @@
-import User from "@/server/models/User";
+import UserService from '@/server/service/UserService';
+
+const userService = new UserService();
 
 export default defineWrappedResponseHandler(async (event) => {
-  const user = await readBody(event);
-  user.password = defineEncodeHash(user.password);
-  await User.create(user);
-  return defineOk({
-    msg: "新增成功"
-  });
+  const userData = await readBody(event);
+  const result = await userService.createUser(userData);
+  return defineOk({ msg: result.message });
 });

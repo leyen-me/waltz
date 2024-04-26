@@ -1,16 +1,9 @@
-import User from "@/server/models/User";
+import UserService from '@/server/service/UserService';
+
+const userService = new UserService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    const user = await readBody(event);
-    if (user.password) {
-        user.password = defineEncodeHash(user.password);
-    }
-    await User.update(
-        user,
-        {
-            where: {
-                id: user.id,
-            }
-        });
-    return defineOk({ msg: "修改成功" })
+    const { id, ...updatedUserData } = await readBody(event);
+    const result = await userService.updateUser(id, updatedUserData);
+    return defineOk({ msg: result.message });
 });

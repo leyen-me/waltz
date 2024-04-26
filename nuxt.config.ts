@@ -32,14 +32,14 @@ export default defineNuxtConfig({
   },
   vite: {
     // 前后端分离
-    // 上线之后去除
+    // 上线之后删除server
     server: {
-      proxy: {
-        "/api": {
-          target: "http://192.168.57.227:3000",
+      proxy: process.env.USERNAME === "wjc" ? {} : {
+        '/api': {
+          target: "http://192.168.31.76:3000",
           changeOrigin: true,
         },
-      },
+      }
     },
   },
   runtimeConfig: {

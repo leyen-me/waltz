@@ -18,6 +18,32 @@ export default class User extends BaseModel {
         allowNull: false,
         comment: "密码",
       },
+      avatar: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: "头像",
+      },
+      gender: {
+        type: DataTypes.ENUM("男", "女", "保密"),
+        allowNull: true,
+        comment: "性别",
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: "邮箱",
+      },
+      introduction: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: "简介",
+      },
+      superAdmin: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        comment: "是否是超级管理员"
+      }
     };
 
     const modelOptions: ModelOptions & { sequelize: Sequelize } = {
@@ -32,35 +58,18 @@ export default class User extends BaseModel {
 
 // 初始化模型，调用 initUser 方法
 const userModel = User.initUser(sequelize);
-// User.init(
-//   {
-//     username: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//       comment: "姓名/昵称",
-//     },
-//     password: {
-//       type: DataTypes.STRING(500),
-//       allowNull: false,
-//       comment: "密码",
-//     },
-//   },
-//   {
-//     sequelize,
-//     tableName: 'user',
-//   }
-// );
 
 (async () => {
   // 每次运行都重新建表
   await userModel.sync({ force: false });
 
-  // 每次运行都重新新建用户
+  // // 每次运行都重新新建用户
   const password = "123456";
   // 假设你已经定义了 defineEncodeHash 方法
   const hashedPassword = defineEncodeHash(password);
   await userModel.create({
     username: "LEYEN",
     password: hashedPassword,
+    superAdmin: 1
   });
 })
