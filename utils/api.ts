@@ -1,6 +1,6 @@
 import type { UseFetchOptions } from "#app";
 
-const useApi = async (url: string, options: UseFetchOptions<any>) => {
+const useApi = async <T>(url: string, options: UseFetchOptions<any>):Promise<T> => {
   const token = useCookie("token", {
     default: () => "",
     watch: false,
@@ -12,7 +12,7 @@ const useApi = async (url: string, options: UseFetchOptions<any>) => {
     },
     ...options,
   });
-  const res = _res.data.value as unknown as MResponse<any>;
+  const res = _res.data.value
   if (res === null) {
     throw Error("请求错误，请检查网络或服务器");
   }

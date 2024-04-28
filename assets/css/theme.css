@@ -4,11 +4,18 @@
   --tw-content: '';
 }
 
+
+ul{
+  padding-inline-start: 0;
+}
+
 li{
   list-style: none;
 }
 
 *, ::before, ::after {
+  box-sizing: border-box;
+
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;

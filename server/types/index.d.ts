@@ -17,11 +17,20 @@ interface BaseQuery {
   asc?: boolean;
 }
 
+interface BasePageResponse<T> {
+  data: T[];
+  meta: {
+    totalPages: number;
+    currentPage: number;
+    pageSize: number;
+    totalItems: number;
+  };
+}
+
 interface ArticleQuery extends BaseQuery {
   title?: string;
   authorId?: number;
 }
-
 
 interface UserQuery extends BaseQuery {
   username?: string;
@@ -37,4 +46,3 @@ interface MenuQuery extends BaseQuery {
   title?: string;
   pid?: number;
 }
-
