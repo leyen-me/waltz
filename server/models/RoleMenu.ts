@@ -2,7 +2,7 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
-export default class RoleMenu extends BaseModel {
+export default class RoleMenu extends BaseModel<RoleMenu> {
     declare roleId: number;
     declare menuId: number;
 
@@ -31,9 +31,4 @@ export default class RoleMenu extends BaseModel {
 }
 
 // 初始化模型，调用 initRoleMenu 方法
-const roleMenuModel = RoleMenu.initRoleMenu(sequelize) as typeof RoleMenu;
-
-(async () => {
-    // 每次运行都重新建表
-    await roleMenuModel.sync({ force: false });
-})();
+export const roleMenuModel = RoleMenu.initRoleMenu(sequelize) as typeof RoleMenu;

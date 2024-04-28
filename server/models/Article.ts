@@ -1,15 +1,22 @@
 import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
+import moment from "moment";
 
-export default class Article extends BaseModel {
+export default class Article extends BaseModel<Article> {
   declare title: string;
   declare cover: string;
   declare content: string;
   declare authorId: string;
-  declare publishedAt: Date;
+  declare publishedAt: string;
   declare status: ArticleStatus;
   declare viewsCount: number;
+
+  toJSON() {
+    const json = super.toJSON();
+    json.publishedAt = moment(json.publishedAt).format('YYYY-MM-DD HH:mm:ss');
+    return json;
+  }
 
   static initArticle(sequelize: Sequelize): typeof Article {
     const modelAttributes = {
@@ -65,9 +72,4 @@ export default class Article extends BaseModel {
 }
 
 // 初始化模型，调用 initArticle 方法
-const articleModel = Article.initArticle(sequelize) as typeof Article;
-
-(async () => {
-  // 每次运行都重新建表
-  await articleModel.sync({ force: false });
-})();
+export const articleModel = Article.initArticle(sequelize) as typeof Article;

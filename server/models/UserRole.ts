@@ -2,7 +2,7 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
-export default class UserRole extends BaseModel {
+export default class UserRole extends BaseModel<UserRole> {
     declare userId: number;
     declare roleId: number;
 
@@ -31,9 +31,4 @@ export default class UserRole extends BaseModel {
 }
 
 // 初始化模型，调用 initUserRole 方法
-const userRoleModel = UserRole.initUserRole(sequelize) as typeof UserRole;
-
-(async () => {
-    // 每次运行都重新建表
-    await userRoleModel.sync({ force: false });
-})();
+export const userRoleModel = UserRole.initUserRole(sequelize) as typeof UserRole;

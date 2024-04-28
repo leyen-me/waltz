@@ -2,12 +2,11 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
-export default class Menu extends BaseModel {
+export default class Menu extends BaseModel<Menu> {
     declare pid: number;
     declare path: string;
     declare title: string;
     declare icon: string;
-    declare level: number;
     declare authority: string;
     declare sort: number;
 
@@ -60,9 +59,4 @@ export default class Menu extends BaseModel {
 }
 
 // 初始化模型，调用 initMenu 方法
-const menuModel = Menu.initMenu(sequelize) as typeof Menu;
-
-(async () => {
-    // 每次运行都重新建表
-    await menuModel.sync({ force: false });
-})();
+export const menuModel = Menu.initMenu(sequelize) as typeof Menu;

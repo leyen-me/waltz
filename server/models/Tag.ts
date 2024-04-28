@@ -2,7 +2,7 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
-export default class Tag extends BaseModel {
+export default class Tag extends BaseModel<Tag> {
     declare categoryId: number;
     declare title: string;
 
@@ -30,9 +30,4 @@ export default class Tag extends BaseModel {
 }
 
 // 初始化模型，调用 initTag 方法
-const tagModel = Tag.initTag(sequelize) as typeof Tag;
-
-(async () => {
-    // 每次运行都重新建表
-    await tagModel.sync({ force: false });
-})();
+export const tagModel = Tag.initTag(sequelize) as typeof Tag;

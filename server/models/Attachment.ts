@@ -2,7 +2,7 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
-export default class Attachment extends BaseModel {
+export default class Attachment extends BaseModel<Attachment> {
     declare title: string;
     declare url: string;
     declare ext: string;
@@ -42,9 +42,4 @@ export default class Attachment extends BaseModel {
 }
 
 // 初始化模型，调用 initAttachment 方法
-const attachmentModel = Attachment.initAttachment(sequelize) as typeof Attachment;
-
-(async () => {
-    // 每次运行都重新建表
-    await attachmentModel.sync({ force: false });
-})();
+export const attachmentModel = Attachment.initAttachment(sequelize) as typeof Attachment;
