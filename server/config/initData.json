@@ -1,16 +1,19 @@
 {
     "users": [
         {
+            "id": 1,
             "username": "LEYEN",
             "password": "$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq",
             "superAdmin": 0
         },
         {
+            "id": 2,
             "username": "Alice",
             "password": "$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq",
             "superAdmin": 0
         },
         {
+            "id": 3,
             "username": "Facker",
             "password": "$2b$10$nhB88IYOLJNHn5FnmuW57.EP8Oj5KJ0VgjZ0gFxQuCi04RieL2ek2",
             "superAdmin": 1
@@ -18,16 +21,71 @@
     ],
     "roles": [
         {
+            "id": 1,
             "roleName": "admin",
             "roleDesc": "超级管理员"
         },
         {
+            "id": 2,
             "roleName": "blog_admin",
             "roleDesc": "博文管理员"
         },
         {
+            "id": 3,
             "roleName": "visitor",
             "roleDesc": "访客"
+        }
+    ],
+    "menus": [
+        {
+            "id": 1,
+            "pid": 0,
+            "path": "",
+            "title": "菜单管理",
+            "icon": "",
+            "type":"菜单",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 2,
+            "pid": 1,
+            "path": "",
+            "title": "列表",
+            "icon": "",
+            "type":"按钮",
+            "authority": "menu:list",
+            "sort": 0
+        },
+        {
+            "id": 3,
+            "pid": 1,
+            "path": "",
+            "title": "新增",
+            "icon": "",
+            "type":"按钮",
+            "authority": "menu:save",
+            "sort": 1
+        },
+        {
+            "id": 4,
+            "pid": 1,
+            "path": "",
+            "title": "修改",
+            "type":"按钮",
+            "icon": "",
+            "authority": "menu:update",
+            "sort": 2
+        },
+        {
+            "id": 5,
+            "pid": 1,
+            "path": "",
+            "title": "删除",
+            "type":"按钮",
+            "icon": "",
+            "authority": "menu:delete",
+            "sort": 3
         }
     ]
 }

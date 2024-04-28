@@ -2,7 +2,7 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize, ModelAttributes, ModelOptions } from "sequelize";
 import sequelize from "../db";
 
-export default class User extends BaseModel {
+export default class User extends BaseModel<User> {
   declare username: string;
   declare password: string;
 

@@ -2,7 +2,7 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
-export default class Category extends BaseModel {
+export default class Category extends BaseModel<Category> {
   declare title: string;
   declare desc: string;
 
@@ -30,9 +30,5 @@ export default class Category extends BaseModel {
 }
 
 // 初始化模型，调用 initCategory 方法
-const categoryModel = Category.initCategory(sequelize) as typeof Category;
+export const categoryModel = Category.initCategory(sequelize) as typeof Category;
 
-(async () => {
-  // 每次运行都重新建表
-  await categoryModel.sync({ force: false });
-})();

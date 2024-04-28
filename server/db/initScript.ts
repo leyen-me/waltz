@@ -1,3 +1,4 @@
+import { menuModel } from "../models/Menu";
 import { roleModel } from "../models/Role";
 import { userModel } from "../models/User";
 import fs from 'fs';
@@ -11,7 +12,7 @@ export default class initScript {
     private static async initData(isForce: boolean) {
         const dataFilePath = './server/config/initData.json';
         const data = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
-        const { users, roles } = data;
+        const { users, roles, menus } = data;
         const initData = [
             {
                 model: userModel,
@@ -20,6 +21,10 @@ export default class initScript {
             {
                 model: roleModel,
                 data: roles
+            },
+            {
+                model: menuModel,
+                data: menus
             }
         ];
 

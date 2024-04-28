@@ -1,13 +1,13 @@
 import { DataTypes, Model, ModelAttributes, ModelOptions, Sequelize } from "sequelize";
 import moment from "moment";
 
-class BaseModel extends Model {
+class BaseModel<T extends BaseModel<T>> extends Model {
   declare id?: number;
   declare createdAt?: string;
   declare updatedAt?: string;
-
-  toJSON() {
-    const json = this.get() as unknown as BaseModel
+  
+  toJSON(): T {
+    const json = this.get() as unknown as T;
     json.createdAt = moment(json.createdAt).format('YYYY-MM-DD HH:mm:ss');
     json.updatedAt = moment(json.updatedAt).format('YYYY-MM-DD HH:mm:ss');
     return json;
