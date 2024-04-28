@@ -3,7 +3,7 @@
  * @param param
  * @returns 
  */
-export const defineOk = <T>({ code = 200, msg = 'ok', data }: MResponse<T>) => {
+export const defineOk = <T>({ code = 200, msg = 'ok', data }: BaseResponse<T>) => {
     return {
         code,
         msg,
@@ -16,7 +16,7 @@ export const defineOk = <T>({ code = 200, msg = 'ok', data }: MResponse<T>) => {
  * @param param
  * @returns 
  */
-export const defineError = <T>({ code = 500, msg = '', data }: MResponse<T>) => {
+export const defineError = <T>({ code = 500, msg = '', data }: BaseResponse<T>) => {
     return {
         code,
         msg,

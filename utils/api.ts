@@ -1,10 +1,15 @@
 import type { UseFetchOptions } from "#app";
 
-const useApi = async <T>(url: string, options: UseFetchOptions<any>):Promise<T> => {
+const useApi = async <T>(
+  url: string,
+  options: UseFetchOptions<any>
+): Promise<T> => {
   const token = useCookie("token", {
     default: () => "",
     watch: false,
   });
+  const nuxtApp = useNuxtApp();
+  const toast = nuxtApp.vueApp.config.globalProperties.$toast;
   const _res = await useFetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -12,14 +17,26 @@ const useApi = async <T>(url: string, options: UseFetchOptions<any>):Promise<T> 
     },
     ...options,
   });
-  const res = _res.data.value
+  const res = _res.data.value as BaseResponse<T>;
   if (res === null) {
+    toast.add({
+      severity: "error",
+      summary: "错误",
+      detail: "请求错误，请检查网络或服务器",
+      life: 3000,
+    });
     throw Error("请求错误，请检查网络或服务器");
   }
   if (res.code !== 200) {
+    toast.add({
+      severity: "error",
+      summary: "错误",
+      detail: res.msg,
+      life: 3000,
+    });
     throw Error(res.msg);
   }
-  return res.data;
+  return res.data as T;
 };
 
 export default useApi;
