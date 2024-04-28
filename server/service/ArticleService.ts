@@ -7,7 +7,7 @@ export default class ArticleService extends BaseService<Article> {
         super(Article);
     }
 
-    async selectPage(query: ArticleQuery): Promise<{ data: Article[]; meta: any }> {
+    async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
         return this.page(query);
     }
 

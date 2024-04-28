@@ -2,12 +2,12 @@ import User from '@/server/models/User';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes } from 'sequelize';
 
-export default class ArticleService extends BaseService<User> {
+export default class UserService extends BaseService<User> {
     constructor() {
         super(User);
     }
 
-    async selectPage(query: UserQuery): Promise<{ data: User[]; meta: any }> {
+    async selectPage(query: UserQuery): Promise<BasePageResponse<User>> {
         return this.page(query);
     }
 

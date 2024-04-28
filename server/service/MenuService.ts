@@ -9,7 +9,7 @@ export default class MenuService extends BaseService<Menu> {
         super(Menu);
     }
 
-    async selectPage(query: MenuQuery): Promise<{ data: Menu[]; meta: any }> {
+    async selectPage(query: MenuQuery): Promise<BasePageResponse<Menu>> {
         return this.page(query);
     }
 

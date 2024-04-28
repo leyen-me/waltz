@@ -7,7 +7,7 @@ export default class RoleService extends BaseService<Role> {
         super(Role);
     }
 
-    async selectPage(query: RoleQuery): Promise<{ data: Role[]; meta: any }> {
+    async selectPage(query: RoleQuery): Promise<BasePageResponse<Role>> {
         return this.page(query);
     }
 
