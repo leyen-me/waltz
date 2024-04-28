@@ -1,6 +1,7 @@
 import { secretKey, whiteList } from "../config";
 import User from "../models/User";
 import jwt from "jsonwebtoken";
+import MenuService from "../service/MenuService";
 
 export default defineEventHandler(async (event) => {
   // 拦截所有api请求
@@ -35,6 +36,9 @@ export default defineEventHandler(async (event) => {
     if (!user) {
       return defineError({ msg: "用户已被删除" })
     }
+
+    const menuService = new MenuService();
+    user.authority = await menuService.getUserAuthority(user);
 
     // 把user放到上下文
     event.context.user = user

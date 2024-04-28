@@ -2,9 +2,9 @@ import { DataTypes, Model, ModelAttributes, ModelOptions, Sequelize } from "sequ
 import moment from "moment";
 
 class BaseModel extends Model {
-  declare id: number;
-  declare createdAt: string;
-  declare updatedAt: string;
+  declare id?: number;
+  declare createdAt?: string;
+  declare updatedAt?: string;
 
   toJSON() {
     const json = this.get() as unknown as BaseModel

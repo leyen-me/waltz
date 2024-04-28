@@ -6,6 +6,8 @@ export default class User extends BaseModel {
   declare username: string;
   declare password: string;
 
+  public authority?: string[];
+
   static initUser(sequelize: Sequelize): typeof User {
     const modelAttributes: ModelAttributes = {
       username: {
@@ -41,8 +43,14 @@ export default class User extends BaseModel {
       superAdmin: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 1,
+        comment: "是否是超级管理员(0:是 1:否)"
+      },
+      status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
         defaultValue: 0,
-        comment: "是否是超级管理员"
+        comment: "是否正常(0:正常 1:停用)"
       }
     };
 
@@ -57,19 +65,4 @@ export default class User extends BaseModel {
 }
 
 // 初始化模型，调用 initUser 方法
-const userModel = User.initUser(sequelize);
-
-(async () => {
-  // 每次运行都重新建表
-  await userModel.sync({ force: false });
-
-  // // 每次运行都重新新建用户
-  const password = "123456";
-  // 假设你已经定义了 defineEncodeHash 方法
-  const hashedPassword = defineEncodeHash(password);
-  await userModel.create({
-    username: "LEYEN",
-    password: hashedPassword,
-    superAdmin: 1
-  });
-})
+export const userModel = User.initUser(sequelize);

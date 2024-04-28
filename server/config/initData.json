@@ -1,0 +1,33 @@
+{
+    "users": [
+        {
+            "username": "LEYEN",
+            "password": "$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq",
+            "superAdmin": 0
+        },
+        {
+            "username": "Alice",
+            "password": "$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq",
+            "superAdmin": 0
+        },
+        {
+            "username": "Facker",
+            "password": "$2b$10$nhB88IYOLJNHn5FnmuW57.EP8Oj5KJ0VgjZ0gFxQuCi04RieL2ek2",
+            "superAdmin": 1
+        }
+    ],
+    "roles": [
+        {
+            "roleName": "admin",
+            "roleDesc": "超级管理员"
+        },
+        {
+            "roleName": "blog_admin",
+            "roleDesc": "博文管理员"
+        },
+        {
+            "roleName": "visitor",
+            "roleDesc": "访客"
+        }
+    ]
+}

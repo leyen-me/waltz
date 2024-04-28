@@ -30,9 +30,6 @@ export default class Role extends BaseModel {
 }
 
 // 初始化模型，调用 initRole 方法
-const roleModel = Role.initRole(sequelize) as typeof Role;
+export const roleModel = Role.initRole(sequelize) as typeof Role;
 
-(async () => {
-    // 每次运行都重新建表
-    await roleModel.sync({ force: false });
-})();
+
