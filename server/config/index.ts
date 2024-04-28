@@ -5,7 +5,7 @@ export const secretKey = "ijdioshai";
 export const whiteList = ["/api/admin/auth/**", "/api/admin/article/**"];
 
 export const dbConfig: Options = {
-  host: "192.168.57.227",
+  host: "localhost",
   username: "root",
   password: "JGhQ83axm5ydtQEnX8B3RgtqnFIY6U3+TO5VMMVyLxA=",
   database: "open-nuxt-blog",

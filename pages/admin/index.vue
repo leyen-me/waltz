@@ -42,7 +42,8 @@
       </span>
     </div>
 
-    <main class="flex-1 lg:w-0 p-5">
+    <!-- Not beyond the full screen of the phone, beyond the phone flex-1 -->
+    <main class="flex-1 p-5 lg:w-0">
       <RouterView />
     </main>
   </div>
@@ -56,9 +57,9 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 
-definePageMeta({
-  middleware: 'auth'
-})
+// definePageMeta({
+//   middleware: 'auth'
+// })
 
 const sidebarOpen = ref(false);
 const key = ref("");
