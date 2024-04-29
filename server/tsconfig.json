@@ -3,5 +3,6 @@
   "exclude": [
     "../scripts/**/*",
     "../tailwind.config.js",
-  ]
+    "../components/BaseEditor/js/highlight.js",
+  ],
 }

@@ -1,4 +1,5 @@
 import useApi from "@/utils/api";
+import type { CreationAttributes } from "sequelize";
 import type Article from "~/server/models/Article";
 
 export const useAdminArticlePageApi = <T = BasePageResponse<Article>>(
@@ -10,4 +11,24 @@ export const useAdminArticlePageApi = <T = BasePageResponse<Article>>(
       method: "GET",
     }
   );
+};
+
+export const useAdminArticleInfoApi = <T = Article>(id: number) => {
+  return useApi<T>(`/api/admin/article/${id}`, {
+    method: "GET",
+  });
+};
+
+export const useAdminArticleSubmitApi = <T = any>(body: Partial<Article>) => {
+  if (body.id) {
+    return useApi<T>(`/api/admin/article/`, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    });
+  } else {
+    return useApi<T>(`/api/admin/article/`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
 };

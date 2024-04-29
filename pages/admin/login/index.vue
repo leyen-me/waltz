@@ -1,5 +1,5 @@
 <template>
-    <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 dark:var(--surface-ground)">
+    <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div class="flex flex-col justify-center items-center sm:mx-auto sm:w-full sm:max-w-sm">
             <IconLogo class="text-indigo-500"></IconLogo>
             <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">

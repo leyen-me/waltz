@@ -22,10 +22,86 @@ body,
 .p-paginator-rpp-options {
   display: none;
 }
+.v-md-editor__preview-wrapper {
+  display: none;
+}
 
 @media (min-width: 1280px) {
   /* 电脑端显示 */
   .p-paginator-rpp-options {
     display: inline-flex;
+  }
+
+  .v-md-editor__preview-wrapper {
+    display: block;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .v-md-editor {
+  }
+
+  .v-md-editor__left-area {
+    background-color: #2e2e2e !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  .v-md-editor__left-area-title {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  .v-md-editor__toc-nav-item {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .v-md-editor__toolbar {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    background-color: #2e2e2e !important;
+  }
+
+  .v-md-editor__toolbar-item {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  .v-md-editor__toolbar-item:hover {
+    background: var(--surface-section) !important;
+  }
+  .v-md-editor__toolbar-item--active {
+    background: var(--surface-section) !important;
+  }
+
+  .v-md-textarea-editor pre,
+  .v-md-textarea-editor textarea {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .v-md-editor__editor-wrapper,
+  .v-md-editor__preview-wrapper {
+    background-color: #121212 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .github-markdown-body div[class*="v-md-pre-wrapper-"] {
+    background-color: #2e2e2e !important;
+  }
+
+  .github-markdown-body
+    div[class*="v-md-pre-wrapper-"].line-numbers-mode
+    .line-numbers-wrapper {
+    background-color: #2e2e2e !important;
+  }
+
+  .github-markdown-body
+    div[class*="v-md-pre-wrapper-"].line-numbers-mode:after {
+    background-color: #2e2e2e !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .github-markdown-body .hljs-keyword,
+  .github-markdown-body .hljs-selector-tag,
+  .github-markdown-body .hljs-subst {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .github-markdown-body pre code,
+  .github-markdown-body pre tt {
+    color: rgba(255, 255, 255, 0.8) !important;
   }
 }
