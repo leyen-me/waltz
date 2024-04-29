@@ -54,7 +54,7 @@ const validateFile = (file: File): string => {
         throw new Error('File size exceeds the limit');
     }
 
-    return path.join("/", subDir);
+    return subDir;
 };
 
 
@@ -70,7 +70,7 @@ export const uploadFile = async (file: File, baseUploadDir: string): Promise<str
     const subDir = validateFile(file);
 
     // 拼接上传目录
-    const uploadDir = path.join(baseUploadDir, subDir);
+    const uploadDir = path.posix.join(baseUploadDir, subDir);
 
     if (!uploadDir) {
         throw new Error('Upload directory is required');
@@ -82,7 +82,7 @@ export const uploadFile = async (file: File, baseUploadDir: string): Promise<str
     }
 
     // 构造文件路径
-    const filePath = path.join(uploadDir, generateUUID() + getFileExtension(file.name));
+    const filePath = path.posix.join(uploadDir, generateUUID() + getFileExtension(file.name));
 
     // 将文件保存到服务器
     const fileBuffer = await file.arrayBuffer();
