@@ -4,8 +4,8 @@ import { secretKey } from "@/server/config";
 
 export default defineWrappedResponseHandler(async (event) => {
   // 账号/密码
-  const { username, password } = await readBody(event);
-  
+  const { username, password }: LoginRequest = await readBody(event);
+
   // 判断数据库是否有该账号，有则取出
   const user = await User.findOne({
     where: {
@@ -19,7 +19,7 @@ export default defineWrappedResponseHandler(async (event) => {
   }
 
   // 密码校验
-  await defineVerifyHash(password, user.password,"账号或密码错误")
+  await defineVerifyHash(password, user.password, "账号或密码错误");
 
   // 用户信息
   const userInfo = {
@@ -31,9 +31,12 @@ export default defineWrappedResponseHandler(async (event) => {
     expiresIn: "24h",
   });
 
+  // 返回
+  const res: LoginResponse = {
+    token,
+  };
+
   return defineOk({
-    data: {
-      token
-    }
-  })
+    data: res,
+  });
 });

@@ -1,4 +1,4 @@
-interface MResponse<T> {
+interface BaseResponse<T> {
   code?: number;
   data?: T;
   msg?: string;
@@ -25,6 +25,15 @@ interface BasePageResponse<T> {
     pageSize: number;
     totalItems: number;
   };
+}
+
+interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+interface LoginResponse {
+  token: string;
 }
 
 interface ArticleQuery extends BaseQuery {

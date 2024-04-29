@@ -42,13 +42,11 @@
 <script setup lang="ts">
 import Cookies from 'js-cookie';
 import { useAdminLoginApi } from '@/api/admin/auth';
-import { useToast } from 'primevue/usetoast';
 
 const username = ref("")
 const password = ref("")
 
 const router = useRouter()
-const toast = useToast();
 
 const handleLogin = async () => {
     try {
@@ -60,9 +58,7 @@ const handleLogin = async () => {
         Cookies.set("token", token)
         // 回到主页
         router.replace("/admin")
-    } catch (error: any) {
-        toast.add({ severity: 'error', summary: '错误', detail: error.message, life: 3000 })
-    }
+    } catch (error: any) { }
 }
 
 const handleKeyDown = (event: KeyboardEvent) => {
