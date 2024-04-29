@@ -72,9 +72,6 @@ export const uploadFile = async (file: File, baseUploadDir: string): Promise<str
     // 拼接上传目录
     const uploadDir = path.join(baseUploadDir, subDir);
 
-    // 验证文件是否符合要求
-    validateFile(file);
-
     if (!uploadDir) {
         throw new Error('Upload directory is required');
     }
