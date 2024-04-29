@@ -3,50 +3,31 @@ import BaseService from "@/server/base/BaseService";
 import { CreationAttributes } from "sequelize";
 
 export default class ArticleService extends BaseService<Article> {
-  constructor() {
-    super(Article);
-  }
-
-  async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
-    return this.page(query);
-  }
-
-  async createArticle(
-    articleData: CreationAttributes<Article>
-  ): Promise<BaseCreateResponse> {
-    const createdArticle = await this.create(articleData);
-    if (createdArticle.id) {
-      return createdArticle.id;
+    constructor() {
+        super(Article);
     }
-    throw Error("Failed to create article");
-  }
 
-  async updateArticle(
-    articleId: number,
-    articleData: Partial<CreationAttributes<Article>>
-  ): Promise<{ message: string }> {
-    const options = { where: { id: articleId } };
-    const affectedRows = await this.update(articleData, options);
-    if (affectedRows > 0) {
-      return { message: "Article updated successfully" };
+    async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
+        return this.page(query);
     }
-    throw Error("Failed to update article");
-  }
 
-  async deleteArticles(articleIds: number[]): Promise<{ message: string }> {
-    const options = { where: { id: articleIds } };
-    const deletedCount = await this.delete(options);
-    if (deletedCount > 0) {
-      return { message: "Articles deleted successfully" };
+    async createArticle(articleData: CreationAttributes<Article>): Promise<BaseCreateResponse> {
+        return (await this.create(articleData)).id as number;
     }
-    throw Error("Failed to delete articles");
-  }
 
-  async getArticleById(articleId: number | string): Promise<Article | null> {
-    return await Article.findByPk(articleId);
-  }
+    async updateArticle(articleId: number, articleData: Partial<CreationAttributes<Article>>): Promise<void> {
+        await this.update(articleData, { where: { id: articleId } });
+    }
 
-  async getAllArticles(): Promise<Article[]> {
-    return await Article.findAll();
-  }
+    async deleteArticles(articleIds: number[]): Promise<void> {
+        await this.delete({ where: { id: articleIds } });
+    }
+
+    async getArticleById(articleId: number | string): Promise<Article | null> {
+        return await Article.findByPk(articleId);
+    }
+
+    async getAllArticles(): Promise<Article[]> {
+        return await Article.findAll();
+    }
 }

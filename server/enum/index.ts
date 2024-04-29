@@ -1,5 +1,4 @@
-enum ArticleStatus {
-    draft = "draft",
-    published = "published",
-    archived = "archived"
-}
+
+import { DataTypes } from "sequelize";
+
+export const ArticleStatus = DataTypes.ENUM("draft", "published", "archived")

@@ -1,14 +1,31 @@
-export const listToTree = <K, T>(list: TreeNode<K, T>[], idKey: keyof TreeNode<K, T>, parentKey: keyof TreeNode<K, T>, root: K): TreeNode<K, T>[] => {
-    return list
-        .filter(item => item[parentKey] === root) // 过滤出根节点的直接子节点
-        .map(item => ({ ...item, children: buildTree(item[idKey] as K) })); // 构建树形结构
+export const listToTree = <K, T>(list: T[], idKey: keyof T, parentKey: keyof T, root: K): TreeNode<K, T>[] => {
+    const map = new Map<K, TreeNode<K, T>>();
 
-    function buildTree(parentId: K): TreeNode<K, T>[] {
-        const children = list
-            .filter(item => item[parentKey] === parentId) // 过滤出当前节点的子节点
-            .map(item => ({ ...item, children: buildTree(item[idKey] as K) })); // 递归构建子节点的树形结构
-        return children.length ? children : [] as TreeNode<K, T>[]; // 如果没有子节点，则返回空数组
-    }
+    // 构建节点映射表
+    list.forEach(item => {
+        const nodeId = item[idKey] as K;
+        map.set(nodeId, { id: nodeId, pid: item[parentKey] as K, children: [] });
+    });
+
+    // 构建树形结构
+    const tree: TreeNode<K, T>[] = [];
+    list.forEach(item => {
+        const nodeId = item[idKey] as K;
+        const node = map.get(nodeId);
+        if (node) {
+            const parentId = item[parentKey] as K;
+            if (parentId === root) {
+                tree.push(node);
+            } else {
+                const parentNode = map.get(parentId);
+                if (parentNode) {
+                    parentNode.children?.push(node);
+                }
+            }
+        }
+    });
+
+    return tree;
 };
 
 
