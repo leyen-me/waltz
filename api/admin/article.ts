@@ -32,3 +32,10 @@ export const useAdminArticleSubmitApi = <T = any>(body: Partial<Article>) => {
     });
   }
 };
+
+export const useAdminArticleDeleteApi = <T = Article>(id: number) => {
+  return useApi<T>(`/api/admin/article/`, {
+    method: "DELETE",
+    body: JSON.stringify([id]),
+  });
+};
