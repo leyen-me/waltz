@@ -57,3 +57,8 @@ interface MenuQuery extends BaseQuery {
   title?: string;
   pid?: number;
 }
+
+interface AttachmentQuery extends BaseQuery {
+  title?: string;
+}
+

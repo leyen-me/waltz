@@ -10,7 +10,7 @@ function getLocalIP() {
       if (
         alias.family === "IPv4" &&
         alias.address !== "127.0.0.1" &&
-        alias.address.startsWith("192.168.")
+        alias.address.startsWith("192.168.31.")
       ) {
         localIP = alias.address;
         return;

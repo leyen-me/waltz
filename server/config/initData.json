@@ -40,10 +40,10 @@
         {
             "id": 1,
             "pid": 0,
-            "path": "",
-            "title": "菜单管理",
+            "path": "web",
+            "title": "客户端管理",
             "icon": "",
-            "type":"菜单",
+            "type": "菜单",
             "authority": "",
             "sort": 0
         },
@@ -51,38 +51,188 @@
             "id": 2,
             "pid": 1,
             "path": "",
-            "title": "列表",
+            "title": "分类管理",
             "icon": "",
-            "type":"按钮",
-            "authority": "menu:list",
+            "type": "菜单",
+            "authority": "",
             "sort": 0
         },
         {
             "id": 3,
             "pid": 1,
             "path": "",
-            "title": "新增",
+            "title": "标签管理",
             "icon": "",
-            "type":"按钮",
-            "authority": "menu:save",
-            "sort": 1
+            "type": "菜单",
+            "authority": "",
+            "sort": 0
         },
         {
             "id": 4,
             "pid": 1,
             "path": "",
+            "title": "文章管理",
+            "icon": "",
+            "type": "菜单",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 5,
+            "pid": 0,
+            "path": "admin",
+            "title": "服务端管理",
+            "icon": "",
+            "type": "菜单",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 6,
+            "pid": 5,
+            "path": "",
+            "title": "菜单管理",
+            "icon": "",
+            "type": "菜单",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 7,
+            "pid": 6,
+            "path": "",
+            "title": "列表",
+            "icon": "",
+            "type": "按钮",
+            "authority": "menu:list",
+            "sort": 0
+        },
+        {
+            "id": 8,
+            "pid": 6,
+            "path": "",
+            "title": "新增",
+            "icon": "",
+            "type": "按钮",
+            "authority": "menu:save",
+            "sort": 1
+        },
+        {
+            "id": 9,
+            "pid": 6,
+            "path": "",
             "title": "修改",
-            "type":"按钮",
+            "type": "按钮",
             "icon": "",
             "authority": "menu:update",
             "sort": 2
         },
         {
-            "id": 5,
-            "pid": 1,
+            "id": 10,
+            "pid": 6,
             "path": "",
             "title": "删除",
-            "type":"按钮",
+            "type": "按钮",
+            "icon": "",
+            "authority": "menu:delete",
+            "sort": 3
+        },
+        {
+            "id": 11,
+            "pid": 5,
+            "path": "",
+            "title": "角色管理",
+            "icon": "",
+            "type": "菜单",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 12,
+            "pid": 11,
+            "path": "",
+            "title": "列表",
+            "icon": "",
+            "type": "按钮",
+            "authority": "menu:list",
+            "sort": 0
+        },
+        {
+            "id": 13,
+            "pid": 11,
+            "path": "",
+            "title": "新增",
+            "icon": "",
+            "type": "按钮",
+            "authority": "menu:save",
+            "sort": 1
+        },
+        {
+            "id": 14,
+            "pid": 11,
+            "path": "",
+            "title": "修改",
+            "type": "按钮",
+            "icon": "",
+            "authority": "menu:update",
+            "sort": 2
+        },
+        {
+            "id": 15,
+            "pid": 11,
+            "path": "",
+            "title": "删除",
+            "type": "按钮",
+            "icon": "",
+            "authority": "menu:delete",
+            "sort": 3
+        },
+        {
+            "id": 16,
+            "pid": 5,
+            "path": "",
+            "title": "用户管理",
+            "icon": "",
+            "type": "菜单",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 17,
+            "pid": 16,
+            "path": "",
+            "title": "列表",
+            "icon": "",
+            "type": "按钮",
+            "authority": "menu:list",
+            "sort": 0
+        },
+        {
+            "id": 18,
+            "pid": 16,
+            "path": "",
+            "title": "新增",
+            "icon": "",
+            "type": "按钮",
+            "authority": "menu:save",
+            "sort": 1
+        },
+        {
+            "id": 19,
+            "pid": 16,
+            "path": "",
+            "title": "修改",
+            "type": "按钮",
+            "icon": "",
+            "authority": "menu:update",
+            "sort": 2
+        },
+        {
+            "id": 20,
+            "pid": 16,
+            "path": "",
+            "title": "删除",
+            "type": "按钮",
             "icon": "",
             "authority": "menu:delete",
             "sort": 3

@@ -25,7 +25,7 @@ export default class MenuService extends BaseService<Menu> {
         const options = { where: { id: menuId } };
         const affectedRows = await this.update(menuData, options);
         if (affectedRows > 0) {
-            return { message: 'Article updated successfully' };
+            return { message: 'Menu updated successfully' };
         }
         throw Error("Failed to update menu")
     }
@@ -34,7 +34,7 @@ export default class MenuService extends BaseService<Menu> {
         const options = { where: { id: menuIds } };
         const deletedCount = await this.delete(options);
         if (deletedCount > 0) {
-            return { message: 'Articles deleted successfully' };
+            return { message: 'Menus deleted successfully' };
         }
         throw Error("Failed to delete menus");
     }

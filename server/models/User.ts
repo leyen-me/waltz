@@ -7,6 +7,7 @@ export default class User extends BaseModel<User> {
   declare password: string;
 
   public authority?: string[];
+  public roleIdList?: number[];
 
   static initUser(sequelize: Sequelize): typeof User {
     const modelAttributes: ModelAttributes = {

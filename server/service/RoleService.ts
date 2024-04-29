@@ -1,8 +1,10 @@
 import Role from '@/server/models/Role';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes } from 'sequelize';
+import RoleMenuService from './RoleMenuService';
 
 export default class RoleService extends BaseService<Role> {
+    private roleMenuService!: RoleMenuService;
     constructor() {
         super(Role);
     }
@@ -13,6 +15,7 @@ export default class RoleService extends BaseService<Role> {
 
     async createRole(roleData: CreationAttributes<Role>): Promise<{ message: string }> {
         const createdRole = await this.create(roleData);
+        this.roleMenuService.saveOrUpdate(createdRole.id as number, roleData.roleIdList);
         if (createdRole) {
             return { message: 'Role created successfully' };
         }
