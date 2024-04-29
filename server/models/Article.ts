@@ -2,6 +2,7 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 import moment from "moment";
+import { ArticleStatus } from "../enum";
 
 export default class Article extends BaseModel<Article> {
   declare title: string;
@@ -9,7 +10,7 @@ export default class Article extends BaseModel<Article> {
   declare content: string;
   declare authorId: string;
   declare publishedAt: string;
-  declare status: ArticleStatus;
+  declare status: string;
   declare viewsCount: number;
 
   toJSON() {
@@ -22,7 +23,7 @@ export default class Article extends BaseModel<Article> {
     const modelAttributes = {
       categoryId: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         comment: "文章分类",
       },
       title: {
@@ -51,8 +52,9 @@ export default class Article extends BaseModel<Article> {
         comment: "发布时间",
       },
       status: {
-        type: DataTypes.ENUM("draft", "published", "archived"),
+        type: ArticleStatus,
         allowNull: false,
+        defaultValue: ArticleStatus.values[0],
         comment: "文章状态",
       },
       viewsCount: {

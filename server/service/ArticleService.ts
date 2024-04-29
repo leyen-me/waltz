@@ -11,6 +11,7 @@ export default class ArticleService extends BaseService<Article> {
         return this.page(query);
     }
 
+
     async createArticle(articleData: CreationAttributes<Article>): Promise<{ message: string }> {
         const createdArticle = await this.create(articleData);
         if (createdArticle) {
@@ -25,7 +26,7 @@ export default class ArticleService extends BaseService<Article> {
         if (affectedRows > 0) {
             return { message: 'Article updated successfully' };
         }
-        throw Error("Failed to update article")
+        return {message: 'Article updated failure'}
     }
 
     async deleteArticles(articleIds: number[]): Promise<{ message: string }> {
@@ -34,7 +35,7 @@ export default class ArticleService extends BaseService<Article> {
         if (deletedCount > 0) {
             return { message: 'Articles deleted successfully' };
         }
-        throw Error("Failed to delete articles");
+        return {message: 'Failed to delete articles'}
     }
 
     async getArticleById(articleId: number | string): Promise<Article | null> {

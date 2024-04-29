@@ -1,8 +1,10 @@
-import { attachmentModel } from "../models/Attachment";
-import { menuModel } from "../models/Menu";
-import { roleModel } from "../models/Role";
-import { userModel } from "../models/User";
 import fs from 'fs';
+import { userModel } from "../models/User";
+import { roleModel } from "../models/Role";
+import { menuModel } from "../models/Menu";
+import { userRoleModel } from "../models/UserRole";
+import { attachmentModel } from "../models/Attachment";
+import { roleMenuModel } from "../models/RoleMenu";
 
 export default class initScript {
 
@@ -13,7 +15,7 @@ export default class initScript {
     private static async initData(isForce: boolean) {
         const dataFilePath = './server/config/initData.json';
         const data = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
-        const { users, roles, menus } = data;
+        const { users, roles, menus, userRoles, roleMenus } = data;
         const initData = [
             {
                 model: userModel,
@@ -26,6 +28,14 @@ export default class initScript {
             {
                 model: menuModel,
                 data: menus
+            },
+            {
+                model: userRoleModel,
+                data: userRoles
+            },
+            {
+                model: roleMenuModel,
+                data: roleMenus
             },
             {
                 model: attachmentModel,

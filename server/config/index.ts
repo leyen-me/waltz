@@ -5,7 +5,7 @@ export const whiteList = ["/api/admin/auth/**", "/api/admin/article/**", "/api/a
 
 export const isForce = false;
 
-export const baseUploadDir = './public'; // 从某个地方获取上传目录
+export const baseUploadDir = './public'; 
 
 export const dbConfig: Options = {
   host: "localhost",

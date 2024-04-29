@@ -237,5 +237,124 @@
             "authority": "menu:delete",
             "sort": 3
         }
+    ],
+    "userRoles": [
+        {
+            "id": "1",
+            "userId": "1",
+            "roleId": "1"
+        },
+        {
+            "id": "2",
+            "userId": "2",
+            "roleId": "2"
+        },
+        {
+            "id": "3",
+            "userId": "3",
+            "roleId": "3"
+        }
+    ],
+    "roleMenus": [
+        {
+            "id": "1",
+            "roleId": "1",
+            "menuId": "1"
+        },
+        {
+            "id": "2",
+            "roleId": "1",
+            "menuId": "2"
+        },
+        {
+            "id": "3",
+            "roleId": "1",
+            "menuId": "3"
+        },
+        {
+            "id": "4",
+            "roleId": "1",
+            "menuId": "4"
+        },
+        {
+            "id": "5",
+            "roleId": "1",
+            "menuId": "5"
+        },
+        {
+            "id": "6",
+            "roleId": "1",
+            "menuId": "6"
+        },
+        {
+            "id": "7",
+            "roleId": "1",
+            "menuId": "7"
+        },
+        {
+            "id": "8",
+            "roleId": "1",
+            "menuId": "8"
+        },
+        {
+            "id": "9",
+            "roleId": "1",
+            "menuId": "9"
+        },
+        {
+            "id": "10",
+            "roleId": "1",
+            "menuId": "10"
+        },
+        {
+            "id": "11",
+            "roleId": "1",
+            "menuId": "11"
+        },
+        {
+            "id": "12",
+            "roleId": "1",
+            "menuId": "12"
+        },
+        {
+            "id": "13",
+            "roleId": "1",
+            "menuId": "13"
+        },
+        {
+            "id": "14",
+            "roleId": "1",
+            "menuId": "14"
+        },
+        {
+            "id": "15",
+            "roleId": "1",
+            "menuId": "15"
+        },
+        {
+            "id": "16",
+            "roleId": "1",
+            "menuId": "16"
+        },
+        {
+            "id": "17",
+            "roleId": "1",
+            "menuId": "17"
+        },
+        {
+            "id": "18",
+            "roleId": "1",
+            "menuId": "18"
+        },
+        {
+            "id": "19",
+            "roleId": "1",
+            "menuId": "19"
+        },
+        {
+            "id": "20",
+            "roleId": "1",
+            "menuId": "20"
+        }
     ]
 }

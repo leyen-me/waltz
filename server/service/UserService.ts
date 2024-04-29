@@ -18,6 +18,16 @@ export default class UserService extends BaseService<User> {
     }
 
     async createUser(userData: CreationAttributes<User>): Promise<{ message: string }> {
+        const existingUserByUsername = await this.getByUsername(userData.username);
+        if (existingUserByUsername) {
+            throw new Error("username is existed in db");
+        }
+
+        const existingUserByEmail = await this.getByEmail(userData.email);
+        if (existingUserByEmail) {
+            throw new Error("email is existed in db");
+        }
+
         const createUser = await this.create(userData);
         this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
         if (createUser) {
@@ -28,11 +38,29 @@ export default class UserService extends BaseService<User> {
 
     async updateUser(userId: number, userData: Partial<CreationAttributes<User>>): Promise<{ message: string }> {
         const options = { where: { id: userId } };
+
+        // 检查用户名是否已经存在
+        if (userData.username) {
+            const existingUserByUsername = await this.getByUsername(userData.username);
+            if (existingUserByUsername && existingUserByUsername.id !== userId) {
+                throw new Error("username is existed in db");
+            }
+        }
+
+        // 检查邮箱是否已经存在
+        if (userData.email) {
+            const existingUserByEmail = await this.getByEmail(userData.email);
+            if (existingUserByEmail && existingUserByEmail.id !== userId) {
+                throw new Error("email is existed in db");
+            }
+        }
+
         if (userData.password) {
             userData.password = defineEncodeHash(userData.password);
         }
         const affectedRows = await this.update(userData, options);
         if (affectedRows > 0) {
+            this.userRoleService.saveOrUpdate(userId, userData.roleIdList);
             return { message: 'User updated successfully' };
         }
         throw Error("Failed to update user")
@@ -42,6 +70,7 @@ export default class UserService extends BaseService<User> {
         const options = { where: { id: userIds } };
         const deletedCount = await this.delete(options);
         if (deletedCount > 0) {
+            this.userRoleService.deleteByUserIdList(userIds);
             return { message: 'Users deleted successfully' };
         }
         throw Error("Failed to delete users");
@@ -53,5 +82,15 @@ export default class UserService extends BaseService<User> {
 
     async getAllUsers(): Promise<User[]> {
         return await User.findAll();
+    }
+
+    async getByUsername(username: string): Promise<User | null> {
+        const user = await User.findOne({ where: { username: username } });
+        return user;
+    }
+
+    async getByEmail(email: string): Promise<User | null> {
+        const user = await User.findOne({ where: { email: email } })
+        return user;
     }
 }

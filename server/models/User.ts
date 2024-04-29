@@ -5,6 +5,12 @@ import sequelize from "../db";
 export default class User extends BaseModel<User> {
   declare username: string;
   declare password: string;
+  declare avatar: string;
+  declare gender: number;
+  declare email: string;
+  declare introduction:string;
+  declare superAdmin:number;
+  declare status:number;
 
   public authority?: string[];
   public roleIdList?: number[];
