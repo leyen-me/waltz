@@ -1,3 +1,4 @@
+import { attachmentModel } from "../models/Attachment";
 import { menuModel } from "../models/Menu";
 import { roleModel } from "../models/Role";
 import { userModel } from "../models/User";
@@ -6,7 +7,7 @@ import fs from 'fs';
 export default class initScript {
 
     public static async init(isForce: boolean) {
-        await this.initData(isForce);
+        isForce && await this.initData(isForce);
     }
 
     private static async initData(isForce: boolean) {
@@ -25,6 +26,10 @@ export default class initScript {
             {
                 model: menuModel,
                 data: menus
+            },
+            {
+                model: attachmentModel,
+                data: []
             }
         ];
 

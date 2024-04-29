@@ -1,7 +1,7 @@
 import { Attributes, CreateOptions, CreationAttributes, DestroyOptions, FindAndCountOptions, ModelStatic, UpdateOptions } from 'sequelize';
 import BaseModel from './BaseModel';
 
-export default class BaseService<T extends BaseModel> {
+export default class BaseService<T extends BaseModel<T>> {
 
     private model: ModelStatic<T>;
 
@@ -13,7 +13,7 @@ export default class BaseService<T extends BaseModel> {
         let { page = 1, limit = 10, order, asc } = query;
         page = Number(page);
         limit = Number(limit);
-        
+
         const offset = (page - 1) * limit;
 
         const options: FindAndCountOptions = {

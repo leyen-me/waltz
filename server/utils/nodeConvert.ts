@@ -12,8 +12,6 @@ export const listToTree = <K, T>(list: TreeNode<K, T>[], idKey: keyof TreeNode<K
 };
 
 
-
-
 export const treeToList = <K, T>(tree: TreeNode<K, T>[]): TreeNode<K, T>[] => {
     let queue: TreeNode<K, T>[] = [...tree];
     const out: TreeNode<K, T>[] = [];

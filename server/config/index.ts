@@ -1,9 +1,11 @@
 import { Options } from "sequelize";
 export const secretKey = "ijdioshai";
 
-export const whiteList = ["/api/admin/auth/**", "/api/admin/article/**"];
+export const whiteList = ["/api/admin/auth/**", "/api/admin/article/**", "/api/admin/attachment/**"];
 
-export const isForceDbData = [true, false];
+export const isForce = false;
+
+export const baseUploadDir = './public'; // 从某个地方获取上传目录
 
 export const dbConfig: Options = {
   host: "localhost",

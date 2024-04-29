@@ -1,11 +1,17 @@
 import User from '@/server/models/User';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes } from 'sequelize';
+import UserRoleService from '~/server/service/UserRoleService';
 
 export default class UserService extends BaseService<User> {
+    private userRoleService!: UserRoleService;
     constructor() {
         super(User);
     }
+
+    // setUserRoleService(userRoleService: UserRoleService) {
+    //     this.userRoleService = userRoleService;
+    // }
 
     async selectPage(query: UserQuery): Promise<BasePageResponse<User>> {
         return this.page(query);
@@ -13,6 +19,7 @@ export default class UserService extends BaseService<User> {
 
     async createUser(userData: CreationAttributes<User>): Promise<{ message: string }> {
         const createUser = await this.create(userData);
+        this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
         if (createUser) {
             return { message: 'User created successfully' };
         }
