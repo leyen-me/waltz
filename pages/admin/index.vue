@@ -43,7 +43,7 @@
     </div>
 
     <!-- Not beyond the full screen of the phone, beyond the phone flex-1 -->
-    <main class="flex-1 p-5 lg:w-0">
+    <main class="flex-1 p-5 lg:w-0 overflow-y-auto">
       <RouterView />
     </main>
   </div>

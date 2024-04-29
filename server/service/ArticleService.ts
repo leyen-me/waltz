@@ -1,6 +1,6 @@
-import Article from '@/server/models/Article';
-import BaseService from '@/server/base/BaseService';
-import { CreationAttributes } from 'sequelize';
+import Article from "@/server/models/Article";
+import BaseService from "@/server/base/BaseService";
+import { CreationAttributes } from "sequelize";
 
 export default class ArticleService extends BaseService<Article> {
     constructor() {
@@ -11,31 +11,16 @@ export default class ArticleService extends BaseService<Article> {
         return this.page(query);
     }
 
-
-    async createArticle(articleData: CreationAttributes<Article>): Promise<{ message: string }> {
-        const createdArticle = await this.create(articleData);
-        if (createdArticle) {
-            return { message: 'Article created successfully' };
-        }
-        throw Error("Failed to create article");
+    async createArticle(articleData: CreationAttributes<Article>): Promise<BaseCreateResponse> {
+        return (await this.create(articleData)).id as number;
     }
 
-    async updateArticle(articleId: number, articleData: Partial<CreationAttributes<Article>>): Promise<{ message: string }> {
-        const options = { where: { id: articleId } };
-        const affectedRows = await this.update(articleData, options);
-        if (affectedRows > 0) {
-            return { message: 'Article updated successfully' };
-        }
-        return {message: 'Article updated failure'}
+    async updateArticle(articleId: number, articleData: Partial<CreationAttributes<Article>>): Promise<void> {
+        await this.update(articleData, { where: { id: articleId } });
     }
 
-    async deleteArticles(articleIds: number[]): Promise<{ message: string }> {
-        const options = { where: { id: articleIds } };
-        const deletedCount = await this.delete(options);
-        if (deletedCount > 0) {
-            return { message: 'Articles deleted successfully' };
-        }
-        return {message: 'Failed to delete articles'}
+    async deleteArticles(articleIds: number[]): Promise<void> {
+        await this.delete({ where: { id: articleIds } });
     }
 
     async getArticleById(articleId: number | string): Promise<Article | null> {

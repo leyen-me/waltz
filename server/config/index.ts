@@ -1,11 +1,11 @@
 import { Options } from "sequelize";
 export const secretKey = "ijdioshai";
 
-export const whiteList = ["/api/admin/auth/**", "/api/admin/article/**", "/api/admin/attachment/**"];
+export const whiteList = ["/api/admin/auth/**"];
 
 export const isForce = false;
 
-export const baseUploadDir = './public'; 
+export const baseUploadDir = './public';
 
 export const dbConfig: Options = {
   host: "localhost",

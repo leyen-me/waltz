@@ -27,6 +27,8 @@ interface BasePageResponse<T> {
   };
 }
 
+type BaseCreateResponse = number;
+
 interface LoginRequest {
   username: string;
   password: string;

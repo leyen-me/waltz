@@ -13,30 +13,16 @@ export default class MenuService extends BaseService<Menu> {
         return this.page(query);
     }
 
-    async createMenu(menuData: CreationAttributes<Menu>): Promise<{ message: string }> {
-        const createdMenu = await this.create(menuData);
-        if (createdMenu) {
-            return { message: 'Menu created successfully' };
-        }
-        throw Error("Failed to create menu");
+    async createMenu(menuData: CreationAttributes<Menu>): Promise<BaseCreateResponse> {
+        return (await this.create(menuData)).id as number;
     }
 
-    async updateMenu(menuId: number, menuData: Partial<CreationAttributes<Menu>>): Promise<{ message: string }> {
-        const options = { where: { id: menuId } };
-        const affectedRows = await this.update(menuData, options);
-        if (affectedRows > 0) {
-            return { message: 'Menu updated successfully' };
-        }
-        throw Error("Failed to update menu")
+    async updateMenu(menuId: number, menuData: Partial<CreationAttributes<Menu>>): Promise<void> {
+        await this.update(menuData, { where: { id: menuId } });
     }
 
-    async deleteMenus(menuIds: number[]): Promise<{ message: string }> {
-        const options = { where: { id: menuIds } };
-        const deletedCount = await this.delete(options);
-        if (deletedCount > 0) {
-            return { message: 'Menus deleted successfully' };
-        }
-        throw Error("Failed to delete menus");
+    async deleteMenus(menuIds: number[]): Promise<void> {
+        const deletedCount = await this.delete({ where: { id: menuIds } });
     }
 
     async getMenuById(menuId: number | string): Promise<Menu | null> {
@@ -45,16 +31,14 @@ export default class MenuService extends BaseService<Menu> {
 
     async getAllMenus(user: User): Promise<Menu[]> {
         if (user.get("superAdmin") === 0) {
-            return (await Menu.findAll()).map((item) => {
-                return item.toJSON() as Menu;
-            });
-        } else {
+            return await Menu.findAll();
+        }else {
             // 构建查询条件对象
             const whereCondition = {
                 userId: user.id,
                 type: "菜单"
             };
-
+    
             // 执行查询
             const result = await Menu.findAll({
                 include: [{
@@ -68,9 +52,8 @@ export default class MenuService extends BaseService<Menu> {
                 where: whereCondition,
                 order: [['sort', 'ASC']]
             });
-
-            // 处理查询结果并返回菜单数组
-            return result.map((row: any) => new Menu(row) as Menu);
+    
+            return result;
         }
     }
 

@@ -5,6 +5,7 @@ import { menuModel } from "../models/Menu";
 import { userRoleModel } from "../models/UserRole";
 import { attachmentModel } from "../models/Attachment";
 import { roleMenuModel } from "../models/RoleMenu";
+import { articleModel } from '../models/Article';
 
 export default class initScript {
 
@@ -39,6 +40,10 @@ export default class initScript {
             },
             {
                 model: attachmentModel,
+                data: []
+            },
+            {
+                model: articleModel,
                 data: []
             }
         ];

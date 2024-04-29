@@ -36,12 +36,13 @@ export default defineEventHandler(async (event) => {
     if (!user) {
       return defineError({ msg: "用户已被删除" })
     }
-
-    const menuService = new MenuService();
-    user.authority = await menuService.getUserAuthority(user);
+    // const menuService = new MenuService();
+    // user.authority = await menuService.getUserAuthority(user);
 
     // 把user放到上下文
     event.context.user = user
+
+    
   } catch (err) {
     return defineError({ msg: "token无效" })
   }

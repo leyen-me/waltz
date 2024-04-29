@@ -1,40 +1,45 @@
 <template>
-    <ul class="grid grid-cols-1 gap-2 xl:grid-cols-2 w-full xl:w-3/4 m-auto mt-4 xl:mt-8"
-        style="padding-inline-start: 0;">
-        <li v-for="v, k in list" :key="v.id" class="w-full cursor-pointer flex relative p-4" style="list-style: none;">
-            <!-- cover -->
-            <div class="w-full h-full overflow-hidden rounded-md absolute top-0 left-0 z-0">
-                <img class="w-full h-auto object-cover transition duration-300 ease-in-out hover:scale-110"
-                    :src="v.cover || defaultCover" />
-            </div>
-            <!-- mask -->
-            <div
-                class="w-full h-full overflow-hidden rounded-md absolute top-0 left-0 z-[1] bg-gradient-to-t from-[rgba(0,0,0,0.5)] to-[rgba(0,0,0,0)]">
-            </div>
-            <!-- content -->
-            <div class="flex-1 w-0 flex flex-col justify-center z-20 text-white">
-                <div class="flex justify-between items-center">
-                    <h2 class="font-bold text-xl flex flex-1 w-0 leading-[1] p-0 m-0">
-                        <span class="line-clamp-1">{{ v.title }}</span>
-                    </h2>
-                    <span class="font-time opacity-65 text-sm ml-24">
-                        January 1,2022
-                    </span>
+    <div class="w-full m-auto mt-4 xl:w-3/4 xl:mt-8">
+        <div v-if="list.length == 0" class="flex w-full h-full items-center justify-center text-gray-500 text-sm">
+            什么都没有...<Button class="text-sm py-0 px-2" label="新增文章" link  @click="$router.push('/admin/article/0')"/>
+        </div>
+        <ul v-else class="grid grid-cols-1 gap-2 xl:grid-cols-2 w-full" style="padding-inline-start: 0;">
+            <li v-for="v, k in list" :key="v.id" class="w-full cursor-pointer flex relative p-4"
+                style="list-style: none;">
+                <!-- cover -->
+                <div class="w-full h-full overflow-hidden rounded-md absolute top-0 left-0 z-0">
+                    <img class="w-full h-auto object-cover transition duration-300 ease-in-out hover:scale-110"
+                        :src="v.cover || defaultCover" />
                 </div>
-                <div class="mt-8 flex items-center">
-                    <p class="line-clamp-2 flex-1 w-0 opacity-65 m-0">
-                        {{ v.content }}<br />
-                    </p>
-                    <div class="ml-24">
-                        <Button @click="$router.push(`/admin/article/${v.id}`)">编辑</Button>
+                <!-- mask -->
+                <div
+                    class="w-full h-full overflow-hidden rounded-md absolute top-0 left-0 z-[1] bg-gradient-to-t from-[rgba(0,0,0,0.5)] to-[rgba(0,0,0,0)]">
+                </div>
+                <!-- content -->
+                <div class="flex-1 w-0 flex flex-col justify-center z-20 text-white">
+                    <div class="flex justify-between items-center">
+                        <h2 class="font-bold text-xl flex flex-1 w-0 leading-[1] p-0 m-0">
+                            <span class="line-clamp-1">{{ v.title }}</span>
+                        </h2>
+                        <span class="font-time opacity-65 text-sm ml-24">
+                            January 1,2022
+                        </span>
+                    </div>
+                    <div class="mt-8 flex items-center">
+                        <p class="line-clamp-2 flex-1 w-0 opacity-65 m-0">
+                            {{ v.content }}<br />
+                        </p>
+                        <div class="ml-24">
+                            <Button @click="$router.push(`/admin/article/${v.id}`)">编辑</Button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </li>
-    </ul>
-    <Paginator class="w-full xl:w-3/4 m-auto mt-4 xl:mt-8" :rows="limit" :totalRecords="total"
-        :rowsPerPageOptions="defaultRowsPerPageOptions" @page="handlePageChange">
-    </Paginator>
+            </li>
+        </ul>
+        <Paginator class="w-full mt-4" :rows="limit" :totalRecords="total" v-if="list.length > limit"
+            :rowsPerPageOptions="defaultRowsPerPageOptions" @page="handlePageChange">
+        </Paginator>
+    </div>
 </template>
 
 <script setup lang="ts">
