@@ -154,7 +154,7 @@
             "title": "列表",
             "icon": "",
             "type": "按钮",
-            "authority": "menu:list",
+            "authority": "role:list",
             "sort": 0
         },
         {
@@ -164,7 +164,7 @@
             "title": "新增",
             "icon": "",
             "type": "按钮",
-            "authority": "menu:save",
+            "authority": "role:save",
             "sort": 1
         },
         {
@@ -174,7 +174,7 @@
             "title": "修改",
             "type": "按钮",
             "icon": "",
-            "authority": "menu:update",
+            "authority": "role:update",
             "sort": 2
         },
         {
@@ -184,7 +184,7 @@
             "title": "删除",
             "type": "按钮",
             "icon": "",
-            "authority": "menu:delete",
+            "authority": "role:delete",
             "sort": 3
         },
         {
@@ -204,7 +204,7 @@
             "title": "列表",
             "icon": "",
             "type": "按钮",
-            "authority": "menu:list",
+            "authority": "user:list",
             "sort": 0
         },
         {
@@ -214,7 +214,7 @@
             "title": "新增",
             "icon": "",
             "type": "按钮",
-            "authority": "menu:save",
+            "authority": "user:save",
             "sort": 1
         },
         {
@@ -224,7 +224,7 @@
             "title": "修改",
             "type": "按钮",
             "icon": "",
-            "authority": "menu:update",
+            "authority": "user:update",
             "sort": 2
         },
         {
@@ -234,7 +234,7 @@
             "title": "删除",
             "type": "按钮",
             "icon": "",
-            "authority": "menu:delete",
+            "authority": "user:delete",
             "sort": 3
         }
     ],

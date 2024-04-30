@@ -17,33 +17,29 @@ export default class UserService extends BaseService<User> {
         return this.page(query);
     }
 
-    async createUser(userData: CreationAttributes<User>): Promise<{ message: string }> {
+    async createUser(userData: CreationAttributes<User>): Promise<BaseCreateResponse> {
         const existingUserByUsername = await this.getByUsername(userData.username);
         if (existingUserByUsername) {
-            throw new Error("username is existed in db");
+            throw new Error("用户名已存在");
         }
 
         const existingUserByEmail = await this.getByEmail(userData.email);
         if (existingUserByEmail) {
-            throw new Error("email is existed in db");
+            throw new Error("邮箱已存在");
         }
 
         const createUser = await this.create(userData);
         this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
-        if (createUser) {
-            return { message: 'User created successfully' };
-        }
-        throw Error("Failed to create user");
+        return createUser.id as number;
     }
 
-    async updateUser(userId: number, userData: Partial<CreationAttributes<User>>): Promise<{ message: string }> {
-        const options = { where: { id: userId } };
+    async updateUser(userId: number, userData: Partial<CreationAttributes<User>>): Promise<void> {
 
         // 检查用户名是否已经存在
         if (userData.username) {
             const existingUserByUsername = await this.getByUsername(userData.username);
             if (existingUserByUsername && existingUserByUsername.id !== userId) {
-                throw new Error("username is existed in db");
+                throw new Error("用户名已存在");
             }
         }
 
@@ -51,29 +47,18 @@ export default class UserService extends BaseService<User> {
         if (userData.email) {
             const existingUserByEmail = await this.getByEmail(userData.email);
             if (existingUserByEmail && existingUserByEmail.id !== userId) {
-                throw new Error("email is existed in db");
+                throw new Error("邮箱已存在");
             }
         }
 
         if (userData.password) {
             userData.password = defineEncodeHash(userData.password);
         }
-        const affectedRows = await this.update(userData, options);
-        if (affectedRows > 0) {
-            this.userRoleService.saveOrUpdate(userId, userData.roleIdList);
-            return { message: 'User updated successfully' };
-        }
-        throw Error("Failed to update user")
+        await this.update(userData, { where: { id: userId } });
     }
 
-    async deleteUsers(userIds: number[]): Promise<{ message: string }> {
-        const options = { where: { id: userIds } };
-        const deletedCount = await this.delete(options);
-        if (deletedCount > 0) {
-            this.userRoleService.deleteByUserIdList(userIds);
-            return { message: 'Users deleted successfully' };
-        }
-        throw Error("Failed to delete users");
+    async deleteUsers(userIds: number[]): Promise<void> {
+        await this.delete({ where: { id: userIds } });
     }
 
     async getUserById(userId: number | string): Promise<User | null> {

@@ -3,8 +3,13 @@ import BaseService from '@/server/base/BaseService';
 import { CreationAttributes, Op } from 'sequelize';
 import User from '../models/User';
 import RoleMenu from '../models/RoleMenu';
+import UserRoleService from './UserRoleService';
+import sequelize from '../db';
+
 
 export default class MenuService extends BaseService<Menu> {
+    private userRoleService = new UserRoleService();
+
     constructor() {
         super(Menu);
     }
@@ -32,13 +37,13 @@ export default class MenuService extends BaseService<Menu> {
     async getAllMenus(user: User): Promise<Menu[]> {
         if (user.get("superAdmin") === 0) {
             return await Menu.findAll();
-        }else {
+        } else {
             // 构建查询条件对象
             const whereCondition = {
                 userId: user.id,
                 type: "菜单"
             };
-    
+
             // 执行查询
             const result = await Menu.findAll({
                 include: [{
@@ -52,7 +57,7 @@ export default class MenuService extends BaseService<Menu> {
                 where: whereCondition,
                 order: [['sort', 'ASC']]
             });
-    
+
             return result;
         }
     }
@@ -60,32 +65,26 @@ export default class MenuService extends BaseService<Menu> {
 
 
     async getUserAuthority(user: User): Promise<string[]> {
-        let whereCondition: any = {};
 
-        if (user.get("superAdmin") !== 0) {
-            whereCondition.userId = user.get("id");
+        if (user.superAdmin !== 0) {
+            // 如果用户是超级管理员，直接返回所有菜单权限
+            const allMenus = await Menu.findAll();
+            return allMenus.map(menu => menu.authority);
         }
 
-        // 构建查询条件
-        const includeCondition = [{
-            model: RoleMenu,
-            required: true,
-            attributes: [],
-            where: {
-                roleId: { [Op.col]: 't_user_role.role_id' }
-            }
-        }];
+        // 如果用户不是超级管理员，则根据用户的角色信息获取菜单权限
+        // 获取用户的角色信息，假设从数据库中查询
+        const roleIdList = await this.userRoleService.getRoleIdList(user.id as number);
 
-        // 执行查询
-        const result = await Menu.findAll({
-            include: includeCondition,
-            where: whereCondition,
-            order: [['sort', 'ASC']]
-        });
-
-        // 提取查询结果中的权限字符串并返回
-        const authorityList: string[] = result.map((menu: any) => menu.authority);
-
-        return authorityList;
+        // 构建 SQL 查询语句
+        const query = `
+            SELECT DISTINCT m.authority,m.sort AS sort_order
+            FROM t_menu m
+            INNER JOIN t_role_menu rm ON m.id = rm.menu_id
+            WHERE rm.role_id IN (${roleIdList.join(',')})
+            ORDER BY sort_order ASC;
+        `;
+        const [results] = await sequelize.query(query);
+        return results.map((row: any) => row.authority);
     }
 }

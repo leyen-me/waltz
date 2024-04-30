@@ -25,7 +25,7 @@ export default defineWrappedResponseHandler(async (event) => {
   const userInfo = {
     id: user.id,
   };
-
+  
   // 分发Token
   const token = jwt.sign(userInfo, secretKey, {
     expiresIn: "24h",
@@ -33,7 +33,7 @@ export default defineWrappedResponseHandler(async (event) => {
 
   // 返回
   const res: LoginResponse = {
-    token,
+    token
   };
 
   return defineOk({

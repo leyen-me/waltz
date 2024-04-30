@@ -1,4 +1,4 @@
-import { Attributes, CreateOptions, CreationAttributes, DestroyOptions, FindAndCountOptions, ModelStatic, UpdateOptions } from 'sequelize';
+import { Attributes, CreateOptions, CreationAttributes, DestroyOptions, FindAndCountOptions, ModelStatic, UpdateOptions, Transaction } from 'sequelize';
 import BaseModel from './BaseModel';
 
 export default class BaseService<T extends BaseModel<T>> {
@@ -39,21 +39,23 @@ export default class BaseService<T extends BaseModel<T>> {
 
     async create(
         values?: CreationAttributes<T>,
-        options?: CreateOptions<Attributes<T>>
+        options?: CreateOptions<Attributes<T>>,
+        transaction?: Transaction
     ): Promise<T> {
-        return await this.model.create(values, options);
+        return await this.model.create(values, { ...options, transaction });
     }
 
     async update(
         values: Partial<CreationAttributes<T>>,
-        options: UpdateOptions<Attributes<T>>
+        options: UpdateOptions<Attributes<T>>,
+        transaction?: Transaction
     ): Promise<number> {
-        const [affectedCount] = await this.model.update(values, options);
+        const [affectedCount] = await this.model.update(values, { ...options, transaction });
         return affectedCount;
     }
 
-    async delete(options: DestroyOptions): Promise<number> {
-        const deletedCount = await this.model.destroy(options);
+    async delete(options: DestroyOptions, transaction?: Transaction): Promise<number> {
+        const deletedCount = await this.model.destroy({ ...options, transaction });
         return deletedCount;
     }
 

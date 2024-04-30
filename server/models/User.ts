@@ -12,7 +12,7 @@ export default class User extends BaseModel<User> {
   declare superAdmin:number;
   declare status:number;
 
-  public authority?: string[];
+  public authorityList?: string[];
   public roleIdList?: number[];
 
   static initUser(sequelize: Sequelize): typeof User {
