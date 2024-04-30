@@ -146,9 +146,3 @@ const getData = async () => {
 
 getData();
 </script>
-
-<style>
-.p-dialog-content {
-  padding: 10px 250px 20px 8px;
-}
-</style>
