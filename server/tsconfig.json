@@ -5,6 +5,4 @@
     "../tailwind.config.js",
     "../components"
   ]
-    "../components",
-  ],
 }
