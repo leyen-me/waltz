@@ -18,6 +18,12 @@ body,
   height: 100%;
 }
 
+/* 样式重置 */
+.p-dialog-content {
+  padding: 10px 250px 20px 8px;
+}
+
+
 /* 手机端隐藏 */
 .p-paginator-rpp-options {
   display: none;
