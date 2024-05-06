@@ -15,13 +15,13 @@ export default class RoleService extends BaseService<Role> {
 
     async createRole(roleData: CreationAttributes<Role>): Promise<BaseCreateResponse> {
         const createdRole = await this.create(roleData);
-        this.roleMenuService.saveOrUpdate(createdRole.id as number, roleData.roleIdList);
+        this.roleMenuService.saveOrUpdate(createdRole.id as number, roleData.menuIdList);
         return createdRole.id as number;
     }
 
     async updateRole(roleId: number, roleData: Partial<CreationAttributes<Role>>): Promise<void> {
         await this.update(roleData, { where: { id: roleId } });
-        this.roleMenuService.saveOrUpdate(roleId, roleData.roleIdList);
+        this.roleMenuService.saveOrUpdate(roleId, roleData.menuIdList);
     }
 
     async deleteRoles(roleIds: number[]): Promise<void> {

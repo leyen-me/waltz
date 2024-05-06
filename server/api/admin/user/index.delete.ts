@@ -3,8 +3,10 @@ import UserService from '@/server/service/UserService';
 const userService = new UserService();
 
 export default defineWrappedResponseHandler(async (event) => {
+    hasAuthority(event, "user:delete")
+
     const ids: number[] = await readBody(event);
 
-    const result = await userService.deleteUsers(ids);
-    return defineOk({ msg: result.message });
+    await userService.deleteUsers(ids);
+    return defineOk;
 });

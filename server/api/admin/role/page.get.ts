@@ -1,10 +1,11 @@
 import RoleService from '@/server/service/RoleService';
+
 const roleService = new RoleService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    hasAuthority(event, "role:info")
+    hasAuthority(event, "role:page")
 
-    const { id } = getRouterParams(event);
-    const result = await roleService.getRoleById(id);
+    const query: RoleQuery = getQuery(event);
+    const result = await roleService.selectPage(query);
     return defineOk({ data: result });
 });

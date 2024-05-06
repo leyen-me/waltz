@@ -76,5 +76,5 @@ VMdEditor.use(createCopyCodePlugin())
 // VMdEditor.use(createImageManagerPlugin())
 
 const leftToolbar = ref("bold clear code emoji h hr image-manager italic link ol quote strikethrough table ul todo-list tip image redo undo save")
-const rightToolbar = ref("preview review toc sync-scroll")
+const rightToolbar = ref("preview review toc sync-scroll fullscreen")
 </script>

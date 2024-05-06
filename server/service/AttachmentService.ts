@@ -1,6 +1,6 @@
 import Attachment from '@/server/models/Attachment';
 import BaseService from '@/server/base/BaseService';
-import { CreationAttributes } from 'sequelize';
+import { CreationAttributes, Op } from 'sequelize';
 import { uploadFile } from '../utils/fileUtil';
 
 export default class AttachmentService extends BaseService<Attachment> {
@@ -54,7 +54,7 @@ export default class AttachmentService extends BaseService<Attachment> {
         return await Attachment.findByPk(attachmentId);
     }
 
-    async getAllAttachments(): Promise<Attachment[]> {
+    async getAllAttachments(title?: string): Promise<Attachment[]> {
         return await Attachment.findAll();
     }
 }

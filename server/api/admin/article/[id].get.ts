@@ -2,7 +2,7 @@ import ArticleService from '@/server/service/ArticleService';
 const articleService = new ArticleService();
 
 export default defineWrappedResponseHandler(async (event) => {
-
+    hasAuthority(event, "article:info")
     const { id } = getRouterParams(event);
 
     const result = await articleService.getArticleById(id);
