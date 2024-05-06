@@ -23,12 +23,14 @@ body,
   padding: 10px 250px 20px 8px;
 }
 
-
 /* 手机端隐藏 */
 .p-paginator-rpp-options {
   display: none;
 }
 .v-md-editor__preview-wrapper {
+  display: none;
+}
+.v-md-editor__toolbar-right-wrapper {
   display: none;
 }
 
@@ -39,6 +41,10 @@ body,
   }
 
   .v-md-editor__preview-wrapper {
+    display: block;
+  }
+
+  .v-md-editor__toolbar-right-wrapper {
     display: block;
   }
 }
@@ -75,12 +81,14 @@ body,
 
   .v-md-textarea-editor pre,
   .v-md-textarea-editor textarea {
+    min-height: 80vh;
+    background-color: #2e2e2e !important;
     color: rgba(255, 255, 255, 0.8) !important;
   }
 
   .v-md-editor__editor-wrapper,
   .v-md-editor__preview-wrapper {
-    background-color: #121212 !important;
+    background-color: #2e2e2e !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
   }
 

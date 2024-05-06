@@ -24,7 +24,6 @@
           name="files"
           :url="uploadUrl"
           accept="image/*"
-          :maxFileSize="1000000"
           @upload="onCoverUploadSuccess"
           @error="onCoverUploadError"
           :auto="true"
@@ -33,6 +32,17 @@
         />
         <Button class="ml-2" link @click="handlePreviewCover">预览</Button>
       </div>
+    </div>
+    <div class="mt-2 flex flex-col xl:flex-row xl:items-center">
+      <span class="text-sm">文章状态：</span>
+      <SelectButton
+        class="mt-1 xl:mt-0"
+        v-model="formData.status"
+        :options="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        aria-labelledby="basic"
+      />
     </div>
     <div class="mt-2">
       <BaseEditor
@@ -57,11 +67,18 @@ const toast = nuxtApp.vueApp.config.globalProperties.$toast;
 const uploadUrl =
   "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
 
+const status = ref("");
+const statusOptions = ref([
+  { label: "草稿", value: "draft" },
+  { label: "发布", value: "published" },
+]);
+
 const formData = ref({
   id: Number(route.params.id),
   title: "",
   cover: "",
   content: "",
+  status: "",
 });
 
 const handleSave = async () => {
@@ -120,7 +137,9 @@ const handleEditorUpload = async (event: any, insertImage: any, files: any) => {
 };
 
 const handlePreviewCover = () => {
-  window.open(formData.value.cover);
+  if (formData.value.cover) {
+    window.open(formData.value.cover);
+  }
 };
 
 const onCoverUploadSuccess = (e: any) => {
@@ -161,16 +180,17 @@ const reset = () => {
   formData.value.title = "";
   formData.value.cover = "";
   formData.value.content = "";
+  formData.value.status = statusOptions.value[0].value;
 };
 
 const getData = async () => {
   if (formData.value.id) {
-    const { title, cover, content, authorId } = await useAdminArticleInfoApi(
-      formData.value.id
-    );
+    const { title, cover, content, authorId, status } =
+      await useAdminArticleInfoApi(formData.value.id);
     formData.value.title = title;
     formData.value.cover = cover;
     formData.value.content = content;
+    formData.value.status = status;
   } else {
     reset();
   }

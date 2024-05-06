@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout>
     <NuxtPage />
-    <Toast position="top-right" />
+    <Toast position="top-center" />
   </NuxtLayout>
 </template>
 

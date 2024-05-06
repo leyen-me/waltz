@@ -1,9 +1,8 @@
 <template>
-    <v-md-editor v-model="modelValue.content" :left-toolbar :rightToolbar height="95.5vh" :autofocus="true"
+    <v-md-editor v-model="modelValue.content" :left-toolbar :rightToolbar height="auto" :autofocus="true"
         @save="emits('save')" placeholder="文章内容" :disabled-menus="[]"
         @upload-image="(event, insertImage, files) => emits('upload', event, insertImage, files)"></v-md-editor>
 </template>
-<!--  -->
 
 <script setup>
 // 基础
@@ -28,9 +27,10 @@ import "./js/katex.min.js"
 import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn'
 
 // 支持流程图
-import "./js/mermaid.min.js"
-import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn';
-import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css';
+// 开启流程图插件，编译太慢
+// import "./js/mermaid.min.js"
+// import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn';
+// import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css';
 
 // 支持TodoList
 import createTodoListPlugin from '@kangc/v-md-editor/lib/plugins/todo-list/index';
@@ -57,24 +57,17 @@ const props = defineProps({
     }
 })
 
-// const innerValue = ref(props.modelValue)
-// watch(() => props.modelValue, (newValue, oldValue) => {
-//     innerValue.value = newValue
-// })
-
-
 VMdEditor.use(githubTheme, {
     Hljs: hljs,
 });
 VMdEditor.use(createEmojiPlugin())
-VMdEditor.use(createMermaidPlugin())
+// VMdEditor.use(createMermaidPlugin())
 VMdEditor.use(createKatexPlugin())
 VMdEditor.use(createTodoListPlugin())
 VMdEditor.use(createLineNumbertPlugin())
 VMdEditor.use(createHighlightLinesPlugin())
 VMdEditor.use(createCopyCodePlugin())
-// VMdEditor.use(createImageManagerPlugin())
 
 const leftToolbar = ref("bold clear code emoji h hr image-manager italic link ol quote strikethrough table ul todo-list tip image redo undo save")
-const rightToolbar = ref("preview review toc sync-scroll")
+const rightToolbar = ref("preview sync-scroll fullscreen")
 </script>

@@ -19,7 +19,7 @@
       <li
         v-for="(v, k) in list"
         :key="v.id"
-        class="w-full cursor-pointer flex relative p-4"
+        class="w-full cursor-pointer flex relative p-4 xl:p-10 h-50 xl:h-60"
         style="list-style: none"
       >
         <!-- cover -->
@@ -36,20 +36,30 @@
           class="w-full h-full overflow-hidden rounded-md absolute top-0 left-0 z-[1] bg-gradient-to-t from-[rgba(0,0,0,0.5)] to-[rgba(0,0,0,0)]"
         ></div>
         <!-- content -->
-        <div class="flex-1 w-0 flex flex-col justify-center z-20 text-white">
+        <div class="flex-1 w-0 flex flex-col justify-between z-20 text-white">
           <div class="flex justify-between items-center">
             <h2 class="font-bold text-xl flex flex-1 w-0 leading-[1] p-0 m-0">
               <span class="line-clamp-1">{{ v.title }}</span>
             </h2>
-            <span class="font-time opacity-65 text-sm ml-24">
-              January 1,2022
+            <span class="font-time opacity-65 text-sm ml-24 text-right">
+              {{ v.status === "draft" ? "未发布" : v.publishedAtDetails.week }}
+              <br />
+              {{
+                v.status === "draft"
+                  ? ""
+                  : v.publishedAtDetails.year +
+                    "-" +
+                    v.publishedAtDetails.month +
+                    "-" +
+                    v.publishedAtDetails.day
+              }}
             </span>
           </div>
-          <div class="mt-8 flex items-center">
-            <p class="line-clamp-2 flex-1 w-0 opacity-65 m-0">
+          <div class="mt-8 flex items-end">
+            <p class="line-clamp-2 flex-1 w-0 opacity-65 m-0 xl:line-clamp-3">
               {{ v.content }}<br />
             </p>
-            <div class="ml-24">
+            <div class="ml-4 xl:ml-24">
               <Button @click="$router.push(`/admin/article/${v.id}`)" text
                 >编辑</Button
               >

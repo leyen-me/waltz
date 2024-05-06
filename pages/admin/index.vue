@@ -90,8 +90,8 @@ const items = ref([
     label: '系统设置',
     items: [
       {
-        label: 'Settings',
-        shortcut: '⌘+O'
+        label: '菜单管理',
+        url: "/admin/menu",
       },
       {
         label: 'Messages',
