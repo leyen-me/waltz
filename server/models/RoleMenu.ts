@@ -6,7 +6,6 @@ export default class RoleMenu extends BaseModel<RoleMenu> {
     declare roleId: number;
     declare menuId: number;
 
-
     static initRoleMenu(sequelize: Sequelize): typeof RoleMenu {
         const modelAttributes = {
             roleId: {

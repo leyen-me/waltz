@@ -13,31 +13,19 @@ export default class RoleService extends BaseService<Role> {
         return this.page(query);
     }
 
-    async createRole(roleData: CreationAttributes<Role>): Promise<{ message: string }> {
+    async createRole(roleData: CreationAttributes<Role>): Promise<BaseCreateResponse> {
         const createdRole = await this.create(roleData);
-        this.roleMenuService.saveOrUpdate(createdRole.id as number, roleData.roleIdList);
-        if (createdRole) {
-            return { message: 'Role created successfully' };
-        }
-        throw Error("Failed to create role");
+        this.roleMenuService.saveOrUpdate(createdRole.id as number, roleData.menuIdList);
+        return createdRole.id as number;
     }
 
-    async updateRole(roleId: number, roleData: Partial<CreationAttributes<Role>>): Promise<{ message: string }> {
-        const options = { where: { id: roleId } };
-        const affectedRows = await this.update(roleData, options);
-        if (affectedRows > 0) {
-            return { message: 'Role updated successfully' };
-        }
-        throw Error("Failed to update role")
+    async updateRole(roleId: number, roleData: Partial<CreationAttributes<Role>>): Promise<void> {
+        await this.update(roleData, { where: { id: roleId } });
+        this.roleMenuService.saveOrUpdate(roleId, roleData.menuIdList);
     }
 
-    async deleteRoles(roleIds: number[]): Promise<{ message: string }> {
-        const options = { where: { id: roleIds } };
-        const deletedCount = await this.delete(options);
-        if (deletedCount > 0) {
-            return { message: 'Roles deleted successfully' };
-        }
-        throw Error("Failed to delete roles");
+    async deleteRoles(roleIds: number[]): Promise<void> {
+        await this.delete({ where: { id: roleIds } });
     }
 
     async getRoleById(roleId: number | string): Promise<Role | null> {

@@ -13,22 +13,22 @@ export default class Attachment extends BaseModel<Attachment> {
             title: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                comment: "图片标题",
+                comment: "附件标题",
             },
             url: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                comment: '图片链接',
+                comment: '附件链接',
             },
             ext: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                comment: '图片分类/扩展名',
+                comment: '附件分类/扩展名',
             },
             size: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                comment: '图片大小',
+                comment: '附件大小',
             },
         };
 

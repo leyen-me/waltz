@@ -1,7 +1,16 @@
 import fs from 'fs';
 import path from 'path';
+import mime from 'mime';
 
 
+/**
+ * 获取文件的 MIME 类型
+ * @param file 文件对象
+ * @returns MIME 类型
+ */
+const getFileMimeType = (file: File): string => {
+    return mime.getType(file.name) || '';
+};
 
 
 /**
@@ -14,38 +23,46 @@ const validateFile = (file: File): string => {
     // 定义允许上传的最大文件大小（以字节为单位）
     const maxFileSize = 1024 * 1024 * 1024; // 1GB
 
-    // 获取文件名的后缀名
-    const fileExtension = getFileExtension(file.name);
+    // 获取文件的 MIME 类型
+    const mimeType = getFileMimeType(file);
 
-    // 定义允许上传的文件扩展名
-    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.pdf', '.doc', '.docx', '.txt', '.mp3', '.mp4', '.avi', '.wav', '.ogg', '.html', '.css', '.js', '.md', '.java', '.py'];
+    // 定义允许上传的文件 MIME 类型
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain', 'audio/mpeg', 'audio/mp4', 'video/mp4', 'video/avi', 'video/x-msvideo', 'audio/wav', 'audio/ogg', 'text/html', 'text/css', 'application/javascript'];
 
-    // 检查文件扩展名是否在允许的范围内
-    if (!allowedExtensions.includes(fileExtension)) {
+    // 检查文件 MIME 类型是否在允许的范围内
+    if (!allowedMimeTypes.includes(mimeType)) {
         throw new Error('Invalid file type');
     }
 
     // 默认子目录为 'picture'
     let subDir = 'picture';
 
-    // 根据文件后缀名确定子目录
-    switch (fileExtension) {
-        case '.mp4':
-            subDir = 'video';
-            break;
-        case '.mp3':
+    // 根据 MIME 类型确定子目录
+    switch (mimeType) {
+        case 'audio/mpeg':
+        case 'audio/mp4':
+        case 'audio/wav':
+        case 'audio/ogg':
             subDir = 'audio';
             break;
-        case '.pdf':
-        case '.doc':
-        case '.docx':
-        case '.txt':
-        case '.md':
+        case 'video/mp4':
+        case 'video/avi':
+        case 'video/x-msvideo':
+            subDir = 'video';
+            break;
+        case 'application/pdf':
+        case 'application/msword':
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+        case 'text/plain':
+        case 'text/html':
+        case 'text/css':
+        case 'application/javascript':
             subDir = 'document';
             break;
-        case '.java':
-        case '.py':
-            subDir = 'code';
+        case 'image/jpeg':
+        case 'image/png':
+        case 'image/gif':
+            subDir = 'image';
             break;
     }
 
@@ -56,6 +73,7 @@ const validateFile = (file: File): string => {
 
     return subDir;
 };
+
 
 
 /**
