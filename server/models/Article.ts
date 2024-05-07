@@ -12,10 +12,21 @@ export default class Article extends BaseModel<Article> {
   declare publishedAt: string;
   declare status: string;
   declare viewsCount: number;
+  declare publishedAtDetails: object;
 
   toJSON() {
     const json = super.toJSON();
-    json.publishedAt = moment(json.publishedAt).format('YYYY-MM-DD HH:mm:ss');
+    if (json.publishedAt) {
+      json.publishedAt = moment(json.publishedAt).format('YYYY-MM-DD HH:mm:ss')
+      json.publishedAtDetails = {
+        "year": moment(json.publishedAt).format('YYYY'),
+        "quarter": moment(json.publishedAt).format('Q'),
+        "month": moment(json.publishedAt).format('MM'),
+        "week": moment(json.publishedAt).format('dddd'),
+        "day": moment(json.publishedAt).format('DD'),
+        "second": moment(json.publishedAt).format('X')
+      };
+    }
     return json;
   }
 

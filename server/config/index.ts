@@ -3,7 +3,7 @@ export const secretKey = "ijdioshai";
 
 export const whiteList = ["/api/admin/auth/**"];
 
-export const isForce = true;
+export const isForce = false;
 
 export const baseUploadDir = './public';
 

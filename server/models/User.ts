@@ -33,7 +33,7 @@ export default class User extends BaseModel<User> {
         comment: "头像",
       },
       gender: {
-        type: DataTypes.ENUM("男", "女", "保密"),
+        type: DataTypes.ENUM("men", "women", "secret"),
         allowNull: true,
         comment: "性别",
       },
@@ -50,8 +50,8 @@ export default class User extends BaseModel<User> {
       superAdmin: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 1,
-        comment: "是否是超级管理员(0:是 1:否)"
+        defaultValue: 0,
+        comment: "是否是超级管理员(0:否 1:是)"
       },
       status: {
         type: DataTypes.INTEGER,

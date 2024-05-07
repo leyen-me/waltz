@@ -1,10 +1,17 @@
-export const listToTree = <K, T>(list: T[], idKey: keyof T, parentKey: keyof T, root: K): TreeNode<K, T>[] => {
+export const listToTree = <K, T extends { [key: string]: any }>(list: T[], idKey: keyof T, parentKey: keyof T, root: K): TreeNode<K, T>[] => {
     const map = new Map<K, TreeNode<K, T>>();
 
     // 构建节点映射表
     list.forEach(item => {
         const nodeId = item[idKey] as K;
-        map.set(nodeId, { id: nodeId, pid: item[parentKey] as K, children: [] });
+        let m = {
+            id: item.id as K,
+            pid: item.pid as K,
+            children: []
+        }
+        // 从 Menu 对象中取出所需的属性
+        m = { ...m, ...item }
+        map.set(nodeId, m);
     });
 
     // 构建树形结构
@@ -27,6 +34,7 @@ export const listToTree = <K, T>(list: T[], idKey: keyof T, parentKey: keyof T, 
 
     return tree;
 };
+
 
 
 export const treeToList = <K, T>(tree: TreeNode<K, T>[]): TreeNode<K, T>[] => {
