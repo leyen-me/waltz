@@ -1,0 +1,154 @@
+<template>
+  <div class="h-full flex xl:justify-center xl:items-center">
+    <div class="w-full xl:w-[680px]">
+      <t-card title="基本信息">
+        <template #actions>
+          <t-button @click="handleSubmitForm">保存</t-button>
+        </template>
+        <t-form
+          ref="form"
+          :data="formData"
+          :rules="formRules"
+          :colon="true"
+          :label-align="'top'"
+          @submit="handleSave"
+        >
+          <t-form-item name="avatar" label="头像">
+            <t-upload
+              name="files"
+              v-model="files"
+              :action="uploadUrl"
+              :abridge-name="[8, 6]"
+              :multiple="false"
+              theme="image"
+              :showImageFileName="false"
+              placeholder="未选择文件"
+              @success="onUploadSuccess"
+              @fail="onUploadError"
+            ></t-upload>
+          </t-form-item>
+          <t-form-item name="username" label="名称">
+            <t-input v-model="formData.username" clearable> </t-input>
+          </t-form-item>
+          <t-form-item name="password" label="密码" v-if="!formData.id">
+            <t-input v-model="formData.password" clearable> </t-input>
+          </t-form-item>
+          <t-form-item name="gender" label="性别">
+            <t-radio-group variant="default-filled" v-model="formData.gender">
+              <t-radio-button value="men">男</t-radio-button>
+              <t-radio-button value="women">女</t-radio-button>
+              <t-radio-button value="secret">未知</t-radio-button>
+            </t-radio-group>
+          </t-form-item>
+          <t-form-item name="email" label="邮箱">
+            <t-input v-model="formData.email" clearable></t-input>
+          </t-form-item>
+          <t-form-item name="introduction" label="简介">
+            <t-textarea v-model="formData.introduction"></t-textarea>
+          </t-form-item>
+          <t-form-item name="superAdmin" label="超管">
+            <t-radio-group
+              variant="default-filled"
+              v-model="formData.superAdmin"
+            >
+              <t-radio-button :value="1">是</t-radio-button>
+              <t-radio-button :value="0">否</t-radio-button>
+            </t-radio-group>
+          </t-form-item>
+          <t-form-item name="status" label="状态">
+            <t-radio-group variant="default-filled" v-model="formData.status">
+              <t-radio-button :value="0">正常</t-radio-button>
+              <t-radio-button :value="1">停用</t-radio-button>
+            </t-radio-group>
+          </t-form-item>
+        </t-form>
+      </t-card>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { SubmitContext } from "tdesign-vue-next/es/form";
+import Cookies from "js-cookie";
+import { useAdminUserFindOneApi, useAdminUserSubmitApi } from "@/api/admin/user";
+
+const route = useRoute();
+const router = useRouter();
+
+const files = ref([]);
+const uploadUrl =
+  "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
+
+const onUploadSuccess = (e: any) => {
+  const { code, msg, data } = e.response;
+  if (code !== 200) {
+    MessagePlugin.error(msg);
+    return;
+  }
+  formData.value.avatar = data[0];
+  MessagePlugin.success("文件上传成功");
+};
+const onUploadError = () => {
+  MessagePlugin.error("文件上传失败");
+};
+
+const formData = ref({
+  id: Number(route.params.id),
+  username: "",
+  password: "",
+  avatar: "",
+  gender: "men",
+  email: "",
+  introduction: "",
+  superAdmin: 1,
+  status: 0,
+});
+const form = ref(null);
+const formRules = ref({
+  username: [{ required: true, message: "名称必填" }],
+  password: [{ required: true, message: "密码必填" }],
+});
+
+const getData = async () => {
+  if (formData.value.id) {
+    const {
+      username,
+      avatar,
+      gender,
+      email,
+      introduction,
+      superAdmin,
+      status,
+    } = await useAdminUserFindOneApi(formData.value.id);
+    formData.value.username = username;
+    formData.value.avatar = avatar;
+    formData.value.gender = gender;
+    formData.value.email = email;
+    formData.value.introduction = introduction;
+    formData.value.superAdmin = superAdmin;
+    formData.value.status = status;
+  }
+};
+
+const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
+  if (validateResult === true) {
+    try {
+      const res = await useAdminUserSubmitApi(formData.value);
+      MessagePlugin.success("保存成功");
+      router.back();
+    } catch (error: any) {
+      MessagePlugin.error("保存失败");
+    }
+  } else {
+    console.log("Validate Errors: ", firstError, validateResult);
+    firstError && MessagePlugin.warning(firstError);
+  }
+};
+
+const handleSubmitForm = () => {
+  // @ts-ignore
+  form.value.submit();
+};
+
+getData();
+</script>

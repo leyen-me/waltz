@@ -1,79 +1,150 @@
 <template>
-  <Card>
-    <template #content>
-      <form>
-        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          <div class="sm:col-span-4">
-            <label
-              for="username"
-              class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
-              >菜单名称</label
+  <div class="h-full flex justify-center items-center">
+    <div class="w-full xl:w-[500px]">
+      <t-card title="基本信息">
+        <template #actions>
+          <t-button @click="handleSubmitForm">保存</t-button>
+        </template>
+        <t-form
+          ref="form"
+          :data="formData"
+          :rules="formRules"
+          :colon="true"
+          :label-align="'top'"
+          @submit="handleSave"
+        >
+          <t-form-item name="type" label="类型">
+            <t-radio-group variant="default-filled" v-model="formData.type">
+              <t-radio-button
+                :value="v.value"
+                v-for="(v, k) in typeOptions"
+                :key="v.value"
+                >{{ v.label }}</t-radio-button
+              >
+            </t-radio-group>
+          </t-form-item>
+          <t-form-item name="pid" label="父级">
+            <t-tree-select
+              v-model="formData.pid"
+              :data="pList"
+              :keys="{
+                label: 'title',
+                value: 'id',
+              }"
             >
-            <div class="mt-2">
-              <InputText type="text" v-model="value" />
-            </div>
-          </div>
-          <div class="sm:col-span-4">
-            <label
-              for="username"
-              class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
-              >路径</label
-            >
-            <div class="mt-2">
-              <InputText type="text" v-model="value" />
-            </div>
-          </div>
-          <div class="sm:col-span-4">
-            <label
-              for="username"
-              class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
-              >路径</label
-            >
-            <div class="mt-2">
-              <InputText type="text" v-model="value" />
-            </div>
-          </div>
-          <div class="sm:col-span-4">
-            <label
-              for="username"
-              class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
-              >路径</label
-            >
-            <div class="mt-2">
-              <InputText type="text" v-model="value" />
-            </div>
-          </div>
-          <div class="sm:col-span-4">
-            <label
-              for="username"
-              class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
-              >路径</label
-            >
-            <div class="mt-2">
-              <InputText type="text" v-model="value" />
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-          <button
-            type="button"
-            class="text-sm font-semibold leading-6 text-gray-900"
+            </t-tree-select>
+          </t-form-item>
+          <t-form-item name="title" label="菜单名称">
+            <t-input v-model="formData.title" clearable> </t-input>
+          </t-form-item>
+          <t-form-item
+            name="path"
+            label="菜单路径"
+            v-if="formData.type === typeOptions[0].value"
           >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            <t-input v-model="formData.path" clearable> </t-input>
+          </t-form-item>
+          <t-form-item
+            name="icon"
+            label="菜单图标"
+            v-if="formData.type === typeOptions[0].value"
           >
-            Save
-          </button>
-        </div>
-      </form>
-    </template>
-  </Card>
+            <BaseIconSelect v-model="formData.icon"></BaseIconSelect>
+          </t-form-item>
+          <t-form-item name="sort" label="排序">
+            <t-input v-model="formData.sort" clearable type="number"> </t-input>
+          </t-form-item>
+          <t-form-item
+            name="authority"
+            label="权限标识"
+            v-if="formData.type === typeOptions[1].value"
+          >
+            <t-input v-model="formData.authority" clearable>
+            </t-input>
+          </t-form-item>
+        </t-form>
+      </t-card>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-const value = ref();
+import {
+  useAdminMenuInfoApi,
+  useAdminMenuListApi,
+  useAdminMenuSubmitApi,
+} from "@/api/admin/menu";
+import type { SubmitContext } from "tdesign-vue-next/es/form";
+
+const route = useRoute();
+const router = useRouter();
+
+const typeOptions = ref([
+  { label: "菜单", value: "menu" },
+  { label: "按钮", value: "button" },
+]);
+const pList = ref();
+const formData = ref({
+  id: Number(route.params.id),
+  pid: 0,
+  icon: "",
+  title: "",
+  path: "",
+  sort: 0,
+  type: typeOptions.value[0].value,
+  authority: "",
+});
+const form = ref(null);
+const formRules = ref({
+  title: [{ required: true, message: "菜单名称必填" }],
+  path: [{ required: true, message: "路径必填" }],
+  icon: [{ required: true, message: "图标必填" }],
+});
+
+const getData = async () => {
+  const data = await useAdminMenuListApi();
+
+  const res = [
+    {
+      id: 0,
+      title: "一级菜单",
+      children: data,
+    },
+  ];
+  pList.value = res;
+
+  if (formData.value.id) {
+    const { pid, icon, title, path, sort, type, authority } =
+      await useAdminMenuInfoApi(formData.value.id);
+    formData.value.pid = pid;
+    formData.value.icon = icon;
+    formData.value.title = title;
+    formData.value.path = path;
+    formData.value.sort = sort;
+    formData.value.type = type;
+    formData.value.authority = authority;
+  }
+};
+
+const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
+  if (validateResult === true) {
+    try {
+      const res = await useAdminMenuSubmitApi(formData.value);
+      MessagePlugin.success("保存成功");
+      router.back()
+    } catch (error: any) {
+      MessagePlugin.error("保存失败");
+    }
+  } else {
+    console.log("Validate Errors: ", firstError, validateResult);
+    firstError && MessagePlugin.warning(firstError);
+  }
+};
+
+const handleSubmitForm = () => {
+  // @ts-ignore
+  form.value.submit();
+};
+
+getData();
 </script>

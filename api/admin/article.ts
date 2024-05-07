@@ -1,5 +1,4 @@
 import useApi from "@/utils/api";
-import type { CreationAttributes } from "sequelize";
 import type Article from "~/server/models/Article";
 
 export const useAdminArticlePageApi = <T = BasePageResponse<Article>>(

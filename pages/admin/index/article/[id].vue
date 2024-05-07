@@ -1,55 +1,67 @@
 <template>
   <div>
-    <div class="flex flex-col xl:flex-row xl:items-center">
-      <span class="text-sm">文章标题：</span>
-      <InputText
-        class="mt-1 xl:mt-0"
-        type="text"
-        v-model="formData.title"
-        placeholder="文章标题"
-      />
-    </div>
-    <div class="mt-2 flex flex-col xl:flex-row xl:items-center">
-      <span class="text-sm">文章封面：</span>
-      <InputText
-        class="mt-1 xl:mt-0"
-        type="text"
-        v-model="formData.cover"
-        placeholder="文章封面"
-      />
-      <div class="flex mt-2 xl:mt-0">
-        <FileUpload
-          class="xl:ml-2"
-          mode="basic"
-          name="files"
-          :url="uploadUrl"
-          accept="image/*"
-          @upload="onCoverUploadSuccess"
-          @error="onCoverUploadError"
-          :auto="true"
-          :fileLimit="1"
-          chooseLabel="上传"
-        />
-        <Button class="ml-2" link @click="handlePreviewCover">预览</Button>
-      </div>
-    </div>
-    <div class="mt-2 flex flex-col xl:flex-row xl:items-center">
-      <span class="text-sm">文章状态：</span>
-      <SelectButton
-        class="mt-1 xl:mt-0"
-        v-model="formData.status"
-        :options="statusOptions"
-        optionLabel="label"
-        optionValue="value"
-        aria-labelledby="basic"
-      />
-    </div>
-    <div class="mt-2">
-      <BaseEditor
-        v-model="formData"
-        @save="handleSave"
-        @upload="handleEditorUpload"
-      ></BaseEditor>
+    <t-card title="基本信息">
+      <template #actions>
+        <t-button @click="handleSubmitForm">保存</t-button>
+      </template>
+      <t-form
+        ref="form"
+        :data="formData"
+        :rules="formRules"
+        :colon="true"
+        :label-align="'top'"
+        @submit="handleSave"
+      >
+        <t-form-item name="title" label="文章标题">
+          <t-input
+            v-model="formData.title"
+            clearable
+            placeholder="请输入文章标题"
+          >
+          </t-input>
+        </t-form-item>
+        <t-form-item name="cover" label="文章封面">
+          <t-input
+            v-model="formData.cover"
+            clearable
+            placeholder="请输入文章标题"
+          >
+          </t-input>
+          <div class="ml-2">
+            <t-upload
+              name="files"
+              v-model="files"
+              :action="uploadUrl"
+              :abridge-name="[8, 6]"
+              :multiple="false"
+              theme="custom"
+              :showImageFileName="false"
+              placeholder="未选择文件"
+              @success="onCoverUploadSuccess"
+              @fail="onCoverUploadError"
+            ></t-upload>
+          </div>
+        </t-form-item>
+        <t-form-item name="status" label="文章状态">
+          <t-radio-group variant="default-filled" v-model="formData.status">
+            <t-radio-button
+              :value="v.value"
+              v-for="(v, k) in statusOptions"
+              :key="v.value"
+              >{{ v.label }}</t-radio-button
+            >
+          </t-radio-group>
+        </t-form-item>
+      </t-form>
+    </t-card>
+    <div class="mt-4">
+      <t-card title="文章内容">
+        <BaseEditor
+          v-model="formData"
+          @save="handleSubmitForm"
+          @upload="handleEditorUpload"
+        ></BaseEditor>
+      </t-card>
     </div>
   </div>
 </template>
@@ -60,19 +72,19 @@ import {
   useAdminArticleSubmitApi,
 } from "@/api/admin/article";
 import Cookies from "js-cookie";
+import type { SubmitContext } from "tdesign-vue-next/es/form";
 
 const route = useRoute();
-const nuxtApp = useNuxtApp();
-const toast = nuxtApp.vueApp.config.globalProperties.$toast;
 const uploadUrl =
   "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
 
-const status = ref("");
 const statusOptions = ref([
   { label: "草稿", value: "draft" },
   { label: "发布", value: "published" },
 ]);
 
+const files = ref([]);
+const form = ref(null);
 const formData = ref({
   id: Number(route.params.id),
   title: "",
@@ -80,30 +92,34 @@ const formData = ref({
   content: "",
   status: "",
 });
+const formRules = ref({
+  title: [{ required: true, message: "文章标题必填" }],
+  cover: [{ required: true, message: "封面必填" }],
+});
 
-const handleSave = async () => {
-  try {
-    const res = await useAdminArticleSubmitApi(formData.value);
-    if (typeof res === "number") {
-      formData.value.id = res;
-      await getData();
+const handleSubmitForm = () => {
+  // @ts-ignore
+  form.value.submit();
+};
 
-      const newPath = `/admin/article/${formData.value.id}`;
-      history.pushState({}, "", newPath);
+const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
+  if (validateResult === true) {
+    try {
+      const res = await useAdminArticleSubmitApi(formData.value);
+      if (typeof res === "number") {
+        formData.value.id = res;
+        await getData();
+
+        const newPath = `/admin/article/${formData.value.id}`;
+        history.pushState({}, "", newPath);
+      }
+      MessagePlugin.success("保存成功");
+    } catch (e) {
+      MessagePlugin.error("保存失败");
     }
-    toast.add({
-      severity: "success",
-      summary: "成功",
-      detail: "保存成功",
-      life: 3000,
-    });
-  } catch (e) {
-    toast.add({
-      severity: "error",
-      summary: "错误",
-      detail: "保存失败",
-      life: 3000,
-    });
+  } else {
+    console.log("Validate Errors: ", firstError, validateResult);
+    firstError && MessagePlugin.warning(firstError);
   }
 };
 
@@ -131,48 +147,22 @@ const handleEditorUpload = async (event: any, insertImage: any, files: any) => {
   for (const item of data.value.data) {
     insertImage({
       url: item,
-      desc: "七龙珠",
+      desc: "",
     });
   }
 };
 
-const handlePreviewCover = () => {
-  if (formData.value.cover) {
-    window.open(formData.value.cover);
-  }
-};
-
 const onCoverUploadSuccess = (e: any) => {
-  if (!e.xhr.response) {
-    onCoverUploadError();
+  const { code, msg, data } = e.response;
+  if (code !== 200) {
+    MessagePlugin.error(msg);
     return;
   }
-  try {
-    const response = JSON.parse(e.xhr.response);
-    if (response.code !== 200) {
-      onCoverUploadError();
-      return;
-    }
-    formData.value.cover = response.data[0];
-  } catch (e2) {
-    onCoverUploadError();
-    return;
-  }
-
-  toast.add({
-    severity: "success",
-    summary: "成功",
-    detail: "文件上传成功",
-    life: 3000,
-  });
+  formData.value.cover = data[0];
+  MessagePlugin.success("文件上传成功");
 };
 const onCoverUploadError = () => {
-  toast.add({
-    severity: "error",
-    summary: "错误",
-    detail: "文件上传失败",
-    life: 3000,
-  });
+  MessagePlugin.error("文件上传失败");
 };
 
 const reset = () => {

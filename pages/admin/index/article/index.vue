@@ -4,23 +4,16 @@
       v-if="list.length == 0"
       class="flex w-full h-full items-center justify-center text-gray-500 text-sm"
     >
-      什么都没有...<Button
-        class="text-sm py-0 px-2"
-        label="新增文章"
-        link
-        @click="$router.push('/admin/article/0')"
-      />
+      什么都没有,
+      <t-link label="" @click="$router.push('/admin/article/0')"
+        >新增文章</t-link
+      >
     </div>
-    <ul
-      v-else
-      class="grid grid-cols-1 gap-2 xl:grid-cols-2 w-full"
-      style="padding-inline-start: 0"
-    >
+    <ul v-else class="grid grid-cols-1 gap-2 xl:grid-cols-2 w-full">
       <li
         v-for="(v, k) in list"
         :key="v.id"
-        class="w-full cursor-pointer flex relative p-4 xl:p-10 h-50 xl:h-60"
-        style="list-style: none"
+        class="w-full cursor-pointer flex relative p-4 xl:p-10 h-40 xl:h-60"
       >
         <!-- cover -->
         <div
@@ -59,30 +52,41 @@
             <p class="line-clamp-2 flex-1 w-0 opacity-65 m-0 xl:line-clamp-3">
               {{ v.content }}<br />
             </p>
-            <div class="ml-4 xl:ml-24">
-              <Button @click="$router.push(`/admin/article/${v.id}`)" text
-                >编辑</Button
-              >
-              <Button
-                severity="danger"
-                @click="handleDelete(v.id as number)"
-                text
-                >删除</Button
-              >
+            <div
+              class="ml-4 xl:ml-24"
+              style="--td-bg-color-specialcomponent: rgba(0, 0, 0, 0)"
+            >
+              <t-space>
+                <t-button
+                  @click="$router.push(`/admin/article/${v.id}`)"
+                  variant="outline"
+                  style="color: white"
+                  >编辑</t-button
+                >
+                <t-popconfirm
+                  content="确认删除吗"
+                  @confirm="handleDelete(v.id as number)"
+                >
+                  <t-button theme="danger" variant="outline">删除</t-button>
+                </t-popconfirm>
+              </t-space>
             </div>
           </div>
         </div>
       </li>
     </ul>
-    <Paginator
-      class="w-full mt-4"
-      :rows="limit"
-      :totalRecords="total"
-      v-if="list.length > limit"
-      :rowsPerPageOptions="defaultRowsPerPageOptions"
-      @page="handlePageChange"
-    >
-    </Paginator>
+    <div class="mt-4">
+      <t-pagination
+        v-if="list.length > limit"
+        v-model="page"
+        v-model:pageSize="limit"
+        :total="total"
+        show-sizer
+        :page-size-options="defaultRowsPerPageOptions"
+        @page-size-change="getData"
+        @current-change="getData"
+      />
+    </div>
   </div>
 
   <ConfirmDialog></ConfirmDialog>
@@ -95,54 +99,22 @@ import {
 } from "@/api/admin/article";
 import { defaultCover, defaultRowsPerPageOptions } from "@/constans";
 import type Article from "@/server/models/Article";
-import type { PageState } from "primevue/paginator";
 
 // 分页
 const page = ref(1);
 const limit = ref(defaultRowsPerPageOptions[0]);
 
-const handlePageChange = (pageState: PageState) => {
-  page.value = pageState.page + 1;
-  limit.value = pageState.rows;
-  getData();
-};
-
 const total = ref(0);
 const list = ref<Article[]>([]);
 
-const toast = useToast();
-const confirm = useConfirm();
-
-const handleDelete = (id: number) => {
-  confirm.require({
-    message: "确定删除吗?",
-    header: "删除",
-    icon: "pi pi-info-circle",
-    rejectLabel: "取消",
-    acceptLabel: "删除",
-    rejectClass: "p-button-secondary p-button-outlined",
-    acceptClass: "p-button-danger",
-    accept: async () => {
-      try {
-        await useAdminArticleDeleteApi(id);
-        await getData();
-        toast.add({
-          severity: "success",
-          summary: "成功",
-          detail: "文章删除成功",
-          life: 3000,
-        });
-      } catch (error) {
-        toast.add({
-          severity: "error",
-          summary: "错误",
-          detail: "文章删除失败",
-          life: 3000,
-        });
-      }
-    },
-    reject: () => {},
-  });
+const handleDelete = async (id: number) => {
+  try {
+    await useAdminArticleDeleteApi(id);
+    await getData();
+    MessagePlugin.success("文章删除成功");
+  } catch (error) {
+    MessagePlugin.error("文章删除失败");
+  }
 };
 
 const getData = async () => {

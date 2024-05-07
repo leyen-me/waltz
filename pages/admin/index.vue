@@ -1,27 +1,56 @@
 <template>
   <div class="h-full flex flex-col lg:flex-row">
-
     <TransitionRoot as="template" :show="sidebarOpen">
-      <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
-        <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0"
-          enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100"
-          leave-to="opacity-0">
+      <Dialog
+        as="div"
+        class="relative z-50 lg:hidden"
+        @close="sidebarOpen = false"
+      >
+        <TransitionChild
+          as="template"
+          enter="transition-opacity ease-linear duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="transition-opacity ease-linear duration-300"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
           <div class="fixed inset-0 bg-gray-900/80" />
         </TransitionChild>
         <div class="fixed inset-0 flex">
-          <TransitionChild as="template" enter="transition ease-in-out duration-300 transform"
-            enter-from="-translate-x-full" enter-to="translate-x-0"
-            leave="transition ease-in-out duration-300 transform" leave-from="translate-x-0"
-            leave-to="-translate-x-full">
+          <TransitionChild
+            as="template"
+            enter="transition ease-in-out duration-300 transform"
+            enter-from="-translate-x-full"
+            enter-to="translate-x-0"
+            leave="transition ease-in-out duration-300 transform"
+            leave-from="translate-x-0"
+            leave-to="-translate-x-full"
+          >
             <DialogPanel class="relative mr-16 flex w-full max-w-xs flex-1">
-              <TransitionChild as="template" enter="ease-in-out duration-300" enter-from="opacity-0"
-                enter-to="opacity-100" leave="ease-in-out duration-300" leave-from="opacity-100" leave-to="opacity-0">
-                <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
-                  <IconXmark class="!text-white" @click="sidebarOpen = false"></IconXmark>
+              <TransitionChild
+                as="template"
+                enter="ease-in-out duration-300"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="ease-in-out duration-300"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+              >
+                <div
+                  class="absolute left-full top-0 flex w-16 justify-center pt-5"
+                >
+                  <IconXmark
+                    class="!text-white"
+                    @click="sidebarOpen = false"
+                  ></IconXmark>
                 </div>
               </TransitionChild>
               <!-- Sidebar component, swap this element with another sidebar if you like -->
-              <BaseNav :items="items" @item-click="handleNavItemClick"></BaseNav>
+              <BaseNav
+                :items="items"
+                @item-click="handleNavItemClick"
+              ></BaseNav>
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -35,9 +64,10 @@
     </div>
 
     <div
-      class="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden dark:bg-[var(--surface-ground)]">
+      class="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden dark:bg-[var(--surface-ground)]"
+    >
       <IconMenu class="p-[2px]" @click="sidebarOpen = true"></IconMenu>
-      <span truncated class="flex-1 text-sm font-semibold leading-6 ">
+      <span truncated class="flex-1 text-sm font-semibold leading-6">
         <span class="sr-only">手机端标题</span>
       </span>
     </div>
@@ -56,6 +86,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
+import { nanoid } from "nanoid";
 
 // definePageMeta({
 //   middleware: 'auth'
@@ -66,57 +97,72 @@ const key = ref("");
 
 const items = ref([
   {
-    separator: true
+    label: "首页",
+    path: "/admin/home",
   },
   {
-    label: '首页',
-    url: "/admin/home"
+    id: nanoid(),
+    label: "文章管理",
+    path: nanoid(),
+    children: [
+      {
+        label: "新增",
+        path: "/admin/article/0",
+        shortcut: "⌘+N",
+      },
+      {
+        label: "列表",
+        path: "/admin/article",
+      },
+    ],
   },
   {
-    label: '文章管理',
-    items: [
+    id: nanoid(),
+    label: "系统设置",
+    path: nanoid(),
+    children: [
       {
-        label: '新增',
-        url: "/admin/article/0",
-        shortcut: '⌘+N'
+        label: "菜单管理",
+        path: "/admin/menu",
       },
       {
-        label: '列表',
-        url: "/admin/article",
-      }
-    ]
+        label: "用户管理",
+        path: "/admin/user",
+      },
+      {
+        label: "角色管理",
+        path: "/admin/role",
+      },
+    ],
   },
   {
-    label: '系统设置',
-    items: [
+    id: nanoid(),
+    label: "更多",
+    path: nanoid(),
+    children: [
       {
-        label: '菜单管理',
-        url: "/admin/menu",
+        label: "个人页",
+        icon: "user",
+        path: "/admin/user/info",
       },
       {
-        label: 'Messages',
-        badge: 2
+        label: "登录页",
+        icon: "login",
+        path: "/admin/login",
       },
-      {
-        label: 'Logout',
-        shortcut: '⌘+Q'
-      },
-    ]
+    ],
   },
-  {
-    separator: true
-  }
 ]);
 
-const router = useRouter()
+const router = useRouter();
 // router.replace("/admin/home")
 
 const handleNavItemClick = (url: string) => {
-  router.push(url)
+  router.push(url);
   if (sidebarOpen.value) {
-    sidebarOpen.value = false
+    sidebarOpen.value = false;
   }
-}
+};
 </script>
 
 <style scoped>

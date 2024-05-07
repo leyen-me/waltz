@@ -1,61 +1,117 @@
 <template>
   <div class="w-full">
-    <div class="w-full flex justify-end">
-      <Button class="ml-2" @click="$router.push('/admin/menu/0')">新增</Button>
-    </div>
-    <Card class="mt-2">
-      <template #content>
-        <TreeTable :value="list" :dataKey="'id'">
-          <Column field="title" header="名称" expander></Column>
-          <Column field="path" header="路径"></Column>
-          <Column field="sort" header="排序"></Column>
-          <Column header="类型">
-            <template #body="slotProps">
-              <Tag :severity="getTypeTagColor(slotProps.node.type)">{{
-                slotProps.node.type === "menu" ? "菜单" : "按钮"
-              }}</Tag>
-            </template>
-          </Column>
-          
-          <Column field="authority" header="权限"></Column>
-          <Column header="操作">
-            <template #body="slotProps">
-              <Button
-                text
-                @click="$router.push(`/admin/menu/${slotProps.node.id}`)"
-                >修改</Button
-              >
-              <Button class="ml-2" text severity="danger">删除</Button>
-            </template>
-          </Column>
-        </TreeTable>
+    <t-card title="菜单管理">
+      <template #actions>
+        <t-button class="ml-2" @click="$router.push('/admin/menu/0')"
+          >新增</t-button
+        >
       </template>
-    </Card>
+      <t-enhanced-table
+        ref="tableRef"
+        row-key="id"
+        drag-sort="row-handler"
+        :data="list"
+        :columns="columns"
+        :tree="treeConfig"
+      ></t-enhanced-table>
+    </t-card>
   </div>
 </template>
 
-<script setup lang="ts">
-import { useAdminMenuListApi } from "@/api/admin/menu";
-import TreeTable from "primevue/treetable";
-import Column from "primevue/column";
+<script setup lang="tsx">
+import { useAdminMenuDeleteApi, useAdminMenuListApi } from "@/api/admin/menu";
 
 const list = ref([]);
-
-const handleData = (data: any) => {
-  let _list = [];
-  _list = data.map((item) => {
-    return { ...item, children: handleData(item.children), data: { ...item } };
-  });
-  return _list;
-};
+const router = useRouter();
 
 const getData = async () => {
   const data = await useAdminMenuListApi();
-  list.value = handleData(data);
+  list.value = data;
 };
 
-const getTypeTagColor = (type) => {
-  return type === "menu" ? "primary" : "info";
+const columns = [
+  {
+    colKey: "id",
+    title: "编号",
+    ellipsis: true,
+  },
+  {
+    colKey: "title",
+    title: "名称",
+    ellipsis: true,
+  },
+  {
+    colKey: "path",
+    title: "路径",
+    ellipsis: true,
+  },
+  {
+    colKey: "sort",
+    title: "排序",
+    ellipsis: true,
+  },
+  {
+    colKey: "type",
+    title: "类型",
+    ellipsis: true,
+    cell: (_h: any, { row }: any) => {
+      return (
+        <t-tag theme={getTypeTagColor(row.type)}>
+          {row.type === "menu" ? "菜单" : "按钮"}
+        </t-tag>
+      );
+    },
+  },
+  {
+    colKey: "authority",
+    title: "权限",
+    ellipsis: true,
+  },
+  {
+    colKey: "operate",
+    title: "操作",
+    cell: (_h: any, { row }: any) => {
+      return (
+        <t-space>
+          <t-link
+            variant="text"
+            hover="color"
+            onClick={() => router.push(`/admin/menu/${row.id}`)}
+          >
+            编辑
+          </t-link>
+          <t-popconfirm
+            content="确认删除吗"
+            onConfirm={() => handleDelete(row.id)}
+          >
+            <t-link variant="text" hover="color" theme="danger">
+              删除
+            </t-link>
+          </t-popconfirm>
+        </t-space>
+      );
+    },
+  },
+];
+const treeConfig = reactive({
+  childrenKey: "children",
+  treeNodeColumnIndex: 0,
+  indent: 25,
+  expandTreeNodeOnClick: true,
+});
+
+const handleDelete = async (id: number) => {
+  try {
+    await useAdminMenuDeleteApi(id);
+    await getData();
+    MessagePlugin.success("删除成功");
+  } catch (error) {
+    MessagePlugin.error("删除失败");
+  }
+};
+
+const getTypeTagColor = (type: string) => {
+  return type === "menu" ? "primary" : "default";
 };
 
 getData();

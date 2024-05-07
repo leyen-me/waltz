@@ -1,62 +1,55 @@
 <template>
-    <Menu :model="items" class="w-full h-full flex flex-col justify-between menu">
-        <template #start>
-            <span class="inline-flex align-items-center gap-1 px-2 py-2">
-                <IconLogo class="text-[var(--primary-color)]"></IconLogo>
-                <span class="text-xl font-semibold">NUXT</span>
-            </span>
-        </template>
-        <template #submenuheader="{ item }">
-            <span class="text-primary font-bold text-sm">{{ item.label || "" }}</span>
-        </template>
-        <template #item="{ item, props }">
-            <a v-ripple class="flex align-items-center" v-bind="props.action"
-                :class="handleActive(item.url as string) ? 'active text-[var(--primary-color)] font-bold' : ''"
-                @click="item.url && emits('itemClick', item.url)">
-                <span :class="item.icon" />
-                <span class="ml-2 text-sm">{{ item.label }}</span>
-                <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
-                <span v-if="item.shortcut"
-                    class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{
-                        item.shortcut }}</span>
-            </a>
-        </template>
-        <template #end>
-            <button v-ripple
-                class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-3 text-color hover:surface-200 border-noround">
-                <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2"
-                    shape="circle" />
-                <span class="inline-flex flex-column">
-                    <span class="font-bold">Amy Elsner</span>
-                    <span class="text-sm">Admin</span>
-                </span>
-            </button>
-        </template>
-    </Menu>
+  <div
+    class="h-full overflow-hidden bg-black flex w-full border-r border-solid border-[var(--td-component-stroke)]"
+  >
+    <t-menu @change="handleClick" v-model="menuActive" width="100%">
+      <template #logo>
+        <BaseLogo></BaseLogo>
+      </template>
+      <BaseMenu :menus="items" @click="(e) => emits('itemClick', e)"></BaseMenu>
+    </t-menu>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { MenuItem } from 'primevue/menuitem';
+import type { RouteLocationNormalized } from "vue-router";
 
-const emits = defineEmits(['itemClick'])
-defineProps({
-    items: {
-        type: Array<MenuItem>,
-        required: true,
-    }
-})
+const emits = defineEmits(["itemClick"]);
+const props = defineProps({
+  items: {
+    type: Array<any>,
+    required: true,
+  },
+});
 
-const route = useRoute()
-const router = useRouter()
-const handleActive = (url: string) => {
-    let flag = false
-    const { id } = route.params
-    if (route.path === url) {
-        flag = true
-    }
-    if (id !== "0" && id !== undefined) {
-        flag = false
-    }
-    return flag
-}
+const route = useRoute();
+const router = useRouter();
+
+/**active menu */
+const getPath = (to: RouteLocationNormalized) => {
+  let path = "";
+  const { id } = to.params;
+  if (id !== "0" && id !== undefined) {
+    const url = to.path;
+    const regex = /\d+/g;
+    path = url.replace(regex, "0");
+    console.log(id);
+  } else {
+    path = to.path;
+  }
+  return path;
+};
+
+const menuActive = ref(getPath(route));
+
+onBeforeRouteUpdate((to, from) => {
+  nextTick(() => {
+    menuActive.value = getPath(to);
+  });
+});
+/**active menu */
+
+const handleClick = (path: any) => {
+  emits("itemClick", path);
+};
 </script>

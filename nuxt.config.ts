@@ -23,22 +23,14 @@ function getLocalIP() {
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: ["@/assets/css/main.css"],
-  modules: ["nuxt-primevue"],
-  primevue: {
-    components: {
-      include: "*",
-    },
-    options: {
-      ripple: true,
-    },
-  },
+  modules: ["@tdesign-vue-next/nuxt"],
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   pages: true,
   devServer: {
     host: getLocalIP(),

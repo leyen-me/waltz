@@ -1,4 +1,5 @@
 import type { UseFetchOptions } from "#app";
+import { MessagePlugin } from "tdesign-vue-next";
 
 const useApi = async <T>(
   url: string,
@@ -8,8 +9,6 @@ const useApi = async <T>(
     default: () => "",
     watch: false,
   });
-  const nuxtApp = useNuxtApp();
-  const toast = nuxtApp.vueApp.config.globalProperties.$toast;
   const _res = await useFetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -19,30 +18,16 @@ const useApi = async <T>(
   });
   const res = _res.data.value as BaseResponse<T>;
   if (res === null) {
-    toast.add({
-      severity: "error",
-      summary: "错误",
-      detail: "请求错误，请检查网络或服务器",
-      life: 3000,
-    });
-    throw Error("请求错误，请检查网络或服务器");
+    let msg = "请求错误，请检查网络或服务器";
+    MessagePlugin.error(msg);
+    throw Error(msg);
   }
   if (res.code === 500 || res.code === 403) {
-    toast.add({
-      severity: "error",
-      summary: "错误",
-      detail: res.msg,
-      life: 3000,
-    });
+    MessagePlugin.error(res.msg as string);
     throw Error(res.msg);
   }
   if (res.code === 401) {
-    toast.add({
-      severity: "error",
-      summary: "错误",
-      detail: "登录已失效，请重新登录",
-      life: 3000,
-    });
+    MessagePlugin.error("登录已失效，请重新登录");
     useRouter().push("/admin/login");
     // 重定向
     throw Error(res.msg);
