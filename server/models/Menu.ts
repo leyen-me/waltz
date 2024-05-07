@@ -10,6 +10,11 @@ export default class Menu extends BaseModel<Menu> {
     declare authority: string;
     declare sort: number;
 
+    toJSON() {
+        const json = super.toJSON();
+        return json;
+    }
+
     static initMenu(sequelize: Sequelize): typeof Menu {
         const modelAttributes = {
             pid: {
@@ -33,7 +38,7 @@ export default class Menu extends BaseModel<Menu> {
                 comment: '菜单图标',
             },
             type: {
-                type: DataTypes.ENUM("菜单", "按钮", "接口"),
+                type: DataTypes.ENUM("menu", "button", "interface"),
                 allowNull: false,
                 comment: '菜单类型',
             },

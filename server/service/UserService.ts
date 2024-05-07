@@ -18,14 +18,25 @@ export default class UserService extends BaseService<User> {
     }
 
     async createUser(userData: CreationAttributes<User>): Promise<BaseCreateResponse> {
-        const existingUserByUsername = await this.getByUsername(userData.username);
-        if (existingUserByUsername) {
-            throw new Error("用户名已存在");
+
+        // 检查用户名是否已经存在
+        if (userData.username) {
+            const existingUserByUsername = await this.getByUsername(userData.username);
+            if (existingUserByUsername) {
+                throw new Error("用户名已存在");
+            }
         }
 
-        const existingUserByEmail = await this.getByEmail(userData.email);
-        if (existingUserByEmail) {
-            throw new Error("邮箱已存在");
+        // 检查邮箱是否已经存在
+        if (userData.email) {
+            const existingUserByEmail = await this.getByEmail(userData.email);
+            if (existingUserByEmail) {
+                throw new Error("邮箱已存在");
+            }
+        }
+
+        if (userData.password) {
+            userData.password = defineEncodeHash(userData.password);
         }
 
         const createUser = await this.create(userData);

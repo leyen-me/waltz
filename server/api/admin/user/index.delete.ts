@@ -8,5 +8,5 @@ export default defineWrappedResponseHandler(async (event) => {
     const ids: number[] = await readBody(event);
 
     await userService.deleteUsers(ids);
-    return defineOk;
+    return defineOk({});
 });

@@ -7,5 +7,5 @@ export default defineWrappedResponseHandler(async (event) => {
 
     const { id, ...updatedUserData } = await readBody(event);
     await userService.updateUser(id, updatedUserData);
-    return defineOk;
+    return defineOk({});
 });
