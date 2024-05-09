@@ -48,7 +48,7 @@
               </TransitionChild>
               <!-- Sidebar component, swap this element with another sidebar if you like -->
               <BaseNav
-                :items="items"
+                :items="menus"
                 @item-click="handleNavItemClick"
               ></BaseNav>
             </DialogPanel>
@@ -60,7 +60,7 @@
     <!-- Static sidebar for desktop -->
     <div class="hidden lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <BaseNav :items="items" @item-click="handleNavItemClick"></BaseNav>
+      <BaseNav :items="menus" @item-click="handleNavItemClick"></BaseNav>
     </div>
 
     <div
@@ -87,13 +87,21 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { nanoid } from "nanoid";
+import { useAdminMenuNavApi } from "@/api/admin/menu";
+import type Menu from "~/server/models/Menu";
 
-// definePageMeta({
-//   middleware: 'auth'
-// })
+definePageMeta({
+  middleware: "auth",
+});
 
 const sidebarOpen = ref(false);
-const key = ref("");
+const menus = ref<Menu[]>([])
+
+const getData = async () => {
+  const data = await useAdminMenuNavApi();
+  menus.value = data
+  console.log(data);
+};
 
 const items = ref([
   {
@@ -163,6 +171,8 @@ const handleNavItemClick = (url: string) => {
     sidebarOpen.value = false;
   }
 };
+
+getData();
 </script>
 
 <style scoped>

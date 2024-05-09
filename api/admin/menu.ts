@@ -1,7 +1,11 @@
 import useApi from "@/utils/api";
 import type Menu from "~/server/models/Menu";
 
-export const useAdminMenuListApi = <T = any>() => {
+export const useAdminMenuNavApi = <T = Menu[]>() => {
+  return useApi<T>("/api/admin/menu/nav", { method: "GET" });
+};
+
+export const useAdminMenuListApi = <T = Menu[]>() => {
   return useApi<T>("/api/admin/menu/list", { method: "GET" });
 };
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex xl:justify-center xl:items-center">
+  <div class="h-full flex xl:justify-center">
     <div class="w-full xl:w-[680px]">
       <t-card title="基本信息">
         <template #actions>
@@ -25,12 +25,13 @@
               placeholder="未选择文件"
               @success="onUploadSuccess"
               @fail="onUploadError"
+              @remove="onUploadRemove"
             ></t-upload>
           </t-form-item>
           <t-form-item name="username" label="名称">
             <t-input v-model="formData.username" clearable> </t-input>
           </t-form-item>
-          <t-form-item name="password" label="密码" v-if="!formData.id">
+          <t-form-item name="password" label="密码">
             <t-input v-model="formData.password" clearable> </t-input>
           </t-form-item>
           <t-form-item name="gender" label="性别">
@@ -46,7 +47,7 @@
           <t-form-item name="introduction" label="简介">
             <t-textarea v-model="formData.introduction"></t-textarea>
           </t-form-item>
-          <t-form-item name="superAdmin" label="超管">
+          <t-form-item name="superAdmin" label="超管" v-if="!info">
             <t-radio-group
               variant="default-filled"
               v-model="formData.superAdmin"
@@ -55,11 +56,20 @@
               <t-radio-button :value="0">否</t-radio-button>
             </t-radio-group>
           </t-form-item>
-          <t-form-item name="status" label="状态">
+          <t-form-item name="status" label="状态" v-if="!info">
             <t-radio-group variant="default-filled" v-model="formData.status">
               <t-radio-button :value="0">正常</t-radio-button>
               <t-radio-button :value="1">停用</t-radio-button>
             </t-radio-group>
+          </t-form-item>
+          <t-form-item name="roleIdList" label="角色" v-if="!info">
+            <t-select
+              v-model="formData.roleIdList"
+              :options="roleList"
+              :keys="{ label: 'roleDesc', value: 'id' }"
+              placeholder="请选择"
+              multiple
+            />
           </t-form-item>
         </t-form>
       </t-card>
@@ -70,10 +80,17 @@
 <script setup lang="ts">
 import type { SubmitContext } from "tdesign-vue-next/es/form";
 import Cookies from "js-cookie";
-import { useAdminUserFindOneApi, useAdminUserSubmitApi } from "@/api/admin/user";
+import {
+  useAdminUserFindOneApi,
+  useAdminUserInfoApi,
+  useAdminUserSubmitApi,
+} from "@/api/admin/user";
+import { useAdminRoleListApi } from "@/api/admin/role";
+import type Role from "@/server/models/Role";
 
 const route = useRoute();
 const router = useRouter();
+const info = ref(false);
 
 const files = ref([]);
 const uploadUrl =
@@ -92,8 +109,21 @@ const onUploadError = () => {
   MessagePlugin.error("文件上传失败");
 };
 
+const onUploadRemove = () => {
+  files.value = [];
+  formData.value.avatar = "";
+};
+
+const roleList: Ref<Role[]> = ref([]);
+const getRoleList = async () => {
+  const data = await useAdminRoleListApi();
+  roleList.value = data;
+};
+
+info.value = route.params.id === "info";
+
 const formData = ref({
-  id: Number(route.params.id),
+  id: route.params.id !== "info" ? Number(route.params.id) : route.params.id,
   username: "",
   password: "",
   avatar: "",
@@ -102,16 +132,18 @@ const formData = ref({
   introduction: "",
   superAdmin: 1,
   status: 0,
+  roleIdList: [],
 });
 const form = ref(null);
 const formRules = ref({
   username: [{ required: true, message: "名称必填" }],
-  password: [{ required: true, message: "密码必填" }],
 });
 
 const getData = async () => {
   if (formData.value.id) {
+    const call = info.value ? useAdminUserInfoApi : useAdminUserFindOneApi;
     const {
+      id,
       username,
       avatar,
       gender,
@@ -119,7 +151,9 @@ const getData = async () => {
       introduction,
       superAdmin,
       status,
-    } = await useAdminUserFindOneApi(formData.value.id);
+      roleIdList,
+    } = await call(formData.value.id);
+    formData.value.id = id;
     formData.value.username = username;
     formData.value.avatar = avatar;
     formData.value.gender = gender;
@@ -127,6 +161,16 @@ const getData = async () => {
     formData.value.introduction = introduction;
     formData.value.superAdmin = superAdmin;
     formData.value.status = status;
+
+    // @ts-ignore
+    formData.value.roleIdList = roleIdList;
+    if (formData.value.avatar) {
+      // @ts-ignore
+      files.value.push({
+        name: "FileName",
+        url: formData.value.avatar,
+      });
+    }
   }
 };
 
@@ -135,7 +179,7 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
     try {
       const res = await useAdminUserSubmitApi(formData.value);
       MessagePlugin.success("保存成功");
-      router.back();
+      !info.value && router.back();
     } catch (error: any) {
       MessagePlugin.error("保存失败");
     }
@@ -150,5 +194,6 @@ const handleSubmitForm = () => {
   form.value.submit();
 };
 
+getRoleList();
 getData();
 </script>

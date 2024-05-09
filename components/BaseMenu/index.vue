@@ -7,16 +7,16 @@
       <template #icon>
         <t-icon :name="menu.icon" v-if="menu.icon" />
       </template>
-      {{ menu.label }}
+      {{ menu.title }}
     </t-menu-item>
     <template v-else>
       <!-- 二级显示 -->
-      <t-menu-group v-if="level <= 1" :title="menu.label">
+      <t-menu-group v-if="level <= 1" :title="menu.title">
         <BaseMenu :menus="menu.children" :level="level + 1" />
       </t-menu-group>
 
       <!-- 三级以上显示 -->
-      <t-submenu v-else :value="menu.path" :title="menu.label">
+      <t-submenu v-else :value="menu.path" :title="menu.title">
         <template #icon>
           <t-icon :name="menu.icon" v-if="menu.icon" />
         </template>
