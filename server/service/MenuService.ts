@@ -2,7 +2,6 @@ import Menu from '@/server/models/Menu';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes, Op, QueryTypes } from 'sequelize';
 import User from '../models/User';
-import RoleMenu from '../models/RoleMenu';
 import UserRoleService from './UserRoleService';
 import sequelize from '../db';
 
@@ -34,11 +33,66 @@ export default class MenuService extends BaseService<Menu> {
         return await Menu.findByPk(menuId);
     }
 
+
+    async getNav(user: User, type: string | null): Promise<Menu[]> {
+        if (user.get("superAdmin") === 1) {
+            // 如果用户是超级管理员，并且有传入类型条件，添加类型条件限制
+            let query = `  
+            SELECT m.*  
+            FROM t_menu m`;
+
+            const replacements: { [key: string]: any } = {};
+
+            // 如果type不为null，则添加类型条件
+            if (type !== null) {
+                query += ` WHERE m.type = :type`;
+                replacements.type = type;
+            }
+
+            query += ` ORDER BY m.sort ASC;`;
+
+            // 执行原生 SQL 查询  
+            const [results] = await sequelize.query(query, {
+                replacements
+            });
+
+            return results as Menu[];
+        } else {
+            // 构建 SQL 查询语句  
+            let query = `  
+                SELECT m.*  
+                FROM t_menu m  
+                JOIN t_role_menu rm ON m.id = rm.menu_id  
+                JOIN t_user_role ur ON rm.role_id = ur.role_id  
+                WHERE ur.user_id = :userId`;
+
+            const replacements: { [key: string]: any } = { userId: user.id };
+
+            // 如果type不为null，则添加条件
+            if (type !== null) {
+                query += ` AND m.type = :type`;
+                replacements.type = type;
+            }
+
+            query += ` ORDER BY m.sort ASC;`;
+
+            // 执行原生 SQL 查询  
+            const [results] = await sequelize.query(query, {
+                replacements
+            });
+
+            return results as Menu[];
+        }
+    }
+
+
+
+
     async getAllMenus(user: User): Promise<Menu[]> {
         if (user.get("superAdmin") === 1) {
             // 如果用户是超级管理员，直接返回所有菜单  
             return Menu.findAll().then((menus: Menu[]) => {
-                return menus.map((item)=>item.toJSON())
+                return menus.map((item) => item.toJSON())
             });
         } else {
             // 构建 SQL 查询语句  
@@ -47,7 +101,7 @@ export default class MenuService extends BaseService<Menu> {
                 FROM t_menu m  
                 JOIN t_role_menu rm ON m.id = rm.menu_id  
                 JOIN t_user_role ur ON rm.role_id = ur.role_id  
-                WHERE ur.user_id = :userId AND m.type = 'menu'  
+                WHERE ur.user_id = :userId  
                 ORDER BY m.sort ASC;  
             `;
 
@@ -58,7 +112,6 @@ export default class MenuService extends BaseService<Menu> {
             const [results] = await sequelize.query(query, {
                 replacements
             });
-
             return results as Menu[]
         }
     }

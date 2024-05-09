@@ -15,6 +15,9 @@ export default class UserRoleService extends BaseService<UserRole> {
         // 需要新增的角色ID列表
         const insertRoleIds = roleIdList.filter(roleId => !existingRoleIds.includes(roleId));
 
+        console.log(insertRoleIds);
+        
+
         // 需要删除的角色ID列表
         const deleteRoleIds = existingRoleIds.filter(roleId => !roleIdList.includes(roleId));
 

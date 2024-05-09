@@ -228,7 +228,7 @@
             "path": "",
             "title": "分页",
             "icon": "search",
-            "type": "menu",
+            "type": "button",
             "authority": "user:page",
             "sort": 0
         },

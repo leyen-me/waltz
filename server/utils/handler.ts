@@ -14,6 +14,8 @@ export const defineWrappedResponseHandler = <T extends EventHandlerRequest, D>(
       const response = await handler(event);
       return response;
     } catch (err: any) {
+      console.error(err);
+      
       // h3 error
       if (err.statusCode && err.statusMessage) {
         return defineError({ code: err.statusCode, msg: err.statusMessage });

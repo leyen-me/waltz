@@ -4,7 +4,7 @@ import { CreationAttributes } from 'sequelize';
 import RoleMenuService from './RoleMenuService';
 
 export default class RoleService extends BaseService<Role> {
-    private roleMenuService!: RoleMenuService;
+    private roleMenuService = new RoleMenuService();
     constructor() {
         super(Role);
     }
