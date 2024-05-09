@@ -122,8 +122,21 @@ const getRoleList = async () => {
 
 info.value = route.params.id === "info";
 
-const formData = ref({
-  id: route.params.id !== "info" ? Number(route.params.id) : route.params.id,
+const formData = ref<{
+  id: number;
+  username: string;
+  password: string;
+  avatar: string;
+  gender: string;
+  email: string;
+  introduction: string;
+  superAdmin: number;
+  status: number;
+  roleIdList: number[];
+}>({
+  id: (route.params.id !== "info"
+    ? Number(route.params.id)
+    : route.params.id) as number,
   username: "",
   password: "",
   avatar: "",
@@ -153,7 +166,7 @@ const getData = async () => {
       status,
       roleIdList,
     } = await call(formData.value.id);
-    formData.value.id = id;
+    formData.value.id = id as number;
     formData.value.username = username;
     formData.value.avatar = avatar;
     formData.value.gender = gender;
@@ -161,9 +174,7 @@ const getData = async () => {
     formData.value.introduction = introduction;
     formData.value.superAdmin = superAdmin;
     formData.value.status = status;
-
-    // @ts-ignore
-    formData.value.roleIdList = roleIdList;
+    formData.value.roleIdList = roleIdList as number[];
     if (formData.value.avatar) {
       // @ts-ignore
       files.value.push({

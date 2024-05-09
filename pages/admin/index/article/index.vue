@@ -1,6 +1,6 @@
 <template>
   <div class="w-full m-auto mt-4 xl:w-3/4 xl:mt-8">
-    <div class="fixed bottom-12 right-12">
+    <div class="fixed bottom-12 right-12 z-10">
       <t-button
         shape="circle"
         theme="primary"

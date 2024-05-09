@@ -24,7 +24,7 @@
           <t-input
             v-model="formData.cover"
             clearable
-            placeholder="请输入文章标题"
+            placeholder="请输入文章封面"
           >
           </t-input>
           <div class="ml-2">
@@ -111,7 +111,7 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
         await getData();
 
         const newPath = `/admin/article/${formData.value.id}`;
-        history.pushState({}, "", newPath);
+        history.replaceState({}, "", newPath);
       }
       MessagePlugin.success("保存成功");
     } catch (e) {

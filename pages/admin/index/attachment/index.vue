@@ -2,9 +2,19 @@
   <div class="w-full">
     <t-card title="附件管理">
       <template #actions>
-        <t-button class="ml-2" @click="$router.push('/admin/user/0')"
-          >新增</t-button
-        >
+        <t-upload
+          name="files"
+          v-model="files"
+          :action="uploadUrl"
+          :abridge-name="[8, 6]"
+          :multiple="false"
+          :showImageFileName="false"
+          theme="custom"
+          placeholder="未选择文件"
+          @success="onUploadSuccess"
+          @fail="onUploadError"
+          @remove="onUploadRemove"
+        ></t-upload>
       </template>
       <t-table
         ref="tableRef"
@@ -29,9 +39,33 @@
 </template>
 
 <script setup lang="tsx">
-import { useAdminUserDeleteApi, useAdminUserPageApi } from "@/api/admin/user";
 import { defaultRowsPerPageOptions } from "@/constans";
-import type User from "@/server/models/User";
+import {
+  useAdminAttachmentDeleteApi,
+  useAdminAttachmentPageApi,
+} from "@/api/admin/attachment";
+import type Attachment from "~/server/models/Attachment";
+import Cookies from "js-cookie";
+
+const files = ref([]);
+const uploadUrl =
+  "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
+const onUploadSuccess = (e: any) => {
+  const { code, msg, data } = e.response;
+  if (code !== 200) {
+    MessagePlugin.error(msg);
+    return;
+  }
+  getData()
+  MessagePlugin.success("文件上传成功");
+};
+const onUploadError = () => {
+  MessagePlugin.error("文件上传失败");
+};
+
+const onUploadRemove = () => {
+  files.value = [];
+};
 
 const router = useRouter();
 
@@ -40,9 +74,9 @@ const page = ref(1);
 const limit = ref(defaultRowsPerPageOptions[0]);
 
 const total = ref(0);
-const list = ref<User[]>([]);
+const list = ref<Attachment[]>([]);
 const getData = async () => {
-  const { data, meta } = await useAdminUserPageApi({
+  const { data, meta } = await useAdminAttachmentPageApi({
     page: page.value,
     limit: limit.value,
   });
@@ -57,58 +91,24 @@ const columns = [
     ellipsis: true,
   },
   {
-    colKey: "username",
-    title: "名称",
+    colKey: "title",
+    title: "附件标题",
     ellipsis: true,
   },
   {
-    colKey: "gender",
-    title: "性别",
-    ellipsis: true,
-    cell: (_h: any, { row }: any) => {
-      return (
-        <t-tag
-          theme={
-            row.gender === "men"
-              ? "primary"
-              : row.gender === "women"
-              ? "danger"
-              : "default"
-          }
-        >
-          {row.gender === "men" ? "男" : row.gender === "women" ? "女" : "保密"}
-        </t-tag>
-      );
-    },
-  },
-  {
-    colKey: "email",
-    title: "邮箱",
+    colKey: "url",
+    title: "附件链接",
     ellipsis: true,
   },
   {
-    colKey: "superAdmin",
-    title: "超管",
+    colKey: "ext",
+    title: "扩展名",
     ellipsis: true,
-    cell: (_h: any, { row }: any) => {
-      return (
-        <t-tag theme={row.superAdmin === 1 ? "primary" : "default"}>
-          {row.superAdmin === 1 ? "是" : "否"}
-        </t-tag>
-      );
-    },
   },
   {
-    colKey: "status",
-    title: "状态",
+    colKey: "size",
+    title: "附件大小",
     ellipsis: true,
-    cell: (_h: any, { row }: any) => {
-      return (
-        <t-tag theme={row.status === 0 ? "primary" : "default"}>
-          {row.status === 0 ? "正常" : "停用"}
-        </t-tag>
-      );
-    },
   },
   {
     colKey: "operate",
@@ -116,13 +116,6 @@ const columns = [
     cell: (_h: any, { row }: any) => {
       return (
         <t-space>
-          <t-link
-            variant="text"
-            hover="color"
-            onClick={() => router.push(`/admin/user/${row.id}`)}
-          >
-            编辑
-          </t-link>
           <t-popconfirm
             content="确认删除吗"
             onConfirm={() => handleDelete(row.id)}
@@ -138,7 +131,7 @@ const columns = [
 ];
 const handleDelete = async (id: number) => {
   try {
-    await useAdminUserDeleteApi(id);
+    await useAdminAttachmentDeleteApi(id);
     await getData();
     MessagePlugin.success("删除成功");
   } catch (error) {
