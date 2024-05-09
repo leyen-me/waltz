@@ -4,7 +4,9 @@ import { CreationAttributes } from 'sequelize';
 import UserRoleService from '~/server/service/UserRoleService';
 
 export default class UserService extends BaseService<User> {
-    private userRoleService!: UserRoleService;
+
+    private userRoleService = new UserRoleService();
+
     constructor() {
         super(User);
     }
@@ -37,9 +39,14 @@ export default class UserService extends BaseService<User> {
 
         if (userData.password) {
             userData.password = defineEncodeHash(userData.password);
+        } else {
+            userData.password = undefined;
         }
 
         const createUser = await this.create(userData);
+        console.log(createUser.id);
+        console.log(userData.roleIdList);
+
         this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
         return createUser.id as number;
     }
@@ -64,12 +71,16 @@ export default class UserService extends BaseService<User> {
 
         if (userData.password) {
             userData.password = defineEncodeHash(userData.password);
+        } else {
+            userData.password = undefined;
         }
+
         await this.update(userData, { where: { id: userId } });
     }
 
     async deleteUsers(userIds: number[]): Promise<void> {
         await this.delete({ where: { id: userIds } });
+        this.userRoleService.deleteByUserIdList(userIds);
     }
 
     async getUserById(userId: number | string): Promise<User | null> {

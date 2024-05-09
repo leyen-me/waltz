@@ -6,7 +6,7 @@ export default class Role extends BaseModel<Role> {
     declare roleName: string;
     declare roleDesc: string;
 
-    public menuIdList?: [];
+    public menuIdList?: number[];
 
     static initRole(sequelize: Sequelize): typeof Role {
         const modelAttributes = {

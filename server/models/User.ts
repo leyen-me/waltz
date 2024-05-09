@@ -6,7 +6,7 @@ export default class User extends BaseModel<User> {
   declare username: string;
   declare password: string;
   declare avatar: string;
-  declare gender: number;
+  declare gender: string;
   declare email: string;
   declare introduction:string;
   declare superAdmin:number;
