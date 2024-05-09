@@ -10,6 +10,7 @@
           :multiple="false"
           :showImageFileName="false"
           theme="custom"
+          :disabled="!useHasAuth('attachment:save')"
           placeholder="未选择文件"
           @success="onUploadSuccess"
           @fail="onUploadError"
@@ -46,6 +47,7 @@ import {
 } from "@/api/admin/attachment";
 import type Attachment from "~/server/models/Attachment";
 import Cookies from "js-cookie";
+import useHasAuth from "@/utils/auth";
 
 const files = ref([]);
 const uploadUrl =
@@ -56,7 +58,7 @@ const onUploadSuccess = (e: any) => {
     MessagePlugin.error(msg);
     return;
   }
-  getData()
+  getData();
   MessagePlugin.success("文件上传成功");
 };
 const onUploadError = () => {
@@ -120,7 +122,12 @@ const columns = [
             content="确认删除吗"
             onConfirm={() => handleDelete(row.id)}
           >
-            <t-link variant="text" hover="color" theme="danger">
+            <t-link
+              disabled={!useHasAuth("attachment:delete")}
+              variant="text"
+              hover="color"
+              theme="danger"
+            >
               删除
             </t-link>
           </t-popconfirm>

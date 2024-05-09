@@ -2,7 +2,7 @@
   <div>
     <t-card title="基本信息">
       <template #actions>
-        <t-button @click="handleSubmitForm">保存</t-button>
+        <t-button @click="handleSubmitForm" :disabled="!useHasAuth('article:save')">保存</t-button>
       </template>
       <t-form
         ref="form"
@@ -37,6 +37,7 @@
               theme="custom"
               :showImageFileName="false"
               placeholder="未选择文件"
+              :disabled="!useHasAuth('attachment:save')"
               @success="onCoverUploadSuccess"
               @fail="onCoverUploadError"
             ></t-upload>
@@ -73,6 +74,7 @@ import {
 } from "@/api/admin/article";
 import Cookies from "js-cookie";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
+import useHasAuth from "@/utils/auth"
 
 const route = useRoute();
 const uploadUrl =

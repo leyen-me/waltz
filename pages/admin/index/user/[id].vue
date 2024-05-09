@@ -3,7 +3,11 @@
     <div class="w-full xl:w-[680px]">
       <t-card title="基本信息">
         <template #actions>
-          <t-button @click="handleSubmitForm">保存</t-button>
+          <t-button
+            @click="handleSubmitForm"
+            :disabled="!useHasAuth('user:save')"
+            >保存</t-button
+          >
         </template>
         <t-form
           ref="form"
@@ -21,6 +25,7 @@
               :abridge-name="[8, 6]"
               :multiple="false"
               theme="image"
+              :disabled="!useHasAuth('attachment:save')"
               :showImageFileName="false"
               placeholder="未选择文件"
               @success="onUploadSuccess"
@@ -87,6 +92,7 @@ import {
 } from "@/api/admin/user";
 import { useAdminRoleListApi } from "@/api/admin/role";
 import type Role from "@/server/models/Role";
+import useHasAuth from "@/utils/auth";
 
 const route = useRoute();
 const router = useRouter();
