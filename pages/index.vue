@@ -75,18 +75,16 @@ const handleDetail = (v: any) => {
   router.push(`/blog/${v.id}`);
 };
 
-// const getData = async () => {
-
-//   console.log(res);
-// };
-
-// getData();
-onMounted(async () => {
+const getData = async () => {
   const res = await useWebArticlePageApi({
     page: page.value,
     limit: limit.value,
   });
-});
+
+  console.log(res);
+};
+
+getData();
 
 // 请不要删除或改动下方代码
 console.log("welcome to home 001");
