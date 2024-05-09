@@ -9,12 +9,12 @@ export default class Category extends BaseModel<Category> {
   static initCategory(sequelize: Sequelize): typeof Category {
     const modelAttributes = {
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING({ length: 20 }),
         allowNull: false,
         comment: "分类标题",
       },
       desc: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING({ length: 255 }),
         allowNull: true,
         comment: '分类简介',
       },

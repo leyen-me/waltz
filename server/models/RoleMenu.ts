@@ -9,12 +9,12 @@ export default class RoleMenu extends BaseModel<RoleMenu> {
     static initRoleMenu(sequelize: Sequelize): typeof RoleMenu {
         const modelAttributes = {
             roleId: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: '角色id',
             },
             menuId: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: '菜单id',
             },

@@ -10,23 +10,28 @@ export default class Attachment extends BaseModel<Attachment> {
 
     static initAttachment(sequelize: Sequelize): typeof Attachment {
         const modelAttributes = {
+            originalTitle: {
+                type: DataTypes.STRING({ length: 20 }),
+                allowNull: true,
+                comment: "附件原始标题",
+            },
             title: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 255 }),
                 allowNull: false,
                 comment: "附件标题",
             },
             url: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 255 }),
                 allowNull: false,
                 comment: '附件链接',
             },
             ext: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 20 }),
                 allowNull: false,
                 comment: '附件分类/扩展名',
             },
             size: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER({ length: 11 }),
                 allowNull: false,
                 comment: '附件大小',
             },

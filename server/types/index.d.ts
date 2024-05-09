@@ -41,6 +41,7 @@ interface LoginResponse {
 interface ArticleQuery extends BaseQuery {
   title?: string;
   authorId?: number;
+  status?: string;
 }
 
 interface UserQuery extends BaseQuery {
@@ -60,5 +61,6 @@ interface MenuQuery extends BaseQuery {
 
 interface AttachmentQuery extends BaseQuery {
   title?: string;
+  ext?: string;
 }
 

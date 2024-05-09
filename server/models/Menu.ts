@@ -18,37 +18,37 @@ export default class Menu extends BaseModel<Menu> {
     static initMenu(sequelize: Sequelize): typeof Menu {
         const modelAttributes = {
             pid: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: '父级ID',
             },
             path: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 255 }),
                 allowNull: false,
                 comment: '菜单路径',
             },
             title: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 20 }),
                 allowNull: false,
                 comment: '菜单标题',
             },
             icon: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 20 }),
                 allowNull: true,
                 comment: '菜单图标',
             },
             type: {
-                type: DataTypes.ENUM("menu", "button", "interface"),
+                type: DataTypes.ENUM({ values: ["menu", "button", "interface"] }),
                 allowNull: false,
                 comment: '菜单类型',
             },
             authority: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 20 }),
                 allowNull: true,
                 comment: '授权标识',
             },
             sort: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER({ length: 11 }),
                 allowNull: true,
                 comment: '排序',
             }

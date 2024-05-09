@@ -9,7 +9,7 @@ export default class Type extends BaseModel<Type> {
     static initType(sequelize: Sequelize): typeof Type {
         const modelAttributes = {
             userId: {
-                type: DataTypes.BIGINT,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: "用户ID",
             },

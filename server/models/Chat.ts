@@ -14,7 +14,7 @@ export default class Chat extends BaseModel<Chat> {
                 comment: "标题",
             },
             userId: {
-                type: DataTypes.BIGINT,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: "用户ID",
             },

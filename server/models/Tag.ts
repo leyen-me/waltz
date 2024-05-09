@@ -9,12 +9,12 @@ export default class Tag extends BaseModel<Tag> {
     static initTag(sequelize: Sequelize): typeof Tag {
         const modelAttributes = {
             categoryId: {
-                type: DataTypes.BIGINT,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: "分类id",
             },
             title: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 20 }),
                 allowNull: false,
                 comment: "标签标题",
             },

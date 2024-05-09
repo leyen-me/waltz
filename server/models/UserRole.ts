@@ -10,12 +10,12 @@ export default class UserRole extends BaseModel<UserRole> {
     static initUserRole(sequelize: Sequelize): typeof UserRole {
         const modelAttributes = {
             userId: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: '用户id',
             },
             roleId: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: '角色id',
             },

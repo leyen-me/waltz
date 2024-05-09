@@ -33,27 +33,27 @@ export default class Article extends BaseModel<Article> {
   static initArticle(sequelize: Sequelize): typeof Article {
     const modelAttributes = {
       categoryId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.BIGINT({ length: 20 }),
         allowNull: true,
         comment: "文章分类",
       },
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING({ length: 20 }),
         allowNull: false,
         comment: "文章标题",
       },
       cover: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING({ length: 255 }),
         allowNull: true,
         comment: '文章封面',
       },
       content: {
-        type: DataTypes.TEXT("long"),
+        type: DataTypes.TEXT({ length: 'long' }),
         allowNull: false,
         comment: "文章内容",
       },
       authorId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.BIGINT({ length: 20 }),
         allowNull: false,
         comment: "文章作者ID",
       },
