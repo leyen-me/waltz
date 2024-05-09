@@ -122,6 +122,7 @@
 html,
 body,
 #__nuxt {
+  background-color: rgba(226, 232, 240);
   height: 100%;
 }
 
@@ -176,7 +177,10 @@ li {
 }
 
 @media (prefers-color-scheme: dark) {
-  .v-md-editor {
+  html,
+  body,
+  #__nuxt {
+    background-color: #242424;
   }
 
   .v-md-editor__left-area {

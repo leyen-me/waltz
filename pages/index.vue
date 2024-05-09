@@ -13,7 +13,7 @@
             :src="v.src"
           />
         </div>
-        <div class="p-2 xl:p-4">
+        <div class="p-2 xl:p-4 dark:text-white">
           <h2 class="mt-3 font-bold text-2xl flex">
             <span class="line-clamp-1">冰川融化</span>
             <span class="ml-2">#009</span>
@@ -30,31 +30,64 @@
         </div>
       </li>
     </ul>
+    <div class="mt-4">
+      <t-pagination
+        v-if="list.length > limit"
+        v-model="page"
+        v-model:pageSize="limit"
+        :total="total"
+        show-sizer
+        :page-size-options="defaultRowsPerPageOptions"
+        @page-size-change="getData"
+        @current-change="getData"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// const { data: count } = await useFetch('/api/admin/count')
+import { useWebArticlePageApi } from "~/api/web/article";
+import { defaultRowsPerPageOptions } from "@/constans";
+import type Article from "~/server/models/Article";
+
+const page = ref(1);
+const limit = ref(defaultRowsPerPageOptions[0]);
+
+const total = ref(0);
+const list = ref<Article[]>([]);
 const router = useRouter();
 
-const list = ref([
-  {
-    id: "1",
-    src: "https://images.unsplash.com/photo-1706914890322-336df4374736?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzNnx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
-    id: "2",
-    src: "https://images.unsplash.com/photo-1709777083341-2ebb9f0772cc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHx8",
-  },
-  {
-    id: "3",
-    src: "https://images.unsplash.com/photo-1713727967827-b04e5eab7d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzMHx8fGVufDB8fHx8fA%3D%3D",
-  },
-]);
+// const list = ref([
+//   {
+//     id: "1",
+//     src: "https://images.unsplash.com/photo-1706914890322-336df4374736?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzNnx8fGVufDB8fHx8fA%3D%3D",
+//   },
+//   {
+//     id: "2",
+//     src: "https://images.unsplash.com/photo-1709777083341-2ebb9f0772cc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHx8",
+//   },
+//   {
+//     id: "3",
+//     src: "https://images.unsplash.com/photo-1713727967827-b04e5eab7d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzMHx8fGVufDB8fHx8fA%3D%3D",
+//   },
+// ]);
 const handleDetail = (v: any) => {
   router.push(`/blog/${v.id}`);
 };
 
+// const getData = async () => {
+
+//   console.log(res);
+// };
+
+// getData();
+onMounted(async () => {
+  const res = await useWebArticlePageApi({
+    page: page.value,
+    limit: limit.value,
+  });
+});
+
 // 请不要删除或改动下方代码
-console.log("welcome to home 002");
+console.log("welcome to home 001");
 </script>
