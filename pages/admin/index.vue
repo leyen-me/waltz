@@ -86,7 +86,6 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { nanoid } from "nanoid";
 import { useAdminMenuNavApi } from "@/api/admin/menu";
 import type Menu from "~/server/models/Menu";
 
@@ -95,75 +94,20 @@ definePageMeta({
 });
 
 const sidebarOpen = ref(false);
-const menus = ref<Menu[]>([])
+const menus = ref<Menu[]>([]);
 
 const getData = async () => {
   const data = await useAdminMenuNavApi();
-  menus.value = data
+  menus.value = data;
   console.log(data);
 };
 
-const items = ref([
-  {
-    label: "首页",
-    path: "/admin/home",
-  },
-  {
-    id: nanoid(),
-    label: "文章管理",
-    path: nanoid(),
-    children: [
-      {
-        label: "新增",
-        path: "/admin/article/0",
-        shortcut: "⌘+N",
-      },
-      {
-        label: "列表",
-        path: "/admin/article",
-      },
-    ],
-  },
-  {
-    id: nanoid(),
-    label: "系统设置",
-    path: nanoid(),
-    children: [
-      {
-        label: "菜单管理",
-        path: "/admin/menu",
-      },
-      {
-        label: "用户管理",
-        path: "/admin/user",
-      },
-      {
-        label: "角色管理",
-        path: "/admin/role",
-      },
-    ],
-  },
-  {
-    id: nanoid(),
-    label: "更多",
-    path: nanoid(),
-    children: [
-      {
-        label: "个人页",
-        icon: "user",
-        path: "/admin/user/info",
-      },
-      {
-        label: "登录页",
-        icon: "login",
-        path: "/admin/login",
-      },
-    ],
-  },
-]);
-
+const route = useRoute();
 const router = useRouter();
-// router.replace("/admin/home")
+
+if (route.path === "/admin") {
+  router.replace("/admin/home");
+}
 
 const handleNavItemClick = (url: string) => {
   router.push(url);

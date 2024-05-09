@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex justify-center items-center">
+  <div class="h-full flex justify-center">
     <div class="w-full xl:w-[500px]">
       <t-card title="基本信息">
         <template #actions>

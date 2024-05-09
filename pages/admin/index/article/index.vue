@@ -1,13 +1,20 @@
 <template>
   <div class="w-full m-auto mt-4 xl:w-3/4 xl:mt-8">
+    <div class="fixed bottom-12 right-12">
+      <t-button
+        shape="circle"
+        theme="primary"
+        style="width: 56px; height: 56px; border-radius: 999px"
+        @click="$router.push('/admin/article/0')"
+      >
+        <template #icon><plus-icon size="32px" /></template>
+      </t-button>
+    </div>
     <div
       v-if="list.length == 0"
       class="flex w-full h-full items-center justify-center text-gray-500 text-sm"
     >
-      什么都没有,
-      <t-link label="" @click="$router.push('/admin/article/0')"
-        >新增文章</t-link
-      >
+      一篇文章也没有
     </div>
     <ul v-else class="grid grid-cols-1 gap-2 xl:grid-cols-2 w-full">
       <li
@@ -93,6 +100,7 @@
 </template>
 
 <script setup lang="ts">
+import { PlusIcon } from "tdesign-icons-vue-next";
 import {
   useAdminArticleDeleteApi,
   useAdminArticlePageApi,
