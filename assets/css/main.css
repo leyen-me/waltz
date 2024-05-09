@@ -119,10 +119,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* --td-comp-size-m: 44px !important; */
-}
-
 html,
 body,
 #__nuxt {
@@ -140,6 +136,12 @@ body,
 }
 
 /* 样式重置 */
+ul {
+}
+li {
+  list-style: none;
+}
+
 .p-dialog-content {
   padding: 10px 250px 20px 8px;
 }

@@ -29,9 +29,10 @@
               v-model="formData.menuIdList"
               :data="menuList"
               :checkable="true"
-              :check-strictly="false"
-              :value-mode="'onlyLeaf'"
+              :check-strictly="true"
+              :value-mode="'all'"
               :keys="{ label: 'title', value: 'id' }"
+              @change="handleCheck"
               hover
             />
           </t-form-item>
@@ -99,6 +100,10 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
     console.log("Validate Errors: ", firstError, validateResult);
     firstError && MessagePlugin.warning(firstError);
   }
+};
+
+const handleCheck = (checkedKeys: any, info: any) => {
+  console.log(checkedKeys);
 };
 
 const handleSubmitForm = () => {
