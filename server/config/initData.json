@@ -1,60 +1,64 @@
 {
     "users": [
         {
+            "id": 1,
             "username": "LEYEN",
             "password": "$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq",
             "gender": "men",
             "superAdmin": 1
         },
         {
+            "id": 2,
             "username": "Alice",
             "password": "$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq",
             "gender": "women",
             "superAdmin": 1
         },
         {
+            "id": 3,
             "username": "Facker",
             "password": "$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq",
-            "gender":"secret",
+            "gender": "secret",
             "superAdmin": 0
         }
     ],
     "roles": [
         {
-            "roleName": "admin",
-            "roleDesc": "超级管理员"
-        },
-        {
+            "id": 1,
             "roleName": "blog_admin",
             "roleDesc": "博文管理员"
         },
         {
+            "id": 2,
             "roleName": "visitor",
             "roleDesc": "访客"
         }
     ],
     "menus": [
         {
+            "id": 1,
             "pid": 0,
             "path": "/admin/home",
             "title": "首页",
-            "icon": "logo-adobe-illustrate",
+            "icon": "home",
             "type": "menu",
             "authority": "",
             "sort": 0
         },
         {
+            "id": 2,
             "pid": 0,
-            "path": "/admin/web",
+            "path": "",
             "title": "博文管理",
-            "icon": "server",
+            "icon": "",
             "type": "menu",
             "authority": "",
             "sort": 0
         },
         {
+            "id": 3,
             "pid": 2,
-            "path": "/admin/ca",
+            "path": "/admin/category",
             "title": "分类管理",
             "icon": "catalog",
             "type": "menu",
@@ -62,6 +66,7 @@
             "sort": 0
         },
         {
+            "id": 4,
             "pid": 2,
             "path": "/admin/tag",
             "title": "标签管理",
@@ -71,6 +76,7 @@
             "sort": 0
         },
         {
+            "id": 5,
             "pid": 2,
             "path": "/admin/article",
             "title": "文章管理",
@@ -80,15 +86,17 @@
             "sort": 0
         },
         {
+            "id": 6,
             "pid": 0,
-            "path": "/admin/xxx",
+            "path": "",
             "title": "权限管理",
-            "icon": "setting-1",
+            "icon": "",
             "type": "menu",
             "authority": "",
             "sort": 0
         },
         {
+            "id": 7,
             "pid": 6,
             "path": "/admin/menu",
             "title": "菜单管理",
@@ -98,6 +106,7 @@
             "sort": 0
         },
         {
+            "id": 8,
             "pid": 7,
             "path": "",
             "title": "分页",
@@ -107,6 +116,7 @@
             "sort": 0
         },
         {
+            "id": 9,
             "pid": 7,
             "path": "",
             "title": "列表",
@@ -116,6 +126,7 @@
             "sort": 1
         },
         {
+            "id": 10,
             "pid": 7,
             "path": "add",
             "title": "新增",
@@ -125,6 +136,7 @@
             "sort": 2
         },
         {
+            "id": 11,
             "pid": 7,
             "path": "",
             "title": "修改",
@@ -134,6 +146,7 @@
             "sort": 3
         },
         {
+            "id": 12,
             "pid": 7,
             "path": "",
             "title": "删除",
@@ -143,6 +156,7 @@
             "sort": 4
         },
         {
+            "id": 13,
             "pid": 7,
             "path": "",
             "title": "详情",
@@ -152,6 +166,7 @@
             "sort": 5
         },
         {
+            "id": 14,
             "pid": 6,
             "path": "/admin/role",
             "title": "角色管理",
@@ -161,6 +176,7 @@
             "sort": 0
         },
         {
+            "id": 15,
             "pid": 14,
             "path": "",
             "title": "分页",
@@ -170,6 +186,7 @@
             "sort": 0
         },
         {
+            "id": 16,
             "pid": 14,
             "path": "",
             "title": "列表",
@@ -179,6 +196,7 @@
             "sort": 4
         },
         {
+            "id": 17,
             "pid": 14,
             "path": "",
             "title": "新增",
@@ -188,6 +206,7 @@
             "sort": 2
         },
         {
+            "id": 18,
             "pid": 14,
             "path": "",
             "title": "修改",
@@ -197,6 +216,7 @@
             "sort": 3
         },
         {
+            "id": 19,
             "pid": 14,
             "path": "",
             "title": "删除",
@@ -206,6 +226,7 @@
             "sort": 4
         },
         {
+            "id": 20,
             "pid": 14,
             "path": "",
             "title": "详情",
@@ -215,6 +236,7 @@
             "sort": 5
         },
         {
+            "id": 21,
             "pid": 6,
             "path": "/admin/user",
             "title": "用户管理",
@@ -224,6 +246,7 @@
             "sort": 0
         },
         {
+            "id": 22,
             "pid": 21,
             "path": "",
             "title": "分页",
@@ -233,6 +256,7 @@
             "sort": 0
         },
         {
+            "id": 23,
             "pid": 21,
             "path": "",
             "title": "列表",
@@ -242,6 +266,7 @@
             "sort": 1
         },
         {
+            "id": 24,
             "pid": 21,
             "path": "",
             "title": "新增",
@@ -251,6 +276,7 @@
             "sort": 2
         },
         {
+            "id": 25,
             "pid": 21,
             "path": "",
             "title": "修改",
@@ -260,6 +286,7 @@
             "sort": 3
         },
         {
+            "id": 26,
             "pid": 21,
             "path": "",
             "title": "删除",
@@ -269,6 +296,7 @@
             "sort": 4
         },
         {
+            "id": 27,
             "pid": 21,
             "path": "",
             "title": "详情",
@@ -278,6 +306,7 @@
             "sort": 5
         },
         {
+            "id": 28,
             "pid": 5,
             "path": "",
             "title": "分页",
@@ -287,6 +316,7 @@
             "sort": 0
         },
         {
+            "id": 29,
             "pid": 5,
             "path": "",
             "title": "列表",
@@ -296,6 +326,7 @@
             "sort": 1
         },
         {
+            "id": 30,
             "pid": 5,
             "path": "",
             "title": "新增",
@@ -305,6 +336,7 @@
             "sort": 2
         },
         {
+            "id": 31,
             "pid": 5,
             "path": "",
             "title": "修改",
@@ -314,6 +346,7 @@
             "sort": 3
         },
         {
+            "id": 32,
             "pid": 5,
             "path": "",
             "title": "删除",
@@ -323,6 +356,7 @@
             "sort": 4
         },
         {
+            "id": 33,
             "pid": 5,
             "path": "",
             "title": "详情",
@@ -332,6 +366,7 @@
             "sort": 5
         },
         {
+            "id": 34,
             "pid": 0,
             "path": "/admin/attachment",
             "title": "附件管理",
@@ -341,6 +376,7 @@
             "sort": 0
         },
         {
+            "id": 35,
             "pid": 34,
             "path": "",
             "title": "分页",
@@ -350,6 +386,7 @@
             "sort": 0
         },
         {
+            "id": 36,
             "pid": 34,
             "path": "",
             "title": "列表",
@@ -359,6 +396,7 @@
             "sort": 1
         },
         {
+            "id": 37,
             "pid": 34,
             "path": "",
             "title": "新增",
@@ -368,6 +406,7 @@
             "sort": 2
         },
         {
+            "id": 38,
             "pid": 34,
             "path": "",
             "title": "删除",
@@ -375,162 +414,70 @@
             "icon": "delete",
             "authority": "attachment:delete",
             "sort": 3
+        },
+        {
+            "id": 39,
+            "pid": 0,
+            "path": "",
+            "title": "更多",
+            "type": "menu",
+            "icon": "",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 40,
+            "pid": 39,
+            "path": "/admin/user/info",
+            "title": "个人页",
+            "type": "menu",
+            "icon": "user",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 41,
+            "pid": 39,
+            "path": "/admin/login",
+            "title": "登录页",
+            "type": "menu",
+            "icon": "login",
+            "authority": "",
+            "sort": 0
         }
     ],
     "userRoles": [
         {
+            "id": 1,
             "userId": "3",
             "roleId": "1"
         }
     ],
     "roleMenus": [
         {
+            "id": 1,
             "roleId": "1",
             "menuId": "1"
         },
         {
+            "id": 2,
             "roleId": "1",
             "menuId": "2"
         },
         {
+            "id": 3,
             "roleId": "1",
             "menuId": "3"
         },
         {
+            "id": 4,
             "roleId": "1",
             "menuId": "4"
         },
         {
+            "id": 5,
             "roleId": "1",
             "menuId": "5"
-        },
-        {
-            "roleId": "1",
-            "menuId": "6"
-        },
-        {
-            "roleId": "1",
-            "menuId": "7"
-        },
-        {
-            "roleId": "1",
-            "menuId": "8"
-        },
-        {
-            "roleId": "1",
-            "menuId": "9"
-        },
-        {
-            "roleId": "1",
-            "menuId": "10"
-        },
-        {
-            "roleId": "1",
-            "menuId": "11"
-        },
-        {
-            "roleId": "1",
-            "menuId": "12"
-        },
-        {
-            "roleId": "1",
-            "menuId": "13"
-        },
-        {
-            "roleId": "1",
-            "menuId": "14"
-        },
-        {
-            "roleId": "1",
-            "menuId": "15"
-        },
-        {
-            "roleId": "1",
-            "menuId": "16"
-        },
-        {
-            "roleId": "1",
-            "menuId": "17"
-        },
-        {
-            "roleId": "1",
-            "menuId": "18"
-        },
-        {
-            "roleId": "1",
-            "menuId": "19"
-        },
-        {
-            "roleId": "1",
-            "menuId": "20"
-        },
-        {
-            "roleId": "1",
-            "menuId": "21"
-        },
-        {
-            "roleId": "1",
-            "menuId": "22"
-        },
-        {
-            "roleId": "1",
-            "menuId": "23"
-        },
-        {
-            "roleId": "1",
-            "menuId": "24"
-        },
-        {
-            "roleId": "1",
-            "menuId": "25"
-        },
-        {
-            "roleId": "1",
-            "menuId": "26"
-        },
-        {
-            "roleId": "1",
-            "menuId": "27"
-        },
-        {
-            "roleId": "1",
-            "menuId": "28"
-        },
-        {
-            "roleId": "1",
-            "menuId": "29"
-        },
-        {
-            "roleId": "1",
-            "menuId": "30"
-        },
-        {
-            "roleId": "1",
-            "menuId": "31"
-        },
-        {
-            "roleId": "1",
-            "menuId": "32"
-        },
-        {
-            "roleId": "1",
-            "menuId": "33"
-        },
-        {
-            "roleId": "1",
-            "menuId": "34"
-        },
-        {
-            "roleId": "1",
-            "menuId": "35"
-        },
-        {
-            "roleId": "1",
-            "menuId": "36"
-        },
-        {
-            "roleId": "1",
-            "menuId": "37"
         }
     ]
 }
