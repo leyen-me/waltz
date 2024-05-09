@@ -47,7 +47,7 @@
           <t-form-item name="introduction" label="简介">
             <t-textarea v-model="formData.introduction"></t-textarea>
           </t-form-item>
-          <t-form-item name="superAdmin" label="超管">
+          <t-form-item name="superAdmin" label="超管" v-if="!info">
             <t-radio-group
               variant="default-filled"
               v-model="formData.superAdmin"
@@ -56,13 +56,13 @@
               <t-radio-button :value="0">否</t-radio-button>
             </t-radio-group>
           </t-form-item>
-          <t-form-item name="status" label="状态">
+          <t-form-item name="status" label="状态" v-if="!info">
             <t-radio-group variant="default-filled" v-model="formData.status">
               <t-radio-button :value="0">正常</t-radio-button>
               <t-radio-button :value="1">停用</t-radio-button>
             </t-radio-group>
           </t-form-item>
-          <t-form-item name="roleIdList" label="角色">
+          <t-form-item name="roleIdList" label="角色" v-if="!info">
             <t-select
               v-model="formData.roleIdList"
               :options="roleList"
@@ -82,13 +82,15 @@ import type { SubmitContext } from "tdesign-vue-next/es/form";
 import Cookies from "js-cookie";
 import {
   useAdminUserFindOneApi,
+  useAdminUserInfoApi,
   useAdminUserSubmitApi,
 } from "@/api/admin/user";
 import { useAdminRoleListApi } from "@/api/admin/role";
-import type Role from "~/server/models/Role";
+import type Role from "@/server/models/Role";
 
 const route = useRoute();
 const router = useRouter();
+const info = ref(false);
 
 const files = ref([]);
 const uploadUrl =
@@ -118,8 +120,10 @@ const getRoleList = async () => {
   roleList.value = data;
 };
 
+info.value = route.params.id === "info";
+
 const formData = ref({
-  id: Number(route.params.id),
+  id: route.params.id !== "info" ? Number(route.params.id) : route.params.id,
   username: "",
   password: "",
   avatar: "",
@@ -137,7 +141,9 @@ const formRules = ref({
 
 const getData = async () => {
   if (formData.value.id) {
+    const call = info.value ? useAdminUserInfoApi : useAdminUserFindOneApi;
     const {
+      id,
       username,
       avatar,
       gender,
@@ -146,7 +152,8 @@ const getData = async () => {
       superAdmin,
       status,
       roleIdList,
-    } = await useAdminUserFindOneApi(formData.value.id);
+    } = await call(formData.value.id);
+    formData.value.id = id;
     formData.value.username = username;
     formData.value.avatar = avatar;
     formData.value.gender = gender;
@@ -172,7 +179,7 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
     try {
       const res = await useAdminUserSubmitApi(formData.value);
       MessagePlugin.success("保存成功");
-      router.back();
+      !info.value && router.back();
     } catch (error: any) {
       MessagePlugin.error("保存失败");
     }

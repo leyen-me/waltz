@@ -30,8 +30,8 @@ export const useAdminUserSubmitApi = <T = any>(body: Partial<User>) => {
   }
 };
 
-export const useAdminUserInfoApi = () => {
-  return useApi("/api/admin/user/info", { method: "GET" });
+export const useAdminUserInfoApi = <T = User>() => {
+  return useApi<T>("/api/admin/user/info", { method: "GET" });
 };
 
 export const useAdminUserDeleteApi = <T = User>(id: number) => {
