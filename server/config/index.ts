@@ -3,7 +3,8 @@ export const secretKey = "ijdioshai";
 
 export const whiteList = ["/api/admin/auth/**"];
 
-export const isForce = true;
+// 清库有风险 使用需谨慎 强制不规范 亲人两行泪
+export const isForce = false;
 
 export const baseUploadDir = './public';
 

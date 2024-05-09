@@ -9,12 +9,12 @@ export default class Context extends BaseModel<Context> {
     static initContext(sequelize: Sequelize): typeof Context {
         const modelAttributes = {
             chatId: {
-                type: DataTypes.BIGINT,
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
                 comment: "聊天ID",
             },
             context: {
-                type: DataTypes.TEXT,
+                type: DataTypes.TEXT({ length: 'long' }),
                 allowNull: true,
                 comment: '内容',
             },
@@ -29,7 +29,7 @@ export default class Context extends BaseModel<Context> {
                 comment: '工具名称',
             },
             toolParameters: {
-                type: DataTypes.TEXT,
+                type: DataTypes.TEXT({ length: 'long' }),
                 allowNull: true,
                 comment: '工具参数',
             },
@@ -39,7 +39,7 @@ export default class Context extends BaseModel<Context> {
                 comment: '耗时',
             },
             status: {
-                type: DataTypes.INTEGER({ length: 12 }),
+                type: DataTypes.INTEGER({ length: 11 }),
                 allowNull: true,
                 comment: '状态',
             },

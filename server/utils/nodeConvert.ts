@@ -14,6 +14,8 @@ export const listToTree = <K, T extends { [key: string]: any }>(list: T[], idKey
         map.set(nodeId, m);
     });
 
+    
+
     // 构建树形结构
     const tree: TreeNode<K, T>[] = [];
     list.forEach(item => {
@@ -31,6 +33,9 @@ export const listToTree = <K, T extends { [key: string]: any }>(list: T[], idKey
             }
         }
     });
+
+    console.log(tree);
+
 
     return tree;
 };

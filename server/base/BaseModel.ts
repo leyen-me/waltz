@@ -5,7 +5,7 @@ class BaseModel<T extends BaseModel<T>> extends Model {
   declare id?: number;
   declare createdAt?: string;
   declare updatedAt?: string;
-  
+
   toJSON(): T {
     const json = this.get() as unknown as T;
     json.createdAt = moment(json.createdAt).format('YYYY-MM-DD HH:mm:ss');
@@ -17,7 +17,7 @@ class BaseModel<T extends BaseModel<T>> extends Model {
   static initModel(attributes: ModelAttributes, options: ModelOptions & { sequelize: Sequelize }): typeof BaseModel {
     const modelAttributes: ModelAttributes = {
       id: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.BIGINT({ length: 20 }),
         primaryKey: true,
         autoIncrement: true,
         comment: "主键id"

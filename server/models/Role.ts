@@ -11,12 +11,12 @@ export default class Role extends BaseModel<Role> {
     static initRole(sequelize: Sequelize): typeof Role {
         const modelAttributes = {
             roleName: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 20 }),
                 allowNull: false,
                 comment: '角色名称',
             },
             roleDesc: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING({ length: 255 }),
                 allowNull: true,
                 comment: '角色描述',
             },

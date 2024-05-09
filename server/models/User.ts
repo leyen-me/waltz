@@ -8,9 +8,9 @@ export default class User extends BaseModel<User> {
   declare avatar: string;
   declare gender: string;
   declare email: string;
-  declare introduction:string;
-  declare superAdmin:number;
-  declare status:number;
+  declare introduction: string;
+  declare superAdmin: number;
+  declare status: number;
 
   public authorityList?: string[];
   public roleIdList?: number[];
@@ -18,43 +18,43 @@ export default class User extends BaseModel<User> {
   static initUser(sequelize: Sequelize): typeof User {
     const modelAttributes: ModelAttributes = {
       username: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING({ length: 20 }),
         allowNull: false,
         comment: "姓名/昵称",
       },
       password: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING({ length: 255 }),
         allowNull: false,
         comment: "密码",
       },
       avatar: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING({ length: 255 }),
         allowNull: true,
         comment: "头像",
       },
       gender: {
-        type: DataTypes.ENUM("men", "women", "secret"),
+        type: DataTypes.ENUM({ values: ["men", "women", "secret"] }),
         allowNull: true,
         comment: "性别",
       },
       email: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING({ length: 20 }),
         allowNull: true,
         comment: "邮箱",
       },
       introduction: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT({ length: 'long' }),
         allowNull: true,
         comment: "简介",
       },
       superAdmin: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER({ length: 1 }),
         allowNull: false,
         defaultValue: 0,
         comment: "是否是超级管理员(0:否 1:是)"
       },
       status: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER({ length: 1 }),
         allowNull: false,
         defaultValue: 0,
         comment: "是否正常(0:正常 1:停用)"
