@@ -1,4 +1,4 @@
-import { Attributes, CreateOptions, CreationAttributes, DestroyOptions, FindAndCountOptions, ModelStatic, UpdateOptions, Transaction } from 'sequelize';
+import { Attributes, CreateOptions, CreationAttributes, DestroyOptions, FindAndCountOptions, ModelStatic, UpdateOptions, Transaction, where } from 'sequelize';
 import BaseModel from './BaseModel';
 
 export default class BaseService<T extends BaseModel<T>> {
@@ -10,16 +10,18 @@ export default class BaseService<T extends BaseModel<T>> {
     }
 
     async page<Q extends BaseQuery>(query: Q): Promise<BasePageResponse<T>> {
-        let { page = 1, limit = 10, order, asc } = query;
+        let { page = 1, limit = 10, order, asc, ...items } = query;
         page = Number(page);
         limit = Number(limit);
 
         const offset = (page - 1) * limit;
 
+        // 构建查询条件
         const options: FindAndCountOptions = {
             offset,
             limit,
             order: this.getOrderCriteria(order, asc),
+            where: items
         };
 
         const { rows, count } = await this.model.findAndCountAll(options);
@@ -59,7 +61,7 @@ export default class BaseService<T extends BaseModel<T>> {
         return deletedCount;
     }
 
-    private getOrderCriteria(order?: string, asc?: boolean): [string, 'ASC' | 'DESC'][] {
+    private getOrderCriteria(order?: string, asc: boolean = true): [string, 'ASC' | 'DESC'][] {
         if (!order) return [];
         return [[order, asc ? 'ASC' : 'DESC']];
     }

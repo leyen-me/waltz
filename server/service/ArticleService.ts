@@ -1,7 +1,8 @@
 import Article from "@/server/models/Article";
 import BaseService from "@/server/base/BaseService";
-import { CreationAttributes } from "sequelize";
+import { CreationAttributes, Op } from "sequelize";
 import { ArticleStatus } from "../enum";
+import sequelize from "../db";
 
 export default class ArticleService extends BaseService<Article> {
     constructor() {
@@ -9,29 +10,91 @@ export default class ArticleService extends BaseService<Article> {
     }
 
     async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
+        query.order = 'sort';
         return this.page(query);
     }
 
     async createArticle(articleData: CreationAttributes<Article>): Promise<BaseCreateResponse> {
         if (articleData.status === ArticleStatus.values[1]) {
             articleData.publishedAt = new Date();
+
+            // 获取文章的发布年份
+            const publishedYear = new Date(articleData.publishedAt).getFullYear();
+
+            // 获取当年发布的文章数量
+            const count = await Article.count({
+                where: sequelize.where(
+                    sequelize.fn('YEAR', sequelize.col('published_at')),
+                    publishedYear
+                )
+            });
+            // 设置排序编号
+            articleData.sort = count + 1;
         }
+
         return (await this.create(articleData)).id as number;
     }
 
     async updateArticle(articleId: number, articleData: Partial<CreationAttributes<Article>>): Promise<void> {
         if (articleData.status === ArticleStatus.values[1]) {
             articleData.publishedAt = new Date();
+
+            // 获取文章的发布年份
+            const publishedYear = new Date(articleData.publishedAt).getFullYear();
+
+            // 获取当年发布的文章数量
+            const count = await Article.count({
+                where: sequelize.where(
+                    sequelize.fn('YEAR', sequelize.col('published_at')),
+                    publishedYear
+                )
+            });
+            // 设置排序编号
+            articleData.sort = count + 1;
         }
         await this.update(articleData, { where: { id: articleId } });
     }
 
     async deleteArticles(articleIds: number[]): Promise<void> {
+        // 查询待删除文章的年份和排序编号
+        const articlesToDelete = await Article.findAll({ attributes: ['id', 'publishedAt', 'sort'], where: { id: articleIds } });
+
+        // 删除文章
         await this.delete({ where: { id: articleIds } });
+
+        // 更新后续文章的排序编号
+        for (const article of articlesToDelete) {
+            const year = new Date(article.publishedAt).getFullYear();
+
+            // 更新后续文章的排序编号
+            await Article.update({ sort: sequelize.literal('sort - 1') }, {
+                where: {
+                    publishedAt: {
+                        [Op.gte]: new Date(`${year}-01-01`),
+                        [Op.lt]: new Date(`${year + 1}-01-01`)
+                    },
+                    status: ArticleStatus.values[1], // 只更新状态为已发布的文章
+                    sort: { [Op.gt]: article.sort } // 只更新排序编号大于当前文章的文章
+                }
+            });
+        }
     }
 
     async getArticleById(articleId: number | string): Promise<Article | null> {
-        return await Article.findByPk(articleId);
+        const query = `
+            SELECT a.*, u.username as author
+            FROM t_article a
+            JOIN t_user u ON a.author_id = u.id
+            WHERE A.id = :articleId
+        `;
+
+        const result = await sequelize.query(query, {
+            replacements: { articleId },
+            model: Article,
+            mapToModel: true
+        });
+
+        return result.length ? result[0] : null;
     }
 
     async getAllArticles(): Promise<Article[]> {
