@@ -1,6 +1,6 @@
 import Attachment from '@/server/models/Attachment';
 import BaseService from '@/server/base/BaseService';
-import { CreationAttributes, Op } from 'sequelize';
+import { CreationAttributes } from 'sequelize';
 import { uploadFile } from '../utils/fileUtil';
 
 export default class AttachmentService extends BaseService<Attachment> {

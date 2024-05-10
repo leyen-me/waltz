@@ -12,7 +12,10 @@ export default class Article extends BaseModel<Article> {
   declare publishedAt: string;
   declare status: string;
   declare viewsCount: number;
-  declare publishedAtDetails: object;
+  declare sort: number;
+
+  public author?: string;
+  public publishedAtDetails!: ArticlePublishedAtDetail;
 
   toJSON() {
     const json = super.toJSON();
@@ -21,7 +24,10 @@ export default class Article extends BaseModel<Article> {
       json.publishedAtDetails = {
         "year": moment(json.publishedAt).format('YYYY'),
         "quarter": moment(json.publishedAt).format('Q'),
-        "month": moment(json.publishedAt).format('MM'),
+        "month": {
+          'number': moment(json.publishedAt).format('MM'),
+          'english': moment(json.publishedAt).format('MMMM')
+        },
         "week": moment(json.publishedAt).format('dddd'),
         "day": moment(json.publishedAt).format('DD'),
         "second": moment(json.publishedAt).format('X')
@@ -38,7 +44,7 @@ export default class Article extends BaseModel<Article> {
         comment: "文章分类",
       },
       title: {
-        type: DataTypes.STRING({ length: 20 }),
+        type: DataTypes.STRING({ length: 255 }),
         allowNull: false,
         comment: "文章标题",
       },
@@ -72,6 +78,11 @@ export default class Article extends BaseModel<Article> {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         comment: '文章浏览量',
+      },
+      sort: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        comment: '排序',
       }
     };
 

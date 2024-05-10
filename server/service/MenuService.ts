@@ -1,6 +1,6 @@
 import Menu from '@/server/models/Menu';
 import BaseService from '@/server/base/BaseService';
-import { CreationAttributes, Op, QueryTypes } from 'sequelize';
+import { CreationAttributes } from 'sequelize';
 import User from '../models/User';
 import UserRoleService from './UserRoleService';
 import sequelize from '../db';
@@ -14,6 +14,7 @@ export default class MenuService extends BaseService<Menu> {
     }
 
     async selectPage(query: MenuQuery): Promise<BasePageResponse<Menu>> {
+        query.order = 'sort';
         return this.page(query);
     }
 
@@ -80,7 +81,7 @@ export default class MenuService extends BaseService<Menu> {
             const [results] = await sequelize.query(query, {
                 replacements
             });
-            
+
             return results as Menu[];
         }
     }
@@ -120,7 +121,7 @@ export default class MenuService extends BaseService<Menu> {
 
     async getUserAuthority(user: User): Promise<string[]> {
         let authorities: string[] = [];
-    
+
         if (user.superAdmin === 1) {
             // 如果用户是超级管理员，直接返回所有菜单权限
             const allMenus = await Menu.findAll();
@@ -129,7 +130,7 @@ export default class MenuService extends BaseService<Menu> {
             // 如果用户不是超级管理员，则根据用户的角色信息获取菜单权限
             // 获取用户的角色信息，假设从数据库中查询
             const roleIdList = await this.userRoleService.getRoleIdList(user.id as number);
-    
+
             // 构建 SQL 查询语句
             const query = `  
                 SELECT DISTINCT m.authority  
@@ -137,19 +138,19 @@ export default class MenuService extends BaseService<Menu> {
                 INNER JOIN t_role_menu rm ON m.id = rm.menu_id  
                 WHERE rm.role_id IN (:roleIds);  
             `;
-    
+
             // 使用参数绑定来避免 SQL 注入  
             // Sequelize 会自动处理数组中的值，用于 IN 查询  
             const [results] = await sequelize.query(query, {
                 replacements: { roleIds: roleIdList }
             });
-    
+
             authorities = results.map((row: any) => row.authority);
         }
-    
+
         // 过滤空值
         authorities = authorities.filter(authority => authority !== "");
-    
+
         return authorities;
-    }    
+    }
 }
