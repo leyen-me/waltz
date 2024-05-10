@@ -10,22 +10,29 @@
         <div class="w-full aspect-square overflow-hidden">
           <img
             class="w-full h-full object-cover transition duration-300 ease-in-out hover:scale-110"
-            :src="v.src"
+            :src="v.cover"
           />
         </div>
         <div class="p-2 xl:p-4 dark:text-white">
           <h2 class="mt-3 font-bold text-2xl flex">
-            <span class="line-clamp-1">冰川融化</span>
-            <span class="ml-2">#009</span>
+            <span class="line-clamp-1">{{ v.title }}</span>
+
+            <span class="ml-2">#{{ String(v.sort).padStart(3, "0") }}</span>
             <span class="inline-block align-middle">
               <IconRtArrow></IconRtArrow>
             </span>
           </h2>
           <p class="mt-1 opacity-65 line-clamp-3">
-            莫言表示：“虽然我也会时不时地刷短视频，但每次刷完后都会自我反省，问自己为什么又浪费了一小时，而且大部分时间都在看无聊的东西。因此，短视频只是一个阶段性的现象。相比之下，阅读才是我们业余时间中最值得，也是最应该做的
+            {{ v.content }}
           </p>
           <span class="font-time mt-1 opacity-65 text-sm">
-            January 1,2022
+            {{
+              v.publishedAtDetails.month.english +
+              " " +
+              v.publishedAtDetails.day +
+              "," +
+              v.publishedAtDetails.year
+            }}
           </span>
         </div>
       </li>
@@ -57,20 +64,6 @@ const total = ref(0);
 const list = ref<Article[]>([]);
 const router = useRouter();
 
-// const list = ref([
-//   {
-//     id: "1",
-//     src: "https://images.unsplash.com/photo-1706914890322-336df4374736?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzNnx8fGVufDB8fHx8fA%3D%3D",
-//   },
-//   {
-//     id: "2",
-//     src: "https://images.unsplash.com/photo-1709777083341-2ebb9f0772cc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3fHx8ZW58MHx8fHx8",
-//   },
-//   {
-//     id: "3",
-//     src: "https://images.unsplash.com/photo-1713727967827-b04e5eab7d3a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzMHx8fGVufDB8fHx8fA%3D%3D",
-//   },
-// ]);
 const handleDetail = (v: any) => {
   router.push(`/blog/${v.id}`);
 };
@@ -80,12 +73,12 @@ const getData = async () => {
     page: page.value,
     limit: limit.value,
   });
-
-  console.log(res);
+  list.value = res.data;
+  total.value = res.meta.totalItems;
 };
 
 getData();
 
 // 请不要删除或改动下方代码
-console.log("welcome to home 001");
+console.log("welcome to home 002");
 </script>

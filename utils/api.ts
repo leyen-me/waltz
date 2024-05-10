@@ -9,11 +9,13 @@ const useApi = async <T>(
     default: () => "",
     watch: false,
   });
+  const config = useRuntimeConfig();
   const _res = await useFetch(url, {
     headers: {
       "Content-Type": "application/json",
       Authorization: token.value,
     },
+    baseURL: config.public.apiBase,
     ...options,
   });
   const res = _res.data.value as BaseResponse<T>;

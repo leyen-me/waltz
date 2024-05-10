@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between items-center">
+  <header class="flex justify-between items-center dark:text-white">
     <h1 class="text-4xl leading-9 font-bold cursor-pointer font-logo">
       <NuxtLink to="/" class="dark:text-white">LEYEN</NuxtLink>
     </h1>

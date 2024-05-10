@@ -40,31 +40,14 @@ export default defineNuxtConfig({
     "/": { prerender: true },
     "/blog/**": { isr: true },
     "/admin/**": { ssr: false },
-    "/api/**": {
-      cors: true,
-    },
-  },
-  vite: {
-    // 前后端分离
-    // 上线之后删除server
-    server: {
-      proxy:
-        process.env.USERNAME === "wjc"
-          ? {}
-          : {
-              "/api": {
-                target: "http://192.168.31.76:3000",
-                changeOrigin: true,
-              },
-            },
-    },
+    "/api/**": { cors: true },
   },
   runtimeConfig: {
     // 只在服务器端可用的私有键
     apiSecret: "123",
     // public中的键也可以在客户端使用
     public: {
-      apiBase: "http://192.168.31.76:3000/api",
+      apiBase: "http://192.168.31.76:3000",
     },
   },
 });
