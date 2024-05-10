@@ -13,6 +13,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.20",
     "@kangc/v-md-editor": "^2.3.18",
+    "@pinia/nuxt": "^0.5.1",
     "bcrypt": "^5.1.1",
     "highlight.js": "9.18.1",
     "js-cookie": "^3.0.5",
@@ -22,6 +23,7 @@
     "mysql2": "^3.9.7",
     "nanoid": "^5.0.7",
     "nuxt": "^3.11.2",
+    "pinia": "^2.1.7",
     "sequelize": "^6.37.3",
     "tdesign-icons-vue-next": "^0.2.2",
     "tdesign-vue-next": "^1.9.4",

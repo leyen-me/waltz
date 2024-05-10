@@ -3,7 +3,11 @@
     <div class="w-full xl:w-[680px]">
       <t-card title="基本信息">
         <template #actions>
-          <t-button @click="handleSubmitForm">保存</t-button>
+          <t-button
+            @click="handleSubmitForm"
+            :disabled="!useHasAuth('user:save')"
+            >保存</t-button
+          >
         </template>
         <t-form
           ref="form"
@@ -21,6 +25,7 @@
               :abridge-name="[8, 6]"
               :multiple="false"
               theme="image"
+              :disabled="!useHasAuth('attachment:save')"
               :showImageFileName="false"
               placeholder="未选择文件"
               @success="onUploadSuccess"
@@ -87,6 +92,7 @@ import {
 } from "@/api/admin/user";
 import { useAdminRoleListApi } from "@/api/admin/role";
 import type Role from "@/server/models/Role";
+import useHasAuth from "@/utils/auth";
 
 const route = useRoute();
 const router = useRouter();
@@ -122,8 +128,21 @@ const getRoleList = async () => {
 
 info.value = route.params.id === "info";
 
-const formData = ref({
-  id: route.params.id !== "info" ? Number(route.params.id) : route.params.id,
+const formData = ref<{
+  id: number;
+  username: string;
+  password: string;
+  avatar: string;
+  gender: string;
+  email: string;
+  introduction: string;
+  superAdmin: number;
+  status: number;
+  roleIdList: number[];
+}>({
+  id: (route.params.id !== "info"
+    ? Number(route.params.id)
+    : route.params.id) as number,
   username: "",
   password: "",
   avatar: "",
@@ -153,7 +172,7 @@ const getData = async () => {
       status,
       roleIdList,
     } = await call(formData.value.id);
-    formData.value.id = id;
+    formData.value.id = id as number;
     formData.value.username = username;
     formData.value.avatar = avatar;
     formData.value.gender = gender;
@@ -161,9 +180,7 @@ const getData = async () => {
     formData.value.introduction = introduction;
     formData.value.superAdmin = superAdmin;
     formData.value.status = status;
-
-    // @ts-ignore
-    formData.value.roleIdList = roleIdList;
+    formData.value.roleIdList = roleIdList as number[];
     if (formData.value.avatar) {
       // @ts-ignore
       files.value.push({

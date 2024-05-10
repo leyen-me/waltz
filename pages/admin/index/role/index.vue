@@ -2,7 +2,10 @@
   <div class="w-full">
     <t-card title="角色管理">
       <template #actions>
-        <t-button class="ml-2" @click="$router.push('/admin/role/0')"
+        <t-button
+          class="ml-2"
+          @click="$router.push('/admin/role/0')"
+          :disabled="!useHasAuth('role:save')"
           >新增</t-button
         >
       </template>
@@ -18,7 +21,8 @@
 
 <script setup lang="tsx">
 import { useAdminRoleListApi, useAdminRoleDeleteApi } from "@/api/admin/role";
-import type Role from "@/server/models/User";
+import useHasAuth from "@/utils/auth";
+import type Role from "~/server/models/Role";
 
 const router = useRouter();
 
@@ -53,6 +57,7 @@ const columns = [
           <t-link
             variant="text"
             hover="color"
+            disabled={!useHasAuth("role:update")}
             onClick={() => router.push(`/admin/role/${row.id}`)}
           >
             编辑
@@ -61,7 +66,12 @@ const columns = [
             content="确认删除吗"
             onConfirm={() => handleDelete(row.id)}
           >
-            <t-link variant="text" hover="color" theme="danger">
+            <t-link
+              disabled={!useHasAuth("role:delete")}
+              variant="text"
+              hover="color"
+              theme="danger"
+            >
               删除
             </t-link>
           </t-popconfirm>

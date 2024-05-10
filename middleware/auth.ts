@@ -1,4 +1,5 @@
 import { useAdminUserInfoApi } from "@/api/admin/user";
+import useUserStore from "~/stores/userStore";
 
 /**
  * 后台管理路由守卫
@@ -8,12 +9,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     default: () => "",
     watch: false,
   });
+  const userStore = useUserStore();
   if (!token.value) {
     return navigateTo("/admin/login");
   }
-  // 请求一下INFO信息
   try {
-    await useAdminUserInfoApi();
+    const userinfo = await useAdminUserInfoApi();
+    userStore.authorityList = userinfo.authorityList as string[];
   } catch (error) {
     return navigateTo("/admin/login");
   }

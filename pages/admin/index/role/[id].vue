@@ -3,7 +3,11 @@
     <div class="w-full xl:w-[680px]">
       <t-card title="基本信息">
         <template #actions>
-          <t-button @click="handleSubmitForm">保存</t-button>
+          <t-button
+            @click="handleSubmitForm"
+            :disabled="!useHasAuth('role:save')"
+            >保存</t-button
+          >
         </template>
         <t-form
           ref="form"
@@ -25,9 +29,10 @@
               v-model="formData.menuIdList"
               :data="menuList"
               :checkable="true"
-              :check-strictly="false"
-              :value-mode="'onlyLeaf'"
+              :check-strictly="true"
+              :value-mode="'all'"
               :keys="{ label: 'title', value: 'id' }"
+              @change="handleCheck"
               hover
             />
           </t-form-item>
@@ -42,6 +47,7 @@ import type { SubmitContext } from "tdesign-vue-next/es/form";
 import { useAdminRoleInfoApi, useAdminRoleSubmitApi } from "@/api/admin/role";
 import { useAdminMenuListApi } from "@/api/admin/menu";
 import type Menu from "@/server/models/Menu";
+import useHasAuth from "@/utils/auth";
 
 const route = useRoute();
 const router = useRouter();
@@ -77,7 +83,7 @@ const getData = async () => {
     );
     formData.value.roleName = roleName;
     formData.value.roleDesc = roleDesc;
-    formData.value.menuIdList = menuIdList;
+    formData.value.menuIdList = menuIdList as number[];
   }
 };
 
@@ -94,6 +100,10 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
     console.log("Validate Errors: ", firstError, validateResult);
     firstError && MessagePlugin.warning(firstError);
   }
+};
+
+const handleCheck = (checkedKeys: any, info: any) => {
+  console.log(checkedKeys);
 };
 
 const handleSubmitForm = () => {

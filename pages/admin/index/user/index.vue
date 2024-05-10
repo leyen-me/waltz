@@ -2,7 +2,10 @@
   <div class="w-full">
     <t-card title="用户管理">
       <template #actions>
-        <t-button class="ml-2" @click="$router.push('/admin/user/0')"
+        <t-button
+          class="ml-2"
+          @click="$router.push('/admin/user/0')"
+          :disabled="!useHasAuth('user:save')"
           >新增</t-button
         >
       </template>
@@ -32,6 +35,7 @@
 import { useAdminUserDeleteApi, useAdminUserPageApi } from "@/api/admin/user";
 import { defaultRowsPerPageOptions } from "@/constans";
 import type User from "@/server/models/User";
+import useHasAuth from "@/utils/auth";
 
 const router = useRouter();
 
@@ -119,6 +123,7 @@ const columns = [
           <t-link
             variant="text"
             hover="color"
+            disabled={!useHasAuth("user:update")}
             onClick={() => router.push(`/admin/user/${row.id}`)}
           >
             编辑
@@ -127,7 +132,12 @@ const columns = [
             content="确认删除吗"
             onConfirm={() => handleDelete(row.id)}
           >
-            <t-link variant="text" hover="color" theme="danger">
+            <t-link
+              disabled={!useHasAuth("user:delete")}
+              variant="text"
+              hover="color"
+              theme="danger"
+            >
               删除
             </t-link>
           </t-popconfirm>

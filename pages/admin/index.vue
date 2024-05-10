@@ -99,7 +99,6 @@ const menus = ref<Menu[]>([]);
 const getData = async () => {
   const data = await useAdminMenuNavApi();
   menus.value = data;
-  console.log(data);
 };
 
 const route = useRoute();

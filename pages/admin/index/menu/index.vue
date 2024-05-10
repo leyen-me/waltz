@@ -2,7 +2,10 @@
   <div class="w-full">
     <t-card title="菜单管理">
       <template #actions>
-        <t-button class="ml-2" @click="$router.push('/admin/menu/0')"
+        <t-button
+          class="ml-2"
+          @click="$router.push('/admin/menu/0')"
+          :disabled="!useHasAuth('menu:save')"
           >新增</t-button
         >
       </template>
@@ -20,8 +23,10 @@
 
 <script setup lang="tsx">
 import { useAdminMenuDeleteApi, useAdminMenuListApi } from "@/api/admin/menu";
+import useHasAuth from "@/utils/auth";
+import type Menu from "~/server/models/Menu";
 
-const list = ref([]);
+const list = ref<Menu[]>([]);
 const router = useRouter();
 
 const getData = async () => {
@@ -76,6 +81,7 @@ const columns = [
           <t-link
             variant="text"
             hover="color"
+            disabled={!useHasAuth("menu:update")}
             onClick={() => router.push(`/admin/menu/${row.id}`)}
           >
             编辑
@@ -84,7 +90,12 @@ const columns = [
             content="确认删除吗"
             onConfirm={() => handleDelete(row.id)}
           >
-            <t-link variant="text" hover="color" theme="danger">
+            <t-link
+              disabled={!useHasAuth("menu:delete")}
+              variant="text"
+              hover="color"
+              theme="danger"
+            >
               删除
             </t-link>
           </t-popconfirm>

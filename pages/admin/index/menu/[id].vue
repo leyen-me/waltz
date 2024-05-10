@@ -3,7 +3,7 @@
     <div class="w-full xl:w-[500px]">
       <t-card title="基本信息">
         <template #actions>
-          <t-button @click="handleSubmitForm">保存</t-button>
+          <t-button @click="handleSubmitForm" :disabled="!useHasAuth('menu:save')">保存</t-button>
         </template>
         <t-form
           ref="form"
@@ -75,6 +75,7 @@ import {
   useAdminMenuSubmitApi,
 } from "@/api/admin/menu";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
+import useHasAuth from "@/utils/auth";
 
 const route = useRoute();
 const router = useRouter();

@@ -1,11 +1,12 @@
 <template>
   <div class="w-full m-auto mt-4 xl:w-3/4 xl:mt-8">
-    <div class="fixed bottom-12 right-12">
+    <div class="fixed bottom-12 right-12 z-10">
       <t-button
         shape="circle"
         theme="primary"
         style="width: 56px; height: 56px; border-radius: 999px"
         @click="$router.push('/admin/article/0')"
+        :disabled="!useHasAuth('article:save')"
       >
         <template #icon><plus-icon size="32px" /></template>
       </t-button>
@@ -68,11 +69,13 @@
                   @click="$router.push(`/admin/article/${v.id}`)"
                   variant="outline"
                   style="color: white"
+                  :disabled="!useHasAuth('article:update')"
                   >编辑</t-button
                 >
                 <t-popconfirm
                   content="确认删除吗"
                   @confirm="handleDelete(v.id as number)"
+                  :disabled="!useHasAuth('article:delete')"
                 >
                   <t-button theme="danger" variant="outline">删除</t-button>
                 </t-popconfirm>
@@ -107,6 +110,7 @@ import {
 } from "@/api/admin/article";
 import { defaultCover, defaultRowsPerPageOptions } from "@/constans";
 import type Article from "@/server/models/Article";
+import useHasAuth from "@/utils/auth";
 
 // 分页
 const page = ref(1);

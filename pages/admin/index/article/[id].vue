@@ -2,7 +2,7 @@
   <div>
     <t-card title="基本信息">
       <template #actions>
-        <t-button @click="handleSubmitForm">保存</t-button>
+        <t-button @click="handleSubmitForm" :disabled="!useHasAuth('article:save')">保存</t-button>
       </template>
       <t-form
         ref="form"
@@ -24,7 +24,7 @@
           <t-input
             v-model="formData.cover"
             clearable
-            placeholder="请输入文章标题"
+            placeholder="请输入文章封面"
           >
           </t-input>
           <div class="ml-2">
@@ -37,6 +37,7 @@
               theme="custom"
               :showImageFileName="false"
               placeholder="未选择文件"
+              :disabled="!useHasAuth('attachment:save')"
               @success="onCoverUploadSuccess"
               @fail="onCoverUploadError"
             ></t-upload>
@@ -73,6 +74,7 @@ import {
 } from "@/api/admin/article";
 import Cookies from "js-cookie";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
+import useHasAuth from "@/utils/auth"
 
 const route = useRoute();
 const uploadUrl =
@@ -111,7 +113,7 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
         await getData();
 
         const newPath = `/admin/article/${formData.value.id}`;
-        history.pushState({}, "", newPath);
+        history.replaceState({}, "", newPath);
       }
       MessagePlugin.success("保存成功");
     } catch (e) {

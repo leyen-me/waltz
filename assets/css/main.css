@@ -119,13 +119,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* --td-comp-size-m: 44px !important; */
-}
-
 html,
 body,
 #__nuxt {
+  background-color: rgba(226, 232, 240);
   height: 100%;
 }
 
@@ -140,6 +137,12 @@ body,
 }
 
 /* 样式重置 */
+ul {
+}
+li {
+  list-style: none;
+}
+
 .p-dialog-content {
   padding: 10px 250px 20px 8px;
 }
@@ -174,7 +177,10 @@ body,
 }
 
 @media (prefers-color-scheme: dark) {
-  .v-md-editor {
+  html,
+  body,
+  #__nuxt {
+    background-color: #242424;
   }
 
   .v-md-editor__left-area {
