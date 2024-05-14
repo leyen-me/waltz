@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-5 xl:w-2/5 xl:m-auto xl:mt-20">
+  <div class="w-full xl:w-2/5 xl:m-auto xl:mt-20">
     <BaseHeader></BaseHeader>
     <h1 class="text-2xl font-bold text-center mt-16 xl:mt-16 dark:text-white">
       {{ article.title }} #{{ String(article.sort).padStart(3, "0") }}
@@ -32,11 +32,11 @@
       />
     </div>
     <section
-      class="p-4 leading-[1.6] tracking-[1px] xl:p-8 xl:leading-[1.8] text-justify dark:text-stone-300"
+      class="mt-2 leading-[1.6] tracking-[1px] xl:leading-[1.8] text-justify dark:text-stone-300"
     >
-      <BaseEditor v-model="article"></BaseEditor>
+      <BasePreview v-model="article.content"></BasePreview>
     </section>
-    <div class="text-sm text-stone-500">阅读 {{ article.viewsCount }}</div>
+    <div class="p-5 text-sm text-stone-500">阅读 {{ article.viewsCount }}</div>
   </div>
 </template>
 

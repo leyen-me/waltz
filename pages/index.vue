@@ -18,7 +18,7 @@
             <span class="line-clamp-1">{{ v.title }}</span>
 
             <span class="ml-2">#{{ String(v.sort).padStart(3, "0") }}</span>
-            <span class="inline-block align-middle">
+            <span class="inline-block align-middle w-8 h-8">
               <IconRtArrow></IconRtArrow>
             </span>
           </h2>

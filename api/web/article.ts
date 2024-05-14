@@ -17,3 +17,9 @@ export const useWebArticleInfoApi = <T = Article>(id: number) => {
     method: "GET",
   });
 };
+
+export const useWebArticleListApi = <T = Article[]>(title: string) => {
+  return useApi<T>(`/api/web/article/list?title=${encodeURIComponent(title)}`, {
+    method: "GET",
+  });
+};
