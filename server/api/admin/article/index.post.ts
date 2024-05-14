@@ -2,7 +2,7 @@ import ArticleService from "@/server/service/ArticleService";
 
 const articleService = new ArticleService();
 export default defineWrappedResponseHandler(async (event) => {
-  hasAuthority(event, "article:save")
+  defineHasAuthority(event, "article:save")
 
   const articleData = await readBody(event);
   articleData.authorId = event.context.user.id;

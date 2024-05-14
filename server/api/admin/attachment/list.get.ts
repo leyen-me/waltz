@@ -4,7 +4,7 @@ const attachmentService = new AttachmentService();
 
 
 export default defineWrappedResponseHandler(async (event) => {
-    hasAuthority(event, "attachment:list")
+    defineHasAuthority(event, "attachment:list")
 
     const result = await attachmentService.getAllAttachments();
     return defineOk({ data: result });

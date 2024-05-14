@@ -3,7 +3,7 @@ import AttachmentService from '@/server/service/AttachmentService';
 const attachmentService = new AttachmentService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    hasAuthority(event, "attachment:page")
+    defineHasAuthority(event, "attachment:page")
 
     const query: AttachmentQuery = getQuery(event);
     const result = await attachmentService.selectPage(query);

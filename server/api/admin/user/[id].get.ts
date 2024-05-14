@@ -4,7 +4,7 @@ const userService = new UserService();
 const userRoleService = new UserRoleService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    hasAuthority(event, "user:info")
+    defineHasAuthority(event, "user:info")
 
     const { id } = getRouterParams(event);
 

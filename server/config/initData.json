@@ -418,8 +418,8 @@
         {
             "id": 39,
             "pid": 0,
-            "path": "",
-            "title": "更多",
+            "path": "/admin/siteConfig",
+            "title": "站点配置",
             "type": "menu",
             "icon": "",
             "authority": "",
@@ -428,6 +428,66 @@
         {
             "id": 40,
             "pid": 39,
+            "path": "",
+            "title": "分页",
+            "type": "button",
+            "icon": "search",
+            "authority": "site:config:page",
+            "sort": 0
+        },
+        {
+            "id": 41,
+            "pid": 39,
+            "path": "",
+            "title": "列表",
+            "type": "button",
+            "icon": "list",
+            "authority": "site:config:list",
+            "sort": 1
+        },
+        {
+            "id": 42,
+            "pid": 39,
+            "path": "",
+            "title": "新增",
+            "type": "button",
+            "icon": "add",
+            "authority": "site:config:save",
+            "sort": 2
+        },
+        {
+            "id": 43,
+            "pid": 39,
+            "path": "",
+            "title": "修改",
+            "type": "button",
+            "icon": "edit",
+            "authority": "site:config:update",
+            "sort": 3
+        },
+        {
+            "id": 44,
+            "pid": 39,
+            "path": "",
+            "title": "删除",
+            "type": "button",
+            "icon": "delete",
+            "authority": "site:config:delete",
+            "sort": 4
+        },
+        {
+            "id": 45,
+            "pid": 0,
+            "path": "",
+            "title": "更多",
+            "type": "menu",
+            "icon": "",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 46,
+            "pid": 45,
             "path": "/admin/user/info",
             "title": "个人页",
             "type": "menu",
@@ -436,8 +496,8 @@
             "sort": 0
         },
         {
-            "id": 41,
-            "pid": 39,
+            "id": 47,
+            "pid": 45,
             "path": "/admin/login",
             "title": "登录页",
             "type": "menu",
@@ -478,6 +538,28 @@
             "id": 5,
             "roleId": "1",
             "menuId": "5"
+        }
+    ],
+    "siteConfigs": [
+        {
+            "key": "theme",
+            "value": "default",
+            "type": "string"
+        },
+        {
+            "key": "login",
+            "value": "false",
+            "type": "boolean"
+        },
+        {
+            "key": "leave",
+            "value": "false",
+            "type": "boolean"
+        },
+        {
+            "key": "chatgpt",
+            "value": "false",
+            "type": "boolean"
         }
     ]
 }

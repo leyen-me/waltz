@@ -1,5 +1,5 @@
 import BaseModel from "../base/BaseModel";
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, IndexesOptions, Sequelize } from "sequelize";
 import sequelize from "../db";
 import moment from "moment";
 import { ArticleStatus } from "../enum";
@@ -89,6 +89,13 @@ export default class Article extends BaseModel<Article> {
     const modelOptions = {
       sequelize,
       tableName: 'article',
+      indexes: [
+        {
+          name: 'idx_title_fulltext',
+          fields: ['title','content'],
+          type: 'FULLTEXT'
+        }
+      ] as IndexesOptions[]
     };
 
     return super.initModel(modelAttributes, modelOptions) as typeof Article;

@@ -80,3 +80,7 @@ interface AttachmentQuery extends BaseQuery {
   ext?: string;
 }
 
+interface SiteConfigQuery extends BaseQuery {
+  key?: string;
+}
+

@@ -6,6 +6,8 @@ import { userRoleModel } from "../models/UserRole";
 import { attachmentModel } from "../models/Attachment";
 import { roleMenuModel } from "../models/RoleMenu";
 import { articleModel } from '../models/Article';
+import { articleIpModel } from '../models/ArticleIp';
+import { siteConfigModel } from '../models/SiteConfig';
 
 export default class initScript {
 
@@ -16,7 +18,7 @@ export default class initScript {
     private static async initData(isForce: boolean) {
         const dataFilePath = './server/config/initData.json';
         const data = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
-        const { users, roles, menus, userRoles, roleMenus } = data;
+        const { users, roles, menus, userRoles, roleMenus, siteConfigs } = data;
         const initData = [
             {
                 model: userModel,
@@ -45,6 +47,14 @@ export default class initScript {
             {
                 model: articleModel,
                 data: []
+            },
+            {
+                model: articleIpModel,
+                data: []
+            },
+            {
+                model: siteConfigModel,
+                data: siteConfigs
             }
         ];
 

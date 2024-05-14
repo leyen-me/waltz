@@ -1,10 +1,10 @@
 import RoleService from '@/server/service/RoleService';
-import RoleMenuService from '~/server/service/RoleMenuService';
+import RoleMenuService from '@/server/service/RoleMenuService';
 const roleService = new RoleService();
 const roleMenuService = new RoleMenuService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    hasAuthority(event, "role:info")
+    defineHasAuthority(event, "role:info")
 
     const { id } = getRouterParams(event);
     const result = await roleService.getRoleById(id);

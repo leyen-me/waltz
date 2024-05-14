@@ -4,7 +4,7 @@ import { baseUploadDir } from '@/server/config';
 const attachmentService = new AttachmentService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    hasAuthority(event, "attachment:save")
+    defineHasAuthority(event, "attachment:save")
 
     const attachmentsData = await readFormData(event);
 

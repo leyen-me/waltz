@@ -38,9 +38,9 @@ const getIpAddress = async (ip: string): Promise<string> => {
  * @param req 请求对象
  * @returns 地理位置信息
  */
-const resolveIpAddress = async (req: any): Promise<string> => {
+const defineResolveIpAddress = async (req: any): Promise<string> => {
     const ip = getPublicIP(req);
     return await getIpAddress(ip);
 };
 
-export default resolveIpAddress;
+export default defineResolveIpAddress;

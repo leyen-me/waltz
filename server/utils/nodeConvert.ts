@@ -1,4 +1,4 @@
-export const listToTree = <K, T extends { [key: string]: any }>(list: T[], idKey: keyof T, parentKey: keyof T, root: K): TreeNode<K, T>[] => {
+export const defineListToTree = <K, T extends { [key: string]: any }>(list: T[], idKey: keyof T, parentKey: keyof T, root: K): TreeNode<K, T>[] => {
     const map = new Map<K, TreeNode<K, T>>();
 
     // 构建节点映射表
@@ -42,7 +42,7 @@ export const listToTree = <K, T extends { [key: string]: any }>(list: T[], idKey
 
 
 
-export const treeToList = <K, T>(tree: TreeNode<K, T>[]): TreeNode<K, T>[] => {
+export const defineTreeToList = <K, T>(tree: TreeNode<K, T>[]): TreeNode<K, T>[] => {
     let queue: TreeNode<K, T>[] = [...tree];
     const out: TreeNode<K, T>[] = [];
     while (queue.length) {

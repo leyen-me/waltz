@@ -82,8 +82,8 @@ const validateFile = (file: File): string => {
  * @param uploadDir 上传目录
  * @returns 上传后的文件路径
  */
-export const uploadFile = async (file: File, baseUploadDir: string): Promise<string> => {
-    const fileExtension = getFileExtension(file.name);
+export const defineUploadFile = async (file: File, baseUploadDir: string): Promise<string> => {
+    const fileExtension = defineGetFileExtension(file.name);
     // 获取子目录
     const subDir = validateFile(file);
 
@@ -100,7 +100,7 @@ export const uploadFile = async (file: File, baseUploadDir: string): Promise<str
     }
 
     // 构造文件路径
-    const filePath = path.posix.join(uploadDir, generateUUID() + getFileExtension(file.name));
+    const filePath = path.posix.join(uploadDir, generateUUID() + defineGetFileExtension(file.name));
 
     // 将文件保存到服务器
     const fileBuffer = await file.arrayBuffer();
@@ -115,7 +115,7 @@ export const uploadFile = async (file: File, baseUploadDir: string): Promise<str
  * @param fileName 文件名
  * @returns 文件后缀名
  */
-export const getFileExtension = (fileName: string) => {
+export const defineGetFileExtension = (fileName: string) => {
     return path.extname(fileName).toLowerCase();
 };
 

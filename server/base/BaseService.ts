@@ -1,4 +1,4 @@
-import { Attributes, CreateOptions, CreationAttributes, DestroyOptions, FindAndCountOptions, ModelStatic, UpdateOptions, Transaction, where } from 'sequelize';
+import { Attributes, CreateOptions, CreationAttributes, DestroyOptions, FindAndCountOptions, ModelStatic, UpdateOptions } from 'sequelize';
 import BaseModel from './BaseModel';
 
 export default class BaseService<T extends BaseModel<T>> {
@@ -10,7 +10,7 @@ export default class BaseService<T extends BaseModel<T>> {
     }
 
     async page<Q extends BaseQuery>(query: Q): Promise<BasePageResponse<T>> {
-        let { page = 1, limit = 10, order, asc, ...items } = query;
+        let { page, limit, order, asc, ...items } = query;
         page = Number(page);
         limit = Number(limit);
 
@@ -42,22 +42,20 @@ export default class BaseService<T extends BaseModel<T>> {
     async create(
         values?: CreationAttributes<T>,
         options?: CreateOptions<Attributes<T>>,
-        transaction?: Transaction
     ): Promise<T> {
-        return await this.model.create(values, { ...options, transaction });
+        return await this.model.create(values, { ...options });
     }
 
     async update(
         values: Partial<CreationAttributes<T>>,
         options: UpdateOptions<Attributes<T>>,
-        transaction?: Transaction
     ): Promise<number> {
-        const [affectedCount] = await this.model.update(values, { ...options, transaction });
+        const [affectedCount] = await this.model.update(values, { ...options });
         return affectedCount;
     }
 
-    async delete(options: DestroyOptions, transaction?: Transaction): Promise<number> {
-        const deletedCount = await this.model.destroy({ ...options, transaction });
+    async delete(options: DestroyOptions): Promise<number> {
+        const deletedCount = await this.model.destroy({ ...options });
         return deletedCount;
     }
 

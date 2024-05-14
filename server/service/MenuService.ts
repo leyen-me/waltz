@@ -19,15 +19,21 @@ export default class MenuService extends BaseService<Menu> {
     }
 
     async createMenu(menuData: CreationAttributes<Menu>): Promise<BaseCreateResponse> {
-        return (await this.create(menuData)).id as number;
+        return await defineTransactionWrapper(async (transaction) => {
+            return (await this.create(menuData, { transaction })).id as number;
+        });
     }
 
     async updateMenu(menuId: number, menuData: Partial<CreationAttributes<Menu>>): Promise<void> {
-        await this.update(menuData, { where: { id: menuId } });
+        await defineTransactionWrapper(async (transaction) => {
+            await this.update(menuData, { where: { id: menuId }, transaction });
+        });
     }
 
     async deleteMenus(menuIds: number[]): Promise<void> {
-        const deletedCount = await this.delete({ where: { id: menuIds } });
+        await defineTransactionWrapper(async (transaction) => {
+            await this.delete({ where: { id: menuIds }, transaction });
+        });
     }
 
     async getMenuById(menuId: number | string): Promise<Menu | null> {
