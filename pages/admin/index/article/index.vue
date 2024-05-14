@@ -50,7 +50,7 @@
                   ? ""
                   : v.publishedAtDetails.year +
                     "-" +
-                    v.publishedAtDetails.month +
+                    v.publishedAtDetails.month.number +
                     "-" +
                     v.publishedAtDetails.day
               }}

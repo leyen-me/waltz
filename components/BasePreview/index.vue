@@ -1,23 +1,10 @@
 <template>
-  <v-md-editor
-    v-model="modelValue.content"
-    :left-toolbar
-    :rightToolbar
-    height="auto"
-    :autofocus="true"
-    @save="emits('save')"
-    placeholder="文章内容"
-    :disabled-menus="[]"
-    @upload-image="
-      (event, insertImage, files) => emits('upload', event, insertImage, files)
-    "
-  ></v-md-editor>
+  <v-md-preview :text="modelValue"></v-md-preview>
 </template>
 
 <script setup>
-// 基础
-import VMdEditor from "@kangc/v-md-editor";
-import "@kangc/v-md-editor/lib/style/base-editor.css";
+import VMdPreview from "@kangc/v-md-editor/lib/preview";
+import "@kangc/v-md-editor/lib/style/preview.css";
 
 // vuepress主题
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
@@ -56,34 +43,27 @@ import createHighlightLinesPlugin from "@kangc/v-md-editor/lib/plugins/highlight
 import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
 import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
 
-
 const emits = defineEmits(["update:modelValue", "save"]);
 const props = defineProps({
   modelValue: {
-    type: Object,
-    default: () => {
-      content: "";
-    },
+    type: String,
+    default: () => "",
   },
 });
 
-VMdEditor.use(vuepressTheme, {
+
+VMdPreview.use(vuepressTheme, {
   Prism,
   extend(md) {
     // md为 markdown-it 实例，可以在此处进行修改配置,并使用 plugin 进行语法扩展
     // md.set(option).use(plugin);
   },
 });
-VMdEditor.use(createEmojiPlugin());
+VMdPreview.use(createEmojiPlugin());
 // VMdEditor.use(createMermaidPlugin())
-VMdEditor.use(createKatexPlugin());
-VMdEditor.use(createTodoListPlugin());
-VMdEditor.use(createLineNumbertPlugin());
-VMdEditor.use(createHighlightLinesPlugin());
-VMdEditor.use(createCopyCodePlugin());
-
-const leftToolbar = ref(
-  "bold clear code emoji h hr image-manager italic link ol quote strikethrough table ul todo-list tip image redo undo save"
-);
-const rightToolbar = ref("preview sync-scroll fullscreen");
+VMdPreview.use(createKatexPlugin());
+VMdPreview.use(createTodoListPlugin());
+VMdPreview.use(createLineNumbertPlugin());
+VMdPreview.use(createHighlightLinesPlugin());
+VMdPreview.use(createCopyCodePlugin());
 </script>

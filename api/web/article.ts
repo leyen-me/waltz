@@ -11,3 +11,15 @@ export const useWebArticlePageApi = <T = BasePageResponse<Article>>(
     }
   );
 };
+
+export const useWebArticleInfoApi = <T = Article>(id: number) => {
+  return useApi<T>(`/api/web/article/${id}`, {
+    method: "GET",
+  });
+};
+
+export const useWebArticleListApi = <T = Article[]>(title: string) => {
+  return useApi<T>(`/api/web/article/list?title=${encodeURIComponent(title)}`, {
+    method: "GET",
+  });
+};
