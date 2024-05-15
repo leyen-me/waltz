@@ -1,3 +1,11 @@
+/**
+ *
+ * 防抖
+ * anti-shake
+ * @param func
+ * @param delay
+ * @returns
+ */
 function useDebounce<T extends (...args: any[]) => void>(
   func: T,
   delay: number

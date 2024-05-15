@@ -1,4 +1,6 @@
 import { useAdminUserInfoApi } from "@/api/admin/user";
+import { useAdminDictTypeListApi } from "~/api/admin/dict";
+import useAppStore from "~/stores/appStore";
 import useUserStore from "~/stores/userStore";
 
 /**
@@ -10,6 +12,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     watch: false,
   });
   const userStore = useUserStore();
+  const appStore = useAppStore();
   if (!token.value) {
     return navigateTo("/admin/login");
   }
@@ -19,6 +22,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
     const userinfo = await useAdminUserInfoApi();
     userStore.authorityList = userinfo.authorityList as string[];
+
+    const dictList = await useAdminDictTypeListApi();
+    appStore.dictList = dictList;
   } catch (error) {
     return navigateTo("/admin/login");
   }

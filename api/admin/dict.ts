@@ -13,6 +13,12 @@ export const useAdminDictTypePageApi = <T = BasePageResponse<DictType>>(
   );
 };
 
+export const useAdminDictTypeListApi = <T = DictType[]>() => {
+  return useApi<T>(`/api/admin/dict/type/list`, {
+    method: "GET",
+  });
+};
+
 export const useAdminDictTypeInfo = <T = DictType>(id: number) => {
   return useApi<T>(`/api/admin/dict/type/${id}`, {
     method: "GET",
