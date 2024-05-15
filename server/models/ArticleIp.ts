@@ -1,5 +1,5 @@
 import BaseModel from "../base/BaseModel";
-import { DataTypes, IndexesOptions, Sequelize } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
 export default class ArticleIp extends BaseModel<ArticleIp> {

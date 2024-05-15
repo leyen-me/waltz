@@ -75,12 +75,12 @@ export default class Article extends BaseModel<Article> {
         comment: "文章状态",
       },
       viewsCount: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER({ length: 11 }),
         defaultValue: 0,
         comment: '文章浏览量',
       },
       sort: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER({ length: 11 }),
         defaultValue: 1,
         comment: '排序',
       }
@@ -92,7 +92,7 @@ export default class Article extends BaseModel<Article> {
       indexes: [
         {
           name: 'idx_title_fulltext',
-          fields: ['title','content'],
+          fields: ['title', 'content'],
           type: 'FULLTEXT'
         }
       ] as IndexesOptions[]

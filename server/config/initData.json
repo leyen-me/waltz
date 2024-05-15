@@ -368,6 +368,16 @@
         {
             "id": 34,
             "pid": 0,
+            "path": "",
+            "title": "系统设置",
+            "type": "menu",
+            "icon": "",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 35,
+            "pid": 34,
             "path": "/admin/attachment",
             "title": "附件管理",
             "type": "menu",
@@ -376,8 +386,8 @@
             "sort": 0
         },
         {
-            "id": 35,
-            "pid": 34,
+            "id": 36,
+            "pid": 35,
             "path": "",
             "title": "分页",
             "type": "button",
@@ -386,8 +396,8 @@
             "sort": 0
         },
         {
-            "id": 36,
-            "pid": 34,
+            "id": 37,
+            "pid": 35,
             "path": "",
             "title": "列表",
             "type": "button",
@@ -396,8 +406,8 @@
             "sort": 1
         },
         {
-            "id": 37,
-            "pid": 34,
+            "id": 38,
+            "pid": 35,
             "path": "",
             "title": "新增",
             "type": "button",
@@ -406,8 +416,8 @@
             "sort": 2
         },
         {
-            "id": 38,
-            "pid": 34,
+            "id": 39,
+            "pid": 35,
             "path": "",
             "title": "删除",
             "type": "button",
@@ -416,18 +426,18 @@
             "sort": 3
         },
         {
-            "id": 39,
-            "pid": 0,
-            "path": "/admin/siteConfig",
+            "id": 40,
+            "pid": 34,
+            "path": "/admin/site/config",
             "title": "站点配置",
             "type": "menu",
-            "icon": "",
+            "icon": "adjustment",
             "authority": "",
             "sort": 0
         },
         {
-            "id": 40,
-            "pid": 39,
+            "id": 41,
+            "pid": 40,
             "path": "",
             "title": "分页",
             "type": "button",
@@ -436,8 +446,8 @@
             "sort": 0
         },
         {
-            "id": 41,
-            "pid": 39,
+            "id": 42,
+            "pid": 40,
             "path": "",
             "title": "列表",
             "type": "button",
@@ -446,8 +456,8 @@
             "sort": 1
         },
         {
-            "id": 42,
-            "pid": 39,
+            "id": 43,
+            "pid": 40,
             "path": "",
             "title": "新增",
             "type": "button",
@@ -456,8 +466,8 @@
             "sort": 2
         },
         {
-            "id": 43,
-            "pid": 39,
+            "id": 44,
+            "pid": 40,
             "path": "",
             "title": "修改",
             "type": "button",
@@ -466,8 +476,8 @@
             "sort": 3
         },
         {
-            "id": 44,
-            "pid": 39,
+            "id": 45,
+            "pid": 40,
             "path": "",
             "title": "删除",
             "type": "button",
@@ -476,7 +486,57 @@
             "sort": 4
         },
         {
-            "id": 45,
+            "id": 46,
+            "pid": 34,
+            "path": "",
+            "title": "数据字典",
+            "type": "menu",
+            "icon": "",
+            "authority": "",
+            "sort": 0
+        },
+        {
+            "id": 47,
+            "pid": 46,
+            "path": "",
+            "title": "分页",
+            "type": "button",
+            "icon": "search",
+            "authority": "dict:page",
+            "sort": 0
+        },
+        {
+            "id": 48,
+            "pid": 46,
+            "path": "",
+            "title": "列表",
+            "type": "button",
+            "icon": "list",
+            "authority": "dict:list",
+            "sort": 1
+        },
+        {
+            "id": 49,
+            "pid": 46,
+            "path": "",
+            "title": "新增",
+            "type": "button",
+            "icon": "add",
+            "authority": "dict:save",
+            "sort": 2
+        },
+        {
+            "id": 50,
+            "pid": 46,
+            "path": "",
+            "title": "删除",
+            "type": "button",
+            "icon": "delete",
+            "authority": "dict:delete",
+            "sort": 3
+        },
+        {
+            "id": 51,
             "pid": 0,
             "path": "",
             "title": "更多",
@@ -486,8 +546,8 @@
             "sort": 0
         },
         {
-            "id": 46,
-            "pid": 45,
+            "id": 52,
+            "pid": 51,
             "path": "/admin/user/info",
             "title": "个人页",
             "type": "menu",
@@ -496,8 +556,8 @@
             "sort": 0
         },
         {
-            "id": 47,
-            "pid": 45,
+            "id": 53,
+            "pid": 51,
             "path": "/admin/login",
             "title": "登录页",
             "type": "menu",
@@ -544,22 +604,26 @@
         {
             "key": "theme",
             "value": "default",
-            "type": "string"
+            "type": "string",
+            "desc": "主题"
         },
         {
             "key": "login",
             "value": "false",
-            "type": "boolean"
+            "type": "boolean",
+            "desc": "登录"
         },
         {
             "key": "leave",
             "value": "false",
-            "type": "boolean"
+            "type": "boolean",
+            "desc": "评论"
         },
         {
             "key": "chatgpt",
             "value": "false",
-            "type": "boolean"
+            "type": "boolean",
+            "desc": "大模型"
         }
     ]
 }

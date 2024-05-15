@@ -10,13 +10,6 @@ interface TreeNode<K, T> {
   children?: TreeNode<K, T>[];
 }
 
-interface BaseQuery {
-  page: number;
-  limit: number;
-  order?: string;
-  asc?: boolean;
-}
-
 interface BasePageResponse<T> {
   data: T[];
   meta: {
@@ -48,6 +41,19 @@ interface ArticlePublishedAtDetail {
   "week": string;
   "day": string;
   "second": string;
+}
+
+interface DictData {
+  dictLabel: string;
+  dictValue: string;
+  labelClass: string;
+}
+
+interface BaseQuery {
+  page: number;
+  limit: number;
+  order?: string;
+  asc?: boolean;
 }
 
 interface ArticleQuery extends BaseQuery {
@@ -84,3 +90,11 @@ interface SiteConfigQuery extends BaseQuery {
   key?: string;
 }
 
+interface DictTypeQuery extends BaseQuery {
+  dictType?: string;
+  dictName?: string;
+}
+
+interface DictDataQuery extends BaseQuery {
+  dictTypeId: number;
+}
