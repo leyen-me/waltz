@@ -488,10 +488,10 @@
         {
             "id": 46,
             "pid": 34,
-            "path": "",
+            "path": "/admin/dict",
             "title": "数据字典",
             "type": "menu",
-            "icon": "",
+            "icon": "data",
             "authority": "",
             "sort": 0
         },
@@ -529,14 +529,34 @@
             "id": 50,
             "pid": 46,
             "path": "",
-            "title": "删除",
+            "title": "修改",
             "type": "button",
-            "icon": "delete",
-            "authority": "dict:delete",
+            "icon": "edit",
+            "authority": "dict:update",
             "sort": 3
         },
         {
             "id": 51,
+            "pid": 46,
+            "path": "",
+            "title": "删除",
+            "type": "button",
+            "icon": "delete",
+            "authority": "dict:delete",
+            "sort": 4
+        },
+        {
+            "id": 52,
+            "pid": 46,
+            "path": "",
+            "title": "详情",
+            "type": "button",
+            "icon": "info-circle",
+            "authority": "dict:info",
+            "sort": 5
+        },
+        {
+            "id": 53,
             "pid": 0,
             "path": "",
             "title": "更多",
@@ -546,8 +566,8 @@
             "sort": 0
         },
         {
-            "id": 52,
-            "pid": 51,
+            "id": 54,
+            "pid": 53,
             "path": "/admin/user/info",
             "title": "个人页",
             "type": "menu",
@@ -556,8 +576,8 @@
             "sort": 0
         },
         {
-            "id": 53,
-            "pid": 51,
+            "id": 55,
+            "pid": 53,
             "path": "/admin/login",
             "title": "登录页",
             "type": "menu",
