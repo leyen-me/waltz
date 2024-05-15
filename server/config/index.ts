@@ -4,7 +4,7 @@ export const secretKey = "ijdioshai";
 export const whiteList = ["/api/admin/auth/**"];
 
 // 强制初始化数据库:清库有风险 使用需谨慎 强制不规范 亲人两行泪
-export const isForce = true;
+export const isForce = false;
 
 export const baseUploadDir = './public';
 

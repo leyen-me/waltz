@@ -2,8 +2,10 @@ import DictType from '@/server/models/DictType';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes, Op } from 'sequelize';
 import DictData from '../models/DictData';
+import DictDataService from './DictDataService';
 
 export default class DictTypeService extends BaseService<DictType> {
+    private dictDataService = new DictDataService();
     constructor() {
         super(DictType);
     }
@@ -27,6 +29,7 @@ export default class DictTypeService extends BaseService<DictType> {
     async deleteDictType(dictTypeIds: number[]): Promise<void> {
         await defineTransactionWrapper(async (transaction) => {
             await this.delete({ where: { id: dictTypeIds }, transaction });
+            await this.dictDataService.deleteByTypeIds(dictTypeIds);
         });
     }
 
@@ -34,7 +37,7 @@ export default class DictTypeService extends BaseService<DictType> {
         return await DictType.findByPk(dictTypeId);
     }
 
-    async getDictList(): Promise<DictType[]> {
+    async getDictList(): Promise<DictTypeResponse[]> {
         // 获取全部字典类型列表
         const typeList = await DictType.findAll();
 
@@ -42,15 +45,16 @@ export default class DictTypeService extends BaseService<DictType> {
         const dataList = await DictData.findAll({ order: [['sort', 'ASC']] });
 
         // 构造字典列表
-        const dictList: DictType[] = [];
+        const dictList: DictTypeResponse[] = [];
         typeList.forEach((type) => {
-            const dict = DictType.build({ // 使用 build 方法创建 Sequelize 模型对象
+            const dict: DictTypeResponse = {
                 dictType: type.dictType,
                 dictName: type.dictName,
                 remark: type.remark,
                 sort: type.sort,
                 dataList: [],
-            });
+            };
+
             dataList.forEach((data) => {
                 if (type.id === data.typeId) {
                     dict.dataList.push({

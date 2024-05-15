@@ -8,6 +8,9 @@ import { roleMenuModel } from "../models/RoleMenu";
 import { articleModel } from '../models/Article';
 import { articleIpModel } from '../models/ArticleIp';
 import { siteConfigModel } from '../models/SiteConfig';
+import { dictDataModel } from '../models/DictData';
+import { dictTypeModel } from '../models/DictType';
+import { ModelStatic } from 'sequelize';
 
 export default class initScript {
 
@@ -18,53 +21,24 @@ export default class initScript {
     private static async initData(isForce: boolean) {
         const dataFilePath = './server/config/initData.json';
         const data = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
-        const { users, roles, menus, userRoles, roleMenus, siteConfigs } = data;
-        const initData = [
-            {
-                model: userModel,
-                data: users
-            },
-            {
-                model: roleModel,
-                data: roles
-            },
-            {
-                model: menuModel,
-                data: menus
-            },
-            {
-                model: userRoleModel,
-                data: userRoles
-            },
-            {
-                model: roleMenuModel,
-                data: roleMenus
-            },
-            {
-                model: attachmentModel,
-                data: []
-            },
-            {
-                model: articleModel,
-                data: []
-            },
-            {
-                model: articleIpModel,
-                data: []
-            },
-            {
-                model: siteConfigModel,
-                data: siteConfigs
-            }
+
+        const initModels: { model: ModelStatic<any>, data: any[] }[] = [
+            { model: userModel, data: data.users },
+            { model: roleModel, data: data.roles },
+            { model: menuModel, data: data.menus },
+            { model: userRoleModel, data: data.userRoles },
+            { model: roleMenuModel, data: data.roleMenus },
+            { model: attachmentModel, data: [] },
+            { model: articleModel, data: [] },
+            { model: articleIpModel, data: [] },
+            { model: siteConfigModel, data: data.siteConfigs },
+            { model: dictDataModel, data: [] },
+            { model: dictTypeModel, data: [] }
         ];
 
-        for (const item of initData) {
-            const { model, data } = item;
+        await Promise.all(initModels.map(async ({ model, data }) => {
             await model.sync({ force: isForce });
-            for (const itemData of data) {
-                // @ts-ignore
-                await model.create(itemData);
-            }
-        }
+            await model.bulkCreate(data);
+        }));
     }
 }

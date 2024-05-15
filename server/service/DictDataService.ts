@@ -29,6 +29,12 @@ export default class DictDataService extends BaseService<DictData> {
         });
     }
 
+    async deleteByTypeIds(typeIds: number[]): Promise<void> {
+        await defineTransactionWrapper(async (transaction) => {
+            await DictData.destroy({ where: { typeId: typeIds }, transaction });
+        });
+    }
+
     async getDictDataById(dictDataId: number | string): Promise<DictData | null> {
         return await DictData.findByPk(dictDataId);
     }

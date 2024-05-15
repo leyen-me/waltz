@@ -32,15 +32,24 @@ interface LoginResponse {
 }
 
 interface ArticlePublishedAtDetail {
-  "year": string;
-  "quarter": string;
-  "month": {
-    'number': string;
-    'english': string;
+  year: string;
+  quarter: string;
+  month: {
+    number: string;
+    english: string;
   },
-  "week": string;
-  "day": string;
-  "second": string;
+  week: string;
+  day: string;
+  second: string;
+}
+
+
+interface DictTypeResponse {
+  dictType: string;
+  dictName: string;
+  remark: string;
+  sort: number;
+  dataList: DictData[];
 }
 
 interface DictData {
