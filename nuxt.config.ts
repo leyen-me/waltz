@@ -1,25 +1,3 @@
-import os from "os";
-
-// fix host
-function getLocalIP() {
-  let interfaces = os.networkInterfaces();
-  let localIP = null;
-  Object.keys(interfaces).forEach((iface) => {
-    // @ts-ignore
-    interfaces[iface].forEach((alias) => {
-      if (
-        alias.family === "IPv4" &&
-        alias.address !== "127.0.0.1" &&
-        alias.address.startsWith("192.168.31.")
-      ) {
-        localIP = alias.address;
-        return;
-      }
-    });
-  });
-  return localIP || "localhost";
-}
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: ["@/assets/css/main.css"],
@@ -33,7 +11,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   pages: true,
   devServer: {
-    host: getLocalIP(),
+    host: "0.0.0.0",
     port: 3000,
   },
   routeRules: {
@@ -43,11 +21,9 @@ export default defineNuxtConfig({
     "/api/**": { cors: true },
   },
   runtimeConfig: {
-    // 只在服务器端可用的私有键
-    apiSecret: "123",
-    // public中的键也可以在客户端使用
     public: {
-      apiBase: "http://192.168.31.76:3000",
+      // 前后端分离时打开
+      // apiBase: "http://192.168.31.76:3000",
     },
   },
 });

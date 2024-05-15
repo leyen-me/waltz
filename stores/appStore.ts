@@ -4,7 +4,7 @@ const useAppStore = defineStore("appStore", {
   state: () =>
     <
       {
-        dictList: DictType[];
+        dictList: DictTypeResponse[];
       }
     >{
       // 权限列表

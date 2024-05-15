@@ -15,9 +15,9 @@
           class="w-6 h-6 cursor-pointer"
           @click="handleShowSearch"
         ></IconSearch>
-        <div class="ml-8">
-          <t-button>登录</t-button>
-        </div>
+        <!-- <div class="ml-8">
+          <t-button shape="round" size="large" variant="outline">登录</t-button>
+        </div> -->
       </div>
       <t-dialog
         class="search-dialog"
