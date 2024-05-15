@@ -60,6 +60,7 @@
 <script setup lang="ts">
 import { useWebArticleListApi } from "~/api/web/article";
 import type Article from "~/server/models/Article";
+import useDebounce from "~/utils/debounce"
 
 const visible = ref(false);
 const searchText = ref("");
@@ -73,21 +74,6 @@ const handleFixedChange = (_affixed: boolean) => {
   affixed.value = _affixed;
 };
 
-function debounce<T extends (...args: any[]) => void>(
-  func: T,
-  delay: number
-): (...args: Parameters<T>) => void {
-  let timerId: ReturnType<typeof setTimeout>;
-
-  return function (...args: Parameters<T>): void {
-    clearTimeout(timerId);
-    timerId = setTimeout(() => {
-      // @ts-ignore:忽略this
-      func.apply(this, args);
-    }, delay);
-  };
-}
-
 const search = async () => {
   if (searchText.value.trim() === "") {
     searchList.value = [];
@@ -99,7 +85,7 @@ const search = async () => {
   }
 };
 
-const handleSearch = debounce(search, 500);
+const handleSearch = useDebounce(search, 500);
 
 watch(
   () => searchText.value,
