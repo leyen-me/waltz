@@ -14,6 +14,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo("/admin/login");
   }
   try {
+    if (userStore.authorityList.length > 0) {
+      return;
+    }
     const userinfo = await useAdminUserInfoApi();
     userStore.authorityList = userinfo.authorityList as string[];
   } catch (error) {
