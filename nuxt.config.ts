@@ -29,9 +29,5 @@ export default defineNuxtConfig({
         key.startsWith("NUXT_") ? { ...acc, [key]: value } : acc,
       {}
     ),
-    public: {
-      // 前后端分离时打开
-      apiBase: "http://localhost:3000",
-    },
   },
 });
