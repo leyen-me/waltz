@@ -30,17 +30,6 @@ import Prism from 'prismjs';
 import createEmojiPlugin from "@kangc/v-md-editor/lib/plugins/emoji/index";
 import "@kangc/v-md-editor/lib/plugins/emoji/emoji.css";
 
-// 支持公式
-import "./css/katex.min.css";
-import "./js/katex.min.js";
-import createKatexPlugin from "@kangc/v-md-editor/lib/plugins/katex/cdn";
-
-// 支持流程图
-// 开启流程图插件，编译太慢
-// import "./js/mermaid.min.js"
-// import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn';
-// import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css';
-
 // 支持TodoList
 import createTodoListPlugin from "@kangc/v-md-editor/lib/plugins/todo-list/index";
 import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
@@ -75,7 +64,6 @@ VMdEditor.use(vuepressTheme, {
   },
 });
 VMdEditor.use(createEmojiPlugin());
-// VMdEditor.use(createMermaidPlugin())
 VMdEditor.use(createKatexPlugin());
 VMdEditor.use(createTodoListPlugin());
 VMdEditor.use(createLineNumbertPlugin());

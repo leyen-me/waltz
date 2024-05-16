@@ -3,9 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
     "dev": "node scripts/dev.cjs",
-    "start": "nuxt dev --open",
+    "build": "node scripts/build.cjs",
+    
+    "build-nuxt": "nuxt build",
+    "dev-nuxt": "nuxt dev --open",
+    
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

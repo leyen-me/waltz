@@ -6,22 +6,21 @@ export const whiteList = ["/api/admin/auth/**"];
 // 强制初始化数据库:清库有风险 使用需谨慎 强制不规范 亲人两行泪
 export const isForce = true;
 
-export const baseUploadDir = "./public";
+export const baseUploadDir = './public';
 
 export const dbConfig: Options = {
   host: "localhost",
   username: "root",
-  password: "JGhQ83axm5ydtQEnX8B3RgtqnFIY6U3+TO5VMMVyLxA",
+  password: "JGhQ83axm5ydtQEnX8B3RgtqnFIY6U3+TO5VMMVyLxA=",
   database: "open-nuxt-blog",
   dialect: "mysql",
-  port: 3006,
   ssl: false,
   timezone: "+08:00",
   define: {
     underscored: true,
     freezeTableName: false,
     charset: "utf8mb4",
-    tableName: "t_",
+    tableName: "t_"
   },
   pool: {
     max: 10,
