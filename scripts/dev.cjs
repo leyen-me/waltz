@@ -2,7 +2,10 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const cmd = spawn("cmd", ["/c", "pnpm", "start"]);
+const cmd =
+  process.platform === "win32"
+    ? spawn("cmd", ["/c", "npm run dev-nuxt"])
+    : spawn("sh", ["-c", "npm run dev-nuxt"]);
 const filePath = path.join(__dirname, "../pages", "index.vue");
 const fileContent = fs.readFileSync(filePath, "utf8");
 

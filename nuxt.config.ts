@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     port: 3000,
   },
   routeRules: {
-    "/": { ssr: false },
+    "/blog/**": { ssr: false },
     "/admin/**": { ssr: false },
     "/api/**": { cors: true },
   },
