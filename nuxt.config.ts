@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     "/": { ssr: false },
-    "/blog/**": { isr: true },
+    "/blog/**": { ssr: true },
     "/admin/**": { ssr: false },
     "/api/**": { cors: true },
   },
