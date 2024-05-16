@@ -2,7 +2,10 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const cmd = spawn("cmd", ["/c","npm run build-nuxt"]);
+const cmd =
+  process.platform === "win32"
+    ? spawn("cmd", ["/c", "npm run build-nuxt"])
+    : spawn("sh", ["-c", "npm run build-nuxt"]);
 
 cmd.stdout.on("data", (data) => {
   console.log(`${String(data)}`);

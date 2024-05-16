@@ -52,9 +52,37 @@ pm2 start ecosystem.config.js
 
 
 
+docker run -idt -p 3000:3000 -p 3306:3306 --privileged=true -e TZ=Asia/Shanghai -e MYSQL_DATABASE=open-nuxt-blog -e MYSQL_ROOT_PASSWORD=JGhQ83axm5ydtQEnX8B3RgtqnFIY6U3+TO5VMMVyLxA= --name open-nuxt-blog mysql:8.0.20
+tar -xvf /app/open-nuxt-blog/deploy/node/node-v18.20.2-linux-x64.tar.gz -C /usr/local/
+export PATH=$PATH:/usr/local/node-v18.20.2-linux-x64/bin
+cd /app/open-nuxt-blog
+npm i
+
 
 
 
 export PATH=$PATH:/usr/local/node-v18.20.2-linux-x64/bin
 cd /app/.output/
 pm2 start ecosystem.config.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=================>
+tar -xvf /app/open-nuxt-blog/deploy/node/node-v18.20.2-linux-x64.tar.gz -C /usr/local/
+export PATH=$PATH:/usr/local/node-v18.20.2-linux-x64/bin
+
+
+cd /app/open-nuxt-blog
+npm
+npm run dev

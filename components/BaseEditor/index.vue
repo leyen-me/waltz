@@ -64,7 +64,6 @@ VMdEditor.use(vuepressTheme, {
   },
 });
 VMdEditor.use(createEmojiPlugin());
-VMdEditor.use(createKatexPlugin());
 VMdEditor.use(createTodoListPlugin());
 VMdEditor.use(createLineNumbertPlugin());
 VMdEditor.use(createHighlightLinesPlugin());
