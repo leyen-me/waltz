@@ -24,7 +24,7 @@ export default class AttachmentService extends BaseService<Attachment> {
                 // 将 file 断言为 File 类型
                 const fileObj = file as File;
                 const fileData = fileObj;
-                const filePath = (await defineUploadFile(fileData, baseUploadDir)).replace("public", "");
+                const filePath = (await defineUploadFile(fileData, baseUploadDir)).replace("public", "").replace("../", "");
 
                 // 构建附件数据对象
                 const attachmentData = {
