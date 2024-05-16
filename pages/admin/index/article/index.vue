@@ -29,7 +29,7 @@
         >
           <img
             class="w-full h-auto object-cover transition duration-300 ease-in-out hover:scale-110"
-            :src="v.cover || defaultCover"
+            :src="NUXT_API_STATIC_BASE + v.cover || defaultCover"
           />
         </div>
         <!-- mask -->
@@ -98,8 +98,6 @@
       />
     </div>
   </div>
-
-  <ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup lang="ts">
@@ -111,6 +109,8 @@ import {
 import { defaultCover, defaultRowsPerPageOptions } from "@/constans";
 import type Article from "@/server/models/Article";
 import useHasAuth from "@/utils/auth";
+
+const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
 
 // 分页
 const page = ref(1);

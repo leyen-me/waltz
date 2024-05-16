@@ -2,7 +2,11 @@
   <div>
     <t-card title="基本信息">
       <template #actions>
-        <t-button @click="handleSubmitForm" :disabled="!useHasAuth('article:save')">保存</t-button>
+        <t-button
+          @click="handleSubmitForm"
+          :disabled="!useHasAuth('article:save')"
+          >保存</t-button
+        >
       </template>
       <t-form
         ref="form"
@@ -74,8 +78,9 @@ import {
 } from "@/api/admin/article";
 import Cookies from "js-cookie";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
-import useHasAuth from "@/utils/auth"
+import useHasAuth from "@/utils/auth";
 
+const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
 const route = useRoute();
 const uploadUrl =
   "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
@@ -148,7 +153,7 @@ const handleEditorUpload = async (event: any, insertImage: any, files: any) => {
   // @ts-ignore
   for (const item of data.value.data) {
     insertImage({
-      url: item,
+      url: NUXT_API_STATIC_BASE + item,
       desc: "",
     });
   }

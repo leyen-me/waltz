@@ -1,6 +1,6 @@
 import { Options } from "sequelize";
 
-const runtimeConfig = useRuntimeConfig()
+const runtimeConfig = useRuntimeConfig();
 
 export const secretKey = "ijdioshai";
 
@@ -10,7 +10,8 @@ export const whiteList = ["/api/admin/auth/**"];
 export const isForce = true;
 
 // 开发环境和生产环境目录不一致
-export const baseUploadDir = runtimeConfig.NUXT_ENV === 'development' ? './public' : '../public';
+export const baseUploadDir =
+  runtimeConfig.public.NUXT_ENV === "development" ? "./public" : "../public";
 
 export const dbConfig: Options = {
   host: "localhost",
@@ -24,7 +25,7 @@ export const dbConfig: Options = {
     underscored: true,
     freezeTableName: false,
     charset: "utf8mb4",
-    tableName: "t_"
+    tableName: "t_",
   },
   pool: {
     max: 10,

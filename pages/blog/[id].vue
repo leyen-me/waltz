@@ -27,7 +27,7 @@
     <div class="mt-8">
       <img
         class="w-full h-auto object-cover aspect-video"
-        :src="article.cover"
+        :src="NUXT_API_STATIC_BASE + article.cover"
         alt=""
       />
     </div>
@@ -43,6 +43,7 @@
 <script setup lang="ts">
 import { useWebArticleInfoApi } from "~/api/web/article";
 import type Article from "~/server/models/Article";
+const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
 
 const route = useRoute();
 const router = useRouter();

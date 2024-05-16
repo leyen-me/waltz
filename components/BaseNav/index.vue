@@ -33,7 +33,6 @@ const getPath = (to: RouteLocationNormalized) => {
     const url = to.path;
     const regex = /\d+/g;
     path = url.replace(regex, "0");
-    console.log(id);
   } else {
     path = to.path;
   }
