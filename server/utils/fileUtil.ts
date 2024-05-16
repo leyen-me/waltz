@@ -100,7 +100,7 @@ export const defineUploadFile = async (file: File, baseUploadDir: string): Promi
     }
 
     // 构造文件路径
-    const filePath = path.posix.join(uploadDir, generateUUID() + defineGetFileExtension(file.name));
+    const filePath = path.posix.join(uploadDir, generateUUID().replaceAll("-", "") + defineGetFileExtension(file.name));
 
     // 将文件保存到服务器
     const fileBuffer = await file.arrayBuffer();

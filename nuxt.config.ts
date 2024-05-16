@@ -15,15 +15,14 @@ export default defineNuxtConfig({
     port: 3000,
   },
   routeRules: {
-    "/": { prerender: true },
-    "/blog/**": { isr: true },
+    "/": { ssr: false },
     "/admin/**": { ssr: false },
     "/api/**": { cors: true },
   },
   runtimeConfig: {
     public: {
       // 前后端分离时打开
-      // apiBase: "http://192.168.31.76:3000",
+      apiBase: "http://localhost:3000",
     },
   },
 });

@@ -100,7 +100,7 @@ export default class ArticleService extends BaseService<Article> {
             SELECT a.*, u.username as author
             FROM t_article a
             JOIN t_user u ON a.author_id = u.id
-            WHERE A.id = :articleId
+            WHERE a.id = :articleId
         `;
 
         const result = await sequelize.query(query, {
