@@ -2,7 +2,7 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const cmd = spawn("cmd", ["/c", "pnpm", "start"]);
+const cmd = spawn("pnpm", ["start"]);
 const filePath = path.join(__dirname, "../pages", "index.vue");
 const fileContent = fs.readFileSync(filePath, "utf8");
 
