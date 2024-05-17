@@ -48,9 +48,12 @@ VMdPreview.use(vuepressTheme, {
     // md.set(option).use(plugin);
   },
 });
-VMdPreview.use(createEmojiPlugin());
-VMdPreview.use(createTodoListPlugin());
-VMdPreview.use(createLineNumbertPlugin());
-VMdPreview.use(createHighlightLinesPlugin());
-VMdPreview.use(createCopyCodePlugin());
+
+if(!process.client){
+  VMdPreview.use(createEmojiPlugin());
+  VMdPreview.use(createTodoListPlugin());
+  VMdPreview.use(createLineNumbertPlugin());
+  VMdPreview.use(createHighlightLinesPlugin());
+  VMdPreview.use(createCopyCodePlugin());
+}
 </script>
