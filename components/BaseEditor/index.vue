@@ -30,10 +30,6 @@ import Prism from 'prismjs';
 import createEmojiPlugin from "@kangc/v-md-editor/lib/plugins/emoji/index";
 import "@kangc/v-md-editor/lib/plugins/emoji/emoji.css";
 
-// 支持TodoList
-import createTodoListPlugin from "@kangc/v-md-editor/lib/plugins/todo-list/index";
-import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
-
 // 支持代码行
 import createLineNumbertPlugin from "@kangc/v-md-editor/lib/plugins/line-number/index";
 
@@ -63,13 +59,12 @@ VMdEditor.use(vuepressTheme, {
   },
 });
 VMdEditor.use(createEmojiPlugin());
-VMdEditor.use(createTodoListPlugin());
 VMdEditor.use(createLineNumbertPlugin());
 VMdEditor.use(createHighlightLinesPlugin());
 VMdEditor.use(createCopyCodePlugin());
 
 const leftToolbar = ref(
-  "bold clear code emoji h hr image-manager italic link ol quote strikethrough table ul todo-list tip image redo undo save"
+  "bold clear code emoji h hr image-manager italic link ol quote strikethrough table ul tip image redo undo save"
 );
 const rightToolbar = ref("preview sync-scroll fullscreen");
 </script>
