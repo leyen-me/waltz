@@ -98,6 +98,7 @@ const formData = ref({
   cover: "",
   content: "",
   status: "",
+  html: "",
 });
 const formRules = ref({
   title: [{ required: true, message: "文章标题必填" }],
@@ -108,8 +109,8 @@ const handleSubmitForm = () => {
   // @ts-ignore
   form.value.submit();
 };
-
 const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
+  formData.value.html = window.document.querySelector(".v-md-editor-preview").outerHTML
   if (validateResult === true) {
     try {
       const res = await useAdminArticleSubmitApi(formData.value);

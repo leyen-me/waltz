@@ -49,11 +49,9 @@ VMdPreview.use(vuepressTheme, {
   },
 });
 
-if(!process.client){
-  VMdPreview.use(createEmojiPlugin());
-  VMdPreview.use(createTodoListPlugin());
-  VMdPreview.use(createLineNumbertPlugin());
-  VMdPreview.use(createHighlightLinesPlugin());
-  VMdPreview.use(createCopyCodePlugin());
-}
+VMdPreview.use(createEmojiPlugin());
+VMdPreview.use(createTodoListPlugin());
+VMdPreview.use(createLineNumbertPlugin());
+VMdPreview.use(createHighlightLinesPlugin());
+VMdPreview.use(createCopyCodePlugin());
 </script>

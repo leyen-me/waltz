@@ -34,7 +34,8 @@
     <section
       class="mt-2 leading-[1.6] tracking-[1px] xl:leading-[1.8] text-justify dark:text-stone-300"
     >
-      <BasePreview v-model="article.content"></BasePreview>
+      <div v-html="article.html"></div>
+      <!-- <BasePreview v-model="article.content"></BasePreview> -->
     </section>
     <div class="p-5 text-sm text-stone-500">阅读 {{ article.viewsCount }}</div>
   </div>
