@@ -27,14 +27,15 @@
     <div class="mt-8">
       <img
         class="w-full h-auto object-cover aspect-video"
-        :src="article.cover"
+        :src="NUXT_API_STATIC_BASE + article.cover"
         alt=""
       />
     </div>
     <section
       class="mt-2 leading-[1.6] tracking-[1px] xl:leading-[1.8] text-justify dark:text-stone-300"
     >
-      <BasePreview v-model="article.content"></BasePreview>
+      <div v-html="article.html"></div>
+      <!-- <BasePreview v-model="article.content"></BasePreview> -->
     </section>
     <div class="p-5 text-sm text-stone-500">阅读 {{ article.viewsCount }}</div>
   </div>
@@ -43,6 +44,7 @@
 <script setup lang="ts">
 import { useWebArticleInfoApi } from "~/api/web/article";
 import type Article from "~/server/models/Article";
+const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
 
 const route = useRoute();
 const router = useRouter();

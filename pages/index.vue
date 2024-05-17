@@ -10,7 +10,7 @@
         <div class="w-full aspect-square overflow-hidden">
           <img
             class="w-full h-full object-cover transition duration-300 ease-in-out hover:scale-110"
-            :src="v.cover"
+            :src="NUXT_API_STATIC_BASE + v.cover"
           />
         </div>
         <div class="p-2 xl:p-4 dark:text-white">
@@ -56,6 +56,8 @@
 import { useWebArticlePageApi } from "~/api/web/article";
 import { defaultRowsPerPageOptions } from "@/constans";
 import type Article from "~/server/models/Article";
+const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
+
 
 const page = ref(1);
 const limit = ref(defaultRowsPerPageOptions[0]);

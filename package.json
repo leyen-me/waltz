@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "node scripts/dev.cjs",
     "build": "node scripts/build.cjs",
-    
-    "build-nuxt": "nuxt build",
-    "dev-nuxt": "nuxt dev --open",
+
+    "dev-nuxt": "nuxt dev --open --dotenv .env.development",
+    "build-nuxt": "nuxt build --dotenv .env.production",
     
     "generate": "nuxt generate",
     "preview": "nuxt preview",

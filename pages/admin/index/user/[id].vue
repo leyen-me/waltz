@@ -98,6 +98,8 @@ const route = useRoute();
 const router = useRouter();
 const info = ref(false);
 
+const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
+
 const files = ref([]);
 const uploadUrl =
   "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
@@ -108,7 +110,7 @@ const onUploadSuccess = (e: any) => {
     MessagePlugin.error(msg);
     return;
   }
-  formData.value.avatar = data[0];
+  formData.value.avatar = NUXT_API_STATIC_BASE + data[0];
   MessagePlugin.success("文件上传成功");
 };
 const onUploadError = () => {

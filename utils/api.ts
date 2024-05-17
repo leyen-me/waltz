@@ -10,14 +10,18 @@ const useApi = async <T>(
     watch: false,
   });
   const config = useRuntimeConfig();
-  const _res = await useFetch(url, {
+  const _url_options = config.NUXT_API_BASE
+    ? { baseURL: config.NUXT_API_BASE as string }
+    : {};
+  const _options = {
     headers: {
       "Content-Type": "application/json",
       Authorization: token.value,
     },
-    baseURL: config.public.apiBase,
+    ..._url_options,
     ...options,
-  });
+  };
+  const _res = await useFetch(url, _options);
   const res = _res.data.value as BaseResponse<T>;
   if (res === null) {
     let msg = "请求错误，请检查网络或服务器";

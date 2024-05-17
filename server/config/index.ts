@@ -1,4 +1,7 @@
 import { Options } from "sequelize";
+
+const runtimeConfig = useRuntimeConfig();
+
 export const secretKey = "ijdioshai";
 
 export const whiteList = ["/api/admin/auth/**"];
@@ -6,7 +9,9 @@ export const whiteList = ["/api/admin/auth/**"];
 // 强制初始化数据库:清库有风险 使用需谨慎 强制不规范 亲人两行泪
 export const isForce = true;
 
-export const baseUploadDir = './public';
+// 开发环境和生产环境目录不一致
+export const baseUploadDir =
+  runtimeConfig.public.NUXT_ENV === "development" ? "./public" : "../public";
 
 export const dbConfig: Options = {
   host: "localhost",
@@ -20,7 +25,7 @@ export const dbConfig: Options = {
     underscored: true,
     freezeTableName: false,
     charset: "utf8mb4",
-    tableName: "t_"
+    tableName: "t_",
   },
   pool: {
     max: 10,

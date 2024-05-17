@@ -8,21 +8,29 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   pages: true,
   devServer: {
     host: "0.0.0.0",
     port: 3000,
   },
   routeRules: {
-    "/blog/**": { ssr: false },
+    "/": { ssr: false },
+    "/blog/**": { ssr: true },
     "/admin/**": { ssr: false },
     "/api/**": { cors: true },
   },
   runtimeConfig: {
+    /**
+     * 读取 .env 文件中配置变量
+     * Reading configuration variables from .env files
+     */
     public: {
-      // 前后端分离时打开
-      apiBase: "http://localhost:3000",
+      ...Object.entries(process.env).reduce(
+        (acc, [key, value]) =>
+          key.startsWith("NUXT_") ? { ...acc, [key]: value } : acc,
+        {}
+      ),
     },
   },
 });

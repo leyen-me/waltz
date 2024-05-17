@@ -18,11 +18,6 @@ logs
 .fleet
 .idea
 
-# Local env files
-.env
-.env.*
-!.env.example
-
 # public static resources
 public/document
 public/picture

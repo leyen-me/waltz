@@ -108,8 +108,10 @@ if (route.path === "/admin") {
   router.replace("/admin/home");
 }
 
-const handleNavItemClick = (url: string) => {
-  router.push(url);
+const handleNavItemClick = async (url: string) => {
+  console.log(url);
+  
+  await navigateTo(url);
   if (sidebarOpen.value) {
     sidebarOpen.value = false;
   }

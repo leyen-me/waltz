@@ -48,6 +48,7 @@ VMdPreview.use(vuepressTheme, {
     // md.set(option).use(plugin);
   },
 });
+
 VMdPreview.use(createEmojiPlugin());
 VMdPreview.use(createTodoListPlugin());
 VMdPreview.use(createLineNumbertPlugin());

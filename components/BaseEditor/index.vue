@@ -45,7 +45,6 @@ import createHighlightLinesPlugin from "@kangc/v-md-editor/lib/plugins/highlight
 import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
 import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
 
-
 const emits = defineEmits(["update:modelValue", "save"]);
 const props = defineProps({
   modelValue: {
