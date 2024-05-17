@@ -1,0 +1,10 @@
+[Unit]
+Description=OpenNuxtBlog
+
+[Service]
+User=root
+ExecStart=/app/open-nuxt-blog/deploy/start.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

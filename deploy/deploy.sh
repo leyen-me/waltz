@@ -86,3 +86,10 @@ export PATH=$PATH:/usr/local/node-v18.20.2-linux-x64/bin
 cd /app/open-nuxt-blog
 npm
 npm run dev
+
+
+sudo systemctl daemon-reload
+/app/open-nuxt-blog/deploy/start.sh
+
+
+systemctl enable /app/open-nuxt-blog/deploy/start.service
