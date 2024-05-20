@@ -6,36 +6,33 @@
   <a><img src="https://img.shields.io/npm/l/@kangc/v-md-editor.svg?sanitize=true" alt="License"></a>
 </p>
 
-# 项目简介
+# Project Profile
+
+This project is an open source blog system based on Nuxt.js , using Sequelize for database management , the use of TDesign and v-md-editor to achieve interface beautification and Markdown editing functions.
 
 本项目是一个基于 Nuxt.js 的开源博客系统，采用 Sequelize 进行数据库管理，使用 TDesign 和 v-md-editor 实现界面美化和 Markdown 编辑功能。
 
-## 特性
+## Project Features
 
-- 开箱即用
 - 完善的后台管理
 - 支持 Markdown 格式的文章编写
 - 使用 TDesign 进行界面设计，美观易用
 - 基于 Sequelize 进行数据库管理，可靠性高
 - 响应式设计，适配各种设备
 
-## 环境准备
+## Env
 
 ```bash
 node  v18.19.1+
-pnpm  v8.15.4+
 mysql v5.7+
 ```
 
-## 部署方案
-
-- [源码编译部署](deploy_source_code.md)
-
-- [docker部署](deploy_docker.md)
-
-## 开发环境运行
+## Development environment running
 
 ```bash
+# 克隆
+git clone https://github.com/difffffft/open-nuxt-blog.git
+
 # 安装依赖
 npm i
 
@@ -43,17 +40,12 @@ npm i
 npm run dev
 ```
 
-## 技术栈
+## Deployment program
 
-- [Nuxt.js](https://nuxt.com/)
-- [Sequelize](https://sequelize.org/)
-- [TDesign](https://tdesign.tencent.com/)
-- [v-md-editor](https://github.com/code-farmer-i/vue-markdown-editor)
+- [source_code deploy](./docs/deploy_source_code.md)
 
-## 贡献
+- [docker deploy](./docs/deploy_docker.md)
+
+## Contribute
 
 欢迎贡献代码，提出问题和建议，您可以通过提交 Pull Request 或 Issue 的方式参与到项目中来。
-
-## 许可证
-
-MIT
