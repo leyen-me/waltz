@@ -56,6 +56,8 @@ You are welcome to contribute code, ask questions and make suggestions, and you 
 
 Thank you to all the people who already contributed to Blog!
 
+感谢所有已经为 Blog 做出贡献的人！
+
 <a href="https://github.com/difffffft"><img src="https://avatars.githubusercontent.com/u/40122873?s=64&v=4" /></a>
 <a href="https://github.com/Beaumon"><img src="https://avatars.githubusercontent.com/u/61904805?s=64&v=4" /></a>
 
