@@ -40,6 +40,8 @@ CREATE TABLE `t_article`  (
   FULLTEXT INDEX `idx_title_fulltext`(`title`, `content`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
+create fulltext index idx_title_content on t_article(title,content) WITH PARSER ngram;
+
 -- ----------------------------
 -- Records of t_article
 -- ----------------------------

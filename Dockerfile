@@ -1,6 +1,10 @@
 # 基础
 FROM ubuntu:latest
 
+# 设置时区环境变量
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # 环境变量
 ENV MYSQL_ROOT_PASSWORD=JGhQ83axm5ydtQEnX8B3RgtqnFIY6U3+TO5VMMVyLxA=
 
