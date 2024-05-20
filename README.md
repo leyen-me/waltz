@@ -27,25 +27,20 @@ pnpm  v8.15.4+
 mysql v5.7+
 ```
 
-## 创建数据库并配置
+## 部署方案
 
-```bash
-cd open-nuxt-blog/server/config
-vi index.ts
+- [源码编译部署](deploy_source_code.md)
 
-...change your dbConfig
+- [docker部署](deploy_docker.md)
 
-:wq
-```
-
-## 安装指南
+## 开发环境运行
 
 ```bash
 # 安装依赖
-pnpm i
+npm i
 
 # 启动服务
-pnpm dev
+npm run dev
 ```
 
 ## 技术栈
