@@ -1,5 +1,17 @@
 /*
- Date: 20/05/2024 13:40:02
+ Navicat Premium Data Transfer
+
+ Source Server         : 32
+ Source Server Type    : MySQL
+ Source Server Version : 80036
+ Source Host           : localhost:3306
+ Source Schema         : open_nuxt_blog
+
+ Target Server Type    : MySQL
+ Target Server Version : 80036
+ File Encoding         : 65001
+
+ Date: 20/05/2024 13:52:17
 */
 CREATE DATABASE IF NOT EXISTS open_nuxt_blog CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -141,7 +153,61 @@ CREATE TABLE `t_menu`  (
 -- Records of t_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_menu` VALUES (1, 0, '/admin/home', '首页', 'home', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (2, 0, '', '博文管理', '', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (3, 2, '/admin/category', '分类管理', 'catalog', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (4, 2, '/admin/tag', '标签管理', 'tag', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (5, 2, '/admin/article', '文章管理', 'assignment', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (6, 0, '', '权限管理', '', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (7, 6, '/admin/menu', '菜单管理', 'menu', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (8, 7, '', '分页', 'search', 'button', 'menu:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (9, 7, '', '列表', 'list', 'button', 'menu:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (10, 7, 'add', '新增', 'add', 'button', 'menu:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (11, 7, '', '修改', 'edit', 'button', 'menu:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (12, 7, '', '删除', 'delete', 'button', 'menu:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (13, 7, '', '详情', 'info-circle', 'button', 'menu:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (14, 6, '/admin/role', '角色管理', 'list', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (15, 14, '', '分页', 'search', 'button', 'role:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (16, 14, '', '列表', 'list', 'button', 'role:list', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (17, 14, '', '新增', 'add', 'button', 'role:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (18, 14, '', '修改', 'edit', 'button', 'role:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (19, 14, '', '删除', 'delete', 'button', 'role:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (20, 14, '', '详情', 'info-circle', 'button', 'role:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (21, 6, '/admin/user', '用户管理', 'user-list', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (22, 21, '', '分页', 'search', 'button', 'user:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (23, 21, '', '列表', 'list', 'button', 'user:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (24, 21, '', '新增', 'user-add', 'button', 'user:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (25, 21, '', '修改', 'edit', 'button', 'user:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (26, 21, '', '删除', 'delete', 'button', 'user:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (27, 21, '', '详情', 'info-circle', 'button', 'user:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (28, 5, '', '分页', 'search', 'button', 'article:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (29, 5, '', '列表', 'list', 'button', 'article:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (30, 5, '', '新增', 'add', 'button', 'article:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (31, 5, '', '修改', 'edit', 'button', 'article:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (32, 5, '', '删除', 'delete', 'button', 'article:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (33, 5, '', '详情', 'info-circle', 'button', 'article:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (34, 0, '', '系统设置', '', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (35, 34, '/admin/attachment', '附件管理', 'file-attachment', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (36, 35, '', '分页', 'search', 'button', 'attachment:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (37, 35, '', '列表', 'list', 'button', 'attachment:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (38, 35, '', '新增', 'upload', 'button', 'attachment:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (39, 35, '', '删除', 'delete', 'button', 'attachment:delete', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (40, 34, '/admin/site/config', '站点配置', 'adjustment', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (41, 40, '', '分页', 'search', 'button', 'site:config:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (42, 40, '', '列表', 'list', 'button', 'site:config:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (43, 40, '', '新增', 'add', 'button', 'site:config:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (44, 40, '', '修改', 'edit', 'button', 'site:config:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (45, 40, '', '删除', 'delete', 'button', 'site:config:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (46, 34, '/admin/dict', '数据字典', 'data', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (47, 46, '', '分页', 'search', 'button', 'dict:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (48, 46, '', '列表', 'list', 'button', 'dict:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (49, 46, '', '新增', 'add', 'button', 'dict:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (50, 46, '', '修改', 'edit', 'button', 'dict:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (51, 46, '', '删除', 'delete', 'button', 'dict:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (52, 46, '', '详情', 'info-circle', 'button', 'dict:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (53, 0, '', '更多', '', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (54, 53, '/admin/user/info', '个人页', 'user', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (55, 53, '/admin/login', '登录页', 'login', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (1, 0, '/admin/home', '首页', 'home', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (2, 0, '', '博文管理', '', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (3, 2, '/admin/category', '分类管理', 'catalog', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (4, 2, '/admin/tag', '标签管理', 'tag', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (5, 2, '/admin/article', '文章管理', 'assignment', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (6, 0, '', '权限管理', '', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (7, 6, '/admin/menu', '菜单管理', 'menu', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (8, 7, '', '分页', 'search', 'button', 'menu:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (9, 7, '', '列表', 'list', 'button', 'menu:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (10, 7, 'add', '新增', 'add', 'button', 'menu:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (11, 7, '', '修改', 'edit', 'button', 'menu:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (12, 7, '', '删除', 'delete', 'button', 'menu:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (13, 7, '', '详情', 'info-circle', 'button', 'menu:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (14, 6, '/admin/role', '角色管理', 'list', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (15, 14, '', '分页', 'search', 'button', 'role:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (16, 14, '', '列表', 'list', 'button', 'role:list', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (17, 14, '', '新增', 'add', 'button', 'role:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (18, 14, '', '修改', 'edit', 'button', 'role:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (19, 14, '', '删除', 'delete', 'button', 'role:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (20, 14, '', '详情', 'info-circle', 'button', 'role:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (21, 6, '/admin/user', '用户管理', 'user-list', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (22, 21, '', '分页', 'search', 'button', 'user:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (23, 21, '', '列表', 'list', 'button', 'user:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (24, 21, '', '新增', 'user-add', 'button', 'user:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (25, 21, '', '修改', 'edit', 'button', 'user:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (26, 21, '', '删除', 'delete', 'button', 'user:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (27, 21, '', '详情', 'info-circle', 'button', 'user:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (28, 5, '', '分页', 'search', 'button', 'article:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (29, 5, '', '列表', 'list', 'button', 'article:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (30, 5, '', '新增', 'add', 'button', 'article:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (31, 5, '', '修改', 'edit', 'button', 'article:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (32, 5, '', '删除', 'delete', 'button', 'article:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (33, 5, '', '详情', 'info-circle', 'button', 'article:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (34, 0, '', '系统设置', '', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (35, 34, '/admin/attachment', '附件管理', 'file-attachment', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (36, 35, '', '分页', 'search', 'button', 'attachment:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (37, 35, '', '列表', 'list', 'button', 'attachment:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (38, 35, '', '新增', 'upload', 'button', 'attachment:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (39, 35, '', '删除', 'delete', 'button', 'attachment:delete', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (40, 34, '/admin/site/config', '站点配置', 'adjustment', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (41, 40, '', '分页', 'search', 'button', 'site:config:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (42, 40, '', '列表', 'list', 'button', 'site:config:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (43, 40, '', '新增', 'add', 'button', 'site:config:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (44, 40, '', '修改', 'edit', 'button', 'site:config:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (45, 40, '', '删除', 'delete', 'button', 'site:config:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (46, 34, '/admin/dict', '数据字典', 'data', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (47, 46, '', '分页', 'search', 'button', 'dict:page', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (48, 46, '', '列表', 'list', 'button', 'dict:list', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (49, 46, '', '新增', 'add', 'button', 'dict:save', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (50, 46, '', '修改', 'edit', 'button', 'dict:update', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (51, 46, '', '删除', 'delete', 'button', 'dict:delete', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (52, 46, '', '详情', 'info-circle', 'button', 'dict:info', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (53, 0, '', '更多', '', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (54, 53, '/admin/user/info', '个人页', 'user', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (55, 53, '/admin/login', '登录页', 'login', 'menu', '', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 -- ----------------------------
@@ -161,7 +227,8 @@ CREATE TABLE `t_role`  (
 -- Records of t_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_role` VALUES (1, 'blog_admin', '博文管理员', '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (2, 'visitor', '访客', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_role` (`id`, `role_name`, `role_desc`, `created_at`, `updated_at`) VALUES (1, 'blog_admin', '博文管理员', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_role` (`id`, `role_name`, `role_desc`, `created_at`, `updated_at`) VALUES (2, 'visitor', '访客', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 -- ----------------------------
@@ -181,7 +248,11 @@ CREATE TABLE `t_role_menu`  (
 -- Records of t_role_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_role_menu` VALUES (1, 1, 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (2, 1, 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (3, 1, 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (4, 1, 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (5, 1, 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (1, 1, 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (2, 1, 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (3, 1, 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (4, 1, 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (5, 1, 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 -- ----------------------------
@@ -203,7 +274,10 @@ CREATE TABLE `t_site_config`  (
 -- Records of t_site_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_site_config` VALUES (1, 'theme', 'default', 'string', '主题', '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (2, 'login', 'false', 'boolean', '登录', '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (3, 'leave', 'false', 'boolean', '评论', '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (4, 'chatgpt', 'false', 'boolean', '大模型', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `created_at`, `updated_at`) VALUES (1, 'theme', 'default', 'string', '主题', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `created_at`, `updated_at`) VALUES (2, 'login', 'false', 'boolean', '登录', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `created_at`, `updated_at`) VALUES (3, 'leave', 'false', 'boolean', '评论', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean', '大模型', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 -- ----------------------------
@@ -229,7 +303,9 @@ CREATE TABLE `t_user`  (
 -- Records of t_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_user` VALUES (1, 'LEYEN', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'men', NULL, NULL, 1, 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (2, 'Alice', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'women', NULL, NULL, 1, 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48'), (3, 'Facker', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'secret', NULL, NULL, 0, 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_user` (`id`, `username`, `password`, `avatar`, `gender`, `email`, `introduction`, `super_admin`, `status`, `created_at`, `updated_at`) VALUES (1, 'LEYEN', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'men', NULL, NULL, 1, 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_user` (`id`, `username`, `password`, `avatar`, `gender`, `email`, `introduction`, `super_admin`, `status`, `created_at`, `updated_at`) VALUES (2, 'Alice', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'women', NULL, NULL, 1, 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_user` (`id`, `username`, `password`, `avatar`, `gender`, `email`, `introduction`, `super_admin`, `status`, `created_at`, `updated_at`) VALUES (3, 'Facker', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'secret', NULL, NULL, 0, 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 -- ----------------------------
@@ -249,7 +325,7 @@ CREATE TABLE `t_user_role`  (
 -- Records of t_user_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_user_role` VALUES (1, 3, 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_user_role` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`) VALUES (1, 3, 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
