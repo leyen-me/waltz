@@ -4,8 +4,8 @@ const path = require("path");
 
 const cmd =
   process.platform === "win32"
-    ? spawn("cmd", ["/c", "npm run build-nuxt"])
-    : spawn("sh", ["-c", "npm run build-nuxt"]);
+    ? spawn("cmd", ["/c", "pnpm build-nuxt"])
+    : spawn("sh", ["-c", "pnpm build-nuxt"]);
 
 cmd.stdout.on("data", (data) => {
   console.log(`${String(data)}`);

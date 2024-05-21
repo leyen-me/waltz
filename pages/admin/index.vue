@@ -109,8 +109,6 @@ if (route.path === "/admin") {
 }
 
 const handleNavItemClick = async (url: string) => {
-  console.log(url);
-  
   await navigateTo(url);
   if (sidebarOpen.value) {
     sidebarOpen.value = false;

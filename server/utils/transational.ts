@@ -20,7 +20,6 @@ export async function defineTransactionWrapper<T>(
         }
     } catch (error) {
         if (transaction) {
-            console.log(transaction);
             await transaction.rollback();
         }
         throw error;

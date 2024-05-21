@@ -9,10 +9,9 @@ const useApi = async <T>(
     default: () => "",
     watch: false,
   });
-  const config = useRuntimeConfig();
-  const _url_options = config.NUXT_API_BASE
-    ? { baseURL: config.NUXT_API_BASE as string }
-    : {};
+  const { NUXT_API_BASE } = useRuntimeConfig().public;
+
+  const _url_options = NUXT_API_BASE ? { baseURL: NUXT_API_BASE } : {};
   const _options = {
     headers: {
       "Content-Type": "application/json",

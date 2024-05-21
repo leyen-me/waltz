@@ -44,9 +44,6 @@ export default class UserService extends BaseService<User> {
         }
 
         const createUser = await this.create(userData);
-        console.log(createUser.id);
-        console.log(userData.roleIdList);
-
         this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
         return createUser.id as number;
     }

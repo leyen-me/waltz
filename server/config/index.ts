@@ -1,13 +1,8 @@
 import { Options } from "sequelize";
 
-const runtimeConfig = useRuntimeConfig();
-
 export const secretKey = "ijdioshai";
 
 export const whiteList = ["/api/admin/auth/**"];
-
-export const baseUploadDir =
-  runtimeConfig.public.NUXT_ENV === "development" ? "./public" : "../public";
 
 export const dbConfig: Options = {
   host: "localhost",

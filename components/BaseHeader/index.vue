@@ -40,6 +40,7 @@
             :key="v.id"
             class="w-full flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-[#343434]"
             style="border-bottom: 1px rgba(0, 0, 0, 0.1) solid"
+            @click="handleGoBlog(v)"
           >
             <div class="w-0 flex-1">
               <h3 class="text-zinc-900 line-clamp-1 dark:text-white">
@@ -60,7 +61,9 @@
 <script setup lang="ts">
 import { useWebArticleListApi } from "~/api/web/article";
 import type Article from "~/server/models/Article";
-import useDebounce from "~/utils/debounce"
+import useDebounce from "~/utils/debounce";
+
+const router = useRouter();
 
 const visible = ref(false);
 const searchText = ref("");
@@ -83,6 +86,10 @@ const search = async () => {
   if (list && Array.isArray(list)) {
     searchList.value = list;
   }
+};
+
+const handleGoBlog = (item: Article) => {
+  router.push("/blog/" + item.id);
 };
 
 const handleSearch = useDebounce(search, 500);

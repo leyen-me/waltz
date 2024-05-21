@@ -33,10 +33,6 @@ export const defineListToTree = <K, T extends { [key: string]: any }>(list: T[],
             }
         }
     });
-
-    console.log(tree);
-
-
     return tree;
 };
 

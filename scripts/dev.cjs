@@ -4,8 +4,8 @@ const path = require("path");
 
 const cmd =
   process.platform === "win32"
-    ? spawn("cmd", ["/c", "npm run dev-nuxt"])
-    : spawn("sh", ["-c", "npm run dev-nuxt"]);
+    ? spawn("cmd", ["/c", "pnpm dev-nuxt"])
+    : spawn("sh", ["-c", "pnpm dev-nuxt"]);
 const filePath = path.join(__dirname, "../pages", "index.vue");
 const fileContent = fs.readFileSync(filePath, "utf8");
 
