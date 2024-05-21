@@ -9,7 +9,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV MYSQL_ROOT_PASSWORD=JGhQ83axm5ydtQEnX8B3RgtqnFIY6U3+TO5VMMVyLxA=
 
 # 安装数据库、NodeJs、Npm、n
-RUN apt-get update && apt-get install -y mysql-server && apt-get install -y nodejs && apt-get install -y npm && apt-get install -y wget && npm install -g n && n 18.9.1 && npm install -g pnpm
+RUN apt-get update && apt-get install -y mysql-server && apt-get install -y nodejs && apt-get install -y npm && apt-get install -y wget && npm install -g n && n 18.12.0 && npm install -g pnpm
 
 # 配置文件
 COPY ./deploy/mysql/mysql.conf.d/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
