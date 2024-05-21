@@ -38,7 +38,6 @@ CREATE TABLE `t_article`  (
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  FULLTEXT INDEX `idx_title_fulltext`(`title`, `content`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 create fulltext index idx_title_content on t_article(title,content) WITH PARSER ngram;
