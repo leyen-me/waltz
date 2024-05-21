@@ -73,6 +73,14 @@ interface ArticleQuery extends BaseQuery {
   asc?: boolean;
 }
 
+interface ArticleCategoryQuery extends BaseQuery {
+  title?: string;
+}
+
+interface TagQuery extends BaseQuery {
+  title?: string;
+}
+
 interface UserQuery extends BaseQuery {
   username?: string;
   gender?: number;
