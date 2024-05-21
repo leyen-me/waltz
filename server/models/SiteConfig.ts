@@ -7,6 +7,7 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
   declare key: string;
   declare value: string;
   declare type: "string" | "boolean" | "number";
+  declare desc: string;
   declare sort: number;
 
   static initSiteConfig(sequelize: Sequelize): typeof SiteConfig {
