@@ -39,14 +39,12 @@ import {
   useAdminSiteConfigListApi,
   useAdminSiteConfigSubmitApi,
 } from "@/api/admin/config";
-import { defaultRowsPerPageOptions } from "@/constans";
-import type User from "@/server/models/User";
-import useHasAuth from "@/utils/auth";
 import useDebounce from "@/utils/debounce";
+import type SiteConfig from "~/server/models/SiteConfig";
 
 const router = useRouter();
 
-const list = ref<User[]>([]);
+const list = ref<SiteConfig[]>([]);
 const getData = async () => {
   const data = await useAdminSiteConfigListApi();
   list.value = data;
