@@ -100,7 +100,7 @@ CREATE TABLE `t_dict_data`  (
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字典值',
   `label_class` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标签样式',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `sort` int(0) NULL DEFAULT NULL COMMENT '排序',
+  `sort` int(0) NULL DEFAULT 0 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -145,7 +145,7 @@ CREATE TABLE `t_menu`  (
   `icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
   `type` enum('menu','button','interface') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单类型',
   `authority` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '授权标识',
-  `sort` int(0) NULL DEFAULT NULL COMMENT '排序',
+  `sort` int(0) NULL DEFAULT 0 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -267,19 +267,21 @@ CREATE TABLE `t_site_config`  (
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '值',
   `type` enum('string','boolean','number') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+  `sort` int(0) NULL DEFAULT 0 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 -- ----------------------------
 -- Records of t_site_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `created_at`, `updated_at`) VALUES (1, 'theme', 'default', 'string', '主题', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `created_at`, `updated_at`) VALUES (2, 'login', 'false', 'boolean', '登录', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `created_at`, `updated_at`) VALUES (3, 'leave', 'false', 'boolean', '评论', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean', '大模型', '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (1, 'theme', 'default', 'string', '主题', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (2, 'login', 'false', 'boolean', '登录', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (3, 'leave', 'false', 'boolean', '评论', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean', '大模型', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (5, 'title', 'logo', 'string', '站点名称', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 -- ----------------------------
