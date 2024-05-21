@@ -168,6 +168,7 @@ CREATE TABLE `t_dict_data`  (
 -- Records of t_dict_data
 -- ----------------------------
 BEGIN;
+INSERT INTO `t_dict_data`(`id`, `type_id`, `label`, `value`, `label_class`, `remark`, `sort`, `created_at`, `updated_at`) VALUES (1, 1, '默认', 'Default', 'primary', '默认主题', 0, '2024-05-21 17:04:19', '2024-05-21 17:04:19');
 COMMIT;
 
 -- ----------------------------
@@ -189,6 +190,7 @@ CREATE TABLE `t_dict_type`  (
 -- Records of t_dict_type
 -- ----------------------------
 BEGIN;
+INSERT INTO `t_dict_type`(`id`, `dict_type`, `dict_name`, `remark`, `sort`, `created_at`, `updated_at`) VALUES (1, 'theme', '主题', '主题', 0, '2024-05-21 17:03:07', '2024-05-21 17:03:07');
 COMMIT;
 
 -- ----------------------------
@@ -323,7 +325,8 @@ CREATE TABLE `t_site_config`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '键',
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '值',
-  `type` enum('string','boolean','number') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
+  `type` enum('string','boolean','number','textarea','dict') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
+  `dict_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字典类型',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
   `sort` int(0) NOT NULL DEFAULT 0 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
@@ -335,11 +338,12 @@ CREATE TABLE `t_site_config`  (
 -- Records of t_site_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (1, 'theme', 'default', 'string', '主题', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (2, 'login', 'false', 'boolean', '登录', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (3, 'leave', 'false', 'boolean', '评论', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean', '大模型', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (5, 'title', 'logo', 'string', '站点名称', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (1, 'theme', 'Default', 'dict', 'theme','主题', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (2, 'login', 'false', 'boolean','', '登录', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (3, 'leave', 'false', 'boolean','', '评论', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean','', '大模型', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (5, 'title', 'logo', 'string', '','站点名称', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (6, 'desc', 'Here I will share insights, tips, and tutorials on website development and also thoughts on the latest trends and technologies in the field.v', 'textarea','' ,'网站描述', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 -- ----------------------------
