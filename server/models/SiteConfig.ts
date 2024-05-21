@@ -7,7 +7,7 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
   declare key: string;
   declare value: string;
   declare type: "string" | "boolean" | "number";
-
+  declare sort: number;
 
   static initSiteConfig(sequelize: Sequelize): typeof SiteConfig {
     const modelAttributes = {
@@ -30,6 +30,11 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
         type: DataTypes.STRING({ length: 255 }),
         allowNull: true,
         comment: '描述'
+      },
+      sort: {
+        type: DataTypes.INTEGER({ length: 11 }),
+        allowNull: true,
+        comment: '排序',
       }
     };
 

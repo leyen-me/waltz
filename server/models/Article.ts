@@ -95,13 +95,6 @@ export default class Article extends BaseModel<Article> {
     const modelOptions = {
       sequelize,
       tableName: 'article',
-      indexes: [
-        {
-          name: 'idx_title_fulltext',
-          fields: ['title', 'content'],
-          type: 'FULLTEXT'
-        }
-      ] as IndexesOptions[]
     };
 
     return super.initModel(modelAttributes, modelOptions) as typeof Article;
