@@ -37,7 +37,7 @@ CREATE TABLE `t_article`  (
   `sort` int(0) NULL DEFAULT 1 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE,
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 create fulltext index idx_title_content on t_article(title,content) WITH PARSER ngram;
@@ -267,7 +267,7 @@ CREATE TABLE `t_site_config`  (
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '值',
   `type` enum('string','boolean','number') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `sort` int(0) NULL DEFAULT 0 COMMENT '排序',
+  `sort` int(0) NOT NULL DEFAULT 0 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -277,11 +277,11 @@ CREATE TABLE `t_site_config`  (
 -- Records of t_site_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (1, 'theme', 'default', 'string', '主题', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (2, 'login', 'false', 'boolean', '登录', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (3, 'leave', 'false', 'boolean', '评论', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean', '大模型', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (5, 'title', 'logo', 'string', '站点名称', NULL, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (1, 'theme', 'default', 'string', '主题', 1, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (2, 'login', 'false', 'boolean', '登录', 2, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (3, 'leave', 'false', 'boolean', '评论', 3, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean', '大模型', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (5, 'title', 'logo', 'string', '站点名称', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 COMMIT;
 
 -- ----------------------------

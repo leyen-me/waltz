@@ -97,6 +97,7 @@ interface AttachmentQuery extends BaseQuery {
 
 interface SiteConfigQuery extends BaseQuery {
   key?: string;
+  sort: number;
 }
 
 interface DictTypeQuery extends BaseQuery {

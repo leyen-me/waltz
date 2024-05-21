@@ -1,6 +1,6 @@
 import SiteConfig from '@/server/models/SiteConfig';
 import BaseService from '@/server/base/BaseService';
-import { CreationAttributes, Op } from 'sequelize';
+import { CreationAttributes, Op, Order } from 'sequelize';
 
 export default class SiteConfigService extends BaseService<SiteConfig> {
     constructor() {
@@ -33,8 +33,17 @@ export default class SiteConfigService extends BaseService<SiteConfig> {
         return await SiteConfig.findByPk(configId);
     }
 
-    async getAllSiteConfigs(key?: string): Promise<SiteConfig[]> {
+    async getAllSiteConfigs(key?: string, asc: boolean = true): Promise<SiteConfig[]> {
         const whereClause = key ? { key: { [Op.like]: `%${key}%` } } : {};
-        return await SiteConfig.findAll({ where: whereClause });
+
+        const orderClause: Order = [['sort', asc ? 'ASC' : 'DESC']];
+
+        // 构建查询条件
+        const options = {
+            where: whereClause,
+            order: orderClause
+        };
+
+        return await SiteConfig.findAll(options);
     }
 }
