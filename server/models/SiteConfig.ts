@@ -7,6 +7,7 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
   declare key: string;
   declare value: string;
   declare type: "string" | "boolean" | "number";
+  declare desc: string;
   declare sort: number;
 
   static initSiteConfig(sequelize: Sequelize): typeof SiteConfig {
@@ -22,9 +23,14 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
         comment: '值',
       },
       type: {
-        type: DataTypes.ENUM({ values: ["string", "boolean", "number"] }),
+        type: DataTypes.ENUM({ values: ["string", "boolean", "number","textarea","dict"] }),
         allowNull: false,
         comment: '类型'
+      },
+      dictType: {
+        type: DataTypes.STRING({ length: 255 }),
+        allowNull: true,
+        comment: '字典类型',
       },
       desc: {
         type: DataTypes.STRING({ length: 255 }),

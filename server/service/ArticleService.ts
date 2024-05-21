@@ -3,8 +3,10 @@ import BaseService from "@/server/base/BaseService";
 import { CreationAttributes, FindAndCountOptions, Op, literal } from "sequelize";
 import { ArticleStatus } from "../enum";
 import sequelize from "../db";
+import ArticleTagService from "./ArticleTagService";
 
 export default class ArticleService extends BaseService<Article> {
+    private articleTagService = new ArticleTagService();
     constructor() {
         super(Article);
     }
@@ -33,8 +35,11 @@ export default class ArticleService extends BaseService<Article> {
                 articleData.sort = count + 1;
             }
             const createdArticle = await this.create(articleData, { transaction });
+             // 如果有标签ID列表，保存或更新文章与标签的关联关系
+             if (articleData.tagIdList) {
+                await this.articleTagService.saveOrUpdate(createdArticle.id as number, articleData.tagIdList);
+            }
             return createdArticle.id as number;
-            // return (await this.create(articleData)).id as number;
         });
         return createdArticleId;
     }
@@ -64,6 +69,10 @@ export default class ArticleService extends BaseService<Article> {
                 }
             }
             await this.update(articleData, { where: { id: articleId }, transaction });
+            // 如果有标签ID列表，保存或更新文章与标签的关联关系
+            if (articleData.tagIdList) {
+                await this.articleTagService.saveOrUpdate(articleId, articleData.tagIdList);
+            }
         });
     }
 

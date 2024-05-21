@@ -1,5 +1,5 @@
 import BaseModel from "../base/BaseModel";
-import { DataTypes, IndexesOptions, Sequelize } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 import moment from "moment";
 import { ArticleStatus } from "../enum";
