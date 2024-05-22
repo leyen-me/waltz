@@ -81,6 +81,11 @@ interface TagQuery extends BaseQuery {
   title?: string;
 }
 
+interface CommentQuery extends BaseQuery {
+  articleId?: number;
+  userId?: number;
+}
+
 interface UserQuery extends BaseQuery {
   username?: string;
   gender?: number;

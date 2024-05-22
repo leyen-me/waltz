@@ -3,6 +3,8 @@ import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 import moment from "moment";
 import { ArticleStatus } from "../enum";
+import User from "./User";
+import Category from "./Category";
 
 export default class Article extends BaseModel<Article> {
   declare title: string;
@@ -12,10 +14,15 @@ export default class Article extends BaseModel<Article> {
   declare publishedAt: string;
   declare status: string;
   declare viewsCount: number;
+  declare favoritesCount: number;
+  declare likesCount: number;
+  declare commentsCount: number;
   declare sort: number;
   declare html: string;
 
   public author?: string;
+  public categoryTitle?: string;
+  public tagList?: string;
   public publishedAtDetails!: ArticlePublishedAtDetail;
 
   toJSON() {
@@ -83,7 +90,22 @@ export default class Article extends BaseModel<Article> {
       viewsCount: {
         type: DataTypes.INTEGER({ length: 11 }),
         defaultValue: 0,
-        comment: '文章浏览量',
+        comment: '浏览量',
+      },
+      favoritesCount: {
+        type: DataTypes.INTEGER({ length: 11 }),
+        defaultValue: 0,
+        comment: '收藏量',
+      },
+      likesCount: {
+        type: DataTypes.INTEGER({ length: 11 }),
+        defaultValue: 0,
+        comment: '点赞量',
+      },
+      commentsCount: {
+        type: DataTypes.INTEGER({ length: 11 }),
+        defaultValue: 0,
+        comment: '评论量',
       },
       sort: {
         type: DataTypes.INTEGER({ length: 11 }),
@@ -91,7 +113,6 @@ export default class Article extends BaseModel<Article> {
         comment: '排序',
       }
     };
-
     const modelOptions = {
       sequelize,
       tableName: 'article',

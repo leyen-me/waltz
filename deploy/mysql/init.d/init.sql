@@ -25,15 +25,18 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `t_article`;
 CREATE TABLE `t_article`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `category_id` bigint(0) NULL DEFAULT NULL COMMENT '文章分类',
+  `category_id` bigint(0) NULL NOT NULL COMMENT '文章分类',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章标题',
   `cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文章封面',
   `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章内容',
-  `html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文章HTML',
+  `html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文章HTML',
   `author_id` bigint(0) NOT NULL COMMENT '文章作者ID',
   `published_at` datetime(0) NULL DEFAULT NULL COMMENT '发布时间',
   `status` enum('draft','published','archived') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'draft' COMMENT '文章状态',
-  `views_count` int(0) NULL DEFAULT 0 COMMENT '文章浏览量',
+  `views_count` int(0) NULL DEFAULT 0 COMMENT '浏览量',
+  `favorites_count` int(0) NULL DEFAULT 0 COMMENT '收藏量',
+  `likes_count` int(0) NULL DEFAULT 0 COMMENT '点赞量',
+  `comments_count` int(0) NULL DEFAULT 0 COMMENT '评论量',
   `sort` int(0) NULL DEFAULT 1 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
@@ -46,6 +49,9 @@ create fulltext index idx_title_content on t_article(title,content) WITH PARSER 
 -- Records of t_article
 -- ----------------------------
 BEGIN;
+INSERT INTO `t_article`(`id`, `category_id`, `title`, `cover`, `content`, `html`, `author_id`, `published_at`, `status`, `views_count`, `favorites_count`, `likes_count`, `comments_count`, `sort`, `created_at`, `updated_at`) VALUES (1, 1, '美商务部发布有关人工智能安全的战略愿景，组建与盟友的合作网络', 'https://alexgurghis.com/wp-content/uploads/2023/06/jobs_demo-1020x540.webp', '美國財政部長耶倫週二表示，美國和歐洲在抵制中國工業產能過剩上需要攜手合作，並警告說，中國大量出口廉價商品對全球經濟構成嚴重威脅。耶倫是在德國的一次演講中發表這番言論的，突出了七國集團財長本週在義大利舉行會議時預計將討論的中心議題。「中國的產業政策對坐在這個房間裡的我們來說或許看起來很遙遠，但如果我們不戰略性地、團結一致地做出反應，我們兩國和世界各地的企業都會面臨生存風險，」耶倫在法蘭克福金融與管理學院接受榮譽博士學位時說。近幾個月來，中國過度生產綠色能源技術已成為大西洋兩岸面臨的一個緊迫問題。拜登政府的官員越來越擔心，他為美國國內的清潔能源和其他下一代技術製造提供資金的努力將受到中國廉價出口的削弱，中國正在生產大量的鋼鐵、電動汽車和太陽能電池板。', NULL, 1, '2024-05-21 11:14:51', 'published', 0, 0, 0, 0, 1, '2024-05-21 11:14:43', '2024-05-21 11:14:51');
+INSERT INTO `t_article`(`id`, `category_id`, `title`, `cover`, `content`, `html`, `author_id`, `published_at`, `status`, `views_count`, `favorites_count`, `likes_count`, `comments_count`, `sort`, `created_at`, `updated_at`) VALUES (2, 1, '美商务部发布有关人工智能安全的战略愿景，组建与盟友的合作网络', 'https://alexgurghis.com/wp-content/uploads/2023/06/jobs_demo-1020x540.webp', '美國財政部長耶倫週二表示，美國和歐洲在抵制中國工業產能過剩上需要攜手合作，並警告說，中國大量出口廉價商品對全球經濟構成嚴重威脅。耶倫是在德國的一次演講中發表這番言論的，突出了七國集團財長本週在義大利舉行會議時預計將討論的中心議題。「中國的產業政策對坐在這個房間裡的我們來說或許看起來很遙遠，但如果我們不戰略性地、團結一致地做出反應，我們兩國和世界各地的企業都會面臨生存風險，」耶倫在法蘭克福金融與管理學院接受榮譽博士學位時說。近幾個月來，中國過度生產綠色能源技術已成為大西洋兩岸面臨的一個緊迫問題。拜登政府的官員越來越擔心，他為美國國內的清潔能源和其他下一代技術製造提供資金的努力將受到中國廉價出口的削弱，中國正在生產大量的鋼鐵、電動汽車和太陽能電池板。', NULL, 2, '2024-05-21 11:14:51', 'published', 0, 0, 0, 0, 1, '2024-05-21 11:14:43', '2024-05-21 11:14:51');
+INSERT INTO `t_article`(`id`, `category_id`, `title`, `cover`, `content`, `html`, `author_id`, `published_at`, `status`, `views_count`, `favorites_count`, `likes_count`, `comments_count`, `sort`, `created_at`, `updated_at`) VALUES (3, 1, '美商务部发布有关人工智能安全的战略愿景，组建与盟友的合作网络', 'https://alexgurghis.com/wp-content/uploads/2023/06/jobs_demo-1020x540.webp', '美國財政部長耶倫週二表示，美國和歐洲在抵制中國工業產能過剩上需要攜手合作，並警告說，中國大量出口廉價商品對全球經濟構成嚴重威脅。耶倫是在德國的一次演講中發表這番言論的，突出了七國集團財長本週在義大利舉行會議時預計將討論的中心議題。「中國的產業政策對坐在這個房間裡的我們來說或許看起來很遙遠，但如果我們不戰略性地、團結一致地做出反應，我們兩國和世界各地的企業都會面臨生存風險，」耶倫在法蘭克福金融與管理學院接受榮譽博士學位時說。近幾個月來，中國過度生產綠色能源技術已成為大西洋兩岸面臨的一個緊迫問題。拜登政府的官員越來越擔心，他為美國國內的清潔能源和其他下一代技術製造提供資金的努力將受到中國廉價出口的削弱，中國正在生產大量的鋼鐵、電動汽車和太陽能電池板。', NULL, 3, '2024-05-21 11:14:51', 'published', 0, 0, 0, 0, 1, '2024-05-21 11:14:43', '2024-05-21 11:14:51');
 COMMIT;
 
 -- ----------------------------
@@ -65,6 +71,7 @@ CREATE TABLE `t_category`  (
 -- Records of t_category
 -- ----------------------------
 BEGIN;
+INSERT INTO `t_category`(`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES (1, '随笔', '生活随笔', '2024-05-20 11:16:27', '2024-05-20 11:16:27');
 COMMIT;
 
 -- ----------------------------
@@ -104,6 +111,9 @@ CREATE TABLE `t_tag`  (
 -- Records of t_tag
 -- ----------------------------
 BEGIN;
+INSERT INTO `t_tag`(`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES (1, 'JAVA', 'JAVA', '2024-05-22 11:26:36', '2024-05-22 11:26:36');
+INSERT INTO `t_tag`(`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES (2, 'PYTHON', 'PYTHON', '2024-05-22 11:27:05', '2024-05-22 11:27:05');
+INSERT INTO `t_tag`(`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES (3, 'VUE', 'VUE', '2024-05-22 11:27:35', '2024-05-22 11:27:35');
 COMMIT;
 
 -- ----------------------------
@@ -124,6 +134,69 @@ CREATE TABLE `t_article_tag`  (
 -- ----------------------------
 BEGIN;
 COMMIT;
+
+
+-- ----------------------------
+-- Table structure for t_comment
+-- ----------------------------
+CREATE TABLE `t_comment` (
+  `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `article_id` bigint(0) NOT NULL COMMENT '文章id',
+  `parent_id` bigint(0) NULL DEFAULT NULL COMMENT '父评论id，允许为空，用于支持评论的回复',
+  `user_id` bigint(0) NOT NULL COMMENT '评论用户id',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论内容',
+  `likes_count` int(0) NULL DEFAULT 0 COMMENT '点赞数',
+  `created_at` datetime(0) NOT NULL COMMENT '创建时间',
+  `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='评论表';
+
+
+-- ----------------------------
+-- Records of t_comment
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+
+-- ----------------------------
+-- Table structure for t_favorite
+-- ----------------------------
+CREATE TABLE `t_favorite` (
+  `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` bigint(0) NOT NULL COMMENT '用户id',
+  `article_id` bigint(0) NOT NULL COMMENT '文章id',
+  `created_at` datetime(0) NOT NULL COMMENT '创建时间',
+  `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户文章收藏表';
+
+
+-- ----------------------------
+-- Records of t_favorite
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for t_like
+-- ----------------------------
+CREATE TABLE `t_like` (
+  `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` bigint(0) NOT NULL COMMENT '用户id',
+  `article_id` bigint(0) NOT NULL COMMENT '文章id',
+  `created_at` datetime(0) NOT NULL COMMENT '创建时间',
+  `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户文章点赞表';
+
+
+-- ----------------------------
+-- Records of t_like
+-- ----------------------------
+BEGIN;
+COMMIT;
+
 
 -- ----------------------------
 -- Table structure for t_attachment
@@ -344,6 +417,8 @@ INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, 
 INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean','', '大模型', 4, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (5, 'title', 'logo', 'string', '','站点名称', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
 INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (6, 'desc', 'Here I will share insights, tips, and tutorials on website development and also thoughts on the latest trends and technologies in the field.v', 'textarea','' ,'网站描述', 0, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (7, 'footer', 'false', 'boolean', '', '页脚', 5, '2024-05-20 13:38:48', '2024-05-20 13:38:48');
+
 COMMIT;
 
 -- ----------------------------
