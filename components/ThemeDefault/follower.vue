@@ -3,48 +3,69 @@
 </template>
 
 <script setup lang="ts">
+let cursor: HTMLElement | null = null;
+let mouseX = 0;
+let mouseY = 0;
+let cursorX = 0;
+let cursorY = 0;
+let scale = 1;
+let speed = 0.5;
+
+function animate() {
+  let distX = mouseX - cursorX;
+  let distY = mouseY - cursorY;
+  cursorX = cursorX + distX * speed;
+  cursorY = cursorY + distY * speed;
+  cursor!.style.transform = `scale(${scale})`;
+  cursor!.style.left = cursorX + "px";
+  cursor!.style.top = cursorY + "px";
+  requestAnimationFrame(animate);
+}
+
 onMounted(() => {
-  document.addEventListener("mousemove", (e) => {
-    const follower = document.getElementById("follower");
-    const contents = document.querySelectorAll(".home");
-
-    // 更新小圆圈的位置
-    follower.style.left = e.pageX + "px";
-    follower.style.top = e.pageY + "px";
-    follower.style.opacity = 1; // 显示圆圈
-
-    // 遍历所有内容元素，判断鼠标是否在其上方
-    contents.forEach((content) => {
+  cursor = document.querySelector("#follower");
+  animate();
+  document.addEventListener("mousemove", (event) => {
+    mouseX = event.pageX;
+    mouseY = event.pageY;
+    const contents = document.querySelectorAll("h1,h3,p,img,h2,span,a");
+    for (let i = 0; i < contents.length; i++) {
+      const content = contents[i];
       const rect = content.getBoundingClientRect();
       if (
-        e.clientX > rect.left &&
-        e.clientX < rect.right &&
-        e.clientY > rect.top &&
-        e.clientY < rect.bottom
+        event.clientX > rect.left &&
+        event.clientX < rect.right &&
+        event.clientY > rect.top &&
+        event.clientY < rect.bottom
       ) {
-        // 鼠标在元素上，改变样式
-        // content.style.color = "black"; // 反色效果
-        // follower.style.transform = "scale(2)"; // 圆圈变大
+        scale = 2.4;
+        break
       } else {
-        // 鼠标不在元素上，恢复默认样式
-        // content.style.color = "white";
-        // follower.style.transform = "scale(1)";
+        scale = 1;
       }
-    });
+    }
+  });
+  document.addEventListener("mousedown", (event) => {
+    scale = 2.4;
+  });
+  document.addEventListener("mouseup", (event) => {
+    scale = 1;
   });
 });
 </script>
 
 <style scoped>
 #follower {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  top: 0;
+  left: 0;
   border-radius: 50%;
   background-color: white;
-  position: absolute;
-  pointer-events: none; /* 防止圆圈影响鼠标事件 */
-  opacity: 0; /* 默认隐藏 */
-  transition: all 0.2s ease; /* 动画过渡效果 */
-  z-index: 1000; /* 确保圆圈在顶层 */
+  pointer-events: none;
+  transition: transform 550ms ease;
+  z-index: 1000;
+  mix-blend-mode: difference;
 }
 </style>

@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import useTheme from "@/utils/theme";
-useTheme();
+onMounted(() => {
+  document.documentElement.setAttribute("theme-mode", "dark");
+});
 </script>
