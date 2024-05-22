@@ -4,10 +4,12 @@ import { CreationAttributes } from 'sequelize';
 import User from '../models/User';
 import UserRoleService from './UserRoleService';
 import sequelize from '../db';
+import RoleMenuService from './RoleMenuService';
 
 
 export default class MenuService extends BaseService<Menu> {
     private userRoleService = new UserRoleService();
+    private roleMenuService = new RoleMenuService();
 
     constructor() {
         super(Menu);
@@ -30,9 +32,10 @@ export default class MenuService extends BaseService<Menu> {
         });
     }
 
-    async deleteMenus(menuIds: number[]): Promise<void> {
+    async deleteMenu(menuId: number): Promise<void> {
         await defineTransactionWrapper(async (transaction) => {
-            await this.delete({ where: { id: menuIds }, transaction });
+            await this.delete({ where: { id: menuId }, transaction });
+            await this.roleMenuService.deleteByMenuId(menuId);
         });
     }
 
@@ -92,7 +95,12 @@ export default class MenuService extends BaseService<Menu> {
         }
     }
 
-
+    async hasChildMenus(menuId: number): Promise<boolean> {
+        const count = await Menu.count({
+            where: { pid: menuId }
+        });
+        return count > 0;
+    }
 
 
     async getAllMenus(user: User): Promise<Menu[]> {
