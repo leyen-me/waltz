@@ -1,7 +1,7 @@
 <template>
   <ThemeDefaultDetail
     v-if="appStore.siteConfig.theme === 'Default'"
-    :id="route.params.id as string"
+    :id
   ></ThemeDefaultDetail>
 </template>
 
@@ -13,5 +13,6 @@ definePageMeta({
 });
 
 const route = useRoute();
+const id = route.params.id as string;
 const appStore = useAppStore();
 </script>
