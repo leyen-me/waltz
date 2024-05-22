@@ -35,7 +35,6 @@
       class="mt-2 leading-[1.6] tracking-[1px] xl:leading-[1.8] text-justify dark:text-stone-300"
     >
       <div v-html="article.html"></div>
-      <!-- <BasePreview v-model="article.content"></BasePreview> -->
     </section>
     <div class="p-5 text-sm text-stone-500">阅读 {{ article.viewsCount }}</div>
   </div>
@@ -45,11 +44,15 @@
 import { useWebArticleInfoApi } from "~/api/web/article";
 import type Article from "~/server/models/Article";
 import "@kangc/v-md-editor/lib/style/preview.css";
-import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+import "@kangc/v-md-editor/lib/theme/style/vuepress.css";
 import "@kangc/v-md-editor/lib/plugins/emoji/emoji.css";
 import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
 import "@kangc/v-md-editor/lib/plugins/highlight-lines/highlight-lines.css";
 import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
+
+definePageMeta({
+  middleware: "web-auth",
+});
 
 const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
 

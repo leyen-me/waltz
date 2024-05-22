@@ -20,6 +20,23 @@
               <t-radio-button value="false">关闭</t-radio-button>
             </t-radio-group>
 
+            <!-- textarea -->
+            <t-textarea
+              @change="handleSave(v)"
+              v-else-if="v.type === 'textarea'"
+              v-model="v.value"
+              clearable
+            ></t-textarea>
+
+            <!-- dict -->
+            <t-select
+              v-else-if="v.type === 'dict'"
+              v-model="v.value"
+              :options="getDictOptions('theme')"
+              :keys="{ label: 'dictLabel', value: 'dictValue' }"
+              placeholder="请选择"
+            />
+
             <!-- string -->
             <t-input
               @change="handleSave(v)"
@@ -39,29 +56,38 @@ import {
   useAdminSiteConfigListApi,
   useAdminSiteConfigSubmitApi,
 } from "@/api/admin/config";
-import { defaultRowsPerPageOptions } from "@/constans";
-import type User from "@/server/models/User";
-import useHasAuth from "@/utils/auth";
 import useDebounce from "@/utils/debounce";
+import type SiteConfig from "~/server/models/SiteConfig";
+import useAppStore from "~/stores/appStore";
 
 const router = useRouter();
+const appStore = useAppStore();
 
-const list = ref<User[]>([]);
+const list = ref<SiteConfig[]>([]);
 const getData = async () => {
   const data = await useAdminSiteConfigListApi();
   list.value = data;
 };
 
-const save = async ({ id, key, value }) => {
+const save = async ({ id, key, value }: SiteConfig) => {
   try {
     await useAdminSiteConfigSubmitApi({
       id,
       value,
     });
-    getData();
+    // getData();
+    MessagePlugin.success("修改成功");
   } catch (error) {
-    MessagePlugin.success("修改失败");
+    MessagePlugin.error("修改失败");
   }
+};
+
+const getDictOptions = (dict_type: string) => {
+  const item = appStore.dictList.find((item) => item.dictType === dict_type);
+  if (item) {
+    return item.dataList;
+  }
+  return [];
 };
 
 const handleSave = useDebounce(save, 500);

@@ -5,10 +5,22 @@ const useAppStore = defineStore("appStore", {
     <
       {
         dictList: DictTypeResponse[];
+        siteConfig: {
+          [key: string]: [string];
+        };
+        web: {
+          loading: boolean;
+        };
       }
     >{
       // 权限列表
       dictList: [],
+      siteConfig: {},
+
+      // 前台
+      web: {
+        loading: false,
+      },
     },
   actions: {},
 });
