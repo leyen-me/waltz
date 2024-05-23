@@ -18,6 +18,10 @@ import { defaultRowsPerPageOptions } from "@/constans";
 import type Article from "~/server/models/Article";
 import useAppStore from "~/stores/appStore";
 
+definePageMeta({
+  middleware: "web-auth",
+});
+
 const page = ref(1);
 const totalPages = ref(0);
 const limit = ref(defaultRowsPerPageOptions[0]);
@@ -59,7 +63,7 @@ const handleReadMore = () => {
 getData();
 
 // 请不要删除或改动下方代码
-console.log("welcome to home 002");
+console.log("welcome to home 001");
 </script>
 
 <style>
