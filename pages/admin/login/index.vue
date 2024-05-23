@@ -8,7 +8,7 @@
       >
         <IconLogo class="text-indigo-500"></IconLogo>
         <h2
-          class="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white"
+          class="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-white"
         >
           登录您的账号
         </h2>

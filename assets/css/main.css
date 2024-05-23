@@ -122,8 +122,8 @@
 html,
 body,
 #__nuxt {
-  background-color: rgba(226, 232, 240);
   height: 100%;
+  -webkit-overflow-scrolling: touch; /* 启用滚动优化 */
 }
 
 @font-face {
@@ -159,27 +159,12 @@ a {
   display: none;
 }
 
-/* 电脑端显示 */
-@media (min-width: 1280px) {
-  .v-md-editor__preview-wrapper {
-    display: block;
-  }
-
-  .v-md-editor__toolbar-right-wrapper {
-    display: block;
-  }
-
-  .search-dialog .t-dialog {
-    width: 50% !important;
-  }
-}
-
-/* 深色模式 */
-@media (prefers-color-scheme: dark) {
+html[theme-mode="dark"] {
   html,
   body,
   #__nuxt {
-    background-color: #242424;
+    background-color: #000000;
+    color: white;
   }
 
   .v-md-editor__left-area {
@@ -225,4 +210,72 @@ a {
     background-color: #2e2e2e !important;
     color: white !important;
   }
+}
+
+/* 电脑端显示 */
+@media (min-width: 1280px) {
+  .v-md-editor__preview-wrapper {
+    display: block;
+  }
+
+  .v-md-editor__toolbar-right-wrapper {
+    display: block;
+  }
+
+  .search-dialog .t-dialog {
+    width: 50% !important;
+  }
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  /* html,
+  body,
+  #__nuxt {
+    background-color: #242424;
+  } */
+
+  /* .v-md-editor__left-area {
+    background-color: #2e2e2e !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  .v-md-editor__left-area-title {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  .v-md-editor__toc-nav-item {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .v-md-editor__toolbar {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    background-color: #2e2e2e !important;
+  }
+
+  .v-md-editor__toolbar-item {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  .v-md-editor__toolbar-item:hover {
+    background: var(--surface-section) !important;
+  }
+  .v-md-editor__toolbar-item--active {
+    background: var(--surface-section) !important;
+  }
+
+  .v-md-textarea-editor pre,
+  .v-md-textarea-editor textarea {
+    min-height: 80vh;
+    background-color: #2e2e2e !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .v-md-editor__editor-wrapper,
+  .v-md-editor__preview-wrapper {
+    background-color: #2e2e2e !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .vuepress-markdown-body {
+    background-color: #2e2e2e !important;
+    color: white !important;
+  } */
 }

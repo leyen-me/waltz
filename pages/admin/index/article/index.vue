@@ -29,7 +29,7 @@
         >
           <img
             class="w-full h-auto object-cover transition duration-300 ease-in-out hover:scale-110"
-            :src="NUXT_API_STATIC_BASE + v.cover || defaultCover"
+            :src="useImageUrl(v.cover)"
           />
         </div>
         <!-- mask -->
@@ -106,11 +106,10 @@ import {
   useAdminArticleDeleteApi,
   useAdminArticlePageApi,
 } from "@/api/admin/article";
-import { defaultCover, defaultRowsPerPageOptions } from "@/constans";
+import { defaultRowsPerPageOptions } from "@/constans";
 import type Article from "@/server/models/Article";
 import useHasAuth from "@/utils/auth";
-
-const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
+import useImageUrl from "@/utils/imageUrl";
 
 // 分页
 const page = ref(1);

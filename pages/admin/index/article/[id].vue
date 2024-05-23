@@ -79,8 +79,8 @@ import {
 import Cookies from "js-cookie";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
 import useHasAuth from "@/utils/auth";
+import useImageUrl from "@/utils/imageUrl";
 
-const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
 const route = useRoute();
 const uploadUrl =
   "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
@@ -110,7 +110,9 @@ const handleSubmitForm = () => {
   form.value.submit();
 };
 const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
-  formData.value.html = window.document.querySelector(".v-md-editor-preview").outerHTML
+  formData.value.html = window.document.querySelector(
+    ".v-md-editor-preview"
+  ).outerHTML;
   if (validateResult === true) {
     try {
       const res = await useAdminArticleSubmitApi(formData.value);
@@ -154,7 +156,7 @@ const handleEditorUpload = async (event: any, insertImage: any, files: any) => {
   // @ts-ignore
   for (const item of data.value.data) {
     insertImage({
-      url: NUXT_API_STATIC_BASE + item,
+      url: useImageUrl(item),
       desc: "",
     });
   }

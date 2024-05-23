@@ -6,7 +6,7 @@
     "dev": "node scripts/dev.cjs",
     "build": "node scripts/build.cjs",
 
-    "dev-nuxt": "nuxt dev --open --dotenv .env.development",
+    "dev-nuxt": "nuxt dev --dotenv .env.development",
     "build-nuxt": "nuxt build --dotenv .env.production",
     
     "generate": "nuxt generate",
