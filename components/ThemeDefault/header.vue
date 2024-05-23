@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-4 h-20 fixed top-0 left-0 z-20 w-full flex items-center justify-between text-4xl font-logo xl:px-20 xl:h-28"
+    class="header-1 px-4 h-20 fixed top-0 left-0 z-20 w-full flex items-center justify-between text-4xl font-logo xl:px-20 xl:h-28"
   >
     <div>
       <NuxtLink to="/">{{ appStore.siteConfig.title }}</NuxtLink>
@@ -30,7 +30,7 @@
     <div
       v-show="show"
       :class="[show ? 'h-full' : 'h-0']"
-      class="m-header fixed bg-[var(--theme-bg-color-1)] top-0 left-0 z-10 w-full overflow-hidden"
+      class="header-2 fixed bg-[var(--theme-bg-color-1)] top-0 left-0 z-10 w-full overflow-hidden"
     >
       <div class="mx-auto p-4 xl:px-20 xl:pt-36 xl:max-w-screen-xl mt-28">
         <t-input
@@ -79,6 +79,8 @@ import useDebounce from "~/utils/debounce";
 import { useWebArticleListApi } from "~/api/web/article";
 import Loading from "./loading.vue";
 
+const emits = defineEmits(["change"]);
+
 const router = useRouter();
 
 const loading = ref(false);
@@ -121,6 +123,7 @@ watch(
 watch(
   () => show.value,
   (newValue, oldValue) => {
+    emits("change", newValue);
     if (!newValue) {
       loading.value = false;
       searchText.value = "";
@@ -141,7 +144,7 @@ watch(
   background-color: #333;
 }
 
-.m-header::after {
+.header-2::after {
   content: "";
   position: absolute;
   bottom: 0;

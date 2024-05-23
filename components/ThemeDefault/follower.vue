@@ -3,6 +3,14 @@
 </template>
 
 <script setup lang="ts">
+import useDebounce from "~/utils/debounce";
+const props = defineProps({
+  parent: {
+    type: String,
+    required: true,
+  },
+});
+
 let cursor: HTMLElement | null = null;
 let mouseX = 0;
 let mouseY = 0;
@@ -22,29 +30,41 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-onMounted(() => {
-  cursor = document.querySelector("#follower");
-  animate();
-  document.addEventListener("mousemove", (event) => {
-    mouseX = event.pageX;
-    mouseY = event.pageY;
-    const contents = document.querySelectorAll("h1,h3,p,img,h2,span,a");
-    for (let i = 0; i < contents.length; i++) {
-      const content = contents[i];
+const handleMouseMove = useDebounce((event) => {
+  mouseX = event.pageX;
+  mouseY = event.pageY;
+  props.parent.split(",").map((p) => {
+    const elements = document.querySelectorAll(`${p} *`);
+    const targetElements = Array.prototype.filter.call(
+      elements,
+      function (element) {
+        return ["H1", "H3", "P", "IMG", "H2", "SPAN", "A", "INPUT"].includes(
+          element.tagName
+        );
+      }
+    );
+    for (let i = 0; i < targetElements.length; i++) {
+      const content = targetElements[i];
       const rect = content.getBoundingClientRect();
       if (
-        event.clientX > rect.left &&
-        event.clientX < rect.right &&
-        event.clientY > rect.top &&
-        event.clientY < rect.bottom
+        event.clientX > rect.left - 10 &&
+        event.clientX < rect.right + 10 &&
+        event.clientY > rect.top - 10 &&
+        event.clientY < rect.bottom + 10
       ) {
         scale = 2.4;
-        break
+        break;
       } else {
         scale = 1;
       }
     }
   });
+}, 5);
+
+onMounted(() => {
+  cursor = document.querySelector("#follower");
+  animate();
+  document.addEventListener("mousemove", handleMouseMove);
   document.addEventListener("mousedown", (event) => {
     scale = 2.4;
   });
@@ -64,7 +84,7 @@ onMounted(() => {
   border-radius: 50%;
   background-color: white;
   pointer-events: none;
-  transition: transform 550ms ease;
+  transition: transform 500ms ease;
   z-index: 1000;
   mix-blend-mode: difference;
 }

@@ -31,12 +31,11 @@
         >
       </div>
     </div>
-
     <Footer
       :title="appStore.siteConfig.title"
       v-if="appStore.siteConfig.footer"
     ></Footer>
-    <Follower></Follower>
+    <Follower parent=".home" @change="handleHeaderChange"></Follower>
   </div>
 </template>
 
@@ -50,6 +49,7 @@ import Follower from "./follower.vue";
 import useAppStore from "~/stores/appStore";
 import type Article from "~/server/models/Article";
 
+const parent = ref(".home");
 const emits = defineEmits(["itemClick", "readMoreClick"]);
 const props = defineProps({
   list: {
@@ -79,6 +79,13 @@ const props = defineProps({
 });
 
 const appStore = useAppStore();
+const handleHeaderChange = (show: boolean) => {
+  if (show) {
+    parent.value = ".header-1,.header-2";
+  } else {
+    parent.value = ".home";
+  }
+};
 </script>
 
 <style scoped></style>
