@@ -3,10 +3,9 @@ import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 import moment from "moment";
 import { ArticleStatus } from "../enum";
-import User from "./User";
-import Category from "./Category";
 
 export default class Article extends BaseModel<Article> {
+  declare categoryId: number;
   declare title: string;
   declare cover: string;
   declare content: string;
@@ -23,6 +22,7 @@ export default class Article extends BaseModel<Article> {
   public author?: string;
   public categoryTitle?: string;
   public tagList?: string;
+  public tagIdList?: string;
   public publishedAtDetails!: ArticlePublishedAtDetail;
 
   toJSON() {

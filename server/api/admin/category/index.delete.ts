@@ -3,8 +3,9 @@ import CategoryService from '@/server/service/CategoryService';
 const categoryService = new CategoryService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    defineHasAuthority(event, "category:list")
+    defineHasAuthority(event, "category:delete")
+    const ids: number[] = await readBody(event);
 
-    const result = await categoryService.getAllCategories();
-    return defineOk({ data: result });
+    await categoryService.deleteCategories(ids);
+    return defineOk({});
 });

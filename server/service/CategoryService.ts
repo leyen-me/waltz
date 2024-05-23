@@ -35,7 +35,7 @@ export default class CategoryService extends BaseService<Category> {
     async getCategoryById(categoryId: number | string): Promise<Category | null> {
         const query = `
             SELECT c.*
-            FROM t_article_category c
+            FROM t_category c
             WHERE c.id = :categoryId
         `;
 
