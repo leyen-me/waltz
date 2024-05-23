@@ -3,7 +3,7 @@ import CommentService from '@/server/service/CommentService';
 const commentService = new CommentService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    defineHasAuthority(event, "menu:delete")
+    defineHasAuthority(event, "comment:delete")
     const id: number = await readBody(event);
     const hasChildStatus = await commentService.hasChildComments(id);
     if (hasChildStatus) {

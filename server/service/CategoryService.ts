@@ -1,18 +1,18 @@
-import ArticleCategory from "~/server/models/Category";
+import Category from "~/server/models/Category";
 import BaseService from "@/server/base/BaseService";
 import { CreationAttributes } from "sequelize";
 import sequelize from "../db";
 
-export default class ArticleCategoryService extends BaseService<ArticleCategory> {
+export default class CategoryService extends BaseService<Category> {
     constructor() {
-        super(ArticleCategory);
+        super(Category);
     }
 
-    async selectPage(query: ArticleCategoryQuery): Promise<BasePageResponse<ArticleCategory>> {
+    async selectPage(query: CategoryQuery): Promise<BasePageResponse<Category>> {
         return await this.page(query);
     }
 
-    async createCategory(categoryData: CreationAttributes<ArticleCategory>): Promise<BaseCreateResponse> {
+    async createCategory(categoryData: CreationAttributes<Category>): Promise<BaseCreateResponse> {
         const createdCategoryId = await defineTransactionWrapper(async (transaction) => {
             const createdCategory = await this.create(categoryData, { transaction });
             return createdCategory.id as number;
@@ -20,7 +20,7 @@ export default class ArticleCategoryService extends BaseService<ArticleCategory>
         return createdCategoryId;
     }
 
-    async updateCategory(categoryId: number, categoryData: Partial<CreationAttributes<ArticleCategory>>): Promise<void> {
+    async updateCategory(categoryId: number, categoryData: Partial<CreationAttributes<Category>>): Promise<void> {
         await defineTransactionWrapper(async (transaction) => {
             await this.update(categoryData, { where: { id: categoryId }, transaction });
         });
@@ -32,7 +32,7 @@ export default class ArticleCategoryService extends BaseService<ArticleCategory>
         });
     }
 
-    async getCategoryById(categoryId: number | string): Promise<ArticleCategory | null> {
+    async getCategoryById(categoryId: number | string): Promise<Category | null> {
         const query = `
             SELECT c.*
             FROM t_article_category c
@@ -41,14 +41,14 @@ export default class ArticleCategoryService extends BaseService<ArticleCategory>
 
         const result = await sequelize.query(query, {
             replacements: { categoryId },
-            model: ArticleCategory,
+            model: Category,
             mapToModel: true
         });
 
         return result.length ? result[0] : null;
     }
 
-    async getAllCategories(): Promise<ArticleCategory[]> {
-        return ArticleCategory.findAll();
+    async getAllCategories(): Promise<Category[]> {
+        return Category.findAll();
     }
 }

@@ -1,6 +1,5 @@
 <template>
-  <component :is="theme" />
-  <!-- <div class="w-full p-5 xl:w-2/5 mx-auto pt-20">
+  <div class="w-full p-5 xl:w-2/5 mx-auto pt-20">
     <BaseHeader></BaseHeader>
     <ul class="grid grid-cols-1 gap-2 mt-8 xl:grid-cols-2 xl:gap-6 xl:mt-16">
       <li
@@ -50,37 +49,22 @@
         @current-change="getData"
       />
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useWebArticlePageApi } from "~/api/web/article";
 import { defaultRowsPerPageOptions } from "@/constans";
 import type Article from "~/server/models/Article";
-import useAppStore from "~/stores/appStore";
-import type { Component } from "nuxt/schema";
 const { NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
 
-const themeMap = {
-  ThemeDefault: resolveComponent("ThemeDefault"),
-  ThemeVideinfra: resolveComponent("ThemeVideinfra"),
-};
 
-definePageMeta({
-  middleware: "web-auth",
-});
 const page = ref(1);
 const limit = ref(defaultRowsPerPageOptions[0]);
 
 const total = ref(0);
 const list = ref<Article[]>([]);
 const router = useRouter();
-
-const appStore = useAppStore();
-const theme = computed(() => {
-  let t = "Theme" + appStore.siteConfig.theme;
-  return themeMap[t] ? themeMap[t] : themeMap.ThemeVideinfra;
-});
 
 const handleDetail = (v: any) => {
   router.push(`/blog/${v.id}`);
@@ -98,5 +82,5 @@ const getData = async () => {
 getData();
 
 // 请不要删除或改动下方代码
-console.log("welcome to home 001");
+console.log("welcome to home 002");
 </script>

@@ -73,7 +73,7 @@ interface ArticleQuery extends BaseQuery {
   asc?: boolean;
 }
 
-interface ArticleCategoryQuery extends BaseQuery {
+interface CategoryQuery extends BaseQuery {
   title?: string;
 }
 

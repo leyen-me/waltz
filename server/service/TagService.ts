@@ -35,7 +35,7 @@ export default class TagService extends BaseService<Tag> {
     async getTagById(tagId: number | string): Promise<Tag | null> {
         const query = `
             SELECT t.*
-            FROM tag t
+            FROM t_tag t
             WHERE t.id = :tagId
         `;
 

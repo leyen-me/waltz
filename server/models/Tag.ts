@@ -16,7 +16,7 @@ export default class Tag extends BaseModel<Tag> {
             desc: {
                 type: DataTypes.STRING({ length: 255 }),
                 allowNull: true,
-                comment: "标签标题",
+                comment: "标签描述",
             },
         };
 
