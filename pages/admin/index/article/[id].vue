@@ -123,7 +123,7 @@ const formData = ref({
   content: "",
   status: "",
   html: "",
-  categoryId: "",
+  categoryId: 0,
   tagIdList: [],
 });
 const formRules = ref({
@@ -208,7 +208,7 @@ const reset = () => {
   formData.value.cover = "";
   formData.value.content = "";
   formData.value.status = statusOptions.value[0].value;
-  formData.value.categoryId = "";
+  formData.value.categoryId = 0;
   formData.value.tagIdList = [];
 };
 
@@ -228,7 +228,9 @@ const getData = async () => {
     formData.value.content = _article.content;
     formData.value.status = _article.status;
     formData.value.categoryId = _article.categoryId;
-    formData.value.tagIdList = _article.tagIdList;
+    formData.value.tagIdList = _article.tagIdList
+      ?.split(",")
+      .map((id) => Number(id));
   } else {
     reset();
   }

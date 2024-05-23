@@ -18,10 +18,6 @@ import { defaultRowsPerPageOptions } from "@/constans";
 import type Article from "~/server/models/Article";
 import useAppStore from "~/stores/appStore";
 
-definePageMeta({
-  middleware: "web-auth",
-});
-
 const page = ref(1);
 const totalPages = ref(0);
 const limit = ref(defaultRowsPerPageOptions[0]);
