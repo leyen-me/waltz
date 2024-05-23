@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <div class="mx-auto p-4 xl:px-20 xl:pt-36 xl:max-w-screen-xl pb-40">
+  <div class="blog mx-auto p-4 xl:px-20 xl:pt-36 xl:max-w-screen-xl pb-40">
     <h3 class="text-center text-[var(--theme-text-color-2)]">
       {{ article.categoryTitle }}
     </h3>
@@ -39,7 +39,7 @@
     </p>
   </div>
 
-  <Follower></Follower>
+  <Follower parent=".blog"></Follower>
 </template>
 
 <script setup lang="ts">
