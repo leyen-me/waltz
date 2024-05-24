@@ -1,6 +1,6 @@
 <template>
   <div
-    class="home relative w-full h-full bg-[var(--theme-bg-color-1)] text-[var(--theme-text-color-1)] pt-28"
+    class="home relative w-full h-full bg-[var(--theme-bg-color-1)] text-[var(--theme-text-color-1)] pt-28 flex flex-col justify-between"
   >
     <Header></Header>
     <div class="mx-auto p-4 xl:px-20 xl:pt-36 xl:max-w-screen-xl pb-40">
@@ -14,10 +14,20 @@
         }}</span
         >!
       </h1>
-      <p id="home-title-3" class="mt-4 mb-24 text-xl opacity-80 tracking-wider">
+      <p
+        id="home-title-3"
+        class="mt-4 mb-24 text-xl opacity-80 tracking-wider font-silka-regular"
+      >
         {{ appStore.siteConfig.desc }}
       </p>
+
+      <!-- 分类 -->
       <ul class="w-full flex flex-wrap gap-2">
+        <li
+          class="rounded-full px-6 py-4 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+        >
+          分类：
+        </li>
         <li
           @click="emits('categoryClick', -1)"
           :class="active === -1 ? 'bg-white text-black' : ''"
@@ -35,7 +45,36 @@
           {{ v.title }}
         </li>
       </ul>
+
+      <!-- 标签 -->
+      <ul class="w-full flex flex-wrap gap-2 mt-2">
+        <li
+          class="rounded-full px-6 py-4 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+        >
+          标签：
+        </li>
+        <li
+          @click="emits('tagClick', -1)"
+          :class="tagActive === -1 ? 'bg-white text-black' : ''"
+          class="rounded-full px-6 py-4 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+        >
+          全部
+        </li>
+        <li
+          @click="emits('tagClick', k)"
+          :class="tagActive === k ? 'bg-white text-black' : ''"
+          class="rounded-full px-6 py-4 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+          v-for="(v, k) in tagList"
+          :key="'tag' + v.id"
+        >
+          {{ v.title }}
+        </li>
+      </ul>
+
       <List :list @click="(e:any) => emits('itemClick', e)"></List>
+
+      <p class="text-center mt-32" v-if="list.length === 0">一条博客都没有~</p>
+
       <Loading
         v-if="loading"
         style="--theme-loading-bg-color: var(--theme-bg-color-1)"
@@ -66,10 +105,16 @@ import useAppStore from "~/stores/appStore";
 import type Article from "~/server/models/Article";
 import type Category from "~/server/models/Category";
 import { gsap } from "gsap";
+import type Tag from "~/server/models/Tag";
 
 const parent = ref(".home");
 
-const emits = defineEmits(["itemClick", "readMoreClick", "categoryClick"]);
+const emits = defineEmits([
+  "itemClick",
+  "readMoreClick",
+  "categoryClick",
+  "tagClick",
+]);
 const props = defineProps({
   list: {
     type: Array<Article>,
@@ -101,6 +146,14 @@ const props = defineProps({
   },
   active: {
     type: Number,
+    required: true,
+  },
+  tagActive: {
+    type: Number,
+    required: true,
+  },
+  tagList: {
+    type: Array<Tag>,
     required: true,
   },
 });

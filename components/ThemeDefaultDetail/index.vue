@@ -2,7 +2,9 @@
   <Header></Header>
   <div class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-40 pt-36">
     <h3 class="text-center text-[var(--theme-text-color-2)]">
-      {{ article.categoryTitle }}
+      <NuxtLink :to="'/?categoryId=' + article.categoryId">{{
+        article.categoryTitle
+      }}</NuxtLink>
     </h3>
     <h1
       class="text-2xl font-bold text-center mt-16 xl:mt-16 xl:text-5xl !leading-normal tracking-wider"
@@ -37,9 +39,12 @@
     </section>
     <p
       v-if="article.tagList"
-      class="text-[var(--theme-text-color-2)] mt-4 text-sm"
+      class="text-[var(--theme-text-color-2)] mt-4 text-sm font-silka-medium"
     >
-      {{ article.tagList.split(",").join(" • ") }}
+      <span v-for="(v, k) in tagList" :key="v"
+        ><NuxtLink :to="'/?tagId=' + tagIdList[k]">{{ v }}</NuxtLink
+        ><span v-if="k !== tagList.length - 1"> • </span></span
+      >
     </p>
   </div>
 </template>
@@ -65,5 +70,8 @@ const props = defineProps({
 const browser = computed(() => process.browser);
 const article = ref<Article>(null as unknown as Article);
 const res = await useWebArticleInfoApi(props.id as unknown as number);
+// @ts-ignore
+const tagList = computed(() => article.value.tagList.split(","));
+const tagIdList = computed(() => article.value.tagIdList.split(","));
 article.value = res;
 </script>

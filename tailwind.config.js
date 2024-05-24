@@ -12,6 +12,8 @@ export default {
     fontFamily: {
       logo: ["logo"],
       time: ["time"],
+      "silka-regular": ["silka-regular"],
+      "silka-medium": ["silka-medium"],
     },
     extend: {},
   },
