@@ -50,9 +50,6 @@ dependencies:
   sequelize:
     specifier: ^6.37.3
     version: 6.37.3(mysql2@3.9.7)
-  smooth-scroll:
-    specifier: ^16.1.3
-    version: 16.1.3
   tdesign-icons-vue-next:
     specifier: ^0.2.2
     version: 0.2.2(vue@3.4.27)
@@ -7681,10 +7678,6 @@ packages:
 
   /smob@1.5.0:
     resolution: {integrity: sha512-g6T+p7QO8npa+/hNx9ohv1E5pVCmWrVCUzUXJyLdMmftX6ER0oiWY/w9knEonLpnOp6b6FenKnMfR8gqwWdwig==}
-    dev: false
-
-  /smooth-scroll@16.1.3:
-    resolution: {integrity: sha512-ca9U+neJS/cbdScTBuUTCZvUWNF2EuMCk7oAx3ImdeRK5FPm+xRo9XsVHIkeEVkn7MBRx+ufVEhyveM4ZhaTGA==}
     dev: false
 
   /snapdragon-node@2.1.1:
