@@ -1,7 +1,7 @@
 import User from '@/server/models/User';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes } from 'sequelize';
-import UserRoleService from '~/server/service/UserRoleService';
+import UserRoleService from '@/server/service/UserRoleService';
 
 export default class UserService extends BaseService<User> {
 
@@ -11,73 +11,74 @@ export default class UserService extends BaseService<User> {
         super(User);
     }
 
-    // setUserRoleService(userRoleService: UserRoleService) {
-    //     this.userRoleService = userRoleService;
-    // }
-
     async selectPage(query: UserQuery): Promise<BasePageResponse<User>> {
         return this.page(query);
     }
 
     async createUser(userData: CreationAttributes<User>): Promise<BaseCreateResponse> {
-
-        // 检查用户名是否已经存在
-        if (userData.username) {
-            const existingUserByUsername = await this.getByUsername(userData.username);
-            if (existingUserByUsername) {
-                throw new Error("用户名已存在");
+        return await defineTransactionWrapper(async (transaction) => {
+            // 检查用户名是否已经存在
+            if (userData.username) {
+                const existingUserByUsername = await this.getByUsername(userData.username);
+                if (existingUserByUsername) {
+                    throw new Error("用户名已存在");
+                }
             }
-        }
 
-        // 检查邮箱是否已经存在
-        if (userData.email) {
-            const existingUserByEmail = await this.getByEmail(userData.email);
-            if (existingUserByEmail) {
-                throw new Error("邮箱已存在");
+            // 检查邮箱是否已经存在
+            if (userData.email) {
+                const existingUserByEmail = await this.getByEmail(userData.email);
+                if (existingUserByEmail) {
+                    throw new Error("邮箱已存在");
+                }
             }
-        }
 
-        if (userData.password) {
-            userData.password = defineEncodeHash(userData.password);
-        } else {
-            userData.password = undefined;
-        }
+            if (userData.password) {
+                userData.password = defineEncodeHash(userData.password);
+            } else {
+                userData.password = undefined;
+            }
 
-        const createUser = await this.create(userData);
-        this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
-        return createUser.id as number;
+            const createUser = await this.create(userData, { transaction });
+            await this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
+            return createUser.id as number;
+        });
     }
 
     async updateUser(userId: number, userData: Partial<CreationAttributes<User>>): Promise<void> {
-
-        // 检查用户名是否已经存在
-        if (userData.username) {
-            const existingUserByUsername = await this.getByUsername(userData.username);
-            if (existingUserByUsername && existingUserByUsername.id !== userId) {
-                throw new Error("用户名已存在");
+        await defineTransactionWrapper(async (transaction) => {
+            // 检查用户名是否已经存在
+            if (userData.username) {
+                const existingUserByUsername = await this.getByUsername(userData.username);
+                if (existingUserByUsername && existingUserByUsername.id !== userId) {
+                    throw new Error("用户名已存在");
+                }
             }
-        }
 
-        // 检查邮箱是否已经存在
-        if (userData.email) {
-            const existingUserByEmail = await this.getByEmail(userData.email);
-            if (existingUserByEmail && existingUserByEmail.id !== userId) {
-                throw new Error("邮箱已存在");
+            // 检查邮箱是否已经存在
+            if (userData.email) {
+                const existingUserByEmail = await this.getByEmail(userData.email);
+                if (existingUserByEmail && existingUserByEmail.id !== userId) {
+                    throw new Error("邮箱已存在");
+                }
             }
-        }
 
-        if (userData.password) {
-            userData.password = defineEncodeHash(userData.password);
-        } else {
-            userData.password = undefined;
-        }
-
-        await this.update(userData, { where: { id: userId } });
+            if (userData.password) {
+                userData.password = defineEncodeHash(userData.password);
+            } else {
+                userData.password = undefined;
+            }
+            
+            await this.update(userData, { where: { id: userId }, transaction });
+            await this.userRoleService.saveOrUpdate(userId, userData.roleIdList);
+        });
     }
 
     async deleteUsers(userIds: number[]): Promise<void> {
-        await this.delete({ where: { id: userIds } });
-        this.userRoleService.deleteByUserIdList(userIds);
+        await defineTransactionWrapper(async (transaction) => {
+            await this.delete({ where: { id: userIds }, transaction });
+            await this.userRoleService.deleteByUserIdList(userIds);
+        });
     }
 
     async getUserById(userId: number | string): Promise<User | null> {
@@ -94,7 +95,7 @@ export default class UserService extends BaseService<User> {
     }
 
     async getByEmail(email: string): Promise<User | null> {
-        const user = await User.findOne({ where: { email: email } })
+        const user = await User.findOne({ where: { email: email } });
         return user;
     }
 }

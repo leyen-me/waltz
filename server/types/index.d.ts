@@ -68,6 +68,8 @@ interface BaseQuery {
 interface ArticleQuery extends BaseQuery {
   title?: string;
   authorId?: number;
+  categoryId?: number;
+  tagId?: number;
   status?: string;
   order?: string;
   asc?: boolean;

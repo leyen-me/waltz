@@ -21,8 +21,10 @@ export default class Article extends BaseModel<Article> {
 
   public author?: string;
   public categoryTitle?: string;
-  public tagList?: string;
+  public tagList?: number[];
   public tagIdList?: string;
+  public previouArticle?: string;
+  public nextArticle?: string;
   public publishedAtDetails!: ArticlePublishedAtDetail;
 
   toJSON() {

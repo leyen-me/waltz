@@ -16,12 +16,25 @@ export default class BaseService<T extends BaseModel<T>> {
 
         const offset = (page - 1) * limit;
 
+        // Filter out empty items from the query
+        const filteredItems = Object.fromEntries(
+            Object.entries(items).filter(([key, value]) => {
+                if (value === null || value === '' || value === undefined) {
+                    return false;
+                }
+                if (typeof value === 'number' && isNaN(value)) {
+                    return false;
+                }
+                return true;
+            })
+        );
+
         // 构建查询条件
         const options: FindAndCountOptions = {
             offset,
             limit,
             order: this.getOrderCriteria(order, asc),
-            where: items
+            where: filteredItems
         };
 
         const { rows, count } = await this.model.findAndCountAll(options);

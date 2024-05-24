@@ -20,6 +20,7 @@ export async function defineTransactionWrapper<T>(
         }
     } catch (error) {
         if (transaction) {
+            console.error("Transaction rollback due to error: ", error); // 添加日志
             await transaction.rollback();
         }
         throw error;

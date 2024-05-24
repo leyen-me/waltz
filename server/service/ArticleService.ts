@@ -18,18 +18,32 @@ export default class ArticleService extends BaseService<Article> {
     }
 
     async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
-        let { page, limit, order, asc, ...items } = query;
+        let { page, limit, order, asc, tagId, ...items } = query;
         page = Number(page);
         limit = Number(limit);
 
         const offset = (page - 1) * limit;
+
+
+        // Filter out empty items from the query
+        const filteredItems = Object.fromEntries(
+            Object.entries(items).filter(([key, value]) => {
+                if (value === null || value === '' || value === undefined) {
+                    return false;
+                }
+                if (typeof value === 'number' && isNaN(value)) {
+                    return false;
+                }
+                return true;
+            })
+        );
 
         // 构建查询条件
         const options: FindAndCountOptions = {
             offset,
             limit,
             order: [['published_at', asc ? 'ASC' : 'DESC']],
-            where: items,
+            where: filteredItems,
             attributes: [
                 'id',
                 'title',
@@ -50,6 +64,15 @@ export default class ArticleService extends BaseService<Article> {
                 'updatedAt'
             ],
         };
+
+        if (tagId) {
+            options.where = {
+                ...options.where,
+                [Op.and]: [
+                    sequelize.literal(`EXISTS (SELECT 1 FROM article_tags WHERE article_tags.article_id = Article.id AND article_tags.tag_id = ${tagId})`)
+                ]
+            };
+        }
 
 
         const { rows, count } = await Article.findAndCountAll(options);
@@ -188,6 +211,7 @@ export default class ArticleService extends BaseService<Article> {
                 u.username AS author,
                 c.title AS categoryTitle,
                 GROUP_CONCAT(DISTINCT t.title) AS tagList,
+                GROUP_CONCAT(DISTINCT at.tag_id) as tagIdList,
                 COUNT(DISTINCT f.id) AS favoritesCount,
                 COUNT(DISTINCT l.id) AS likesCount,
                 COUNT(DISTINCT cmt.id) AS commentsCount
@@ -211,6 +235,11 @@ export default class ArticleService extends BaseService<Article> {
 
         return result.length ? result[0] : null;
     }
+
+    // async getPreviousAndNextArticles(articleId: number | string): Promise<Article> {
+
+    // }
+
 
     async getAllArticles(title: string): Promise<Article[]> {
 
