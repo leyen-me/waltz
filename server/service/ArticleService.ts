@@ -24,9 +24,8 @@ export default class ArticleService extends BaseService<Article> {
 
         const offset = (page - 1) * limit;
 
-
         // Filter out empty items from the query
-        const filteredItems = Object.fromEntries(
+        let filteredItems = Object.fromEntries(
             Object.entries(items).filter(([key, value]) => {
                 if (value === null || value === '' || value === undefined) {
                     return false;
@@ -37,6 +36,16 @@ export default class ArticleService extends BaseService<Article> {
                 return true;
             })
         );
+
+
+        if (tagId) {
+            filteredItems = {
+                ...filteredItems,
+                [Op.and]: [
+                    sequelize.literal(`EXISTS (SELECT 1 FROM t_article_tag at WHERE at.article_id = Article.id AND at.tag_id = ${tagId})`)
+                ]
+            };
+        }
 
         // 构建查询条件
         const options: FindAndCountOptions = {
@@ -64,15 +73,6 @@ export default class ArticleService extends BaseService<Article> {
                 'updatedAt'
             ],
         };
-
-        if (tagId) {
-            options.where = {
-                ...options.where,
-                [Op.and]: [
-                    sequelize.literal(`EXISTS (SELECT 1 FROM article_tags WHERE article_tags.article_id = Article.id AND article_tags.tag_id = ${tagId})`)
-                ]
-            };
-        }
 
 
         const { rows, count } = await Article.findAndCountAll(options);
