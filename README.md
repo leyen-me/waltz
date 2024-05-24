@@ -12,6 +12,12 @@ This project is an open source blog system based on Nuxt.js , using Sequelize fo
 
 本项目是一个基于 Nuxt.js 的开源博客系统，采用 Sequelize 进行数据库管理，使用 TDesign 和 v-md-editor 实现界面美化和 Markdown 编辑功能。
 
+## Project Screenshot
+
+![alt 属性文本](./docs/images/1.png)
+![alt 属性文本](./docs/images/2.png)
+![alt 属性文本](./docs/images/3.png)
+
 ## Project Features
 
 - 完善的后台管理

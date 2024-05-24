@@ -5,7 +5,7 @@ export const useWebArticlePageApi = <T = BasePageResponse<Article>>(
   query: ArticleQuery
 ) => {
   return useApi<T>(
-    `/api/web/article/page?page=${query.page}&limit=${query.limit}`,
+    `/api/web/article/page?page=${query.page}&limit=${query.limit}&categoryId=${query.categoryId}`,
     {
       method: "GET",
     }

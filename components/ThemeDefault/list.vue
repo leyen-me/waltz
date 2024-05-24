@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+  <div class="grid grid-cols-1 gap-4 xl:grid-cols-2 mt-8">
     <div
       :class="k === 0 ? 'col-span-full' : ''"
       class="p-4 bg-[var(--theme-bg-color-3)] xl:p-10"
@@ -9,7 +9,7 @@
       <div class="w-full aspect-video overflow-hidden">
         <img
           @click="emits('click', v)"
-          class="w-full h-full object-cover transition duration-300 ease-in-out hover:scale-110"
+          class="w-full h-full object-cover transition duration-300 ease-in-out hover:scale-110 cursor-pointer"
           :src="useImageUrl(v.cover)"
         />
       </div>
@@ -23,7 +23,7 @@
       <div class="mt-3 relative">
         <h2
           @click="emits('click', v)"
-          class="w-full text-[var(--theme-text-color-2)] line-clamp-3 text-2xl hover:text-[var(--theme-text-color-3)] transition duration-300 ease"
+          class="w-full text-[var(--theme-text-color-2)] line-clamp-3 text-2xl hover:text-[var(--theme-text-color-3)] transition duration-300 ease cursor-pointer"
         >
           {{ v.title }}
         </h2>
@@ -46,7 +46,7 @@
         >
           <div
             data-hover="阅读"
-            class="btn relative min-w-[80px] overflow-hidden"
+            class="btn relative min-w-[80px] overflow-hidden cursor-pointer"
             @click="emits('click', v)"
           >
             <span

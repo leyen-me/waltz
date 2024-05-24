@@ -57,6 +57,23 @@
             >
           </t-radio-group>
         </t-form-item>
+        <t-form-item name="categoryId" label="分类">
+          <t-select
+            v-model="formData.categoryId"
+            :options="categoryList"
+            :keys="{ label: 'title', value: 'id' }"
+            placeholder="请选择"
+          />
+        </t-form-item>
+        <t-form-item name="tagIdList" label="标签">
+          <t-select
+            v-model="formData.tagIdList"
+            :options="tagList"
+            :keys="{ label: 'title', value: 'id' }"
+            placeholder="请选择"
+            multiple
+          />
+        </t-form-item>
       </t-form>
     </t-card>
     <div class="mt-4">
@@ -80,6 +97,10 @@ import Cookies from "js-cookie";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
 import useHasAuth from "@/utils/auth";
 import useImageUrl from "@/utils/imageUrl";
+import { useAdminTagListApi } from "~/api/admin/tag";
+import { useAdminCategoryListApi } from "~/api/admin/category";
+import type Category from "~/server/models/Category";
+import type Tag from "~/server/models/Tag";
 
 const route = useRoute();
 const uploadUrl =
@@ -90,6 +111,9 @@ const statusOptions = ref([
   { label: "发布", value: "published" },
 ]);
 
+const categoryList = ref<Category[]>([]);
+const tagList = ref<Tag[]>([]);
+
 const files = ref([]);
 const form = ref(null);
 const formData = ref({
@@ -99,9 +123,12 @@ const formData = ref({
   content: "",
   status: "",
   html: "",
+  categoryId: 0,
+  tagIdList: [],
 });
 const formRules = ref({
   title: [{ required: true, message: "文章标题必填" }],
+  categoryId: [{ required: true, message: "文章分类必填" }],
   cover: [{ required: true, message: "封面必填" }],
 });
 
@@ -109,10 +136,11 @@ const handleSubmitForm = () => {
   // @ts-ignore
   form.value.submit();
 };
+
 const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
-  formData.value.html = window.document.querySelector(
-    ".v-md-editor-preview"
-  ).outerHTML;
+  // @ts-ignore
+  let html = window.document.querySelector(".v-md-editor-preview").outerHTML;
+  formData.value.html = html;
   if (validateResult === true) {
     try {
       const res = await useAdminArticleSubmitApi(formData.value);
@@ -181,16 +209,29 @@ const reset = () => {
   formData.value.cover = "";
   formData.value.content = "";
   formData.value.status = statusOptions.value[0].value;
+  formData.value.categoryId = 0;
+  formData.value.tagIdList = [];
 };
 
 const getData = async () => {
   if (formData.value.id) {
-    const { title, cover, content, authorId, status } =
-      await useAdminArticleInfoApi(formData.value.id);
-    formData.value.title = title;
-    formData.value.cover = cover;
-    formData.value.content = content;
-    formData.value.status = status;
+    const [_tagList, _categoryList, _article] = await Promise.all([
+      useAdminTagListApi(),
+      useAdminCategoryListApi(),
+      useAdminArticleInfoApi(formData.value.id),
+    ]);
+
+    tagList.value = _tagList;
+    categoryList.value = _categoryList;
+
+    formData.value.title = _article.title;
+    formData.value.cover = _article.cover;
+    formData.value.content = _article.content;
+    formData.value.status = _article.status;
+    formData.value.categoryId = _article.categoryId;
+    formData.value.tagIdList = _article.tagIdList
+      ?.split(",")
+      .map((id) => Number(id));
   } else {
     reset();
   }

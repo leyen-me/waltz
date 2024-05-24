@@ -1,8 +1,10 @@
 <template>
   <Header></Header>
-  <div class="blog mx-auto p-4 xl:px-20 xl:pt-36 xl:max-w-screen-xl pb-40">
+  <div class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-40 pt-36">
     <h3 class="text-center text-[var(--theme-text-color-2)]">
-      {{ article.categoryTitle }}
+      <NuxtLink :to="'/?categoryId=' + article.categoryId">{{
+        article.categoryTitle
+      }}</NuxtLink>
     </h3>
     <h1
       class="text-2xl font-bold text-center mt-16 xl:mt-16 xl:text-5xl !leading-normal tracking-wider"
@@ -29,23 +31,27 @@
     <section
       class="mt-2 leading-[1.6] tracking-[0.5px] xl:leading-[1.5] text-justify"
     >
-      <div v-html="article.html"></div>
+      <!-- 服务端渲染 -->
+      <div v-if="!browser" v-html="article.html"></div>
+
+      <!-- 客户端渲染 -->
+      <BasePreview v-else v-model="article.content"></BasePreview>
     </section>
     <p
       v-if="article.tagList"
-      class="text-[var(--theme-text-color-2)] mt-4 text-sm"
+      class="text-[var(--theme-text-color-2)] mt-4 text-sm font-silka-medium"
     >
-      {{ article.tagList.split(",").join(" • ") }}
+      <span v-for="(v, k) in tagList" :key="v"
+        ><NuxtLink :to="'/?tagId=' + tagIdList[k]">{{ v }}</NuxtLink
+        ><span v-if="k !== tagList.length - 1"> • </span></span
+      >
     </p>
   </div>
-
-  <Follower parent=".blog"></Follower>
 </template>
 
 <script setup lang="ts">
 import { useWebArticleInfoApi } from "~/api/web/article";
 import Header from "../ThemeDefault/header.vue";
-import Follower from "../ThemeDefault/follower.vue";
 import type Article from "~/server/models/Article";
 import "@kangc/v-md-editor/lib/style/preview.css";
 import "@kangc/v-md-editor/lib/theme/style/vuepress.css";
@@ -53,7 +59,7 @@ import "@kangc/v-md-editor/lib/plugins/emoji/emoji.css";
 import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
 import "@kangc/v-md-editor/lib/plugins/highlight-lines/highlight-lines.css";
 import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
-import  useImageUrl  from "@/utils/imageUrl"
+import useImageUrl from "@/utils/imageUrl";
 
 const props = defineProps({
   id: {
@@ -61,7 +67,11 @@ const props = defineProps({
     required: true,
   },
 });
+const browser = computed(() => process.browser);
 const article = ref<Article>(null as unknown as Article);
 const res = await useWebArticleInfoApi(props.id as unknown as number);
+// @ts-ignore
+const tagList = computed(() => article.value.tagList.split(","));
+const tagIdList = computed(() => article.value.tagIdList.split(","));
 article.value = res;
 </script>
