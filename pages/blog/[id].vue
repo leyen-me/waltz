@@ -13,6 +13,6 @@ definePageMeta({
 });
 
 const route = useRoute();
-const id = route.params.id as string;
+const id = Number(route.params.id);
 const appStore = useAppStore();
 </script>

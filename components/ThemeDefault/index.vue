@@ -22,7 +22,7 @@
       </p>
 
       <!-- 分类 -->
-      <ul class="w-full flex flex-wrap gap-2">
+      <ul class="w-full flex flex-wrap gap-2" v-if="!tagActive">
         <li
           class="rounded-full px-6 py-4 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
         >
@@ -47,7 +47,7 @@
       </ul>
 
       <!-- 标签 -->
-      <ul class="w-full flex flex-wrap gap-2 mt-2">
+      <!-- <ul class="w-full flex flex-wrap gap-2 mt-2">
         <li
           class="rounded-full px-6 py-4 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
         >
@@ -69,7 +69,7 @@
         >
           {{ v.title }}
         </li>
-      </ul>
+      </ul> -->
 
       <List :list @click="(e:any) => emits('itemClick', e)"></List>
 

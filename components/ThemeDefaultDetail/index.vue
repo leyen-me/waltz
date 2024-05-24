@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <div class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-40 pt-36">
+  <div class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-10 pt-36">
     <h3 class="text-center text-[var(--theme-text-color-2)]">
       <NuxtLink :to="'/?categoryId=' + article.categoryId">{{
         article.categoryTitle
@@ -46,12 +46,54 @@
         ><span v-if="k !== tagList.length - 1"> • </span></span
       >
     </p>
+    <div class="flex justify-between mt-8 p-8">
+      <NuxtLink
+        :to="'/blog/' + String(adjacentInfo.previouArticle.id)"
+        class="hover:no-underline"
+        v-if="adjacentInfo.previouArticle"
+      >
+        <div
+          class="flex group flex-col border border-gray-800 border-solid p-4 rounded-md cursor-pointer hover:border-[var(--theme-text-color-2)] transition duration-500 ease"
+        >
+          <span class="text-xs" style="color: rgba(235, 235, 245, 0.6)"
+            >上一篇</span
+          ><span
+            class="max-w-60 line-clamp-1 mt-2 group-hover:text-[var(--theme-text-color-2)] transition duration-500 ease"
+            >{{ adjacentInfo.previouArticle.title }}</span
+          >
+        </div>
+      </NuxtLink>
+      <div v-else></div>
+
+      <NuxtLink
+        :to="'/blog/' + String(adjacentInfo.nextArticle.id)"
+        class="hover:no-underline"
+        v-if="adjacentInfo.nextArticle"
+      >
+        <div
+          class="flex group items-end flex-col border border-gray-800 border-solid p-4 rounded-md cursor-pointer hover:border-[var(--theme-text-color-2)] transition duration-500 ease"
+        >
+          <span class="text-xs" style="color: rgba(235, 235, 245, 0.6)"
+            >下一篇</span
+          ><span
+            class="max-w-60 line-clamp-1 mt-2 group-hover:text-[var(--theme-text-color-2)] transition duration-500 ease"
+            >{{ adjacentInfo.nextArticle.title }}</span
+          >
+        </div>
+      </NuxtLink>
+      <div v-else></div>
+    </div>
   </div>
+  <Footer :title="String(article.author)"></Footer>
 </template>
 
 <script setup lang="ts">
-import { useWebArticleInfoApi } from "~/api/web/article";
+import {
+  useWebArticleAdjacentApi,
+  useWebArticleInfoApi,
+} from "~/api/web/article";
 import Header from "../ThemeDefault/header.vue";
+import Footer from "../ThemeDefault/footer.vue";
 import type Article from "~/server/models/Article";
 import "@kangc/v-md-editor/lib/style/preview.css";
 import "@kangc/v-md-editor/lib/theme/style/vuepress.css";
@@ -63,15 +105,23 @@ import useImageUrl from "@/utils/imageUrl";
 
 const props = defineProps({
   id: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
-const browser = computed(() => process.browser);
-const article = ref<Article>(null as unknown as Article);
-const res = await useWebArticleInfoApi(props.id as unknown as number);
+
 // @ts-ignore
-const tagList = computed(() => article.value.tagList.split(","));
-const tagIdList = computed(() => article.value.tagIdList.split(","));
+const adjacentInfo = ref<Article>(null);
+const browser = computed(() => process.browser);
+
+// @ts-ignore
+const article = ref<Article>(null);
+const res = await useWebArticleInfoApi(props.id);
+const res_1 = await useWebArticleAdjacentApi(props.id, res.categoryId);
+
+// @ts-ignore
+const tagList = computed(() => article.value.tagList!.split(","));
+const tagIdList = computed(() => article.value.tagIdList!.split(","));
 article.value = res;
+adjacentInfo.value = res_1;
 </script>
