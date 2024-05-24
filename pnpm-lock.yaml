@@ -17,6 +17,9 @@ dependencies:
   bcrypt:
     specifier: ^5.1.1
     version: 5.1.1
+  gsap:
+    specifier: ^3.12.5
+    version: 3.12.5
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -47,6 +50,9 @@ dependencies:
   sequelize:
     specifier: ^6.37.3
     version: 6.37.3(mysql2@3.9.7)
+  smooth-scroll:
+    specifier: ^16.1.3
+    version: 16.1.3
   tdesign-icons-vue-next:
     specifier: ^0.2.2
     version: 0.2.2(vue@3.4.27)
@@ -4591,6 +4597,10 @@ packages:
       strip-bom-string: 1.0.0
     dev: false
 
+  /gsap@3.12.5:
+    resolution: {integrity: sha512-srBfnk4n+Oe/ZnMIOXt3gT605BX9x5+rh/prT2F1SsNJsU1XuMiP0E2aptW481OnonOGACZWBqseH5Z7csHxhQ==}
+    dev: false
+
   /gzip-size@6.0.0:
     resolution: {integrity: sha512-ax7ZYomf6jqPTQ4+XCpUGyXKHk5WweS+e05MBO4/y3WJ5RkmPXNKvX+bx1behVILVwr6JSQvZAku021CHPXG3Q==}
     engines: {node: '>=10'}
@@ -7671,6 +7681,10 @@ packages:
 
   /smob@1.5.0:
     resolution: {integrity: sha512-g6T+p7QO8npa+/hNx9ohv1E5pVCmWrVCUzUXJyLdMmftX6ER0oiWY/w9knEonLpnOp6b6FenKnMfR8gqwWdwig==}
+    dev: false
+
+  /smooth-scroll@16.1.3:
+    resolution: {integrity: sha512-ca9U+neJS/cbdScTBuUTCZvUWNF2EuMCk7oAx3ImdeRK5FPm+xRo9XsVHIkeEVkn7MBRx+ufVEhyveM4ZhaTGA==}
     dev: false
 
   /snapdragon-node@2.1.1:

@@ -2,7 +2,7 @@
   <div
     class="header-1 px-4 h-20 fixed top-0 left-0 z-20 w-full flex items-center justify-between text-4xl font-logo xl:px-20 xl:h-28"
   >
-    <div>
+    <div id="header-title">
       <NuxtLink to="/">{{ appStore.siteConfig.title }}</NuxtLink>
     </div>
     <div>
@@ -10,18 +10,8 @@
         class="relative w-12 h-12 group cursor-pointer"
         @click="show = !show"
       >
-        <div
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center transition duration-250 ease-in-out"
-          :class="[show ? 'rotate-45' : 'rotate-0']"
-        >
-          <t-icon name="remove"></t-icon>
-        </div>
-        <div
-          :class="show ? '-rotate-45' : 'rotate-0'"
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center transition duration-250 ease-in-out"
-        >
-          <t-icon name="remove"></t-icon>
-        </div>
+        <t-icon v-if="!show" name="search" size="32"></t-icon>
+        <t-icon v-else name="close" size="32"></t-icon>
       </div>
     </div>
   </div>
@@ -29,7 +19,7 @@
   <Transition name="slide">
     <div
       v-show="show"
-      :class="[show ? 'h-full' : 'h-0']"
+      :class="[show ? 'header-show h-full' : 'h-0']"
       class="header-2 fixed bg-[var(--theme-bg-color-1)] top-0 left-0 z-10 w-full overflow-hidden"
     >
       <div class="mx-auto p-4 xl:px-20 xl:pt-36 xl:max-w-screen-xl mt-28">
@@ -78,6 +68,7 @@ import useAppStore from "~/stores/appStore";
 import useDebounce from "~/utils/debounce";
 import { useWebArticleListApi } from "~/api/web/article";
 import Loading from "./loading.vue";
+import { gsap } from "gsap";
 
 const emits = defineEmits(["change"]);
 
@@ -93,6 +84,10 @@ const show = ref(false);
 const handleGoBlog = (item: Article) => {
   router.push("/blog/" + item.id);
 };
+
+onMounted(() => {
+  document.body.style.overflow = "auto";
+});
 
 const search = async () => {
   searchList.value = [];
@@ -128,6 +123,9 @@ watch(
       loading.value = false;
       searchText.value = "";
       searchList.value = [];
+      document.body.style.overflow = "auto";
+    } else {
+      document.body.style.overflow = "hidden";
     }
   }
 );
@@ -144,7 +142,7 @@ watch(
   background-color: #333;
 }
 
-.header-2::after {
+/* .header-2::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -152,5 +150,9 @@ watch(
   width: 100%;
   height: 20px;
   background-color: var(--theme-text-color-2);
+  transition: all 500ms ease;
 }
+.header-show::after {
+  height: 0px;
+} */
 </style>

@@ -123,7 +123,9 @@ html,
 body,
 #__nuxt {
   height: 100%;
-  -webkit-overflow-scrolling: touch; /* 启用滚动优化 */
+  background-color: #000000;
+  color: white;
+  -webkit-overflow-scrolling: touch;
 }
 
 @font-face {
@@ -136,13 +138,12 @@ body,
   src: url("/assets/font/time.otf");
 }
 
-/* 样式重置 */
 li {
   list-style: none;
 }
 a {
-  color: inherit; /* 使用父元素的文本颜色 */
-  text-decoration: none; /* 去除下划线 */
+  color: inherit;
+  text-decoration: none;
 }
 .v-md-editor {
   box-shadow: none !important;
@@ -160,15 +161,8 @@ a {
 }
 
 html[theme-mode="dark"] {
-  html,
-  body,
-  #__nuxt {
-    background-color: #000000;
-    color: white;
-  }
-
   .v-md-editor__left-area {
-    background-color: #2e2e2e !important;
+    background-color: #000000 !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
   }
   .v-md-editor__left-area-title {
@@ -180,9 +174,8 @@ html[theme-mode="dark"] {
 
   .v-md-editor__toolbar {
     border-color: rgba(255, 255, 255, 0.2) !important;
-    background-color: #2e2e2e !important;
+    background-color: #000000 !important;
   }
-
   .v-md-editor__toolbar-item {
     color: rgba(255, 255, 255, 0.8) !important;
   }
@@ -196,18 +189,18 @@ html[theme-mode="dark"] {
   .v-md-textarea-editor pre,
   .v-md-textarea-editor textarea {
     min-height: 80vh;
-    background-color: #2e2e2e !important;
+    background-color: #000000 !important;
     color: rgba(255, 255, 255, 0.8) !important;
   }
 
   .v-md-editor__editor-wrapper,
   .v-md-editor__preview-wrapper {
-    background-color: #2e2e2e !important;
+    background-color: #000000 !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
   }
 
   .vuepress-markdown-body {
-    background-color: #2e2e2e !important;
+    background-color: #000000 !important;
     color: white !important;
   }
 }
@@ -225,57 +218,4 @@ html[theme-mode="dark"] {
   .search-dialog .t-dialog {
     width: 50% !important;
   }
-}
-
-/* 深色模式 */
-@media (prefers-color-scheme: dark) {
-  /* html,
-  body,
-  #__nuxt {
-    background-color: #242424;
-  } */
-
-  /* .v-md-editor__left-area {
-    background-color: #2e2e2e !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-  }
-  .v-md-editor__left-area-title {
-    color: rgba(255, 255, 255, 0.8) !important;
-  }
-  .v-md-editor__toc-nav-item {
-    color: rgba(255, 255, 255, 0.8) !important;
-  }
-
-  .v-md-editor__toolbar {
-    border-color: rgba(255, 255, 255, 0.2) !important;
-    background-color: #2e2e2e !important;
-  }
-
-  .v-md-editor__toolbar-item {
-    color: rgba(255, 255, 255, 0.8) !important;
-  }
-  .v-md-editor__toolbar-item:hover {
-    background: var(--surface-section) !important;
-  }
-  .v-md-editor__toolbar-item--active {
-    background: var(--surface-section) !important;
-  }
-
-  .v-md-textarea-editor pre,
-  .v-md-textarea-editor textarea {
-    min-height: 80vh;
-    background-color: #2e2e2e !important;
-    color: rgba(255, 255, 255, 0.8) !important;
-  }
-
-  .v-md-editor__editor-wrapper,
-  .v-md-editor__preview-wrapper {
-    background-color: #2e2e2e !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-  }
-
-  .vuepress-markdown-body {
-    background-color: #2e2e2e !important;
-    color: white !important;
-  } */
 }
