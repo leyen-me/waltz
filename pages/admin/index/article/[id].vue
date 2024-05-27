@@ -1,81 +1,79 @@
 <template>
   <div>
-    <t-card title="基本信息">
-      <template #actions>
-        <t-button
-          @click="handleSubmitForm"
-          :disabled="!useHasAuth('article:save')"
-          >保存</t-button
-        >
-      </template>
-      <t-form
-        ref="form"
-        :data="formData"
-        :rules="formRules"
-        :colon="true"
-        :label-align="'top'"
-        @submit="handleSave"
-      >
-        <t-form-item name="title" label="文章标题">
-          <t-input
-            v-model="formData.title"
-            clearable
-            placeholder="请输入文章标题"
+    <t-collapse>
+      <t-collapse-panel header="基本信息">
+        <div class="pb-4">
+          <t-form
+            ref="form"
+            :data="formData"
+            :rules="formRules"
+            :colon="true"
+            :label-align="'top'"
+            @submit="handleSave"
           >
-          </t-input>
-        </t-form-item>
-        <t-form-item name="cover" label="文章封面">
-          <t-input
-            v-model="formData.cover"
-            clearable
-            placeholder="请输入文章封面"
-          >
-          </t-input>
-          <div class="ml-2">
-            <t-upload
-              name="files"
-              v-model="files"
-              :action="uploadUrl"
-              :abridge-name="[8, 6]"
-              :multiple="false"
-              theme="custom"
-              :showImageFileName="false"
-              placeholder="未选择文件"
-              :disabled="!useHasAuth('attachment:save')"
-              @success="onCoverUploadSuccess"
-              @fail="onCoverUploadError"
-            ></t-upload>
-          </div>
-        </t-form-item>
-        <t-form-item name="status" label="文章状态">
-          <t-radio-group variant="default-filled" v-model="formData.status">
-            <t-radio-button
-              :value="v.value"
-              v-for="(v, k) in statusOptions"
-              :key="v.value"
-              >{{ v.label }}</t-radio-button
-            >
-          </t-radio-group>
-        </t-form-item>
-        <t-form-item name="categoryId" label="分类">
-          <t-select
-            v-model="formData.categoryId"
-            :options="categoryList"
-            :keys="{ label: 'title', value: 'id' }"
-            placeholder="请选择"
-          />
-        </t-form-item>
-        <t-form-item name="tagIdList" label="标签">
-          <t-select
-            v-model="formData.tagIdList"
-            :options="tagList"
-            :keys="{ label: 'title', value: 'id' }"
-            placeholder="请选择"
-            multiple
-          />
-        </t-form-item>
-      </t-form>
-    </t-card>
+            <t-form-item name="title" label="文章标题">
+              <t-input
+                v-model="formData.title"
+                clearable
+                placeholder="请输入文章标题"
+              >
+              </t-input>
+            </t-form-item>
+            <t-form-item name="cover" label="文章封面">
+              <t-input
+                v-model="formData.cover"
+                clearable
+                placeholder="请输入文章封面"
+              >
+              </t-input>
+              <div class="ml-2">
+                <t-upload
+                  name="files"
+                  v-model="files"
+                  :action="uploadUrl"
+                  :abridge-name="[8, 6]"
+                  :multiple="false"
+                  theme="custom"
+                  :showImageFileName="false"
+                  placeholder="未选择文件"
+                  :disabled="!useHasAuth('attachment:save')"
+                  @success="onCoverUploadSuccess"
+                  @fail="onCoverUploadError"
+                ></t-upload>
+              </div>
+            </t-form-item>
+            <t-form-item name="categoryId" label="分类">
+              <t-select
+                v-model="formData.categoryId"
+                :options="categoryList"
+                :keys="{ label: 'title', value: 'id' }"
+                placeholder="请选择"
+              />
+            </t-form-item>
+            <t-form-item name="tagIdList" label="标签">
+              <t-select
+                v-model="formData.tagIdList"
+                :options="tagList"
+                :keys="{ label: 'title', value: 'id' }"
+                placeholder="请选择"
+                multiple
+              />
+            </t-form-item>
+            <t-form-item name="status" label="文章状态">
+              <t-radio-group variant="default-filled" v-model="formData.status">
+                <t-radio-button
+                  :value="v.value"
+                  v-for="(v, k) in statusOptions"
+                  :key="v.value"
+                  >{{ v.label }}</t-radio-button
+                >
+              </t-radio-group>
+            </t-form-item>
+          </t-form>
+        </div>
+      </t-collapse-panel>
+    </t-collapse>
+
     <div class="mt-4">
       <t-card title="文章内容">
         <BaseEditor
@@ -123,7 +121,7 @@ const formData = ref({
   content: "",
   status: "",
   html: "",
-  categoryId: 0,
+  categoryId: "",
   tagIdList: [],
 });
 const formRules = ref({
@@ -209,7 +207,7 @@ const reset = () => {
   formData.value.cover = "";
   formData.value.content = "";
   formData.value.status = statusOptions.value[0].value;
-  formData.value.categoryId = 0;
+  formData.value.categoryId = "";
   formData.value.tagIdList = [];
 };
 
@@ -233,6 +231,12 @@ const getData = async () => {
       ?.split(",")
       .map((id) => Number(id));
   } else {
+    const [_tagList, _categoryList] = await Promise.all([
+      useAdminTagListApi(),
+      useAdminCategoryListApi(),
+    ]);
+    tagList.value = _tagList;
+    categoryList.value = _categoryList;
     reset();
   }
 };

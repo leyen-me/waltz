@@ -1,5 +1,44 @@
 <template>
   <div class="w-full m-auto mt-4 xl:w-3/4 xl:mt-8">
+    <!-- 筛选 -->
+    <t-card title="检索条件">
+      <template #actions>
+        <t-button @click="getData">查询</t-button>
+      </template>
+      <t-form ref="form" :colon="true" :label-align="'left'">
+        <t-form-item label="分类">
+          <ul class="w-full flex flex-wrap gap-2">
+            <li
+              @click="categoryActive = -1"
+              :class="categoryActive === -1 ? 'bg-white text-black' : ''"
+              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+            >
+              全部
+            </li>
+            <li
+              @click="categoryActive = k"
+              :class="categoryActive === k ? 'bg-white text-black' : ''"
+              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+              v-for="(v, k) in categoryList"
+              :key="v.id"
+            >
+              {{ v.title }}
+            </li>
+          </ul>
+        </t-form-item>
+        <t-form-item name="title" label="标题">
+          <t-input
+            size="large"
+            v-model="formData.title"
+            clearable
+            placeholder="请输入文章标题或内容"
+          >
+          </t-input>
+        </t-form-item>
+      </t-form>
+    </t-card>
+
+    <!-- 新增 -->
     <div class="fixed bottom-12 right-12 z-10">
       <t-button
         shape="circle"
@@ -11,92 +50,117 @@
         <template #icon><plus-icon size="32px" /></template>
       </t-button>
     </div>
-    <div
-      v-if="list.length == 0"
-      class="flex w-full h-full items-center justify-center text-gray-500 text-sm"
-    >
-      一篇文章也没有
-    </div>
-    <ul v-else class="grid grid-cols-1 gap-2 xl:grid-cols-2 w-full">
-      <li
-        v-for="(v, k) in list"
-        :key="v.id"
-        class="w-full cursor-pointer flex relative p-4 xl:p-10 h-40 xl:h-60"
+
+    <!-- 文章 -->
+    <div class="mt-4"></div>
+    <t-card title="文章列表">
+      <div
+        v-if="list.length == 0"
+        class="flex w-full h-full items-center justify-center text-gray-500 text-sm"
       >
-        <!-- cover -->
+        一篇文章也没有
+      </div>
+
+      <div
+        class="grid grid-cols-1 gap-4 xl:grid-cols-2 mt-8"
+        style="
+          --theme-bg-color-1: #000000;
+          --theme-bg-color-2: #191a1e;
+          --theme-bg-color-3: #202020;
+          --theme-text-color-1: #ffffff;
+          --theme-text-color-2: #d7b486;
+          --theme-text-color-3: #d6a25e;
+        "
+      >
         <div
-          class="w-full h-full overflow-hidden rounded-md absolute top-0 left-0 z-0"
+          class="p-4 bg-[var(--web-bg-1)] xl:p-10 hover:bg-[var(--web-bg-6)] cursor-pointer group border border-[var(--web-border-2)] border-solid hover:border-[var(--web-border-3)] transition duration-500 ease"
+          v-for="(v, k) in list"
+          :key="v.id"
+          @click="handleGoDetail(v)"
         >
-          <img
-            class="w-full h-auto object-cover transition duration-300 ease-in-out hover:scale-110"
-            :src="useImageUrl(v.cover)"
-          />
-        </div>
-        <!-- mask -->
-        <div
-          class="w-full h-full overflow-hidden rounded-md absolute top-0 left-0 z-[1] bg-gradient-to-t from-[rgba(0,0,0,0.5)] to-[rgba(0,0,0,0)]"
-        ></div>
-        <!-- content -->
-        <div class="flex-1 w-0 flex flex-col justify-between z-20 text-white">
-          <div class="flex justify-between items-center">
-            <h2 class="font-bold text-xl flex flex-1 w-0 leading-[1] p-0 m-0">
-              <span class="line-clamp-1">{{ v.title }}</span>
-            </h2>
-            <span class="font-time opacity-65 text-sm ml-24 text-right">
-              {{ v.status === "draft" ? "未发布" : v.publishedAtDetails.week }}
-              <br />
-              {{
-                v.status === "draft"
-                  ? ""
-                  : v.publishedAtDetails.year +
-                    "-" +
-                    v.publishedAtDetails.month.number +
-                    "-" +
-                    v.publishedAtDetails.day
-              }}
+          <div class="w-full aspect-video overflow-hidden">
+            <img
+              class="w-full h-full object-cover transition duration-300 ease-in-out group-hover:scale-110"
+              :src="useImageUrl(v.cover)"
+            />
+          </div>
+          <div class="text-[var(--theme-text-color-2)] mt-10 flex">
+            <span>{{ v.categoryTitle }}</span
+            ><span class="mx-2">/</span
+            ><span
+              class="text-[var(--theme-text-color-1)] w-0 flex-1 line-clamp-1"
+            >
+              {{ v.tagList && v.tagList.split(",").join(" • ") }}
+
+              <!-- <span v-for="(j, i) in v.tagList" :key="'tag' + j"
+                ><span v-if="i !== v.tagList.length - 1"> • </span></span
+              > -->
             </span>
           </div>
-          <div class="mt-8 flex items-end">
-            <p class="line-clamp-2 flex-1 w-0 opacity-65 m-0 xl:line-clamp-3">
-              {{ v.content }}<br />
-            </p>
-            <div
-              class="ml-4 xl:ml-24"
-              style="--td-bg-color-specialcomponent: rgba(0, 0, 0, 0)"
+          <div class="mt-3 relative">
+            <h2
+              class="w-full text-[var(--theme-text-color-2)] line-clamp-3 text-2xl transition duration-300 ease cursor-pointer"
             >
-              <t-space>
+              {{ v.title }}
+            </h2>
+          </div>
+          <div class="mt-4 xl:mt-8 font-time flex justify-between items-center">
+            <div>
+              <p>Posted by {{ v.author }}</p>
+              <p>
+                {{
+                  v.publishedAtDetails
+                    ? v.publishedAtDetails.month.english +
+                      " " +
+                      v.publishedAtDetails.day +
+                      "," +
+                      v.publishedAtDetails.year
+                    : "未发布"
+                }}
+              </p>
+            </div>
+            <div
+              class="text-[var(--theme-text-color-2)] flex justify-between items-center"
+            >
+              <t-popconfirm
+                content="确认删除吗"
+                @confirm="handleDelete(v.id as number)"
+                :disabled="!useHasAuth('article:delete')"
+              >
                 <t-button
-                  @click="$router.push(`/admin/article/${v.id}`)"
-                  variant="outline"
-                  style="color: white"
-                  :disabled="!useHasAuth('article:update')"
-                  >编辑</t-button
+                  shape="rectangle"
+                  variant="text"
+                  theme="danger"
+                  @click.stop=""
+                  >删除</t-button
                 >
-                <t-popconfirm
-                  content="确认删除吗"
-                  @confirm="handleDelete(v.id as number)"
-                  :disabled="!useHasAuth('article:delete')"
-                >
-                  <t-button theme="danger" variant="outline">删除</t-button>
-                </t-popconfirm>
-              </t-space>
+              </t-popconfirm>
+              <t-button
+                shape="rectangle"
+                variant="text"
+                :disabled="!useHasAuth('article:update')"
+                >编辑</t-button
+              >
+              <div class="mr-2"></div>
+              <IconRtArrow2></IconRtArrow2>
             </div>
           </div>
         </div>
-      </li>
-    </ul>
-    <div class="mt-4">
-      <t-pagination
-        v-if="list.length > limit"
-        v-model="page"
-        v-model:pageSize="limit"
-        :total="total"
-        show-sizer
-        :page-size-options="defaultRowsPerPageOptions"
-        @page-size-change="getData"
-        @current-change="getData"
-      />
-    </div>
+      </div>
+      
+      <div class="mt-4">
+        <t-pagination
+          v-if="list.length > limit"
+          v-model="page"
+          v-model:pageSize="limit"
+          :total="total"
+          show-sizer
+          :page-size-options="defaultRowsPerPageOptions"
+          @page-size-change="getData"
+          @current-change="getData"
+        />
+      </div>
+    </t-card>
   </div>
 </template>
 
@@ -110,13 +174,33 @@ import { defaultRowsPerPageOptions } from "@/constans";
 import type Article from "@/server/models/Article";
 import useHasAuth from "@/utils/auth";
 import useImageUrl from "@/utils/imageUrl";
+import type Category from "~/server/models/Category";
+import { useAdminCategoryListApi } from "~/api/admin/category";
+import useDebounce from "~/utils/debounce";
+
+const router = useRouter();
 
 // 分页
 const page = ref(1);
 const limit = ref(defaultRowsPerPageOptions[0]);
 
+const categoryActive = ref(-1);
+const categoryList = ref<Category[]>([]);
+
 const total = ref(0);
 const list = ref<Article[]>([]);
+
+const formData = ref({
+  title: "",
+});
+
+const handleGoDetail = (article: Article) => {
+  if (!useHasAuth("article:update")) {
+    MessagePlugin.warning("没有权限");
+    return;
+  }
+  router.push(`/admin/article/${article.id}`);
+};
 
 const handleDelete = async (id: number) => {
   try {
@@ -128,14 +212,44 @@ const handleDelete = async (id: number) => {
   }
 };
 
+const getCategoryList = async () => {
+  const _categoryList = await useAdminCategoryListApi();
+  categoryList.value = _categoryList;
+};
+
 const getData = async () => {
+  const options =
+    categoryActive.value === -1
+      ? { categoryId: "" as unknown as number }
+      : {
+          categoryId: categoryList.value[categoryActive.value].id,
+        };
   const { data, meta } = await useAdminArticlePageApi({
     page: page.value,
     limit: limit.value,
+    ...options,
+    title: encodeURIComponent(formData.value.title),
   });
   list.value = data;
   total.value = meta.totalItems;
 };
 
+const handleSearch = useDebounce(getData, 500);
+
+watch(
+  () => formData.value.title,
+  () => {
+    handleSearch();
+  }
+);
+
+watch(
+  () => categoryActive.value,
+  () => {
+    getData();
+  }
+);
+
+getCategoryList();
 getData();
 </script>

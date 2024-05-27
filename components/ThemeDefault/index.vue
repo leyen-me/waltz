@@ -1,28 +1,34 @@
 <template>
   <div
-    class="home relative w-full h-full bg-[var(--theme-bg-color-1)] text-[var(--theme-text-color-1)] pt-28 flex flex-col justify-between"
+    class="home relative w-full h-full bg-[var(--web-bg-1)] text-[var(--theme-text-color-1)] pt-28 flex flex-col justify-between"
   >
     <Header></Header>
-    <div class="mx-auto p-4 xl:px-20 xl:pt-36 xl:max-w-screen-xl pb-40">
-      <h3 id="home-title-1">Blog</h3>
-      <h1 id="home-title-2" class="py-5 text-3xl xl:text-5xl">
-        Welcome to
-        <span class="text-[var(--theme-text-color-2)]">{{
-          (appStore.siteConfig.title as unknown as string)
-            .charAt(0)
-            .toUpperCase() + appStore.siteConfig.title.slice(1)
-        }}</span
-        >!
-      </h1>
-      <p
-        id="home-title-3"
-        class="mt-4 mb-24 text-xl opacity-80 tracking-wider font-silka-regular"
-      >
-        {{ appStore.siteConfig.desc }}
-      </p>
+
+    <div
+      :class="[_categoryId ? 'xl:pt-4' : 'xl:pt-36']"
+      class="w-full mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-16 xl:pb-40"
+    >
+      <div v-show="!_categoryId">
+        <h3 id="home-title-1">Blog</h3>
+        <h1 id="home-title-2" class="py-5 text-3xl xl:text-5xl">
+          Welcome to
+          <span class="text-[var(--theme-text-color-2)]">{{
+            (appStore.siteConfig.title as unknown as string)
+              .charAt(0)
+              .toUpperCase() + appStore.siteConfig.title.slice(1)
+          }}</span
+          >!
+        </h1>
+        <p
+          id="home-title-3"
+          class="mt-4 mb-24 text-xl opacity-80 tracking-wider font-silka-regular"
+        >
+          {{ appStore.siteConfig.desc }}
+        </p>
+      </div>
 
       <!-- 分类 -->
-      <ul class="w-full flex flex-wrap gap-2" v-if="!tagActive">
+      <ul class="w-full flex flex-wrap gap-2">
         <li
           class="rounded-full px-6 py-4 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
         >
@@ -75,10 +81,6 @@
 
       <p class="text-center mt-32" v-if="list.length === 0">一条博客都没有~</p>
 
-      <Loading
-        v-if="loading"
-        style="--theme-loading-bg-color: var(--theme-bg-color-1)"
-      ></Loading>
       <div class="w-full flex justify-center mt-8" v-if="page < totalPages">
         <span
           @click="emits('readMoreClick')"
@@ -100,7 +102,6 @@ import "./index.css";
 import Header from "./header.vue";
 import Footer from "./footer.vue";
 import List from "./list.vue";
-import Loading from "./loading.vue";
 import useAppStore from "~/stores/appStore";
 import type Article from "~/server/models/Article";
 import type Category from "~/server/models/Category";
@@ -140,6 +141,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  categoryId: {
+    type: Number,
+    required: true,
+  },
   categoryList: {
     type: Array<Category>,
     required: true,
@@ -159,18 +164,23 @@ const props = defineProps({
 });
 
 const appStore = useAppStore();
-const handleHeaderChange = (show: boolean) => {
-  if (show) {
-    parent.value = ".header-1,.header-2";
-  } else {
-    parent.value = ".home";
-  }
-};
+
+const route = useRoute();
+const _categoryId = ref(route.query.categoryId);
+
+onBeforeRouteUpdate((n, o) => {
+  _categoryId.value = "";
+});
 
 onMounted(() => {
-  var tl = gsap.timeline();
+  const tl = gsap.timeline();
+  const title1 = document.querySelector("#home-title-1");
+  let y = 0;
+  if (title1) {
+    y = title1.clientHeight;
+  }
   gsap.set(["#home-title-1", "#home-title-2", "#home-title-3"], {
-    y: document.querySelector("#home-title-1")!.clientHeight,
+    y,
     opacity: 0,
   });
   tl.to(["#home-title-1", "#home-title-2", "#home-title-3"], {

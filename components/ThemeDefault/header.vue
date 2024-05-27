@@ -22,25 +22,21 @@
       :class="[show ? 'header-show h-full' : 'h-0']"
       class="header-2 fixed bg-[var(--theme-bg-color-1)] top-0 left-0 z-10 w-full overflow-hidden"
     >
-      <div class="mx-auto p-4 xl:px-20 xl:pt-36 xl:max-w-screen-xl mt-28">
+      <div
+        class="mx-auto p-4 xl:px-20 pt-36 xl:max-w-screen-xl mt-2 h-full pb-32 xl:pb-40"
+      >
         <t-input
-          placeholder="请输入关键词"
+          placeholder="请输入两个以上关键词"
           clearable
           v-model="searchText"
           size="large"
         >
         </t-input>
-
-        <Loading
-          style="--theme-loading-bg-color: #191a1e"
-          v-if="loading"
-        ></Loading>
-
-        <ul class="w-full mt-4">
+        <ul class="w-full h-full mt-4 overflow-auto">
           <li
             v-for="(v, k) in searchList"
             :key="v.id"
-            class="w-full flex items-center justify-between px-8 py-6 cursor-pointer hover:bg-[#343434] rounded transition ease"
+            class="w-full flex items-center justify-between px-4 py-4 xl:px-8 xl:py-6 cursor-pointer hover:bg-[#343434] rounded transition ease"
             style="border-bottom: 1px rgba(0, 0, 0, 0.1) solid"
             @click="handleGoBlog(v)"
           >
@@ -67,8 +63,6 @@ import type Article from "~/server/models/Article";
 import useAppStore from "~/stores/appStore";
 import useDebounce from "~/utils/debounce";
 import { useWebArticleListApi } from "~/api/web/article";
-import Loading from "./loading.vue";
-import { gsap } from "gsap";
 
 const emits = defineEmits(["change"]);
 
@@ -98,7 +92,19 @@ const search = async () => {
     loading.value = true;
     const list = await useWebArticleListApi(searchText.value);
     if (list && Array.isArray(list)) {
-      searchList.value = list;
+      // searchList.value = list;
+      list.map((v) => {
+        searchList.value.push(v);
+        searchList.value.push(v);
+        searchList.value.push(v);
+        searchList.value.push(v);
+        searchList.value.push(v);
+        searchList.value.push(v);
+        searchList.value.push(v);
+        searchList.value.push(v);
+        searchList.value.push(v);
+        searchList.value.push(v);
+      });
     }
   } catch (error) {
   } finally {
