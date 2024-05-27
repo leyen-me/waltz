@@ -35,7 +35,7 @@ export default class RoleService extends BaseService<Role> {
     }
     
 
-    async getRoleById(roleId: number | string): Promise<Role | null> {
+    async getRoleById(roleId: number): Promise<Role | null> {
         return await Role.findByPk(roleId);
     }
 

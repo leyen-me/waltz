@@ -39,7 +39,7 @@ export default class MenuService extends BaseService<Menu> {
         });
     }
 
-    async getMenuById(menuId: number | string): Promise<Menu | null> {
+    async getMenuById(menuId: number): Promise<Menu | null> {
         return await Menu.findByPk(menuId);
     }
 

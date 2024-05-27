@@ -81,7 +81,7 @@ export default class UserService extends BaseService<User> {
         });
     }
 
-    async getUserById(userId: number | string): Promise<User | null> {
+    async getUserById(userId: number): Promise<User | null> {
         return await User.findByPk(userId);
     }
 

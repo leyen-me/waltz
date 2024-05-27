@@ -40,7 +40,7 @@ export default class RoleMenuService extends BaseService<RoleMenu> {
     }
 
     // 根据角色ID，获取菜单ID列表
-    async getMenuIdList(roleId: number | string): Promise<number[]> {
+    async getMenuIdList(roleId: number): Promise<number[]> {
         const roleMenus = await RoleMenu.findAll({
             where: {
                 roleId

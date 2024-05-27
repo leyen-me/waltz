@@ -32,7 +32,7 @@ export default class TagService extends BaseService<Tag> {
         });
     }
 
-    async getTagById(tagId: number | string): Promise<Tag | null> {
+    async getTagById(tagId: number): Promise<Tag | null> {
         const query = `
             SELECT t.*
             FROM t_tag t

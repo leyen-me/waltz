@@ -5,6 +5,6 @@ export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "comment:info")
 
     const { id } = getRouterParams(event);
-    const result = await commentService.getCommentById(id);
+    const result = await commentService.getCommentById(Number(id));
     return defineOk({ data: result });
 });

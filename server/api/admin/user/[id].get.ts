@@ -8,7 +8,7 @@ export default defineWrappedResponseHandler(async (event) => {
 
     const { id } = getRouterParams(event);
 
-    const result = await userService.getUserById(id);
+    const result = await userService.getUserById(Number(id));
     if (result){
         result.dataValues.roleIdList = await userRoleService.getRoleIdList(id as unknown as number);
     }

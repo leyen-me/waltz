@@ -5,6 +5,6 @@ export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "menu:info")
 
     const { id } = getRouterParams(event);
-    const result = await menuService.getMenuById(id);
+    const result = await menuService.getMenuById(Number(id));
     return defineOk({ data: result });
 });

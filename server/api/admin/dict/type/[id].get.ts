@@ -5,6 +5,6 @@ export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "dict:info")
     const { id } = getRouterParams(event);
 
-    const result = await dictTypeService.getDictTypeById(id);
+    const result = await dictTypeService.getDictTypeById(Number(id));
     return defineOk({ data: result });
 });

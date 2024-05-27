@@ -205,7 +205,7 @@ export default class ArticleService extends BaseService<Article> {
         });
     }
 
-    async getArticleById(articleId: number | string): Promise<Article | null> {
+    async getArticleById(articleId: number): Promise<Article | null> {
         const query = `
             SELECT a.*, 
                 u.username AS author,
@@ -233,12 +233,51 @@ export default class ArticleService extends BaseService<Article> {
             mapToModel: true
         });
 
+        this.updateViewsCount(articleId);
+
         return result.length ? result[0] : null;
     }
 
-    // async getPreviousAndNextArticles(articleId: number | string): Promise<Article> {
+    async getPreviousAndNextArticles(articleId: number, categoryId: number): Promise<{ previouArticle: Article | null, nextArticle: Article | null }> {
+        const currentArticle = await Article.findOne({
+            where: { id: articleId, categoryId },
+            attributes: ['id', 'title', 'sort', 'publishedAt']
+        });
 
-    // }
+        if (!currentArticle) {
+            return { previouArticle: null, nextArticle: null };
+        }
+
+        const { sort, publishedAt } = currentArticle;
+
+        const previouArticle = await Article.findOne({
+            where: {
+                categoryId,
+                [Op.or]: [
+                    { sort: { [Op.lt]: sort } },
+                    { sort: sort, publishedAt: { [Op.lt]: publishedAt } }
+                ]
+            },
+            order: [['sort', 'DESC'], ['publishedAt', 'DESC']],
+            attributes: ['id', 'title'],
+            limit: 1
+        }) as Article;
+
+        const nextArticle = await Article.findOne({
+            where: {
+                categoryId,
+                [Op.or]: [
+                    { sort: { [Op.gt]: sort } },
+                    { sort: sort, publishedAt: { [Op.gt]: publishedAt } }
+                ]
+            },
+            order: [['sort', 'ASC'], ['publishedAt', 'ASC']],
+            attributes: ['id', 'title'],
+            limit: 1
+        }) as Article;
+
+        return { previouArticle, nextArticle };
+    }
 
 
     async getAllArticles(title: string): Promise<Article[]> {

@@ -56,7 +56,7 @@ export default class AttachmentService extends BaseService<Attachment> {
         });
     }
 
-    async getAttachmentById(attachmentId: number | string): Promise<Attachment | null> {
+    async getAttachmentById(attachmentId: number): Promise<Attachment | null> {
         return await Attachment.findByPk(attachmentId);
     }
 

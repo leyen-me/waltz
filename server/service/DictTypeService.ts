@@ -33,7 +33,7 @@ export default class DictTypeService extends BaseService<DictType> {
         });
     }
 
-    async getDictTypeById(dictTypeId: number | string): Promise<DictType | null> {
+    async getDictTypeById(dictTypeId: number): Promise<DictType | null> {
         return await DictType.findByPk(dictTypeId);
     }
 

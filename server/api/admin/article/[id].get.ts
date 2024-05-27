@@ -5,6 +5,6 @@ export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "article:info")
     const { id } = getRouterParams(event);
 
-    const result = await articleService.getArticleById(id);
+    const result = await articleService.getArticleById(Number(id));
     return defineOk({ data: result });
 });

@@ -35,7 +35,7 @@ export default class DictDataService extends BaseService<DictData> {
         });
     }
 
-    async getDictDataById(dictDataId: number | string): Promise<DictData | null> {
+    async getDictDataById(dictDataId: number): Promise<DictData | null> {
         return await DictData.findByPk(dictDataId);
     }
 

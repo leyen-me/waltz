@@ -29,7 +29,7 @@ export default class SiteConfigService extends BaseService<SiteConfig> {
         });
     }
 
-    async getSiteConfigById(configId: number | string): Promise<SiteConfig | null> {
+    async getSiteConfigById(configId: number): Promise<SiteConfig | null> {
         return await SiteConfig.findByPk(configId);
     }
 

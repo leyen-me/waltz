@@ -5,6 +5,6 @@ export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "tag:info")
 
     const { id } = getRouterParams(event);
-    const result = await tagService.getTagById(id);
+    const result = await tagService.getTagById(Number(id));
     return defineOk({ data: result });
 });

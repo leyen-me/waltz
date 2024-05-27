@@ -49,7 +49,7 @@ export default class CommentService extends BaseService<Comment> {
         return count > 0;
     }
 
-    async getCommentById(commentId: number | string): Promise<Comment | null> {
+    async getCommentById(commentId: number): Promise<Comment | null> {
         const query = `
             SELECT c.*
             FROM comment c

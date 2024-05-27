@@ -32,7 +32,7 @@ export default class CategoryService extends BaseService<Category> {
         });
     }
 
-    async getCategoryById(categoryId: number | string): Promise<Category | null> {
+    async getCategoryById(categoryId: number): Promise<Category | null> {
         const query = `
             SELECT c.*
             FROM t_category c

@@ -39,7 +39,7 @@ export default class ArticleTagService extends BaseService<ArticleTag> {
     }
 
     // 根据文章ID，获取标签ID列表
-    async getTagIdList(articleId: number | string): Promise<number[]> {
+    async getTagIdList(articleId: number): Promise<number[]> {
         const articleTags = await ArticleTag.findAll({
             where: {
                 articleId
