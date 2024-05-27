@@ -6,13 +6,14 @@
       <template #logo>
         <BaseLogo></BaseLogo>
       </template>
-      <BaseMenu :menus="items" @click="(e) => emits('itemClick', e)"></BaseMenu>
+      <BaseMenu :menus="items"></BaseMenu>
     </t-menu>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { RouteLocationNormalized } from "vue-router";
+import type Menu from "~/server/models/Menu";
 
 const emits = defineEmits(["itemClick"]);
 const props = defineProps({
@@ -48,7 +49,7 @@ onBeforeRouteUpdate((to, from) => {
 });
 /**active menu */
 
-const handleClick = (path: any) => {
+const handleClick = (path: string) => {
   emits("itemClick", path);
 };
 </script>

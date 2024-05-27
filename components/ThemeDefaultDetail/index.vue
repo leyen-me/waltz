@@ -1,6 +1,8 @@
 <template>
   <Header></Header>
-  <div class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-10 pt-24 xl:pt-36">
+  <div
+    class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-10 pt-24 xl:pt-36"
+  >
     <h3 class="text-center text-[var(--theme-text-color-2)]">
       <NuxtLink :to="'/?categoryId=' + article.categoryId">{{
         article.categoryTitle
@@ -118,4 +120,8 @@ const tagList = computed(() => article.value.tagList!.split(","));
 const tagIdList = computed(() => article.value.tagIdList!.split(","));
 article.value = res;
 adjacentInfo.value = res_1;
+
+if (process.browser) {
+  window.document.title = res.author + "-" + res.title;
+}
 </script>

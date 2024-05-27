@@ -1,14 +1,14 @@
 <template>
   <t-affix @fixed-change="handleFixedChange">
     <header
-      class="flex p-5 justify-between items-center dark:text-white"
+      class="flex p-5 justify-between items-center text-white"
       :class="{
-        'bg-white shadow-md dark:bg-[#242424]': affixed,
+        'shadow-md bg-[#242424]': affixed,
         'bg-transparent shadow-none': !affixed,
       }"
     >
       <h1 class="text-4xl leading-9 font-bold cursor-pointer font-logo">
-        <NuxtLink to="/" class="dark:text-white">LEYEN</NuxtLink>
+        <NuxtLink to="/" class="text-white">LEYEN</NuxtLink>
       </h1>
       <div class="flex items-center">
         <IconSearch

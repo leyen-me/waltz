@@ -64,7 +64,7 @@
     </div>
 
     <div
-      class="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden dark:bg-[var(--surface-ground)]"
+      class="sticky top-0 z-40 flex items-center gap-x-6 px-4 py-4 shadow-sm sm:px-6 lg:hidden dark:bg-[var(--surface-ground)]"
     >
       <IconMenu class="p-[2px]" @click="sidebarOpen = true"></IconMenu>
       <span truncated class="flex-1 text-sm font-semibold leading-6">
@@ -88,16 +88,21 @@ import {
 } from "@headlessui/vue";
 import { useAdminMenuNavApi } from "@/api/admin/menu";
 import type Menu from "~/server/models/Menu";
-
+import { defineTreeToList } from "~/server/utils/nodeConvert";
 definePageMeta({
   middleware: "auth",
 });
 
 const sidebarOpen = ref(false);
 const menus = ref<Menu[]>([]);
+const menuList = ref<Menu[]>([]);
 
 const getData = async () => {
   const data = await useAdminMenuNavApi();
+
+  //@ts-ignore
+  //todo:ts语法
+  menuList.value = defineTreeToList(JSON.parse(JSON.stringify(data)));
   menus.value = data;
 };
 
@@ -108,8 +113,19 @@ if (route.path === "/admin") {
   router.replace("/admin/home");
 }
 
-const handleNavItemClick = async (url: string) => {
-  await navigateTo(url);
+const handleNavItemClick = async (path: string) => {
+  let target = "_self";
+  let menu = menuList.value.find((menu) => menu.path === path);
+  if (menu) {
+    target = menu.openStyle;
+  }
+  if (target === "_blank") {
+    await navigateTo(path, {
+      open: target,
+    });
+  } else {
+    await navigateTo(path);
+  }
   if (sidebarOpen.value) {
     sidebarOpen.value = false;
   }
