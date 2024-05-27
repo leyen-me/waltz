@@ -23,3 +23,15 @@ export const useWebArticleListApi = <T = Article[]>(title: string) => {
     method: "GET",
   });
 };
+
+export const useWebArticleAdjacentApi = <T = Article>(
+  id: number,
+  categoryId: number
+) => {
+  return useApi<T>(
+    `/api/web/article/adjacent?id=${id}&categoryId=${categoryId}`,
+    {
+      method: "GET",
+    }
+  );
+};
