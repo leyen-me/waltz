@@ -14,9 +14,14 @@ This project is an open source blog system based on Nuxt.js , using Sequelize fo
 
 ## Project Screenshot
 
-![alt 属性文本](./docs/images/1.png)
-![alt 属性文本](./docs/images/2.png)
-![alt 属性文本](./docs/images/3.png)
+![alt 属性文本](./docs/images/6.png)
+
+![alt 属性文本](./docs/images/8.png)
+
+![alt 属性文本](./docs/images/4.png)
+
+![alt 属性文本](./docs/images/5.png)
+
 
 ## Project Features
 

@@ -17,28 +17,17 @@
 <script setup>
 // 基础
 import VMdEditor from "@kangc/v-md-editor";
-import "@kangc/v-md-editor/lib/style/base-editor.css";
-
 // vuepress主题
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
-import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
-
 // 代码高亮
 import Prism from 'prismjs';
-
 // 支持表情
 import createEmojiPlugin from "@kangc/v-md-editor/lib/plugins/emoji/index";
-import "@kangc/v-md-editor/lib/plugins/emoji/emoji.css";
-
 // 支持代码行
 import createLineNumbertPlugin from "@kangc/v-md-editor/lib/plugins/line-number/index";
-
 // 支持代码高亮行
-import "@kangc/v-md-editor/lib/plugins/highlight-lines/highlight-lines.css";
 import createHighlightLinesPlugin from "@kangc/v-md-editor/lib/plugins/highlight-lines/index";
-
 // 支持复制代码
-import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
 import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
 
 const emits = defineEmits(["update:modelValue", "save"]);

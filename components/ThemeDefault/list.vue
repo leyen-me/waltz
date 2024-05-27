@@ -2,7 +2,7 @@
   <div class="grid grid-cols-1 gap-4 xl:grid-cols-2 mt-8">
     <div
       :class="k === 0 ? 'col-span-full' : ''"
-      class="p-4 bg-[var(--theme-bg-color-3)] xl:p-10"
+      class="p-4 bg-[var(--web-bg-2)] xl:p-10"
       v-for="(v, k) in list"
       :key="v.id"
     >

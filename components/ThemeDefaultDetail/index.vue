@@ -1,6 +1,8 @@
 <template>
   <Header></Header>
-  <div class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-10 pt-36">
+  <div
+    class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-10 pt-24 xl:pt-36"
+  >
     <h3 class="text-center text-[var(--theme-text-color-2)]">
       <NuxtLink :to="'/?categoryId=' + article.categoryId">{{
         article.categoryTitle
@@ -58,7 +60,7 @@
           <span class="text-xs" style="color: rgba(235, 235, 245, 0.6)"
             >上一篇</span
           ><span
-            class="max-w-60 line-clamp-1 mt-2 group-hover:text-[var(--theme-text-color-2)] transition duration-500 ease"
+            class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--theme-text-color-2)] transition duration-500 ease"
             >{{ adjacentInfo.previouArticle.title }}</span
           >
         </div>
@@ -76,7 +78,7 @@
           <span class="text-xs" style="color: rgba(235, 235, 245, 0.6)"
             >下一篇</span
           ><span
-            class="max-w-60 line-clamp-1 mt-2 group-hover:text-[var(--theme-text-color-2)] transition duration-500 ease"
+            class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--theme-text-color-2)] transition duration-500 ease"
             >{{ adjacentInfo.nextArticle.title }}</span
           >
         </div>
@@ -95,12 +97,6 @@ import {
 import Header from "../ThemeDefault/header.vue";
 import Footer from "../ThemeDefault/footer.vue";
 import type Article from "~/server/models/Article";
-import "@kangc/v-md-editor/lib/style/preview.css";
-import "@kangc/v-md-editor/lib/theme/style/vuepress.css";
-import "@kangc/v-md-editor/lib/plugins/emoji/emoji.css";
-import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
-import "@kangc/v-md-editor/lib/plugins/highlight-lines/highlight-lines.css";
-import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
 import useImageUrl from "@/utils/imageUrl";
 
 const props = defineProps({
@@ -124,4 +120,8 @@ const tagList = computed(() => article.value.tagList!.split(","));
 const tagIdList = computed(() => article.value.tagIdList!.split(","));
 article.value = res;
 adjacentInfo.value = res_1;
+
+if (process.browser) {
+  window.document.title = res.author + "-" + res.title;
+}
 </script>

@@ -56,6 +56,8 @@ const loading = ref(false);
 
 const appStore = useAppStore();
 
+window.document.title = "Welcome to " + appStore.siteConfig.title || "Hello Nuxt!"
+
 const handleDetail = (v: any) => {
   router.push(`/blog/${v.id}`);
 };

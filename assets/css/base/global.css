@@ -1,0 +1,66 @@
+html,
+body,
+#__nuxt {
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+@font-face {
+  font-family: "Logo";
+  src: url("/assets/font/logo.ttf");
+}
+
+@font-face {
+  font-family: "Time";
+  src: url("/assets/font/time.otf");
+}
+
+@font-face {
+  font-family: "silka-regular";
+  src: url("/assets/font/silka-regular-webfont.ttf");
+}
+
+@font-face {
+  font-family: "silka-medium";
+  src: url("/assets/font/silka-medium-webfont.ttf");
+}
+
+li {
+  list-style: none;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.v-md-editor {
+  box-shadow: none !important;
+}
+.github-markdown-body img {
+  width: 100%;
+}
+
+/* 手机端隐藏 */
+.v-md-editor__preview-wrapper {
+  display: none;
+}
+.v-md-editor__toolbar-right-wrapper {
+  display: none;
+}
+
+/* 电脑端显示 */
+@media (min-width: 1280px) {
+  .v-md-editor__preview-wrapper {
+    display: block;
+  }
+
+  .v-md-editor__toolbar-right-wrapper {
+    display: block;
+  }
+
+  .search-dialog .t-dialog {
+    width: 50% !important;
+  }
+}
