@@ -7,6 +7,8 @@ export default class Menu extends BaseModel<Menu> {
     declare path: string;
     declare title: string;
     declare icon: string;
+    declare type: "menu" | "button" | "interface";
+    declare openStyle: "_self" | "_blank";
     declare authority: string;
     declare sort: number;
 
@@ -41,6 +43,11 @@ export default class Menu extends BaseModel<Menu> {
                 type: DataTypes.ENUM({ values: ["menu", "button", "interface"] }),
                 allowNull: false,
                 comment: '菜单类型',
+            },
+            openStyle: {
+                type: DataTypes.ENUM({ values: ["_self", "_blank"] }),
+                allowNull: false,
+                comment: '打开方式',
             },
             authority: {
                 type: DataTypes.STRING({ length: 20 }),

@@ -21,7 +21,7 @@ export default class Article extends BaseModel<Article> {
 
   public author?: string;
   public categoryTitle?: string;
-  public tagList?: number[];
+  public tagList?: string[];
   public tagIdList?: string;
   public publishedAtDetails!: ArticlePublishedAtDetail;
 

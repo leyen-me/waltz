@@ -48,7 +48,18 @@ export default class MenuService extends BaseService<Menu> {
         if (user.get("superAdmin") === 1) {
             // 如果用户是超级管理员，并且有传入类型条件，添加类型条件限制
             let query = `  
-            SELECT m.*  
+            SELECT 
+                m.id,
+                m.pid,
+                m.path,
+                m.title,
+                m.icon,
+                m.type,
+                m.open_style AS openStyle,
+                m.authority,
+                m.sort,
+                DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i:%S') AS createdAt,
+                DATE_FORMAT(m.updated_at, '%Y-%m-%d %H:%i:%S') AS updatedAt
             FROM t_menu m`;
 
             const replacements: { [key: string]: any } = {};
@@ -70,11 +81,22 @@ export default class MenuService extends BaseService<Menu> {
         } else {
             // 构建 SQL 查询语句  
             let query = `  
-                SELECT m.*  
-                FROM t_menu m  
-                JOIN t_role_menu rm ON m.id = rm.menu_id  
-                JOIN t_user_role ur ON rm.role_id = ur.role_id  
-                WHERE ur.user_id = :userId`;
+            SELECT 
+                m.id,
+                m.pid,
+                m.path,
+                m.title,
+                m.icon,
+                m.type,
+                m.open_style AS openStyle,
+                m.authority,
+                m.sort,
+                DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i:%S') AS createdAt,
+                DATE_FORMAT(m.updated_at, '%Y-%m-%d %H:%i:%S') AS updatedAt
+            FROM t_menu m  
+            JOIN t_role_menu rm ON m.id = rm.menu_id  
+            JOIN t_user_role ur ON rm.role_id = ur.role_id  
+            WHERE ur.user_id = :userId`;
 
             const replacements: { [key: string]: any } = { userId: user.id };
 
@@ -112,7 +134,18 @@ export default class MenuService extends BaseService<Menu> {
         } else {
             // 构建 SQL 查询语句  
             const query = `  
-                SELECT m.*  
+                SELECT 
+                    m.id,
+                    m.pid,
+                    m.path,
+                    m.title,
+                    m.icon,
+                    m.type,
+                    m.open_style AS openStyle,
+                    m.authority,
+                    m.sort,
+                    DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i:%S') AS createdAt,
+                    DATE_FORMAT(m.updated_at, '%Y-%m-%d %H:%i:%S') AS updatedAt 
                 FROM t_menu m  
                 JOIN t_role_menu rm ON m.id = rm.menu_id  
                 JOIN t_user_role ur ON rm.role_id = ur.role_id  

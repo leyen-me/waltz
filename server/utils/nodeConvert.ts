@@ -9,7 +9,6 @@ export const defineListToTree = <K, T extends { [key: string]: any }>(list: T[],
             pid: item.pid as K,
             children: []
         }
-        // 从 Menu 对象中取出所需的属性
         m = { ...m, ...item }
         map.set(nodeId, m);
     });
