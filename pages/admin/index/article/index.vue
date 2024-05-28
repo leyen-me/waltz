@@ -67,9 +67,8 @@
           --theme-bg-color-1: #000000;
           --theme-bg-color-2: #191a1e;
           --theme-bg-color-3: #202020;
-          --theme-text-color-1: #ffffff;
-          --theme-text-color-2: #d7b486;
-          --theme-text-color-3: #d6a25e;
+          --web-color-7: #d7b486;
+          --web-color-8: #d6a25e;
         "
       >
         <div
@@ -84,22 +83,18 @@
               :src="useImageUrl(v.cover)"
             />
           </div>
-          <div class="text-[var(--theme-text-color-2)] mt-10 flex">
+          <div class="text-[var(--web-color-7)] mt-10 flex">
             <span>{{ v.categoryTitle }}</span
             ><span class="mx-2">/</span
             ><span
-              class="text-[var(--theme-text-color-1)] w-0 flex-1 line-clamp-1"
+              class="text-[var(--web-color-1)] w-0 flex-1 line-clamp-1"
             >
-              {{ v.tagList && v.tagList.split(",").join(" • ") }}
-
-              <!-- <span v-for="(j, i) in v.tagList" :key="'tag' + j"
-                ><span v-if="i !== v.tagList.length - 1"> • </span></span
-              > -->
+              {{ v.tagList && String(v.tagList).split(",").join(" • ") }}
             </span>
           </div>
           <div class="mt-3 relative">
             <h2
-              class="w-full text-[var(--theme-text-color-2)] line-clamp-3 text-2xl transition duration-300 ease cursor-pointer"
+              class="w-full text-[var(--web-color-7)] line-clamp-3 text-2xl transition duration-300 ease cursor-pointer"
             >
               {{ v.title }}
             </h2>
@@ -120,7 +115,7 @@
               </p>
             </div>
             <div
-              class="text-[var(--theme-text-color-2)] flex justify-between items-center"
+              class="text-[var(--web-color-7)] flex justify-between items-center"
             >
               <t-popconfirm
                 content="确认删除吗"

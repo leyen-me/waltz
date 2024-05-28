@@ -31,9 +31,7 @@
 
 <script setup lang="ts">
 import type { SubmitContext } from "tdesign-vue-next/es/form";
-import Cookies from "js-cookie";
 import { useAdminTagInfoApi, useAdminTagSubmitApi } from "@/api/admin/tag";
-import type Tag from "@/server/models/Tag";
 import useHasAuth from "@/utils/auth";
 
 const route = useRoute();

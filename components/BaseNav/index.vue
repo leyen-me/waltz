@@ -12,8 +12,8 @@
 </template>
 
 <script setup lang="ts">
+import type { MenuValue } from "tdesign-vue-next/es/menu";
 import type { RouteLocationNormalized } from "vue-router";
-import type Menu from "~/server/models/Menu";
 
 const emits = defineEmits(["itemClick"]);
 const props = defineProps({
@@ -24,9 +24,7 @@ const props = defineProps({
 });
 
 const route = useRoute();
-const router = useRouter();
 
-/**active menu */
 const getPath = (to: RouteLocationNormalized) => {
   let path = "";
   const { id } = to.params;
@@ -40,16 +38,14 @@ const getPath = (to: RouteLocationNormalized) => {
   return path;
 };
 
-const menuActive = ref(getPath(route));
+const handleClick = (path: MenuValue) => {
+  emits("itemClick", path);
+};
 
+const menuActive = ref(getPath(route));
 onBeforeRouteUpdate((to, from) => {
   nextTick(() => {
     menuActive.value = getPath(to);
   });
 });
-/**active menu */
-
-const handleClick = (path: string) => {
-  emits("itemClick", path);
-};
 </script>

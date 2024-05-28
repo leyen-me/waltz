@@ -152,6 +152,7 @@ const getData = async () => {
 const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
   if (validateResult === true) {
     try {
+      // @ts-ignore
       const res = await useAdminMenuSubmitApi(formData.value);
       MessagePlugin.success("保存成功");
       router.back();

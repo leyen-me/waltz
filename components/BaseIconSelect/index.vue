@@ -3,7 +3,7 @@
     :value="modelValue"
     :popup-visible="popupVisible"
     :popup-props="{ overlayInnerStyle: { padding: '6px' } }"
-    placeholder="请输入"
+    placeholder="请选择"
     clearable
     @clear="handleClear"
     @popup-visible-change="(e) => (popupVisible = e)"

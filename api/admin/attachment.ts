@@ -1,6 +1,5 @@
 import useApi from "@/utils/api";
 import type Attachment from "~/server/models/Attachment";
-import type Role from "~/server/models/Role";
 
 export const useAdminAttachmentPageApi = <T = BasePageResponse<Attachment>>(
   query: any

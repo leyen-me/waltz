@@ -1,6 +1,6 @@
 <template>
   <div
-    class="home relative w-full h-full bg-[var(--web-bg-1)] text-[var(--theme-text-color-1)] pt-28 flex flex-col justify-between"
+    class="home relative w-full h-full bg-[var(--web-bg-1)] text-[var(--web-color-1)] pt-28 flex flex-col justify-between"
   >
     <Header></Header>
 
@@ -12,7 +12,7 @@
         <h3 id="home-title-1">Blog</h3>
         <h1 id="home-title-2" class="py-5 text-3xl xl:text-5xl">
           Welcome to
-          <span class="text-[var(--theme-text-color-2)]">{{
+          <span class="text-[var(--web-color-7)]">{{
             (appStore.siteConfig.title as unknown as string)
               .charAt(0)
               .toUpperCase() + appStore.siteConfig.title.slice(1)
@@ -98,7 +98,6 @@
 </template>
 
 <script setup lang="ts">
-import "./index.css";
 import Header from "./header.vue";
 import Footer from "./footer.vue";
 import List from "./list.vue";
@@ -107,8 +106,6 @@ import type Article from "~/server/models/Article";
 import type Category from "~/server/models/Category";
 import { gsap } from "gsap";
 import type Tag from "~/server/models/Tag";
-
-const parent = ref(".home");
 
 const emits = defineEmits([
   "itemClick",

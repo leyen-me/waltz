@@ -3,7 +3,7 @@
   <div
     class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-10 pt-24 xl:pt-36"
   >
-    <h3 class="text-center text-[var(--theme-text-color-2)]">
+    <h3 class="text-center text-[var(--web-color-7)]">
       <NuxtLink :to="'/?categoryId=' + article.categoryId">{{
         article.categoryTitle
       }}</NuxtLink>
@@ -16,7 +16,7 @@
 
     <p class="text-center font-time mt-8">
       发布
-      <span class="text-[var(--theme-text-color-2)]">{{ article.author }}</span>
+      <span class="text-[var(--web-color-7)]">{{ article.author }}</span>
       • 更新于
       {{ article.publishedAtDetails.month.english }}
       {{ article.publishedAtDetails.day }},
@@ -41,7 +41,7 @@
     </section>
     <p
       v-if="article.tagList"
-      class="text-[var(--theme-text-color-2)] mt-4 text-sm font-silka-medium"
+      class="text-[var(--web-color-7)] mt-4 text-sm font-silka-medium"
     >
       <span v-for="(v, k) in tagList" :key="v"
         ><NuxtLink :to="'/?tagId=' + tagIdList[k]">{{ v }}</NuxtLink
@@ -55,12 +55,12 @@
         v-if="adjacentInfo.previouArticle"
       >
         <div
-          class="flex group flex-col border border-gray-800 border-solid p-4 rounded-md cursor-pointer hover:border-[var(--theme-text-color-2)] transition duration-500 ease"
+          class="flex group flex-col border border-gray-800 border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
         >
           <span class="text-xs" style="color: rgba(235, 235, 245, 0.6)"
             >上一篇</span
           ><span
-            class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--theme-text-color-2)] transition duration-500 ease"
+            class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--web-color-7)] transition duration-500 ease"
             >{{ adjacentInfo.previouArticle.title }}</span
           >
         </div>
@@ -73,12 +73,12 @@
         v-if="adjacentInfo.nextArticle"
       >
         <div
-          class="flex group items-end flex-col border border-gray-800 border-solid p-4 rounded-md cursor-pointer hover:border-[var(--theme-text-color-2)] transition duration-500 ease"
+          class="flex group items-end flex-col border border-gray-800 border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
         >
           <span class="text-xs" style="color: rgba(235, 235, 245, 0.6)"
             >下一篇</span
           ><span
-            class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--theme-text-color-2)] transition duration-500 ease"
+            class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--web-color-7)] transition duration-500 ease"
             >{{ adjacentInfo.nextArticle.title }}</span
           >
         </div>

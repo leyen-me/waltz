@@ -13,17 +13,17 @@
           :src="useImageUrl(v.cover)"
         />
       </div>
-      <div class="text-[var(--theme-text-color-2)] mt-10">
+      <div class="text-[var(--web-color-7)] mt-10 flex">
         <span>{{ v.categoryTitle }}</span
-        ><span class="mx-2">•</span
-        ><span class="text-[var(--theme-text-color-1)]"
-          >#{{ String(v.sort).padStart(3, "0") }}</span
-        >
+        ><span class="mx-2" v-if="v.tagList">/</span
+        ><span class="text-[var(--web-color-1)] w-0 flex-1 line-clamp-1 text-sm">
+          {{ v.tagList && String(v.tagList).split(",").join(" • ") }}
+        </span>
       </div>
       <div class="mt-3 relative">
         <h2
           @click="emits('click', v)"
-          class="w-full text-[var(--theme-text-color-2)] line-clamp-3 text-2xl hover:text-[var(--theme-text-color-3)] transition duration-300 ease cursor-pointer"
+          class="w-full text-[var(--web-color-7)] line-clamp-3 text-2xl hover:text-[var(--web-color-8)] transition duration-300 ease cursor-pointer"
         >
           {{ v.title }}
         </h2>
@@ -42,7 +42,7 @@
           </p>
         </div>
         <div
-          class="text-[var(--theme-text-color-2)] flex justify-between items-center"
+          class="text-[var(--web-color-7)] flex justify-between items-center"
         >
           <div
             data-hover="阅读"

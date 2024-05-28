@@ -60,7 +60,6 @@ import useDebounce from "@/utils/debounce";
 import type SiteConfig from "~/server/models/SiteConfig";
 import useAppStore from "~/stores/appStore";
 
-const router = useRouter();
 const appStore = useAppStore();
 
 const list = ref<SiteConfig[]>([]);
@@ -75,7 +74,6 @@ const save = async ({ id, key, value }: SiteConfig) => {
       id,
       value,
     });
-    // getData();
     MessagePlugin.success("修改成功");
   } catch (error) {
     MessagePlugin.error("修改失败");

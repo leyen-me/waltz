@@ -31,7 +31,6 @@
 
 <script setup lang="ts">
 import type { SubmitContext } from "tdesign-vue-next/es/form";
-import Cookies from "js-cookie";
 import {
   useAdminCategoryInfoApi,
   useAdminCategorySubmitApi,

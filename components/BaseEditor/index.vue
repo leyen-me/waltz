@@ -5,32 +5,52 @@
     :rightToolbar
     height="auto"
     :autofocus="true"
-    @save="emits('save')"
     placeholder="文章内容"
     :disabled-menus="[]"
-    @upload-image="
-      (event, insertImage, files) => emits('upload', event, insertImage, files)
-    "
+    @save="emits('save')"
+    @upload-image="(event:any, insertImage:any, files:any) => emits('upload', event, insertImage, files)"
   ></v-md-editor>
 </template>
 
-<script setup>
-// 基础
+<script setup lang="ts">
+/**
+ * base
+ * 基础
+ */
 import VMdEditor from "@kangc/v-md-editor";
-// vuepress主题
-import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
-// 代码高亮
-import Prism from 'prismjs';
-// 支持表情
+/**
+ * vuepress theme
+ * vuepress 主题
+ */
+import vuepressTheme from "@kangc/v-md-editor/lib/theme/vuepress.js";
+/**
+ * Code Highlighting
+ * 代码高亮
+ */
+import Prism from "prismjs";
+/**
+ * emoji
+ * 表情
+ */
 import createEmojiPlugin from "@kangc/v-md-editor/lib/plugins/emoji/index";
-// 支持代码行
+/**
+ * Show code line
+ * 显示代码行
+ */
 import createLineNumbertPlugin from "@kangc/v-md-editor/lib/plugins/line-number/index";
-// 支持代码高亮行
+/**
+ * Line of Code Highlighting
+ * 代码行高亮
+ */
 import createHighlightLinesPlugin from "@kangc/v-md-editor/lib/plugins/highlight-lines/index";
-// 支持复制代码
+
+/**
+ * Copy Code
+ * 复制代码
+ */
 import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
 
-const emits = defineEmits(["update:modelValue", "save"]);
+const emits = defineEmits(["update:modelValue", "save", "upload"]);
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -42,9 +62,13 @@ const props = defineProps({
 
 VMdEditor.use(vuepressTheme, {
   Prism,
-  extend(md) {
-    // md为 markdown-it 实例，可以在此处进行修改配置,并使用 plugin 进行语法扩展
-    // md.set(option).use(plugin);
+  extend(md: any) {
+    /**
+     * md is an instance of markdown-it, where you can modify the configuration and use the plugin to extend the syntax.
+     *
+     * md为 markdown-it 实例，可以在此处进行修改配置,并使用 plugin 进行语法扩展
+     * md.set(option).use(plugin);
+     */
   },
 });
 VMdEditor.use(createEmojiPlugin());

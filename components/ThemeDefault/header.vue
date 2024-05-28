@@ -20,7 +20,7 @@
     <div
       v-show="show"
       :class="[show ? 'header-show h-full' : 'h-0']"
-      class="header-2 fixed bg-[var(--theme-bg-color-1)] top-0 left-0 z-10 w-full overflow-hidden"
+      class="header-2 fixed bg-[var(--web-bg-1)] top-0 left-0 z-10 w-full overflow-hidden"
     >
       <div
         class="mx-auto p-4 xl:px-20 pt-36 xl:max-w-screen-xl mt-2 h-full pb-32 xl:pb-40"
@@ -36,8 +36,7 @@
           <li
             v-for="(v, k) in searchList"
             :key="v.id"
-            class="w-full flex items-center justify-between px-4 py-4 xl:px-8 xl:py-6 cursor-pointer hover:bg-[#343434] rounded transition ease"
-            style="border-bottom: 1px rgba(0, 0, 0, 0.1) solid"
+            class="w-full flex items-center justify-between px-4 py-4 xl:px-8 xl:py-6 cursor-pointer hover:bg-[var(--web-bg-7)] rounded transition ease"
             @click="handleGoBlog(v)"
           >
             <div class="w-0 flex-1">
@@ -92,19 +91,7 @@ const search = async () => {
     loading.value = true;
     const list = await useWebArticleListApi(searchText.value);
     if (list && Array.isArray(list)) {
-      // searchList.value = list;
-      list.map((v) => {
-        searchList.value.push(v);
-        searchList.value.push(v);
-        searchList.value.push(v);
-        searchList.value.push(v);
-        searchList.value.push(v);
-        searchList.value.push(v);
-        searchList.value.push(v);
-        searchList.value.push(v);
-        searchList.value.push(v);
-        searchList.value.push(v);
-      });
+      searchList.value = list;
     }
   } catch (error) {
   } finally {
@@ -147,18 +134,4 @@ watch(
   height: 0;
   background-color: #333;
 }
-
-/* .header-2::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 20px;
-  background-color: var(--theme-text-color-2);
-  transition: all 500ms ease;
-}
-.header-show::after {
-  height: 0px;
-} */
 </style>

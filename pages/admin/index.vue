@@ -121,6 +121,7 @@ const handleNavItemClick = async (path: string) => {
   }
   if (target === "_blank") {
     await navigateTo(path, {
+      // @ts-ignore
       open: target,
     });
   } else {

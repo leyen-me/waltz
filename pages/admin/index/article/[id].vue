@@ -99,6 +99,7 @@ import { useAdminTagListApi } from "~/api/admin/tag";
 import { useAdminCategoryListApi } from "~/api/admin/category";
 import type Category from "~/server/models/Category";
 import type Tag from "~/server/models/Tag";
+import type Article from "~/server/models/Article";
 
 const route = useRoute();
 const uploadUrl =
@@ -114,14 +115,18 @@ const tagList = ref<Tag[]>([]);
 
 const files = ref([]);
 const form = ref(null);
-const formData = ref({
+const formData = ref<Article>({
   id: Number(route.params.id),
   title: "",
   cover: "",
   content: "",
   status: "",
   html: "",
+
+  // @ts-ignore
   categoryId: "",
+
+  // @ts-ignore
   tagIdList: [],
 });
 const formRules = ref({
@@ -207,7 +212,10 @@ const reset = () => {
   formData.value.cover = "";
   formData.value.content = "";
   formData.value.status = statusOptions.value[0].value;
+
+  // @ts-ignore
   formData.value.categoryId = "";
+  // @ts-ignore
   formData.value.tagIdList = [];
 };
 
@@ -227,6 +235,8 @@ const getData = async () => {
     formData.value.content = _article.content;
     formData.value.status = _article.status;
     formData.value.categoryId = _article.categoryId;
+
+    // @ts-ignore
     formData.value.tagIdList = _article.tagIdList
       ?.split(",")
       .map((id) => Number(id));

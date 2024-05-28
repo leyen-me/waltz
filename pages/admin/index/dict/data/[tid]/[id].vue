@@ -45,12 +45,10 @@
 
 <script setup lang="ts">
 import type { SubmitContext } from "tdesign-vue-next/es/form";
-import Cookies from "js-cookie";
 import {
   useAdminDictDataSubmitApi,
   useAdminDictDataInfo,
 } from "@/api/admin/dict";
-import type Role from "@/server/models/Role";
 import useHasAuth from "@/utils/auth";
 
 const route = useRoute();
@@ -81,7 +79,7 @@ const formData = ref<{
   value: string;
   labelClass: string;
   remark: string;
-  sort: string;
+  sort: number;
 }>({
   id: Number(route.params.id),
   typeId: Number(route.params.tid),

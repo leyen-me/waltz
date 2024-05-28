@@ -24,11 +24,7 @@
             <t-input v-model="formData.dictName" clearable> </t-input>
           </t-form-item>
           <t-form-item name="remark" label="备注">
-            <t-input
-              v-model="formData.remark"
-              clearable
-              type="textarea"
-            ></t-input>
+            <t-input v-model="formData.remark" clearable></t-input>
           </t-form-item>
           <t-form-item name="sort" label="排序">
             <t-input v-model="formData.sort" clearable type="number"> </t-input>
@@ -61,14 +57,12 @@
 
 <script setup lang="tsx">
 import type { SubmitContext } from "tdesign-vue-next/es/form";
-import Cookies from "js-cookie";
 import {
   useAdminDictTypeInfo,
   useAdminDictTypeSubmitApi,
   useAdminDictDataListApi,
   useAdminDictDataDeleteApi,
 } from "@/api/admin/dict";
-import type Role from "@/server/models/Role";
 import useHasAuth from "@/utils/auth";
 
 const route = useRoute();
@@ -79,7 +73,7 @@ const formData = ref<{
   dictType: string;
   dictName: string;
   remark: string;
-  sort: string;
+  sort: number;
 }>({
   id: Number(route.params.id),
   dictType: "",
@@ -106,6 +100,8 @@ const getData = async () => {
     formData.value.sort = sort;
 
     const _list = await useAdminDictDataListApi(formData.value.id);
+
+    // @ts-ignore
     list.value = _list;
   }
 };

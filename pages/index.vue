@@ -49,21 +49,22 @@ const list = ref<Article[]>([]);
 const route = useRoute();
 const router = useRouter();
 
-const categoryId = ref(route.query.categoryId as string);
-const tagId = ref(route.query.tagId as string);
+const categoryId = ref<number>(Number(route.query.categoryId) || 0);
+const tagId = ref<number>(Number(route.query.tagId) || 0);
 
 const loading = ref(false);
 
 const appStore = useAppStore();
 
-window.document.title = "Welcome to " + appStore.siteConfig.title || "Hello Nuxt!"
+window.document.title =
+  "Welcome to " + appStore.siteConfig.title || "Hello Nuxt!";
 
 const handleDetail = (v: any) => {
   router.push(`/blog/${v.id}`);
 };
 
 const handleCategoryClick = (k: number) => {
-  categoryId.value = ""
+  categoryId.value = 0;
   totalPages.value = 0;
   total.value = 0;
   list.value = [];
@@ -72,7 +73,7 @@ const handleCategoryClick = (k: number) => {
 };
 
 const handleTagClick = (k: number) => {
-  tagId.value = ""
+  tagId.value = 0;
   totalPages.value = 0;
   total.value = 0;
   list.value = [];
@@ -92,12 +93,12 @@ const getData = async () => {
         categoryId: categoryId.value
           ? categoryId.value
           : active.value === -1
-          ? ""
+          ? 0
           : categoryList.value[active.value].id,
         tagId: tagId.value
           ? tagId.value
           : tagActive.value === -1
-          ? ""
+          ? 0
           : tagList.value[tagActive.value].id,
       }),
     ]);
@@ -136,5 +137,5 @@ const handleReadMore = () => {
 getData();
 
 // 请不要删除或改动下方代码
-console.log("welcome to home 001");
+console.log("welcome to home 002");
 </script>
