@@ -4,7 +4,7 @@ import sequelize from "../db";
 
 export default class Context extends BaseModel<Context> {
     declare chatId: number;
-    declare context: string;
+    declare content: string;
     declare role: ChatRoleEnum;
     declare toolName: string;
     declare toolParameters: string;
@@ -18,7 +18,7 @@ export default class Context extends BaseModel<Context> {
                 allowNull: false,
                 comment: "聊天ID",
             },
-            context: {
+            content: {
                 type: DataTypes.TEXT({ length: 'long' }),
                 allowNull: true,
                 comment: '内容',
