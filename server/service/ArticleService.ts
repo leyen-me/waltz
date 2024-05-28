@@ -19,19 +19,17 @@ export default class ArticleService extends BaseService<Article> {
 
     async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
         let { page, limit, order, asc, tagId, title, ...items } = query;
-        console.log(query.title);
 
         page = Number(page);
         limit = Number(limit);
+        tagId = Number(tagId);
 
         const offset = (page - 1) * limit;
 
         let filteredItems = Object.fromEntries(
+
             Object.entries(items).filter(([key, value]) => {
-                if (value === null || value === '' || value === undefined) {
-                    return false;
-                }
-                if (typeof value === 'number' && isNaN(value)) {
+                if (value === null || value === '' || value === undefined || value === '0') {
                     return false;
                 }
                 return true;
@@ -246,7 +244,7 @@ export default class ArticleService extends BaseService<Article> {
         return result.length ? result[0] : null;
     }
 
-    async getPreviousAndNextArticles(articleId: number, categoryId: number): Promise<{ previouArticle: Article | null, nextArticle: Article | null }> {
+    async getPreviousAndNextArticles(articleId: number, categoryId: number): Promise<PreviouAndNextArticleResponse> {
         const currentArticle = await Article.findOne({
             where: { id: articleId, categoryId },
             attributes: ['id', 'title', 'sort', 'publishedAt']
@@ -300,4 +298,9 @@ export default class ArticleService extends BaseService<Article> {
         });
         return articles;
     }
+}
+
+export interface PreviouAndNextArticleResponse {
+    previouArticle: Article | null;
+    nextArticle: Article | null;
 }

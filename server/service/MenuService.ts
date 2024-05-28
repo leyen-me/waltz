@@ -46,7 +46,6 @@ export default class MenuService extends BaseService<Menu> {
 
     async getNav(user: User, type: string | null): Promise<Menu[]> {
         if (user.get("superAdmin") === 1) {
-            // 如果用户是超级管理员，并且有传入类型条件，添加类型条件限制
             let query = `  
             SELECT 
                 m.id,
@@ -64,7 +63,6 @@ export default class MenuService extends BaseService<Menu> {
 
             const replacements: { [key: string]: any } = {};
 
-            // 如果type不为null，则添加类型条件
             if (type !== null) {
                 query += ` WHERE m.type = :type`;
                 replacements.type = type;
@@ -72,14 +70,12 @@ export default class MenuService extends BaseService<Menu> {
 
             query += ` ORDER BY m.sort ASC;`;
 
-            // 执行原生 SQL 查询  
             const [results] = await sequelize.query(query, {
                 replacements
             });
 
             return results as Menu[];
         } else {
-            // 构建 SQL 查询语句  
             let query = `  
             SELECT 
                 m.id,
@@ -100,7 +96,6 @@ export default class MenuService extends BaseService<Menu> {
 
             const replacements: { [key: string]: any } = { userId: user.id };
 
-            // 如果type不为null，则添加条件
             if (type !== null) {
                 query += ` AND m.type = :type`;
                 replacements.type = type;
@@ -108,7 +103,6 @@ export default class MenuService extends BaseService<Menu> {
 
             query += ` ORDER BY m.sort ASC;`;
 
-            // 执行原生 SQL 查询  
             const [results] = await sequelize.query(query, {
                 replacements
             });
@@ -127,12 +121,10 @@ export default class MenuService extends BaseService<Menu> {
 
     async getAllMenus(user: User): Promise<Menu[]> {
         if (user.get("superAdmin") === 1) {
-            // 如果用户是超级管理员，直接返回所有菜单  
             return Menu.findAll().then((menus: Menu[]) => {
                 return menus.map((item) => item.toJSON())
             });
         } else {
-            // 构建 SQL 查询语句  
             const query = `  
                 SELECT 
                     m.id,
@@ -153,10 +145,8 @@ export default class MenuService extends BaseService<Menu> {
                 ORDER BY m.sort ASC;  
             `;
 
-            // 使用参数绑定来避免 SQL 注入  
             const replacements = { userId: user.id };
 
-            // 执行原生 SQL 查询  
             const [results] = await sequelize.query(query, {
                 replacements
             });
@@ -170,15 +160,11 @@ export default class MenuService extends BaseService<Menu> {
         let authorities: string[] = [];
 
         if (user.superAdmin === 1) {
-            // 如果用户是超级管理员，直接返回所有菜单权限
             const allMenus = await Menu.findAll();
             authorities = allMenus.map(menu => menu.authority);
         } else {
-            // 如果用户不是超级管理员，则根据用户的角色信息获取菜单权限
-            // 获取用户的角色信息，假设从数据库中查询
             const roleIdList = await this.userRoleService.getRoleIdList(user.id as number);
 
-            // 构建 SQL 查询语句
             const query = `  
                 SELECT DISTINCT m.authority  
                 FROM t_menu m  
@@ -186,8 +172,6 @@ export default class MenuService extends BaseService<Menu> {
                 WHERE rm.role_id IN (:roleIds);  
             `;
 
-            // 使用参数绑定来避免 SQL 注入  
-            // Sequelize 会自动处理数组中的值，用于 IN 查询  
             const [results] = await sequelize.query(query, {
                 replacements: { roleIds: roleIdList }
             });
@@ -195,7 +179,6 @@ export default class MenuService extends BaseService<Menu> {
             authorities = results.map((row: any) => row.authority);
         }
 
-        // 过滤空值
         authorities = authorities.filter(authority => authority !== "");
 
         return authorities;

@@ -3,14 +3,14 @@ import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
 export default class Comment extends BaseModel<Comment> {
-  declare articleId: string;
-  declare pid: string | null;
-  declare userId: string;
+  declare articleId: number;
+  declare pid: number;
+  declare userId: number;
   declare content: string;
   declare likesCount: number;
 
-  public article?: string;
-  public user?: string;
+  public articleTitle?: string;
+  public username?: string;
   public parentComment?: string;
 
   static initComment(sequelize: Sequelize): typeof Comment {
@@ -23,7 +23,7 @@ export default class Comment extends BaseModel<Comment> {
       pid: {
         type: DataTypes.BIGINT({ length: 20 }),
         allowNull: true,
-        comment: "父评论ID，允许为空",
+        comment: "父评论ID,允许为空",
       },
       userId: {
         type: DataTypes.BIGINT({ length: 20 }),
@@ -39,18 +39,6 @@ export default class Comment extends BaseModel<Comment> {
         type: DataTypes.INTEGER({ length: 11 }),
         defaultValue: 0,
         comment: "点赞数",
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-        comment: "创建时间",
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-        comment: "修改时间",
       }
     };
 

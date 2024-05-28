@@ -1,7 +1,6 @@
 import Tag from "@/server/models/Tag";
 import BaseService from "@/server/base/BaseService";
 import { CreationAttributes } from "sequelize";
-import sequelize from "../db";
 
 export default class TagService extends BaseService<Tag> {
     constructor() {
@@ -33,19 +32,7 @@ export default class TagService extends BaseService<Tag> {
     }
 
     async getTagById(tagId: number): Promise<Tag | null> {
-        const query = `
-            SELECT t.*
-            FROM t_tag t
-            WHERE t.id = :tagId
-        `;
-
-        const result = await sequelize.query(query, {
-            replacements: { tagId },
-            model: Tag,
-            mapToModel: true
-        });
-
-        return result.length ? result[0] : null;
+        return await Tag.findByPk(tagId);
     }
 
     async getAllTags(): Promise<Tag[]> {

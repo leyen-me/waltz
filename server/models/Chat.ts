@@ -4,7 +4,8 @@ import sequelize from "../db";
 
 export default class Chat extends BaseModel<Chat> {
     declare title: string;
-    declare desc: string;
+    declare userId: number;
+    declare typeCode: string;
 
     static initChat(sequelize: Sequelize): typeof Chat {
         const modelAttributes = {

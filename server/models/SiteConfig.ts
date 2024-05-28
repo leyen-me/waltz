@@ -6,7 +6,8 @@ import sequelize from "../db";
 export default class SiteConfig extends BaseModel<SiteConfig> {
   declare key: string;
   declare value: string;
-  declare type: "string" | "boolean" | "number";
+  declare type: SiteConfigTypeEnum;
+  declare dictType: string;
   declare desc: string;
   declare sort: number;
 
