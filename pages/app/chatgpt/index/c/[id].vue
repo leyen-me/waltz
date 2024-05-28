@@ -2,13 +2,6 @@
   <div
     class="h-full p-5 flex flex-col relative overflow-hidden lg:px-16 xl:px-60"
   >
-    <!-- 选择专家类型 -->
-    <div class="pb-5 flex justify-between">
-      <!-- <el-button class="h-10" :disabled="messages.length > 0" @click="dialogGptsVisible = true" text> -->
-      <span>{{ typeName }}</span>
-      <!-- <arrow-down class="w-4 ml-2" /></el-button> -->
-    </div>
-
     <!-- 没有任何聊天对话的时候 -->
     <div
       v-show="chatLoading && messages.length <= 0"
@@ -68,7 +61,7 @@
     </div>
 
     <!-- 聊天对话 -->
-    <ul
+    <!-- <ul
       v-show="messages.length > 0"
       class="flex-1 overflow-y-auto pb-24"
       id="messages"
@@ -94,7 +87,7 @@
         <article
           v-else
           class="markdown-body p-5 bg-white m-0"
-          v-html="marked2Html(v.content)"
+          v-html="v.content"
         ></article>
 
         <div
@@ -118,36 +111,30 @@
           ></el-button>
         </div>
       </li>
-    </ul>
+    </ul> -->
 
-    <!-- 发送框 -->
     <footer
       class="w-full fixed py-4 px-5 flex items-end left-0 bottom-0 lg:px-16 lg:absolute xl:px-60"
     >
       <div class="flex-1 relative">
-        <el-input
-          :input-style="{
-            padding: '9.5px 12px',
-            'border-radius': '12px',
-          }"
+        <t-textarea
           v-model="prompt"
-          type="textarea"
-          @keydown.enter="sendMessage"
+          autofocus
+          :autosize="{ minRows: 1, maxRows: 5 }"
+          @keydown="sendMessage"
           placeholder="Enter 发送; Shift+Enter 换行;"
-          :autosize="{ minRows: 1, maxRows: 8 }"
-        >
-        </el-input>
+        ></t-textarea>
       </div>
-      <el-button
+      <!-- <el-button
         class="rounded-full ml-3"
         type="primary"
         @click="onSend"
         size="large"
         >{{ loading ? "停止" : "发送" }}</el-button
-      >
+      > -->
     </footer>
 
-    <el-dialog v-model="dialogGptsVisible" title="选择专家类型" width="800">
+    <!-- <el-dialog v-model="dialogGptsVisible" title="选择专家类型" width="800">
       <el-button
         :type="typeCode === v.code ? 'primary' : 'default'"
         v-for="(v, k) in typeList"
@@ -156,127 +143,48 @@
         style="margin-bottom: 10px; margin-left: 0; margin-right: 10px"
         >{{ v.name }}</el-button
       >
-    </el-dialog>
+    </el-dialog> -->
   </div>
-
-  <input
-    type="text"
-    id="clipboardInput"
-    style="position: absolute; left: -9999px"
-  />
 </template>
 
-<script setup>
-import { useRoute, useRouter } from "vue-router";
-import { ref, onMounted, nextTick, computed, getCurrentInstance } from "vue";
-//   import { marked } from "marked";
-import { useTypeListApi } from "@/api/type";
-//   import hljs from "highlight.js";
-//   import "highlight.js/styles/github.css";
-import {
-  useChatInfoApi,
-  useChatCodeRunApi,
-  useChatSaveApi,
-  useChatResumeApi,
-  useChatCodePkgApi,
-} from "@/api/chat";
-import { useContextListApi, useContextSaveApi } from "@/api/context";
-import { BASE_URL } from "@/constants";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { useUserStore } from "@/stores/modules/userStore";
-import { nanoid } from "nanoid";
-import useDownload from "@/hooks/useDownload.js";
-import usePkg from "@/hooks/usePkg.js";
+<script setup lang="ts">
+import useUserStore from "~/stores/userStore";
+import { useAdminChatTypeListApi } from "@/api/admin/chat/type";
+import { useAdminChatChatInfoApi } from "@/api/admin/chat/chat";
+import { useAdminChatContextListApi } from "@/api/admin/chat/context";
+import type Type from "~/server/models/Type";
+import type Context from "~/server/models/Context";
+import type { TextareaValue } from "tdesign-vue-next/es/textarea";
 
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 
+const chatId = ref<number>(0);
+const wheel = ref(false);
+const chatLoading = ref(false);
+const loading = ref(false);
+const messages = ref<Context[]>([]);
+const messagesRef = ref();
+const prompt = ref("");
+const typeList = ref<Type[]>([]);
+const typeCode = ref("");
+const dialogGptsVisible = ref(false);
+
 const getChatId = () => {
-  return route.params.id;
+  return Number(route.params.id);
 };
 
 const isNewChat = () => {
-  return chatId.value == "new";
+  return chatId.value === 0;
 };
 
-const scrollBottom = (time = 500) => {
-  nextTick(() => {
-    // 用户正在滚动，请勿滚动了
-    if (wheel.value) {
-      return;
-    }
-    const messagesElement = document.querySelector("#messages");
-    messagesElement.scrollTo(0, messagesElement.scrollHeight);
-    window.scrollTo(0, document.body.scrollHeight);
-  });
-};
-
-window.handleCopy = async (text) => {
+const getChatData = async (chatId: number) => {
   try {
-    // 尝试使用现代剪贴板API
-    await navigator.clipboard.writeText(text);
-    ElMessage.success("已复制");
-  } catch (e) {
-    // 如果剪贴板API不可用，使用降级方案
-    const input = document.getElementById("clipboardInput");
-    input.value = text;
-    input.select();
-    try {
-      const result = document.execCommand("copy");
-      if (result) {
-        ElMessage.success("已复制");
-      } else {
-        ElMessage.error("复制失败");
-      }
-    } catch (err) {
-      ElMessage.error("复制失败");
-    }
-  }
+    const response = await useAdminChatChatInfoApi(chatId);
+    typeCode.value = response.typeCode;
+  } catch (error) {}
 };
-
-window.handleCodeCopy = async (event) => {
-  const code = event.parentElement.previousElementSibling.innerText;
-  handleCopy(code);
-};
-
-window.handlePkg = async (event) => {
-  const language = event.parentElement.getAttribute("code-language");
-  const code = event.parentElement.previousElementSibling.innerText;
-  const { pkgId } = await usePkg({ code });
-  if (pkgId) {
-    ElMessageBox.confirm("打包完成，是否下载该程序?", "提示", {
-      confirmButtonText: "下载",
-      cancelButtonText: "取消",
-      type: "warning",
-    }).then(async () => {
-      try {
-        useDownload({
-          url: "/chat/code/pkg/download/",
-          data: { file_name: pkgId.value },
-        })();
-      } catch (error) {
-        ElMessage.error("下载失败");
-      }
-    });
-  }
-};
-
-const handleCopy = window.handleCopy;
-const handleCodeCopy = window.handleCopy;
-const handleRun = window.handleRun;
-const handlePkg = window.handlePkg;
-
-const chatId = ref("");
-const chatLoading = ref(false);
-const loading = ref(false);
-const messages = ref([]);
-const messagesRef = ref();
-const prompt = ref("");
-const typeList = ref([]);
-const typeCode = ref("");
-const dialogGptsVisible = ref(false);
-const wheel = ref(false);
 
 const typeName = computed(() => {
   const _type = typeList.value.find((t) => t.code === typeCode.value);
@@ -286,31 +194,39 @@ const typeName = computed(() => {
   return "未选择";
 });
 
+const scrollBottom = (time = 500) => {
+  nextTick(() => {
+    // 用户正在滚动，请勿滚动了
+    if (wheel.value) {
+      return;
+    }
+    const messagesElement = document.querySelector("#messages");
+    if (messagesElement) {
+      messagesElement.scrollTo(0, messagesElement.scrollHeight);
+    }
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+};
+
 function handleWheel(event) {
   wheel.value = true;
 }
 
 const getTypeData = async () => {
   try {
-    const response = await useTypeListApi();
-    typeList.value = response.data;
+    const response = await useAdminChatTypeListApi();
+    typeList.value = response;
     if (typeList.value.length > 0) {
       typeCode.value = typeList.value[0].code;
     }
+    console.log(typeList.value);
   } catch (error) {}
 };
 
-const getChatData = async (chat_id) => {
+const getContextData = async (chatId: number) => {
   try {
-    const response = await useChatInfoApi(chat_id);
-    typeCode.value = response.data.type_code;
-  } catch (error) {}
-};
-
-const getData = async (id) => {
-  try {
-    const response = await useContextListApi(id);
-    messages.value = response.data;
+    const response = await useAdminChatContextListApi(chatId);
+    messages.value = response;
     scrollBottom();
   } catch (error) {
   } finally {
@@ -318,51 +234,11 @@ const getData = async (id) => {
   }
 };
 
-/**
- * renderer不能返回Vue的自定义组件
- */
-//   const renderer = {
-//     code(code, language) {
-//       const html =
-//         `<pre style="position: relative;" class="hljs ${language}">` +
-//         `<code>${hljs.highlightAuto(code).value}</code>` +
-//         `<div class="copy" code-language="${language}" style="position: absolute;top: 12px;right: 12px;">` +
-//         `<button class="copy-button" onclick="handleCodeCopy(this)">复制</button>` +
-//         (language === "python"
-//           ? `<button class="copy-button" onclick="handlePkg(this)">打包</button>`
-//           : "") +
-//         `</div>` +
-//         `</pre>`;
-//       return html;
-//     },
-//     link(link, t, name) {
-//       return `<a href="${link}" target="_blank">${link}</a>`;
-//     },
-//   };
-//   marked.use({ renderer: renderer });
-
-const marked2Html = (md) => {
-  return md;
-};
-
-const handleSelectType = (_type) => {
-  dialogGptsVisible.value = false;
-  typeCode.value = _type.code;
-};
-
-const sendMessage = async (event) => {
-  if (!event.shiftKey) {
-    event.preventDefault();
-    if (!loading.value) {
-      await onSend();
-    }
-    return;
-  }
-};
-
 const onSend = async () => {
   const messagesId = document.getElementById("messages");
-  messagesId.addEventListener("wheel", handleWheel);
+  if (messagesId) {
+    messagesId.addEventListener("wheel", handleWheel);
+  }
 
   // 停止对话
   if (loading.value) {
@@ -492,85 +368,12 @@ const onSend = async () => {
   }
 };
 
-const handleReSend = async () => {
-  const messagesId = document.getElementById("messages");
-  messagesId.addEventListener("wheel", handleWheel);
-  let stop = false;
-  const answer_options = {
-    id: String(Math.random()),
-    role: "assistant",
-    content: "",
-  };
-  messages.value.push(answer_options);
-  const answer = messages.value.find(
-    (context) => context.id == answer_options.id
-  );
-  scrollBottom();
-
-  try {
-    // 临时
-    loading.value = true;
-
-    // 真实
-    const controller = new AbortController();
-    const signal = controller.signal;
-    const response = await fetch(BASE_URL + "/chat/re/stream", {
-      method: "POST",
-      signal: signal,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: userStore.authorization,
-      },
-      body: JSON.stringify({
-        chat_id: chatId.value,
-      }),
-    });
-
-    const count = { value: 0 };
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        break;
-      }
-      if (!loading.value) {
-        stop = true;
-        controller.abort();
-        break;
-      }
-      const str = decoder.decode(value);
-      answer.content += str;
-      count.value++;
-      if (count.value >= 10) {
-        count.value = 0;
-
-        scrollBottom(0);
-      }
+const sendMessage = (value: TextareaValue, context: { e: KeyboardEvent }) => {
+  if (context.e.key === "Enter" && !context.e.shiftKey) {
+    context.e.preventDefault();
+    if (!loading.value) {
+      await onSend();
     }
-  } catch (error) {
-    console.log("回答错误", error);
-    ElementPlus.ElMessage.error("回答错误");
-  } finally {
-    loading.value = false;
-    messagesId.removeEventListener("wheel", handleWheel);
-    wheel.value = false;
-
-    // 主动停止，保存记录
-    if (stop) {
-      try {
-        const response = await useContextSaveApi({
-          chat_id: chatId.value,
-          content: answer.content,
-          role: answer.role,
-          status: 0,
-        });
-      } catch (error2) {
-        console.log(error2);
-      }
-    }
-
-    getData(chatId.value);
   }
 };
 
@@ -578,11 +381,11 @@ onMounted(async () => {
   await getTypeData();
 
   nextTick(async () => {
-    chatId.value = getChatId();
-    if (!isNewChat()) {
+    chatId.value = Number(route.params.id);
+    if (chatId.value) {
       chatLoading.value = true;
       await getChatData(chatId.value);
-      await getData(chatId.value);
+      await getContextData(chatId.value);
     }
   });
 });

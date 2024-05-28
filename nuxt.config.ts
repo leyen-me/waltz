@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     "/": { ssr: false },
     "/blog/**": { ssr: true },
     "/admin/**": { ssr: false },
+    "/app/**": { ssr: false },
     "/api/**": { cors: true },
   },
   runtimeConfig: {
