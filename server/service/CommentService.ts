@@ -1,7 +1,6 @@
 import Comment from "@/server/models/Comment";
 import BaseService from "@/server/base/BaseService";
 import { CreationAttributes } from "sequelize";
-import sequelize from "../db";
 
 export default class CommentService extends BaseService<Comment> {
     constructor() {
@@ -50,19 +49,7 @@ export default class CommentService extends BaseService<Comment> {
     }
 
     async getCommentById(commentId: number): Promise<Comment | null> {
-        const query = `
-            SELECT c.*
-            FROM comment c
-            WHERE c.id = :commentId
-        `;
-
-        const result = await sequelize.query(query, {
-            replacements: { commentId },
-            model: Comment,
-            mapToModel: true
-        });
-
-        return result.length ? result[0] : null;
+        return await Comment.findByPk(commentId);
     }
 
     async getAllComments(): Promise<Comment[]> {

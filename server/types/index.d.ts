@@ -20,8 +20,6 @@ interface BasePageResponse<T> {
   };
 }
 
-type BaseCreateResponse = number;
-
 interface LoginRequest {
   username: string;
   password: string;
@@ -121,5 +119,28 @@ interface DictTypeQuery extends BaseQuery {
 }
 
 interface DictDataQuery extends BaseQuery {
-  dictTypeId: number;
+  dictTypeId?: number;
 }
+
+interface ChatQuery extends BaseQuery {
+  title?: string;
+  typeCode?: string;
+}
+
+interface ContextQuery extends BaseQuery {
+  role?: ChatRoleEnum;
+  status: number;
+}
+
+interface TypeQuery extends BaseQuery {
+  name?: string;
+  code?: string;
+}
+
+type UserGenderEnum = "men" | "women" | "secret";
+type ChatRoleEnum = "user" | "assitant" | "system";
+type SiteConfigTypeEnum = "string" | "boolean" | "number" | "textarea" | "dict";
+type MenuTypeEnum = "menu" | "button" | "interface";
+type MenuOpenStyleEnum = "_self" | "_blank";
+
+type BaseCreateResponse = number;

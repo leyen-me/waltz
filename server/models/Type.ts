@@ -3,8 +3,9 @@ import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
 export default class Type extends BaseModel<Type> {
-    declare title: string;
-    declare desc: string;
+    declare userId: number;
+    declare name: string;
+    declare code: string;
 
     static initType(sequelize: Sequelize): typeof Type {
         const modelAttributes = {
@@ -14,14 +15,14 @@ export default class Type extends BaseModel<Type> {
                 comment: "用户ID",
             },
             name: {
-                type: DataTypes.STRING({ length: 20 }),
+                type: DataTypes.STRING({ length: 255 }),
                 allowNull: true,
                 comment: '模型名称',
             },
             code: {
-                type: DataTypes.STRING({ length: 20 }),
+                type: DataTypes.STRING({ length: 255 }),
                 allowNull: true,
-                comment: 'agent name',
+                comment: '模型编码',
             },
         };
 

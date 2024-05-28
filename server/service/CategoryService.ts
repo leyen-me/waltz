@@ -1,7 +1,6 @@
 import Category from "~/server/models/Category";
 import BaseService from "@/server/base/BaseService";
 import { CreationAttributes } from "sequelize";
-import sequelize from "../db";
 
 export default class CategoryService extends BaseService<Category> {
     constructor() {
@@ -33,19 +32,7 @@ export default class CategoryService extends BaseService<Category> {
     }
 
     async getCategoryById(categoryId: number): Promise<Category | null> {
-        const query = `
-            SELECT c.*
-            FROM t_category c
-            WHERE c.id = :categoryId
-        `;
-
-        const result = await sequelize.query(query, {
-            replacements: { categoryId },
-            model: Category,
-            mapToModel: true
-        });
-
-        return result.length ? result[0] : null;
+        return Category.findByPk(categoryId);
     }
 
     async getAllCategories(): Promise<Category[]> {

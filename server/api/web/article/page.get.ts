@@ -1,5 +1,5 @@
 import ArticleService from '@/server/service/ArticleService';
-import { ArticleStatus } from '~/server/enum';
+import { ArticleStatus } from '@/server/enum';
 
 const articleService = new ArticleService();
 

@@ -3,8 +3,13 @@ import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
 export default class Context extends BaseModel<Context> {
-    declare title: string;
-    declare desc: string;
+    declare chatId: number;
+    declare context: string;
+    declare role: ChatRoleEnum;
+    declare toolName: string;
+    declare toolParameters: string;
+    declare executionTime: number;
+    declare status: number;
 
     static initContext(sequelize: Sequelize): typeof Context {
         const modelAttributes = {
@@ -19,7 +24,7 @@ export default class Context extends BaseModel<Context> {
                 comment: '内容',
             },
             role: {
-                type: DataTypes.STRING({ length: 20 }),
+                type: DataTypes.ENUM({ values: ["user", "assistant", "system"] }),
                 allowNull: true,
                 comment: '角色',
             },
@@ -34,7 +39,7 @@ export default class Context extends BaseModel<Context> {
                 comment: '工具参数',
             },
             executionTime: {
-                type: DataTypes.STRING({ length: 20 }),
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: true,
                 comment: '耗时',
             },

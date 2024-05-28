@@ -7,8 +7,8 @@ export default class Menu extends BaseModel<Menu> {
     declare path: string;
     declare title: string;
     declare icon: string;
-    declare type: "menu" | "button" | "interface";
-    declare openStyle: "_self" | "_blank";
+    declare type: MenuTypeEnum;
+    declare openStyle: MenuOpenStyleEnum;
     declare authority: string;
     declare sort: number;
 

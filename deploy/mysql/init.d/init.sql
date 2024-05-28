@@ -151,9 +151,52 @@ CREATE TABLE `t_comment` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='评论表';
 
-
 -- ----------------------------
 -- Records of t_comment
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for t_chat
+-- ----------------------------
+DROP TABLE IF EXISTS `t_chat`;
+CREATE TABLE `t_chat`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `type_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '专家类型',
+  `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT='chat';
+
+-- ----------------------------
+-- Records of t_chat
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for t_context
+-- ----------------------------
+DROP TABLE IF EXISTS `t_context`;
+CREATE TABLE `t_context`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `chat_id` bigint(20) NOT NULL COMMENT '聊天ID',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容',
+  `role` enum('user', 'assistant', 'system') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色',
+  `status` int(11) NOT NULL COMMENT '状态',
+  `tool_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '工具名称',
+  `tool_parameters` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '工具参数',
+  `execution_time` bigint(20) NULL DEFAULT NULL COMMENT '耗时',
+  `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT='context';
+
+-- ----------------------------
+-- Records of t_context
 -- ----------------------------
 BEGIN;
 COMMIT;
@@ -440,7 +483,27 @@ INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, 
 INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (5, 'title', 'logo', 'string', '','站点名称', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (6, 'desc', 'Here I will share insights, tips, and tutorials on website development and also thoughts on the latest trends and technologies in the field.v', 'textarea','' ,'网站描述', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (7, 'footer', 'false', 'boolean', '', '页脚', 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+COMMIT;
 
+
+-- ----------------------------
+-- Table structure for t_type
+-- ----------------------------
+DROP TABLE IF EXISTS `t_type`;
+CREATE TABLE `t_type`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `user_id` bigint(20) NOT NULL COMMENT '这个GPT属于谁',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型名称',
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型编码',
+  `created_at` datetime(0) NOT NULL COMMENT '创建时间',
+  `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT='type';
+
+-- ----------------------------
+-- Records of t_type
+-- ----------------------------
+BEGIN;
 COMMIT;
 
 -- ----------------------------
