@@ -61,77 +61,83 @@
     </div>
 
     <!-- 聊天对话 -->
-    <!-- <ul
+    <ul
       v-show="messages.length > 0"
-      class="flex-1 overflow-y-auto pb-24"
+      class="flex-1 overflow-y-auto pb-24 scrollbar-hidden"
       id="messages"
       ref="messagesRef"
     >
       <li class="relative pb-4 group" v-for="(v, k) in messages" :key="v.id">
-        <el-avatar
-          shape="square"
-          class="rounded-md"
-          :style="{
-            'background-color':
-              v.role === 'user' ? '#c0c4cc' : 'var(--el-color-primary)',
-          }"
-        >
-          {{ v.role === "user" ? "我" : "AI" }}
-        </el-avatar>
+        <t-avatar size="medium" shape="round">
+          {{ v.role === "user" ? "您" : "AI" }}
+        </t-avatar>
 
-        <article
-          v-if="v.role === 'user'"
-          class="markdown-body p-5 bg-zinc-100 m-5 rounded-md"
-          v-text="v.content"
-        ></article>
-        <article
-          v-else
-          class="markdown-body p-5 bg-white m-0"
-          v-html="v.content"
-        ></article>
+        <BasePreview v-model="v.content"></BasePreview>
 
         <div
           v-if="!loading"
           class="absolute bottom-0 right-5 flex justify-end mt-3 h-8"
         >
-          <el-button v-if="v.role !== 'user'" class="hidden group-hover:block"
-            >耗时：{{ v.execution_time }}ms</el-button
-          >
-          <el-button
-            icon="CopyDocument"
-            circle
-            class="hidden group-hover:block"
-            @click="handleCopy(v.content)"
-          ></el-button>
-          <el-button
-            icon="Refresh"
-            circle
-            v-if="k === messages.length - 1"
-            @click="handleReSend"
-          ></el-button>
+          <div class="hidden group-hover:block">
+            <t-space size="8px">
+              <t-button v-if="v.role !== 'user'" variant="text">
+                耗时：{{ v.executionTime }}ms
+              </t-button>
+              <t-button
+                shape="square"
+                variant="text"
+                @click="handleCopy(v.content)"
+              >
+                <t-icon name="copy"></t-icon>
+              </t-button>
+              <t-button
+                v-if="k === messages.length - 1"
+                shape="square"
+                variant="text"
+                @click="handleReSend"
+              >
+                <t-icon name="refresh"></t-icon>
+              </t-button>
+            </t-space>
+          </div>
         </div>
       </li>
-    </ul> -->
+    </ul>
 
     <footer
-      class="w-full fixed py-4 px-5 flex items-end left-0 bottom-0 lg:px-16 lg:absolute xl:px-60"
+      class="w-full fixed py-4 px-5 flex left-0 bottom-0 lg:px-16 lg:absolute xl:px-60 z-20"
     >
-      <div class="flex-1 relative">
-        <t-textarea
-          v-model="prompt"
-          autofocus
-          :autosize="{ minRows: 1, maxRows: 5 }"
-          @keydown="sendMessage"
-          placeholder="Enter 发送; Shift+Enter 换行;"
-        ></t-textarea>
+      <div
+        class="w-full flex bg-[var(--web-bg-8)] p-2 rounded-lg items-end border border-solid border-[var(--web-border-2)]"
+      >
+        <div
+          class="flex-1 h-full relative flex items-center"
+          style="
+            --td-border-level-2-color: none;
+            --td-brand-color: none;
+            --td-brand-color-focus: none;
+          "
+        >
+          <t-textarea
+            v-model="prompt"
+            autofocus
+            :autosize="{ minRows: 1, maxRows: 5 }"
+            @keydown="sendMessage"
+            placeholder="Enter 发送; Shift+Enter 换行;"
+          ></t-textarea>
+        </div>
+        <div class="ml-3">
+          <t-button
+            shape="square"
+            :theme="prompt ? 'primary' : 'default'"
+            @click="onSend"
+            size="large"
+          >
+            <t-icon name="stop" v-if="loading" size="24px"></t-icon>
+            <t-icon name="arrow-up" v-else size="24px"></t-icon>
+          </t-button>
+        </div>
       </div>
-      <!-- <el-button
-        class="rounded-full ml-3"
-        type="primary"
-        @click="onSend"
-        size="large"
-        >{{ loading ? "停止" : "发送" }}</el-button
-      > -->
     </footer>
 
     <!-- <el-dialog v-model="dialogGptsVisible" title="选择专家类型" width="800">
@@ -144,17 +150,31 @@
         >{{ v.name }}</el-button
       >
     </el-dialog> -->
+
+    <input
+      type="text"
+      id="clipboardInput"
+      style="position: absolute; left: -9999px"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import useUserStore from "~/stores/userStore";
 import { useAdminChatTypeListApi } from "@/api/admin/chat/type";
-import { useAdminChatChatInfoApi } from "@/api/admin/chat/chat";
-import { useAdminChatContextListApi } from "@/api/admin/chat/context";
+import {
+  useAdminChatChatInfoApi,
+  useAdminChatChatSubmitApi,
+  useAdminChatResumeApi,
+} from "@/api/admin/chat/chat";
+import {
+  useAdminChatContextListApi,
+  useAdminChatContextSubmitApi,
+} from "@/api/admin/chat/context";
 import type Type from "~/server/models/Type";
 import type Context from "~/server/models/Context";
 import type { TextareaValue } from "tdesign-vue-next/es/textarea";
+import { nanoid } from "nanoid";
 
 const route = useRoute();
 const router = useRouter();
@@ -204,7 +224,34 @@ const scrollBottom = (time = 500) => {
   });
 };
 
-function handleWheel(event) {
+const handleCopy = async (text: string) => {
+  try {
+    // 尝试使用现代剪贴板API
+    await navigator.clipboard.writeText(text);
+    MessagePlugin.success("已复制");
+  } catch (e) {
+    // 如果剪贴板API不可用，使用降级方案
+    const input = document.getElementById("clipboardInput");
+    if (input) {
+      //@ts-ignore
+      input.value = text;
+      //@ts-ignore
+      input.select();
+    }
+    try {
+      const result = document.execCommand("copy");
+      if (result) {
+        MessagePlugin.success("已复制");
+      } else {
+        MessagePlugin.error("复制失败");
+      }
+    } catch (err) {
+      MessagePlugin.error("复制失败");
+    }
+  }
+};
+
+function handleWheel(event: WheelEvent) {
   wheel.value = true;
 }
 
@@ -215,7 +262,6 @@ const getTypeData = async () => {
     if (typeList.value.length > 0) {
       typeCode.value = typeList.value[0].code;
     }
-    console.log(typeList.value);
   } catch (error) {}
 };
 
@@ -231,6 +277,13 @@ const getContextData = async (chatId: number) => {
 };
 
 const onSend = async () => {
+  const { NUXT_API_BASE } = useRuntimeConfig().public;
+  const token = useCookie("token", {
+    default: () => "",
+    watch: false,
+  });
+  const decoder = new TextDecoder();
+
   const messagesId = document.getElementById("messages");
   if (messagesId) {
     messagesId.addEventListener("wheel", handleWheel);
@@ -246,40 +299,36 @@ const onSend = async () => {
   }
   const changeTitle = ref(false);
 
-
   if (isNewChat()) {
-    const response = await useChatSaveApi({
+    const response = await useAdminChatChatSubmitApi({
       title: "...",
       typeCode: typeCode.value,
     });
-    chatId.value = response.data;
+    chatId.value = response;
     changeTitle.value = true;
-
-    // 更新路径参数
-    
-    // router.push({
-    //   name: "chat",
-    //   params: { id: chatId.value },
-    // });
+    const newPath = `/app/chatgpt/c/${chatId.value}`;
+    history.replaceState({}, "", newPath);
   }
+
   const _prompt = prompt.value;
   prompt.value = "";
   let stop = false;
   loading.value = true;
-  const question_options = {
+  const questionOptions = {
     id: String(Math.random()),
     role: "user",
     content: _prompt,
   };
-  messages.value.push(question_options);
-  const answer_options = {
+  messages.value.push(questionOptions);
+  const answerOptions = {
     id: String(Math.random()),
     role: "assistant",
     content: "",
   };
-  messages.value.push(answer_options);
+  messages.value.push(answerOptions);
+
   const answer = messages.value.find(
-    (context) => context.id == answer_options.id
+    (context) => context.id == answerOptions.id
   );
   scrollBottom();
 
@@ -287,57 +336,65 @@ const onSend = async () => {
     // 真实
     const controller = new AbortController();
     const signal = controller.signal;
-    const response = await fetch(BASE_URL + "/chat/stream", {
+    const response = await fetch(NUXT_API_BASE + "/api/admin/chat/stream", {
       method: "POST",
       signal: signal,
       headers: {
         "Content-Type": "application/json",
-        Authorization: userStore.authorization,
+        Authorization: token.value,
       },
       body: JSON.stringify({
-        chat_id: chatId.value,
-        question: _prompt,
+        chatId: chatId.value,
+        prompt: _prompt,
       }),
     });
 
     const count = { value: 0 };
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        break;
-      }
-      if (!loading.value) {
-        stop = true;
-        controller.abort();
-        break;
-      }
-      const str = decoder.decode(value);
-      answer.content += str;
-      count.value++;
-      if (count.value >= 10) {
-        count.value = 0;
-        scrollBottom(0);
+
+    if (response.body) {
+      const reader = response.body.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        if (!loading.value) {
+          stop = true;
+          controller.abort();
+          break;
+        }
+        const str = decoder.decode(value);
+        if (answer) {
+          console.log(str);
+          answer.content += str;
+        }
+        count.value++;
+        if (count.value >= 10) {
+          count.value = 0;
+          scrollBottom(0);
+        }
       }
     }
   } catch (error) {
     console.log("回答错误", error);
-    ElMessage.error("回答错误");
+    MessagePlugin.error("回答错误");
   } finally {
     loading.value = false;
-    messagesId.removeEventListener("wheel", handleWheel);
+    if (messagesId) {
+      messagesId.removeEventListener("wheel", handleWheel);
+    }
     wheel.value = false;
-
     // 主动停止，保存记录
     if (stop) {
       try {
-        const response = await useContextSaveApi({
-          chat_id: chatId.value,
-          content: answer.content,
-          role: answer.role,
-          status: 0,
-        });
+        if (answer) {
+          const response = await useAdminChatContextSubmitApi({
+            chatId: chatId.value,
+            content: answer.content,
+            role: answer.role,
+            status: 0,
+          });
+        }
       } catch (error2) {
         console.log(error2);
       }
@@ -346,24 +403,15 @@ const onSend = async () => {
     // 对话完成
     if (changeTitle.value) {
       try {
-        const response = await useChatResumeApi({
-          chat_id: chatId.value,
+        await useAdminChatResumeApi({
+          chatId: chatId.value,
         });
-
-        router.push({
-          name: "chat",
-          params: { id: chatId.value },
-          query: {
-            r: nanoid(),
-          },
-        });
-      } catch (error3) {
-        ElMessage.error("总结对话失败");
-      }
+        router.push(`/app/chatgpt/c/${chatId.value}?r=${nanoid()}`);
+      } catch (error3) {}
     }
 
     // 刷新对话
-    getData(chatId.value);
+    await getChatData(chatId.value);
   }
 };
 

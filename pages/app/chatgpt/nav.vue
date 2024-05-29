@@ -1,10 +1,11 @@
 <template>
   <div
-    class="h-full flex w-full flex-col border-r border-gray-200 overflow-y-hidden bg-zinc-100"
+    class="h-full flex w-full flex-col border-r border-gray-200 overflow-y-hidden text-[var(--web-color-1)]"
+    style="border-right: 1px solid var(--web-border-2)"
   >
     <div class="border-b">
       <a
-        class="cursor-pointer flex items-center gap-x-3 px-6 py-5 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+        class="cursor-pointer flex items-center gap-x-3 px-6 py-5 text-sm font-semibold leading-6 hover:bg-[var(--web-bg-3)]"
         @click.prevent="emits('add')"
       >
         <svg
@@ -25,13 +26,13 @@
       </a>
     </div>
     <div class="w-full flex-1 overflow-hidden relative">
-      <ul class="flex w-full h-full flex-col overflow-y-auto py-4 px-2 gap-y-2">
+      <ul class="flex w-full h-full flex-col overflow-y-auto py-4 px-2 gap-y-2 scrollbar-hidden">
         <li
           class="group rounded-lg flex items-center px-3 py-3 cursor-pointer transition-all"
           :class="[
             currentChatId === chat.id
-              ? 'bg-white text-indigo-600 font-semibold'
-              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+              ? 'bg-[var(--web-bg-7)] font-semibold'
+              : 'hover:bg-[var(--web-bg-7)]',
           ]"
           v-for="chat in chatList"
           :key="chat.id"
@@ -54,37 +55,23 @@
             </svg>
           </div>
 
-          菜单
-          <!-- <el-text
-            truncated
-            class="flex-1 ml-4"
-            :class="[
-              currentChatId === chat.id
-                ? ' text-indigo-600'
-                : 'text-gray-700 hover:text-indigo-600',
-            ]"
-          >
+          <span class="flex-1 ml-4 line-clamp-1 text-sm">
             {{ chat.title }}
-          </el-text>
-          <el-icon
-            @click.stop="emits('delete', chat)"
-            class="invisible group-hover:visible"
-          >
-            <Close />
-          </el-icon> -->
-
-
+          </span>
+          <div class="w-4 h-full flex items-center invisible group-hover:visible">
+            <t-icon name="close"></t-icon>
+          </div>
         </li>
       </ul>
       <div
-        class="w-full h-40 absolute left-0 bottom-0 z-1 bg-gradient-to-t from-zinc-100 pointer-events-none"
+        class="w-full h-40 absolute left-0 bottom-0 z-1 bg-gradient-to-t from-[var(--web-bg-1)] pointer-events-none"
       ></div>
     </div>
 
     <div class="border-t">
       <a
         @click.prevent="emits('deleteAll')"
-        class="flex items-center gap-x-3 px-6 py-5 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50 cursor-pointer"
+        class="flex items-center gap-x-3 px-6 py-5 text-sm font-semibold leading-6 cursor-pointer hover:bg-[var(--web-bg-3)]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

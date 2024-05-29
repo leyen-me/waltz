@@ -85,18 +85,25 @@
     </div>
 
     <div
-      class="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden"
+      class="sticky top-0 z-40 flex items-center gap-x-6 px-4 py-4 shadow-sm sm:px-6 lg:hidden bg-[var(--web-bg-7)]"
     >
-      <button
+      <!-- <button
         type="button"
-        class="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+        class="-m-2.5 p-2.5 lg:hidden"
         @click="sidebarOpen = true"
       >
         <span class="sr-only">Open sidebar</span>
-        <!-- <Bars3Icon class="h-6 w-6" aria-hidden="true" /> -->
-      </button>
+        <Bars3Icon class="h-6 w-6" aria-hidden="true" />
+      </button> -->
 
-      <!-- 标题 -->
+      <t-button
+        @click="sidebarOpen = true"
+        shape="squer"
+        class="-m-2.5 p-2.5 lg:hidden"
+      >
+        <t-icon name="more"></t-icon>
+      </t-button>
+      标题
 
       <!-- <el-text truncated class="flex-1 text-sm font-semibold leading-6 text-gray-900">
             {{
@@ -114,115 +121,117 @@
 </template>
 
 <script setup lang="js">
-  import { watch, toRefs, ref } from "vue";
-  import { useRoute, useRouter } from "vue-router";
-  import {
-    Dialog,
-    DialogPanel,
-    TransitionChild,
-    TransitionRoot,
-  } from "@headlessui/vue";
-  import useUserStore from "@/stores/userStore";
-//   import { useChatListApi, useChatDeleteAllApi, useChatDeleteApi } from "@/api/chat";
-  // import { ElMessageBox, ElMessage } from "element-plus"
-  import Nav from "./nav.vue";
-  import { nanoid } from "nanoid";
+import { watch, toRefs, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import {
+  Dialog,
+  DialogPanel,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import useUserStore from "@/stores/userStore";
+import { useAdminChatChatListApi } from "@/api/admin/chat/chat";
+import "@/assets/css/main.css"
+// import { ElMessageBox, ElMessage } from "element-plus"
+import Nav from "./nav.vue";
+import { nanoid } from "nanoid";
 
-  const route = useRoute()
-  const router = useRouter()
-  const userStore = useUserStore();
+const route = useRoute()
+const router = useRouter()
+const userStore = useUserStore();
 
-  const sidebarOpen = ref(false);
-  const currentChatId = ref(route.query.id || 0);
-  const key = ref(currentChatId.value);
-  const chatList = ref([]);
-
-
+const sidebarOpen = ref(false);
+const currentChatId = ref(route.query.id || 0);
+const key = ref(currentChatId.value);
+const chatList = ref([]);
 
 
-  // const { params, query } = toRefs(route);
-  // watch(params, (newParams, oldParams) => {
-  //   if (oldParams.id === "0" && newParams.id !== "0") {
-  //     getData()
-  //     currentChatId.value = newParams.id
-  //   }
-  // });
 
-  // watch(query, (newQuery, oldQuery) => {
-  //   if (newQuery.r) {
-  //     getData()
-  //   }
-  // });
 
-  const handleAdd = () => {
-    handleOpenChat({ id: "0" })
-  };
+const { params, query } = toRefs(route);
+// watch(params, (newParams, oldParams) => {
+//   if (oldParams.id === "0" && newParams.id !== "0") {
+//     getData()
+//     currentChatId.value = newParams.id
+//   }
+// });
 
-  const handleOpenChat = (chat) => {
-    currentChatId.value = chat.id;
-    key.value = nanoid();
-    router.push("/app/chatgpt/c/" + currentChatId.value)
-    sidebarOpen.value = false;
-  };
-
-  const getData = async () => {
-    try {
-      const response = await useChatListApi();
-      chatList.value = response.data;
-    } catch (error) { }
-  };
-
-  const handleDeleteAll = () => {
-    ElMessageBox.confirm("确定全部清除吗?", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    })
-      .then(async () => {
-        try {
-          await useChatDeleteAllApi();
-          ElMessage.success("清除成功");
-          await getData();
-          handleAdd();
-        } catch (error) { }
-      })
-      .catch(() => { });
-  };
-
-  const handleDelete = (chat) => {
-    ElMessageBox.confirm("确定删除该聊天吗?", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    })
-      .then(async () => {
-        try {
-          await useChatDeleteApi(chat.id);
-          ElMessage.success("清除成功");
-          await getData();
-
-          if (currentChatId.value === chat.id) {
-            handleAdd();
-          }
-        } catch (error) { }
-      })
-      .catch(() => { });
+watch(query, (newQuery, oldQuery) => {
+  if (newQuery.r) {
+    console.log("变化了", newQuery);
+    getData()
   }
+});
 
-  const handleLogout = () => {
-    ElMessageBox.confirm("确定要退出登录吗?", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
+const handleAdd = () => {
+  handleOpenChat({ id: "0" })
+};
+
+const handleOpenChat = (chat) => {
+  currentChatId.value = chat.id;
+  key.value = nanoid();
+  router.push("/app/chatgpt/c/" + currentChatId.value)
+  sidebarOpen.value = false;
+};
+
+const getData = async () => {
+  try {
+    const response = await useAdminChatChatListApi();
+    chatList.value = response;
+  } catch (error) { }
+};
+
+const handleDeleteAll = () => {
+  ElMessageBox.confirm("确定全部清除吗?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      try {
+        await useChatDeleteAllApi();
+        ElMessage.success("清除成功");
+        await getData();
+        handleAdd();
+      } catch (error) { }
     })
-      .then(async () => {
-        userStore.logout()
-      })
-      .catch(() => { });
-  };
+    .catch(() => { });
+};
 
-  getData();
-  // if(!currentChatId.value){
-  //   handleAdd()
-  // }
+const handleDelete = (chat) => {
+  ElMessageBox.confirm("确定删除该聊天吗?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      try {
+        await useChatDeleteApi(chat.id);
+        ElMessage.success("清除成功");
+        await getData();
+
+        if (currentChatId.value === chat.id) {
+          handleAdd();
+        }
+      } catch (error) { }
+    })
+    .catch(() => { });
+}
+
+const handleLogout = () => {
+  ElMessageBox.confirm("确定要退出登录吗?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      userStore.logout()
+    })
+    .catch(() => { });
+};
+
+getData();
+// if(!currentChatId.value){
+//   handleAdd()
+// }
 </script>

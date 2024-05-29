@@ -6,6 +6,7 @@
   --web-bg-5: rgba(101, 117, 133, 0.16);
   --web-bg-6: #000;
   --web-bg-7: #333;
+  --web-bg-8: #393939;
 
   --web-border-1: #2e2e32;
   --web-border-2: rgba(255, 255, 255, 0.1);
@@ -17,9 +18,9 @@
   --web-color-4: rgba(66, 185, 131, 0.4);
   --web-color-5: rgb(178, 148, 0);
   --web-color-6: rgba(178, 148, 0, 0.4);
-
   --web-color-7: #d7b486;
   --web-color-8: #d6a25e;
+  --web-color-9: #a8b1ff;
 }
 
 html,
@@ -52,7 +53,7 @@ body,
   line-height: 44px;
 }
 .v-md-editor__toolbar-item:hover {
-  background: var(--web-bg-7)
+  background: var(--web-bg-7);
 }
 .v-md-editor__toolbar-item--active {
   background: var(--web-bg-7);
@@ -166,4 +167,9 @@ body,
 
 .vuepress-markdown-body h2 {
   border: none;
+}
+
+.vuepress-markdown-body code {
+  background-color: var(--web-bg-5);
+  color: var(--web-color-9);
 }
