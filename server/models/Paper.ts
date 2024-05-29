@@ -13,24 +13,27 @@ export default class Paper extends BaseModel<Paper> {
     declare objScore: number;
     declare subjScore: number;
     declare userScore: number;
-    
+    declare hasSaq: whetherEnum;
+    declare status: number;
+    declare limitTime: string;
+
 
     static initPaper(sequelize: Sequelize): typeof Paper {
         const modelAttributes = {
-            questionType: {
-                type: DataTypes.INTEGER({ length: 11 }),
+            userId: {
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: false,
-                comment: '题目类型',
+                comment: '用户ID',
             },
-            level: {
-                type: DataTypes.ENUM({ values: ["simple", "general", "intermediate", "challenging", "arduous"] }),
-                allowNull: true,
-                comment: '题目难度等级',
+            examId: {
+                type: DataTypes.BIGINT({ length: 20 }),
+                allowNull: false,
+                comment: '考试ID',
             },
-            image: {
+            title: {
                 type: DataTypes.STRING({ length: 255 }),
                 allowNull: true,
-                comment: '题目图片链接',
+                comment: '考试标题',
             },
             content: {
                 type: DataTypes.TEXT({ length: 'long' }),

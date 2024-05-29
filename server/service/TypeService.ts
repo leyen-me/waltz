@@ -35,6 +35,14 @@ export default class TypeService extends BaseService<Type> {
         return await Type.findByPk(typeId);
     }
 
+    async getTypeByCode(code: string): Promise<Type | null> {
+        return await Type.findOne({
+            where: {
+                code
+            }
+        });
+    }
+
     async getAllTypes(): Promise<Type[]> {
         return Type.findAll();
     }

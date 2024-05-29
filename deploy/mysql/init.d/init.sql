@@ -507,9 +507,10 @@ COMMIT;
 DROP TABLE IF EXISTS `t_type`;
 CREATE TABLE `t_type`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `user_id` bigint(20) NOT NULL COMMENT '这个GPT属于谁',
+  `user_id` bigint(20) Default NULL COMMENT '这个GPT属于谁',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型名称',
   `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型编码',
+  `systemPrompt` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '系统提示词',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -519,6 +520,7 @@ CREATE TABLE `t_type`  (
 -- Records of t_type
 -- ----------------------------
 BEGIN;
+INSERT INTO `t_type`(`id`, `user_id`, `name`, `code`, `system_prompt`, `created_at`, `updated_at`) VALUES (1, NULL, '通用', 'general', '你好', '2024-05-29 14:16:37', '2024-05-29 14:16:37');
 COMMIT;
 
 -- ----------------------------

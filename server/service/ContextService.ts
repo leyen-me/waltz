@@ -40,6 +40,6 @@ export default class ContextService extends BaseService<Context> {
     }
 
     async getContextsByChatId(chatId: number): Promise<Context[]> {
-        return await Context.findAll({ where: { chatId } });
+        return await Context.findAll({ where: { chatId, status: 1 }, order: [['created_at', 'ASC']] });
     }
 }

@@ -12,23 +12,38 @@ const useFetchStream = async ({
   url,
   authorization,
   body,
+  stream,
+  success
 }: {
   url: string;
   authorization: string;
   body: any;
+  stream: boolean,
+  success?: (answer: string, executionTime: number) => void;
 }) => {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
   let counter = 0;
+  let answer = "";
+  const startTime = performance.now();
   const res = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization,
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify({ ...body, stream }),
   });
-  const stream = new ReadableStream({
+  if (!stream) {
+    answer = (await res.json()).choices[0].message?.content;
+    if (success) {
+      const endTime = performance.now();
+      const executionTime = endTime - startTime;
+      success(answer, executionTime)
+    }
+    return
+  }
+  const streamResponse = new ReadableStream({
     async start(controller) {
       function onParse(event: ParsedEvent | ReconnectInterval) {
         if (event.type === "event") {
@@ -45,6 +60,7 @@ const useFetchStream = async ({
               // this is a prefix character (i.e., "\n\n"), do nothing
               return;
             }
+            answer += text
             const queue = encoder.encode(text);
             controller.enqueue(queue);
             counter++;
@@ -59,10 +75,15 @@ const useFetchStream = async ({
         //check if it can decode the chunk data to send as stream data
         parser.feed(decoder.decode(chunk));
       }
+      if (success) {
+        const endTime = performance.now();
+        const executionTime = endTime - startTime;
+        success(answer, executionTime);
+      }
     },
   });
 
-  return stream;
+  return streamResponse;
 };
 
 export default useFetchStream;

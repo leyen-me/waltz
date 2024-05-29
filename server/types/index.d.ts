@@ -145,5 +145,5 @@ type MenuOpenStyleEnum = "_self" | "_blank";
 
 type QuestionLevelEnum = "simple" | "general" | "intermediate" | "challenging" | "arduous";
 type QuestionAnswerStatusEnum = "right" | "wrong";
-
+type whetherEnum = "true" | "false"
 type BaseCreateResponse = number;
