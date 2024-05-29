@@ -171,10 +171,6 @@ const typeList = ref<Type[]>([]);
 const typeCode = ref("");
 const dialogGptsVisible = ref(false);
 
-const getChatId = () => {
-  return Number(route.params.id);
-};
-
 const isNewChat = () => {
   return chatId.value === 0;
 };
@@ -239,8 +235,7 @@ const onSend = async () => {
   if (messagesId) {
     messagesId.addEventListener("wheel", handleWheel);
   }
-
-  // 停止对话
+  // 停止之前的对话
   if (loading.value) {
     loading.value = false;
     return;
@@ -250,18 +245,22 @@ const onSend = async () => {
     return;
   }
   const changeTitle = ref(false);
+
+
   if (isNewChat()) {
     const response = await useChatSaveApi({
       title: "...",
-      type_code: typeCode.value,
+      typeCode: typeCode.value,
     });
     chatId.value = response.data;
     changeTitle.value = true;
 
-    router.push({
-      name: "chat",
-      params: { id: chatId.value },
-    });
+    // 更新路径参数
+    
+    // router.push({
+    //   name: "chat",
+    //   params: { id: chatId.value },
+    // });
   }
   const _prompt = prompt.value;
   prompt.value = "";
@@ -368,7 +367,10 @@ const onSend = async () => {
   }
 };
 
-const sendMessage = (value: TextareaValue, context: { e: KeyboardEvent }) => {
+const sendMessage = async (
+  value: TextareaValue,
+  context: { e: KeyboardEvent }
+) => {
   if (context.e.key === "Enter" && !context.e.shiftKey) {
     context.e.preventDefault();
     if (!loading.value) {
