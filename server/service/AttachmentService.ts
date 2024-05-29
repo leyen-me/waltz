@@ -15,23 +15,21 @@ export default class AttachmentService extends BaseService<Attachment> {
     async createAttachments(formData: FormData, baseUploadDir: string): Promise<string[]> {
         const results: string[] = [];
 
-        await defineTransactionWrapper(async (transaction) => { // 在此处使用事务
-            // 直接获取 'files' 键对应的所有值
+        await defineTransactionWrapper(async (transaction) => {
             const files = formData.getAll('files');
 
             // 如果值是一个数组，则遍历数组并上传每个文件
             for (const file of files) {
-                // 将 file 断言为 File 类型
                 const fileObj = file as File;
                 const fileData = fileObj;
                 const filePath = (await defineUploadFile(fileData, baseUploadDir)).replace("public", "").replace("../", "");
 
                 // 构建附件数据对象
                 const attachmentData = {
-                    title: fileObj.name, // 使用文件名作为标题
-                    url: filePath, // 使用完整的 URL
-                    ext: defineGetFileExtension(fileObj.name), // 获取文件扩展名
-                    size: fileObj.size // 获取文件大小
+                    title: fileObj.name,
+                    url: filePath,
+                    ext: defineGetFileExtension(fileObj.name),
+                    size: fileObj.size
                 };
                 // 创建附件
                 const createdAttachment = await this.create(attachmentData, { transaction });
@@ -45,13 +43,13 @@ export default class AttachmentService extends BaseService<Attachment> {
     }
 
     async updateAttachment(attachmentId: number, attachmentData: Partial<CreationAttributes<Attachment>>): Promise<void> {
-        await defineTransactionWrapper(async (transaction) => { // 在此处使用事务
+        await defineTransactionWrapper(async (transaction) => {
             await this.update(attachmentData, { where: { id: attachmentId }, transaction });
         });
     }
 
     async deleteAttachments(attachmentIds: number[]): Promise<void> {
-        await defineTransactionWrapper(async (transaction) => { // 在此处使用事务
+        await defineTransactionWrapper(async (transaction) => {
             await this.delete({ where: { id: attachmentIds }, transaction });
         });
     }

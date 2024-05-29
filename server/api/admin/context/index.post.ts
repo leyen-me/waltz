@@ -5,7 +5,7 @@ const contextService = new ContextService();
 export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "context:save")
 
-    const tagData = await readBody(event);
-    const result = await contextService.createContext(tagData);
+    const contextData = await readBody(event);
+    const result = await contextService.createContext(contextData);
     return defineOk({ data: result });
 });

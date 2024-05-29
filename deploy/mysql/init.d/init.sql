@@ -421,7 +421,7 @@ INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (87, 73, '', '删除', 'delete', 'button', '_self', 'type:delete', 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (88, 73, '', '详情', 'info-circle', 'button', '_self', 'type:info', 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (89, 0, '', '更多', '', 'menu', '_self', '', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (90, 89, '/user/info', '个人页', 'user', 'menu', '_self', '', 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (90, 89, '/admin/user/info', '个人页', 'user', 'menu', '_self', '', 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (91, 89, '/admin/login', '登录页', 'login', 'menu', '_self', '', 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 COMMIT;
 
@@ -507,9 +507,10 @@ COMMIT;
 DROP TABLE IF EXISTS `t_type`;
 CREATE TABLE `t_type`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `user_id` bigint(20) NOT NULL COMMENT '这个GPT属于谁',
+  `user_id` bigint(20) Default NULL COMMENT '这个GPT属于谁',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型名称',
   `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '模型编码',
+  `systemPrompt` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '系统提示词',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -519,6 +520,7 @@ CREATE TABLE `t_type`  (
 -- Records of t_type
 -- ----------------------------
 BEGIN;
+INSERT INTO `t_type`(`id`, `user_id`, `name`, `code`, `system_prompt`, `created_at`, `updated_at`) VALUES (1, NULL, '通用', 'general', '你好', '2024-05-29 14:16:37', '2024-05-29 14:16:37');
 COMMIT;
 
 -- ----------------------------

@@ -1,8 +1,14 @@
 import Chat from "@/server/models/Chat";
 import BaseService from "@/server/base/BaseService";
 import { CreationAttributes } from "sequelize";
+import useFetchStream from "@/utils/useFetchStream";
+import ContextService from "./ContextService";
+import TypeService from "./TypeService";
 
 export default class ChatService extends BaseService<Chat> {
+    private contextService = new ContextService();
+    private typeService = new TypeService();
+
     constructor() {
         super(Chat);
     }
@@ -36,6 +42,94 @@ export default class ChatService extends BaseService<Chat> {
     }
 
     async getAllChats(): Promise<Chat[]> {
-        return Chat.findAll();
+        return Chat.findAll({
+            order: [
+                ['created_at', 'DESC']
+            ]
+        });
+    }
+    
+
+    async getStream(chatId: number, prompt: string): Promise<ReadableStream> {
+        await this.contextService.createContext({ chatId, content: prompt, role: "user", status: 1 });
+
+        const chat = await this.getChatById(chatId);
+
+        const messages: any = [];
+        const { NUXT_LLM_URL, NUXT_LLM_MODEL, NUXT_LLM_KEY } = useRuntimeConfig().public
+        const contexts = await this.contextService.getContextsByChatId(chatId);
+
+
+        const type = await this.typeService.getTypeByCode(chat!.typeCode);
+        if (type!.systemPrompt) {
+            messages.push({
+                role: "system",
+                content: type!.systemPrompt
+            });
+        }
+
+        contexts.map((item) => {
+            messages.push({
+                role: item.role,
+                content: item.content
+            })
+        })
+
+        const success = (answer: string, executionTime: number) => {
+            this.contextService.createContext({ chatId, content: answer, role: "assistant", status: 1, executionTime });
+        }
+
+        const stream = await useFetchStream({
+            url: NUXT_LLM_URL as string,
+            authorization: `Bearer ${NUXT_LLM_KEY}`,
+            body: {
+                model: NUXT_LLM_MODEL,
+                messages,
+            },
+            stream: true,
+            success
+        });
+        if (!stream) {
+            throw new Error("获取 stream 失败");
+        }
+        return stream;
+    }
+
+    async resume(chatId: number): Promise<void> {
+        const contexts = await this.contextService.getContextsByChatId(chatId);
+        const { NUXT_LLM_URL, NUXT_LLM_MODEL, NUXT_LLM_KEY } = useRuntimeConfig().public
+
+        const messages: any = [];
+        contexts.map((item) => {
+            messages.push({
+                role: item.role,
+                content: item.content,
+            })
+        })
+
+        messages.push({
+            role: "user",
+            content: "请使用中文给上述对话起一个10个字以内的标题, 不要任何注释"
+        });
+
+        const chat = await this.getChatById(chatId);
+
+        const success = async (answer: string, executionTime: number) => {
+            if (chat) {
+                const sanitizedAnswer = answer.match(/[^"]+/g)?.join('') || '';
+                await this.updateChat(chatId, { title: sanitizedAnswer });
+            }
+        }
+
+        await useFetchStream({
+            url: NUXT_LLM_URL as string,
+            authorization: `Bearer ${NUXT_LLM_KEY}`,
+            body: {
+                model: NUXT_LLM_MODEL,
+                messages,
+            },
+            stream: false,
+            success
+        });
     }
 }

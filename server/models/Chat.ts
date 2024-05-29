@@ -10,7 +10,7 @@ export default class Chat extends BaseModel<Chat> {
     static initChat(sequelize: Sequelize): typeof Chat {
         const modelAttributes = {
             title: {
-                type: DataTypes.STRING({ length: 20 }),
+                type: DataTypes.STRING({ length: 255 }),
                 allowNull: false,
                 comment: "标题",
             },

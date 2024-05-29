@@ -6,6 +6,7 @@ export default class Type extends BaseModel<Type> {
     declare userId: number;
     declare name: string;
     declare code: string;
+    declare systemPrompt: string;
 
     static initType(sequelize: Sequelize): typeof Type {
         const modelAttributes = {
@@ -16,14 +17,19 @@ export default class Type extends BaseModel<Type> {
             },
             name: {
                 type: DataTypes.STRING({ length: 255 }),
-                allowNull: true,
+                allowNull: false,
                 comment: '模型名称',
             },
             code: {
                 type: DataTypes.STRING({ length: 255 }),
-                allowNull: true,
+                allowNull: false,
                 comment: '模型编码',
             },
+            systemPrompt: {
+                type: DataTypes.TEXT({ length: 'long' }),
+                allowNull: true,
+                comment: '系统提示词',
+            }
         };
 
         const modelOptions = {

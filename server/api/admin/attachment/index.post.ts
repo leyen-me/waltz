@@ -12,6 +12,8 @@ export default defineWrappedResponseHandler(async (event) => {
   if (!attachmentsData) {
     return defineError({ msg: "请选择需要上传的文件" });
   }
+  
+  //todo
   const result = await attachmentService.createAttachments(
     attachmentsData,
     NUXT_API_UPLOAD_BASE
