@@ -11,6 +11,9 @@ export default class Paper extends BaseModel<Paper> {
     declare totalScore: number;
     declare qualifyScore: number;
     declare objScore: number;
+    declare subjScore: number;
+    declare userScore: number;
+    
 
     static initPaper(sequelize: Sequelize): typeof Paper {
         const modelAttributes = {

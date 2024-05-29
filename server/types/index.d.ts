@@ -142,6 +142,7 @@ type ChatRoleEnum = "user" | "assitant" | "system";
 type SiteConfigTypeEnum = "string" | "boolean" | "number" | "textarea" | "dict";
 type MenuTypeEnum = "menu" | "button" | "interface";
 type MenuOpenStyleEnum = "_self" | "_blank";
+
 type QuestionLevelEnum = "simple" | "general" | "intermediate" | "challenging" | "arduous";
 type QuestionAnswerStatusEnum = "right" | "wrong";
 
