@@ -421,7 +421,7 @@ INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (87, 73, '', '删除', 'delete', 'button', '_self', 'type:delete', 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (88, 73, '', '详情', 'info-circle', 'button', '_self', 'type:info', 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (89, 0, '', '更多', '', 'menu', '_self', '', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (90, 89, '/user/info', '个人页', 'user', 'menu', '_self', '', 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (90, 89, '/admin/user/info', '个人页', 'user', 'menu', '_self', '', 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (91, 89, '/admin/login', '登录页', 'login', 'menu', '_self', '', 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 COMMIT;
 
