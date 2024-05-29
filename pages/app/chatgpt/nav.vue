@@ -102,26 +102,6 @@
         </svg>
         清空聊天
       </a>
-      <a
-        @click.prevent="emits('logout')"
-        class="flex items-center gap-x-3 px-6 py-5 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50 cursor-pointer"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-4 h-4"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M6 18 18 6M6 6l12 12"
-          />
-        </svg>
-        退出登录
-      </a>
     </div>
   </div>
 </template>
@@ -137,5 +117,5 @@ const props = defineProps({
     required: true,
   },
 });
-const emits = defineEmits(["add", "delete", "deleteAll", "logout", "navClick"]);
+const emits = defineEmits(["add", "delete", "deleteAll", "navClick"]);
 </script>

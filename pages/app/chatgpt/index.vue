@@ -99,12 +99,12 @@
       <!-- 标题 -->
 
       <!-- <el-text truncated class="flex-1 text-sm font-semibold leading-6 text-gray-900">
-          {{
-        chatList.find((chat) => chat.id === currentChatId)
-          ? chatList.find((chat) => chat.id === currentChatId).title
-          : ""
-          }}
-        </el-text> -->
+            {{
+          chatList.find((chat) => chat.id === currentChatId)
+            ? chatList.find((chat) => chat.id === currentChatId).title
+            : ""
+            }}
+          </el-text> -->
     </div>
 
     <main class="flex-1 lg:w-0" :key>
@@ -133,29 +133,28 @@
   const userStore = useUserStore();
 
   const sidebarOpen = ref(false);
-  const currentChatId = ref(route.query.id);
+  const currentChatId = ref(route.query.id || 0);
   const key = ref(currentChatId.value);
   const chatList = ref([]);
 
 
-  const { params, query } = toRefs(route);
 
-  watch(params, (newParams, oldParams) => {
-    if (oldParams.id === "new" && newParams.id !== "new") {
-      getData()
-      currentChatId.value = newParams.id
-    }
-  });
+  // const { params, query } = toRefs(route);
+  // watch(params, (newParams, oldParams) => {
+  //   if (oldParams.id === "0" && newParams.id !== "0") {
+  //     getData()
+  //     currentChatId.value = newParams.id
+  //   }
+  // });
 
-  watch(query, (newQuery, oldQuery) => {
-    if (newQuery.r) {
-      getData()
-    }
-  });
-
+  // watch(query, (newQuery, oldQuery) => {
+  //   if (newQuery.r) {
+  //     getData()
+  //   }
+  // });
 
   const handleAdd = () => {
-    handleOpenChat({ id: "new" })
+    handleOpenChat({ id: "0" })
   };
 
   const handleOpenChat = (chat) => {
@@ -222,4 +221,7 @@
   };
 
   getData();
+  // if(!currentChatId.value){
+  //   handleAdd()
+  // }
 </script>
