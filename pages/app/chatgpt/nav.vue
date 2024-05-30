@@ -26,7 +26,9 @@
       </a>
     </div>
     <div class="w-full flex-1 overflow-hidden relative">
-      <ul class="flex w-full h-full flex-col overflow-y-auto py-4 px-2 gap-y-2 scrollbar-hidden">
+      <ul
+        class="flex w-full h-full flex-col overflow-y-auto py-4 px-2 gap-y-2 scrollbar-hidden"
+      >
         <li
           class="group rounded-lg flex items-center px-3 py-3 cursor-pointer transition-all"
           :class="[
@@ -58,7 +60,10 @@
           <span class="flex-1 ml-4 line-clamp-1 text-sm">
             {{ chat.title }}
           </span>
-          <div class="w-4 h-full flex items-center invisible group-hover:visible">
+          <div
+            class="w-4 h-full flex items-center invisible group-hover:visible"
+            @click.stop="emits('delete', chat)"
+          >
             <t-icon name="close"></t-icon>
           </div>
         </li>
@@ -96,7 +101,7 @@
 <script setup>
 const props = defineProps({
   currentChatId: {
-    type: String,
+    type: [String, Number],
     required: true,
   },
   chatList: {

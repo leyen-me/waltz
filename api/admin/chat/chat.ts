@@ -18,6 +18,20 @@ export const useAdminChatResumeApi = <T = any>(body: { chatId: number }) => {
   });
 };
 
+export const useAdminChatDeleteApi = <T = Chat>(id: number) => {
+  return useApi<T>(`/api/admin/chat/`, {
+    method: "DELETE",
+    body: JSON.stringify([id]),
+  });
+};
+
+
+export const useAdminChatDeleteAllApi = <T = Chat>() => {
+  return useApi<T>(`/api/admin/chat/all`, {
+    method: "DELETE",
+  });
+};
+
 export const useAdminChatChatSubmitApi = <T = any>(body: Partial<Chat>) => {
   if (body.id) {
     return useApi<T>(`/api/admin/chat/`, {

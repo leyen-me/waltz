@@ -2,6 +2,30 @@
   <div
     class="h-full p-5 flex flex-col relative overflow-hidden lg:px-16 xl:px-60"
   >
+    <!-- 专家类型 -->
+
+    <div class="flex mb-8">
+      <t-dropdown
+        :disabled="chatId ? true : false"
+        :options="
+          typeList.map((type) => {
+            return { content: type.name, value: type.code };
+          })
+        "
+        @click="(item) => (typeCode = item.value)"
+        trigger="click"
+        :hide-after-item-click="true"
+        :min-column-width="100"
+      >
+        <t-button variant="text"
+          >{{ typeName }}
+          <template #suffix>
+            <t-icon name="chevron-down-s" size="16"></t-icon>
+          </template>
+        </t-button>
+      </t-dropdown>
+    </div>
+
     <!-- 没有任何聊天对话的时候 -->
     <div
       v-show="chatLoading && messages.length <= 0"
@@ -72,7 +96,7 @@
           {{ v.role === "user" ? "您" : "AI" }}
         </t-avatar>
 
-        <BasePreview v-model="v.content"></BasePreview>
+        <BasePreview v-if="v.content" v-model="v.content"></BasePreview>
 
         <div
           v-if="!loading"
@@ -190,6 +214,7 @@ const prompt = ref("");
 const typeList = ref<Type[]>([]);
 const typeCode = ref("");
 const dialogGptsVisible = ref(false);
+const { NUXT_API_BASE } = useRuntimeConfig().public;
 
 const isNewChat = () => {
   return chatId.value === 0;
@@ -277,7 +302,6 @@ const getContextData = async (chatId: number) => {
 };
 
 const onSend = async () => {
-  const { NUXT_API_BASE } = useRuntimeConfig().public;
   const token = useCookie("token", {
     default: () => "",
     watch: false,
@@ -365,7 +389,6 @@ const onSend = async () => {
         }
         const str = decoder.decode(value);
         if (answer) {
-          console.log(str);
           answer.content += str;
         }
         count.value++;
@@ -388,7 +411,7 @@ const onSend = async () => {
     if (stop) {
       try {
         if (answer) {
-          const response = await useAdminChatContextSubmitApi({
+          await useAdminChatContextSubmitApi({
             chatId: chatId.value,
             content: answer.content,
             role: answer.role,
@@ -411,7 +434,107 @@ const onSend = async () => {
     }
 
     // 刷新对话
-    await getChatData(chatId.value);
+    await getContextData(chatId.value);
+  }
+};
+
+const handleReSend = async () => {
+  const token = useCookie("token", {
+    default: () => "",
+    watch: false,
+  });
+  const messagesId = document.getElementById("messages");
+  if (messagesId) {
+    messagesId.addEventListener("wheel", handleWheel);
+  }
+  let stop = false;
+
+  // 删除最后一个
+  messages.value.splice(messages.value.length - 1, 1);
+  
+  const answerOptions = {
+    id: String(Math.random()),
+    role: "assistant",
+    content: "",
+  };
+  messages.value.push(answerOptions);
+  const answer = messages.value.find(
+    (context) => context.id == answerOptions.id
+  );
+  scrollBottom();
+
+  try {
+    // 临时
+    loading.value = true;
+
+    // 真实
+    const controller = new AbortController();
+    const signal = controller.signal;
+    const response = await fetch(NUXT_API_BASE + "/api/admin/chat/restream", {
+      method: "POST",
+      signal: signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token.value,
+      },
+      body: JSON.stringify({
+        chatId: chatId.value,
+      }),
+    });
+
+    const count = { value: 0 };
+    if (response.body) {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        if (!loading.value) {
+          stop = true;
+          controller.abort();
+          break;
+        }
+        const str = decoder.decode(value);
+        if (answer) {
+          answer.content += str;
+        }
+        count.value++;
+        if (count.value >= 10) {
+          count.value = 0;
+
+          scrollBottom(0);
+        }
+      }
+    }
+  } catch (error) {
+    console.log("回答错误", error);
+    MessagePlugin.error("回答错误");
+  } finally {
+    loading.value = false;
+    if (messagesId) {
+      messagesId.removeEventListener("wheel", handleWheel);
+    }
+    wheel.value = false;
+
+    // 主动停止，保存记录
+    if (stop) {
+      try {
+        if (answer) {
+          await useAdminChatContextSubmitApi({
+            chatId: chatId.value,
+            content: answer.content,
+            role: answer.role,
+            status: 0,
+          });
+        }
+      } catch (error2) {
+        console.log(error2);
+      }
+    }
+
+    getContextData(chatId.value);
   }
 };
 
