@@ -4,7 +4,7 @@ import sequelize from "../db";
 
 export default class QuestionAnswer extends BaseModel<QuestionAnswer> {
     declare questionId: number;
-    declare isRight: boolean;
+    declare isRight: whetherEnum;
     declare image: string;
     declare content: string;
     declare analysis: string;
@@ -16,8 +16,8 @@ export default class QuestionAnswer extends BaseModel<QuestionAnswer> {
                 allowNull: false,
                 comment: '问题ID',
             },
-            level: {
-                type: DataTypes.INTEGER({ length: 11 }),
+            isRight: {
+                type: DataTypes.INTEGER({ length: 4 }),
                 allowNull: true,
                 comment: '题目难度等级',
             },

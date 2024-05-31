@@ -5,7 +5,7 @@ const attachmentService = new AttachmentService();
 
 export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "attachment:list")
-
-    const result = await attachmentService.getAllAttachments();
+    const { pid } = getQuery(event);
+    const result = await attachmentService.getFolderContents(Number(pid));
     return defineOk({ data: result });
 });

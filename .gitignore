@@ -19,10 +19,5 @@ logs
 .idea
 
 # public static resources
-public/document
-public/picture
-public/vedio
-public/audio
-public/code
-public/image
+public/attachment
 !public/

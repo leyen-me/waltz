@@ -33,13 +33,14 @@ export default defineEventHandler(async (event) => {
         id: userId,
       },
     });
+    
     if (!user) {
       return defineError({ code: 401, msg: "用户不存在" })
     }
     const menuService = new MenuService();
 
     user.authorityList = await menuService.getUserAuthority(user);
-
+    
     // 把user放到上下文
     event.context.user = user
     // console.log(event.context.user);
@@ -56,7 +57,7 @@ export default defineEventHandler(async (event) => {
     // }
 
   } catch (err) {
-    console.error(err);
+    console.log(err);
     return defineError({ code: 401, msg: "token无效" })
   }
 });

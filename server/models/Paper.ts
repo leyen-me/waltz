@@ -10,11 +10,11 @@ export default class Paper extends BaseModel<Paper> {
     declare userTime: string;
     declare totalScore: number;
     declare qualifyScore: number;
-    declare objScore: number;
-    declare subjScore: number;
+    declare objectScore: number;
+    declare subjectScore: number;
     declare userScore: number;
     declare hasSaq: whetherEnum;
-    declare status: number;
+    declare status: PaperStatusEnum;
     declare limitTime: string;
 
 
@@ -35,21 +35,56 @@ export default class Paper extends BaseModel<Paper> {
                 allowNull: true,
                 comment: '考试标题',
             },
-            content: {
-                type: DataTypes.TEXT({ length: 'long' }),
+            totalTime: {
+                type: DataTypes.DATE,
                 allowNull: false,
-                comment: '题目内容',
+                comment: '考试时长',
             },
-            remark: {
-                type: DataTypes.STRING({ length: 255 }),
-                allowNull: true,
-                comment: '题目备注',
+            userTime: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                comment: '用户时长',
             },
-            analysis: {
-                type: DataTypes.TEXT({ length: 'long' }),
+            totalScore: {
+                type: DataTypes.INTEGER({ length: 11 }),
+                allowNull: false,
+                comment: '试卷总分',
+            },
+            qualifyScore: {
+                type: DataTypes.INTEGER({ length: 11 }),
+                allowNull: false,
+                comment: '及格分',
+            },
+            objectScore: {
+                type: DataTypes.INTEGER({ length: 11 }),
+                allowNull: false,
+                comment: '客观分',
+            },
+            subjectScore: {
+                type: DataTypes.INTEGER({ length: 11 }),
                 allowNull: true,
-                comment: '题目整题解析',
-            }
+                comment: '主观分',
+            },
+            userScode: {
+                type: DataTypes.INTEGER({ length: 11 }),
+                allowNull: false,
+                comment: '用户得分',
+            },
+            hasSaq: {
+                type:  DataTypes.INTEGER({ length: 4 }),
+                allowNull: false,
+                comment: '是否包含简答题',
+            },
+            status: {
+                type: DataTypes.ENUM({ values: ["ing", "wait_opt", "finished", "break"] }),
+                allowNull: false,
+                comment: '试卷状态',
+            },
+            limitTime: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                comment: '截止时间',
+            },
         };
 
         const modelOptions = {

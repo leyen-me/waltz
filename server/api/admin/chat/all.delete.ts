@@ -4,8 +4,7 @@ const chatService = new ChatService();
 
 export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "chat:delete")
-    const ids: number[] = await readBody(event);
     const userId = event.context.user.id;
-    await chatService.deleteChats(ids,userId);
+    await chatService.deleteAllChat(userId);
     return defineOk({});
 });

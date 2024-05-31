@@ -145,5 +145,7 @@ type MenuOpenStyleEnum = "_self" | "_blank";
 
 type QuestionLevelEnum = "simple" | "general" | "intermediate" | "challenging" | "arduous";
 type QuestionAnswerStatusEnum = "right" | "wrong";
-type whetherEnum = "true" | "false"
+type PaperStatusEnum = "ing" | "wait_opt" | "finished" | "break";
+type whetherEnum = 0 | 1;
+type ExamOpenTypeEnum = "public" | "protected" | "default" | "private";
 type BaseCreateResponse = number;

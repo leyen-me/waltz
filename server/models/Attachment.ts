@@ -1,39 +1,53 @@
+import { DataTypes, Sequelize } from 'sequelize';
 import BaseModel from "../base/BaseModel";
-import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
 export default class Attachment extends BaseModel<Attachment> {
+    declare pid: number;
     declare title: string;
     declare url: string;
     declare ext: string;
     declare size: number;
+    declare isFolder: whetherEnum;
+    declare type: string;
 
     static initAttachment(sequelize: Sequelize): typeof Attachment {
         const modelAttributes = {
-            originalTitle: {
-                type: DataTypes.STRING({ length: 20 }),
+            pid: {
+                type: DataTypes.BIGINT({ length: 20 }),
                 allowNull: true,
-                comment: "附件原始标题",
+                comment: '父文件夹ID',
             },
             title: {
                 type: DataTypes.STRING({ length: 255 }),
                 allowNull: false,
-                comment: "附件标题",
+                comment: "标题",
             },
             url: {
                 type: DataTypes.STRING({ length: 255 }),
-                allowNull: false,
+                allowNull: true,
                 comment: '附件链接',
             },
             ext: {
                 type: DataTypes.STRING({ length: 20 }),
-                allowNull: false,
-                comment: '附件分类/扩展名',
+                allowNull: true,
+                comment: '附件扩展名',
             },
             size: {
                 type: DataTypes.INTEGER({ length: 11 }),
-                allowNull: false,
+                allowNull: true,
                 comment: '附件大小',
+            },
+            isFolder: {
+                type: DataTypes.INTEGER({ length: 4 }),
+                allowNull: false,
+                defaultValue: false,
+                comment: '是否是文件夹',
+            },
+            type: {
+                type: DataTypes.STRING({ length: 50 }),
+                allowNull: true,
+                comment: '附件类型',
             },
         };
 
@@ -46,5 +60,4 @@ export default class Attachment extends BaseModel<Attachment> {
     }
 }
 
-// 初始化模型，调用 initAttachment 方法
 export const attachmentModel = Attachment.initAttachment(sequelize) as typeof Attachment;
