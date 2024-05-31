@@ -1,6 +1,7 @@
 :root {
-  --web-bg-1: #1b1b1f;
-  --web-bg-2: #202127;
+  --web-bg-1: rgb(33, 33, 33);
+  --web-bg-2: rgb(43, 43, 43);
+
   --web-bg-3: #161618;
   --web-bg-4: #202127;
   --web-bg-5: rgba(101, 117, 133, 0.16);
@@ -18,9 +19,21 @@
   --web-color-4: rgba(66, 185, 131, 0.4);
   --web-color-5: rgb(178, 148, 0);
   --web-color-6: rgba(178, 148, 0, 0.4);
-  --web-color-7: #d7b486;
+  --web-color-7: rgb(215, 180, 134);
   --web-color-8: #d6a25e;
   --web-color-9: #a8b1ff;
+  --web-color-10: rgba(215, 180, 134, 0.5);
+  --web-color-11: rgba(215, 180, 134, 0.3);
+  --web-color-12: rgb(232, 141, 21);
+
+  --td-bg-color-container: rgb(43, 43, 43) !important;
+  --td-brand-color: var(--web-color-7) !important;
+  --td-brand-color-focus: var(--web-color-11) !important;
+  --td-brand-color-hover: var(--web-color-12) !important;
+  --td-text-color-anti: var(--web-bg-1) !important;
+  --td-brand-color-active: var(--web-color-10) !important;
+  --td-brand-color-light: var(--web-color-11) !important;
+  --td-component-border: var(--web-border-2) !important;
 }
 
 html,
@@ -28,6 +41,14 @@ body,
 #__nuxt {
   background-color: var(--web-bg-1);
   color: var(--web-color-1);
+}
+
+.t-card--bordered,
+.t-collapse,
+.t-collapse-panel__header,
+.t-collapse-panel__body {
+  border: none !important;
+  border-radius: 6px;
 }
 
 .v-md-editor__left-area {
@@ -42,8 +63,8 @@ body,
 }
 
 .v-md-editor__toolbar {
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  background-color: var(--web-bg-1) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: var(--web-bg-2) !important;
   padding: 12px;
 }
 .v-md-editor__toolbar-item {
@@ -69,7 +90,7 @@ body,
 .v-md-editor__editor-wrapper,
 .v-md-editor__preview-wrapper {
   background-color: var(--web-bg-1) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .vuepress-markdown-body {

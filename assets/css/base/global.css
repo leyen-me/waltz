@@ -36,11 +36,11 @@ a:hover {
   text-decoration: underline;
 }
 .scrollbar-hidden {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 和 Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 .scrollbar-hidden::-webkit-scrollbar {
-  display: none; /* WebKit 浏览器 */
+  display: none;
 }
 
 .v-md-editor {
@@ -50,7 +50,6 @@ a:hover {
   width: 100%;
 }
 
-/* 手机端隐藏 */
 .v-md-editor__preview-wrapper {
   display: none;
 }
@@ -58,7 +57,6 @@ a:hover {
   display: none;
 }
 
-/* 电脑端显示 */
 @media (min-width: 1280px) {
   .v-md-editor__preview-wrapper {
     display: block;

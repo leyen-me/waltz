@@ -75,7 +75,7 @@
     </t-collapse>
 
     <div class="mt-4">
-      <t-card title="文章内容">
+      <t-card style="background-color: var(--web-bg-2);--td-comp-paddingLR-xl: 16px;">
         <BaseEditor
           v-model="formData"
           @save="handleSubmitForm"

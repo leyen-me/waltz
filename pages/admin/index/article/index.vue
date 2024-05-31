@@ -61,18 +61,9 @@
         一篇文章也没有
       </div>
 
-      <div
-        class="grid grid-cols-1 gap-4 xl:grid-cols-2 mt-8"
-        style="
-          --theme-bg-color-1: #000000;
-          --theme-bg-color-2: #191a1e;
-          --theme-bg-color-3: #202020;
-          --web-color-7: #d7b486;
-          --web-color-8: #d6a25e;
-        "
-      >
+      <div class="grid grid-cols-1 gap-4 xl:grid-cols-2 mt-8">
         <div
-          class="p-4 bg-[var(--web-bg-1)] xl:p-10 hover:bg-[var(--web-bg-6)] cursor-pointer group border border-[var(--web-border-2)] border-solid hover:border-[var(--web-border-3)] transition duration-500 ease"
+          class="p-4 xl:p-10 hover:bg-[var(--web-bg-1)] cursor-pointer group border border-[var(--web-border-2)] border-solid transition duration-500 ease"
           v-for="(v, k) in list"
           :key="v.id"
           @click="handleGoDetail(v)"
@@ -83,18 +74,16 @@
               :src="useImageUrl(v.cover)"
             />
           </div>
-          <div class="text-[var(--web-color-7)] mt-10 flex">
+          <div class="mt-10 flex">
             <span>{{ v.categoryTitle }}</span
             ><span class="mx-2">/</span
-            ><span
-              class="text-[var(--web-color-1)] w-0 flex-1 line-clamp-1"
-            >
+            ><span class="text-[var(--web-color-1)] w-0 flex-1 line-clamp-1">
               {{ v.tagList && String(v.tagList).split(",").join(" • ") }}
             </span>
           </div>
           <div class="mt-3 relative">
             <h2
-              class="w-full text-[var(--web-color-7)] line-clamp-3 text-2xl transition duration-300 ease cursor-pointer"
+              class="w-full group-hover:text-[var(--web-color-7)] line-clamp-3 text-2xl transition duration-300 ease cursor-pointer"
             >
               {{ v.title }}
             </h2>
@@ -122,11 +111,7 @@
                 @confirm="handleDelete(v.id as number)"
                 :disabled="!useHasAuth('article:delete')"
               >
-                <t-button
-                  shape="rectangle"
-                  variant="text"
-                  theme="danger"
-                  @click.stop=""
+                <t-button shape="rectangle" variant="text" @click.stop=""
                   >删除</t-button
                 >
               </t-popconfirm>
@@ -137,12 +122,14 @@
                 >编辑</t-button
               >
               <div class="mr-2"></div>
-              <IconRtArrow2></IconRtArrow2>
+              <IconRtArrow2
+                class="text-white group-hover:text-[var(--web-color-7)] group-hover:-rotate-45 transition duration-300 ease"
+              ></IconRtArrow2>
             </div>
           </div>
         </div>
       </div>
-      
+
       <div class="mt-4">
         <t-pagination
           v-if="list.length > limit"

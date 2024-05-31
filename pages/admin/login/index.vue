@@ -1,12 +1,17 @@
 <template>
   <div
     class="flex h-full flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8"
+    style="
+      background-image: url(/login_bg.svg);
+      background-repeat: space;
+      background-size: 32%;
+    "
   >
     <t-card title="登录">
       <div
         class="flex flex-col justify-center items-center sm:mx-auto sm:w-full sm:max-w-sm"
       >
-        <IconLogo class="text-indigo-500"></IconLogo>
+        <BaseLogo></BaseLogo>
         <h2
           class="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-white"
         >
@@ -23,7 +28,6 @@
           :label-align="'top'"
           @submit="handleLogin"
         >
-          
           <t-form-item name="username" label="账户">
             <t-input
               v-model="formData.username"
@@ -51,7 +55,14 @@
           </t-form-item>
 
           <t-form-item>
-            <t-button theme="primary" type="submit" block style="margin-bottom:20px;" size="large">登录</t-button>
+            <t-button
+              theme="primary"
+              type="submit"
+              block
+              style="margin-bottom: 20px"
+              size="large"
+              >登录</t-button
+            >
           </t-form-item>
         </t-form>
       </div>
