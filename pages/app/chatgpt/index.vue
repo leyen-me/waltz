@@ -15,7 +15,7 @@
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-gray-900/80" />
+          <div class="fixed inset-0 bg-[var(--web-bg-1)]" />
         </TransitionChild>
 
         <div class="fixed inset-0 flex">
@@ -41,17 +41,14 @@
                 <div
                   class="absolute left-full top-0 flex w-16 justify-center pt-5"
                 >
-                  <button
-                    type="button"
-                    class="-m-2.5 p-2.5"
+                  <t-button
                     @click="sidebarOpen = false"
+                    shape="square"
+                    variant="text"
+                    class="-m-2.5 p-2.5 lg:hidden"
                   >
-                    <span class="sr-only">Close sidebar</span>
-                    <IconXmark
-                      class="!text-white"
-                      @click="sidebarOpen = false"
-                    ></IconXmark>
-                  </button>
+                    <t-icon name="close"></t-icon>
+                  </t-button>
                 </div>
               </TransitionChild>
               <!-- Sidebar component, swap this element with another sidebar if you like -->
@@ -60,7 +57,6 @@
                 :chatList
                 @add="handleAdd"
                 @deleteAll="handleDeleteAll"
-                @logout="handleLogout"
                 @navClick="handleOpenChat"
                 @delete="handleDelete"
               ></Nav>
@@ -78,7 +74,6 @@
         :chatList
         @add="handleAdd"
         @deleteAll="handleDeleteAll"
-        @logout="handleLogout"
         @navClick="handleOpenChat"
         @delete="handleDelete"
       ></Nav>
@@ -98,10 +93,11 @@
 
       <t-button
         @click="sidebarOpen = true"
-        shape="squer"
+        shape="square"
+        variant="text"
         class="-m-2.5 p-2.5 lg:hidden"
       >
-        <t-icon name="more"></t-icon>
+        <t-icon name="system-3"></t-icon>
       </t-button>
       标题
 
@@ -120,7 +116,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import { watch, toRefs, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
@@ -129,48 +125,45 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import useUserStore from "@/stores/userStore";
-import { useAdminChatChatListApi } from "@/api/admin/chat/chat";
-import "@/assets/css/main.css"
-// import { ElMessageBox, ElMessage } from "element-plus"
+import {
+  useAdminChatChatListApi,
+  useAdminChatDeleteAllApi,
+  useAdminChatDeleteApi,
+} from "@/api/admin/chat/chat";
 import Nav from "./nav.vue";
 import { nanoid } from "nanoid";
+import type Chat from "~/server/models/Chat";
 
-const route = useRoute()
-const router = useRouter()
-const userStore = useUserStore();
+const route = useRoute();
+const router = useRouter();
 
 const sidebarOpen = ref(false);
-const currentChatId = ref(route.query.id || 0);
-const key = ref(currentChatId.value);
-const chatList = ref([]);
-
-
-
+const currentChatId = ref(Number(route.params.id) || 0);
+const key = ref<number>(currentChatId.value);
+const chatList = ref<Chat[]>([]);
 
 const { params, query } = toRefs(route);
-// watch(params, (newParams, oldParams) => {
-//   if (oldParams.id === "0" && newParams.id !== "0") {
-//     getData()
-//     currentChatId.value = newParams.id
-//   }
-// });
+watch(params, (newParams, oldParams) => {
+  if (oldParams.id === "0" && newParams.id !== "0") {
+    getData();
+    currentChatId.value = Number(newParams.id);
+  }
+});
 
 watch(query, (newQuery, oldQuery) => {
   if (newQuery.r) {
-    console.log("变化了", newQuery);
-    getData()
+    getData();
   }
 });
 
 const handleAdd = () => {
-  handleOpenChat({ id: "0" })
+  handleOpenChat({ id: "0" });
 };
 
-const handleOpenChat = (chat) => {
-  currentChatId.value = chat.id;
-  key.value = nanoid();
-  router.push("/app/chatgpt/c/" + currentChatId.value)
+const handleOpenChat = (chat: Chat) => {
+  currentChatId.value = chat.id as number;
+  key.value = nanoid() as unknown as number;
+  router.push("/app/chatgpt/c/" + currentChatId.value);
   sidebarOpen.value = false;
 };
 
@@ -178,60 +171,53 @@ const getData = async () => {
   try {
     const response = await useAdminChatChatListApi();
     chatList.value = response;
-  } catch (error) { }
+  } catch (error) {}
 };
 
 const handleDeleteAll = () => {
-  ElMessageBox.confirm("确定全部清除吗?", "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(async () => {
+  const dialog = DialogPlugin.confirm({
+    header: "提示",
+    body: "确定全部清除吗?",
+    cancelBtn: "取消",
+    onConfirm: async () => {
       try {
-        await useChatDeleteAllApi();
-        ElMessage.success("清除成功");
+        dialog.update({ confirmBtn: { content: "删除中", loading: true } });
+        await useAdminChatDeleteAllApi();
+        MessagePlugin.success("清除成功");
         await getData();
         handleAdd();
-      } catch (error) { }
-    })
-    .catch(() => { });
+      } catch (error) {
+      } finally {
+        dialog.destroy();
+      }
+    },
+  });
 };
 
-const handleDelete = (chat) => {
-  ElMessageBox.confirm("确定删除该聊天吗?", "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(async () => {
+const handleDelete = (chat: Chat) => {
+  const dialog = DialogPlugin.confirm({
+    header: "提示",
+    body: "确定删除该聊天吗?",
+    cancelBtn: "取消",
+    onConfirm: async () => {
       try {
-        await useChatDeleteApi(chat.id);
-        ElMessage.success("清除成功");
+        dialog.update({ confirmBtn: { content: "删除中", loading: true } });
+        await useAdminChatDeleteApi(chat.id);
+        MessagePlugin.success("删除成功");
         await getData();
-
         if (currentChatId.value === chat.id) {
           handleAdd();
         }
-      } catch (error) { }
-    })
-    .catch(() => { });
-}
-
-const handleLogout = () => {
-  ElMessageBox.confirm("确定要退出登录吗?", "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(async () => {
-      userStore.logout()
-    })
-    .catch(() => { });
+      } catch (error) {
+      } finally {
+        dialog.destroy();
+      }
+    },
+  });
 };
 
+if (!currentChatId.value) {
+  handleAdd();
+}
 getData();
-// if(!currentChatId.value){
-//   handleAdd()
-// }
 </script>

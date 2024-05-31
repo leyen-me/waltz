@@ -1,4 +1,5 @@
 const { spawn } = require("child_process");
+require("./banner.cjs") 
 
 const cmd =
   process.platform === "win32"
