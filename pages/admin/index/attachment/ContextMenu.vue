@@ -7,18 +7,27 @@
       @contextmenu="handleClose"
     >
       <div
-        class="absolute w-36 rounded-md bg-[var(--web-bg-6)] border border-[var(--web-border-1)] border-solid"
-        :style="{ top: y + 'px', left: x + 'px' }"
+        class="absolute rounded-md bg-[var(--web-bg-6)] border border-[var(--web-border-1)] border-solid"
+        :style="{ top: y + 'px', left: x + 'px', width: w + 'px' }"
       >
         <ul>
           <li
             @click.stop="v.onClick && v.onClick()"
             class="h-8"
             style="border-bottom: 1px solid var(--web-border-1)"
+            :style="{ height: h + 'px' }"
             v-for="(v, k) in items"
             :key="v.id"
           >
-            <t-button style="width: 100%; border-radius: 0;justify-content: flex-start" variant="text">
+            <t-button
+              style="
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+                justify-content: flex-start;
+              "
+              variant="text"
+            >
               <div class="flex items-center justify-start">
                 <t-icon :name="v.icon" size="16px"></t-icon>
                 <span class="ml-2 text-sm">{{ v.title }}</span>
@@ -38,7 +47,7 @@ const props = defineProps({
     required: true,
   },
   items: {
-    type: Array,
+    type: Array<any>,
     required: true,
   },
   x: {
@@ -49,11 +58,19 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  w: {
+    type: Number,
+    required: true,
+  },
+  h: {
+    type: Number,
+    required: true,
+  },
 });
 
 const emits = defineEmits(["update:modelValue"]);
 
-const handleClose = (event) => {
+const handleClose = (event: MouseEvent) => {
   event.preventDefault();
   emits("update:modelValue", false);
 };

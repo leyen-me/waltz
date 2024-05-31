@@ -1,6 +1,32 @@
 <template>
-  <div class="w-full h-full" id="attachmentPage" @contextmenu="showMenu">
+  <div class="w-full h-full" @contextmenu="(e) => showMenu(e, false)">
     <t-card title="附件管理" style="height: 100%">
+      <ul class="grid grid-cols-3 gap-4 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-12">
+        <li
+          v-if="pid !== 0"
+          class="w-full bg-[var(--web-bg-8)] p-8 cursor-pointer rounded-md flex flex-col items-center aspect-square hover:bg-[var(--web-bg-9)]"
+          @click="handleParentClick"
+        >
+          <t-icon name="folder" size="56px"></t-icon>
+          <span class="line-clamp-3 mt-2">返回上一级</span>
+        </li>
+        <li
+          v-for="(v, k) in list"
+          :key="v.id"
+          class="w-full h-40 bg-[var(--web-bg-8)] p-8 cursor-pointer rounded-md flex flex-col items-center hover:bg-[var(--web-bg-9)]"
+          @click="handleFileClick(v)"
+          @contextmenu="(e) => showMenu(e, true)"
+        >
+          <t-icon v-if="v.isFolder" name="folder" size="56px"></t-icon>
+          <t-icon v-else name="file" size="56px"></t-icon>
+
+          <img v-if="v.type === 'image/png'" :src="useImageUrl(v.url)" alt="" style="width: 50px;height: 50px;" />
+          <p class="w-full mt-2 line-clamp-3 text-center">
+            {{ v.title }}
+          </p>
+        </li>
+      </ul>
+
       <!-- <template #actions>
         <t-upload
           name="files"
@@ -40,13 +66,67 @@
     </t-card>
   </div>
 
-  <ContextMenu :items :x :y v-model="contextShow"></ContextMenu>
+  <ContextMenu
+    :items
+    :x
+    :y
+    v-model="contextShow"
+    :h="contextItemHight"
+    :w="contextItemWidth"
+  ></ContextMenu>
+
+  <t-dialog
+    v-model:visible="addFolderVisible"
+    header="新建文件夹"
+    width="40%"
+    :confirm-on-enter="true"
+    :on-cancel="() => (addFolderVisible = false)"
+    :on-close-btn-click="() => (addFolderVisible = false)"
+    :on-overlay-click="() => (addFolderVisible = false)"
+    :on-close="() => (addFolderVisible = false)"
+    :on-confirm="handleAddFolderVisibleConfirm"
+  >
+    <t-space direction="vertical" style="width: 100%">
+      <t-input v-model="addFolderName" placeholder="文件夹名称"></t-input>
+    </t-space>
+  </t-dialog>
+
+  <t-dialog
+    v-model:visible="uploadFileVisible"
+    header="文件上传"
+    width="40%"
+    :confirm-on-enter="true"
+    :cancelBtn="null"
+    :confirmBtn="null"
+    :on-cancel="() => (uploadFileVisible = false)"
+    :on-close-btn-click="() => (uploadFileVisible = false)"
+    :on-overlay-click="() => (uploadFileVisible = false)"
+    :on-close="() => (uploadFileVisible = false)"
+  >
+    <t-space direction="vertical" style="width: 100%">
+      <t-upload
+        name="files"
+        v-model="files"
+        :action="uploadUrl"
+        :abridge-name="[8, 6]"
+        :multiple="true"
+        :max="10"
+        theme="file-flow"
+        placeholder="未选择文件"
+        @success="onUploadSuccess"
+        @fail="onUploadError"
+        @remove="onUploadRemove"
+      ></t-upload>
+    </t-space>
+  </t-dialog>
 </template>
 
 <script setup lang="tsx">
 import { defaultRowsPerPageOptions } from "@/constans";
 import {
   useAdminAttachmentDeleteApi,
+  useAdminAttachmentFolderApi,
+  useAdminAttachmentListApi,
   useAdminAttachmentPageApi,
 } from "@/api/admin/attachment";
 import type Attachment from "~/server/models/Attachment";
@@ -54,29 +134,41 @@ import Cookies from "js-cookie";
 import useHasAuth from "@/utils/auth";
 import ContextMenu from "./ContextMenu.vue";
 import { nanoid } from "nanoid";
+import useImageUrl from "@/utils/imageUrl";
 
+const { NUXT_API_BASE } = useRuntimeConfig().public;
+
+const pidCache = ref(0);
 const pid = ref(0);
+
 const contextShow = ref(false);
+const contextItemWidth = ref(180);
+const contextItemHight = ref(44);
 const x = ref(0);
 const y = ref(0);
 
-const items = ref([
+const folderItems = [
   {
     id: nanoid(),
     icon: "folder",
     title: "新建文件夹",
     onClick: () => {
       contextShow.value = false;
+      addFolderVisible.value = true;
     },
   },
   {
     id: nanoid(),
     icon: "upload",
     title: "文件上传",
+    type: "file",
     onClick: () => {
       contextShow.value = false;
+      uploadFileVisible.value = true;
     },
   },
+];
+const fileItems = [
   {
     id: nanoid(),
     icon: "move",
@@ -89,18 +181,26 @@ const items = ref([
     id: nanoid(),
     icon: "delete",
     title: "删除",
+    onClick: () => {
+      contextShow.value = false;
+    },
   },
-]);
+];
 
-// document.querySelector('.t-popup')
-const showMenu = function (event) {
-  // 阻止默认的右键菜单行为
+const items = ref([]);
+
+const showMenu = function (event: MouseEvent, show: Boolean) {
   event.preventDefault();
-  contextShow.value = !contextShow.value;
+  event.stopPropagation();
+  if (show) {
+    items.value = fileItems;
+  } else {
+    items.value = folderItems;
+  }
 
+  contextShow.value = !contextShow.value;
   const viewportWidth = window.innerWidth - 20;
   const viewportHeight = window.innerHeight - 20;
-
   const getMenuPosition = () => {
     const menuWidth = 144;
     const menuHeight = items.value.length * 32;
@@ -121,6 +221,61 @@ const showMenu = function (event) {
 
   x.value = finalX;
   y.value = finalY;
+};
+
+// 新增文件夹
+const addFolderVisible = ref(false);
+const addFolderName = ref("");
+const handleAddFolderVisibleConfirm = async () => {
+  try {
+    await useAdminAttachmentFolderApi({
+      pid: pid.value,
+      title: addFolderName.value,
+    });
+    await getData();
+    MessagePlugin.success("新建成功");
+  } catch {
+  } finally {
+    addFolderVisible.value = false;
+  }
+};
+
+// 文件上传
+const uploadFileVisible = ref(false);
+const files = ref([]);
+const uploadUrl = ref(
+  NUXT_API_BASE +
+    `/api/admin/attachment/file?pid=${pid.value}&Authorization=${Cookies.get(
+      "token"
+    )}`
+);
+
+const onUploadSuccess = (e: any) => {
+  e.response.map((response, index) => {
+    if (response.code !== 200) {
+      MessagePlugin.error(response.msg);
+      files.value[index].status = "warning";
+      return;
+    }
+    MessagePlugin.success("文件上传成功");
+  });
+  getData();
+};
+const onUploadError = () => {
+  MessagePlugin.error("文件上传失败");
+};
+
+// 点击事件
+const handleParentClick = () => {
+  pid.value = pidCache.value;
+};
+const handleFileClick = (v: Attachment) => {
+  if (v.isFolder) {
+    pidCache.value = pid.value;
+    pid.value = v.id;
+    return;
+  }
+  MessagePlugin.warning("不支持打开此文件类型");
 };
 
 // const files = ref([]);
@@ -145,20 +300,19 @@ const showMenu = function (event) {
 
 // const router = useRouter();
 
-// // 分页
+// 分页
 // const page = ref(1);
 // const limit = ref(defaultRowsPerPageOptions[0]);
 
 // const total = ref(0);
-// const list = ref<Attachment[]>([]);
-// const getData = async () => {
-//   const { data, meta } = await useAdminAttachmentPageApi({
-//     page: page.value,
-//     limit: limit.value,
-//   });
-//   list.value = data;
-//   total.value = meta.totalItems;
-// };
+
+const list = ref<Attachment[]>([]);
+const getData = async () => {
+  const data = await useAdminAttachmentListApi({
+    pid: pid.value,
+  });
+  list.value = data;
+};
 
 // const columns = [
 //   {
@@ -220,5 +374,16 @@ const showMenu = function (event) {
 //   }
 // };
 
-// getData();
+watch(
+  () => pid.value,
+  () => {
+    uploadUrl.value =
+      NUXT_API_BASE +
+      `/api/admin/attachment/file?pid=${pid.value}&Authorization=${Cookies.get(
+        "token"
+      )}`;
+    getData();
+  }
+);
+getData();
 </script>

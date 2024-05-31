@@ -1,6 +1,28 @@
 import useApi from "@/utils/api";
 import type Attachment from "~/server/models/Attachment";
 
+export const useAdminAttachmentListApi = <T = Attachment[]>(query: any) => {
+  return useApi<T>(`/api/admin/attachment/list?pid=${query.pid}`, {
+    method: "GET",
+  });
+};
+
+export const useAdminAttachmentFolderApi = <T = any>(body: any) => {
+  return useApi<T>(`/api/admin/attachment/folder`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+};
+
+
+
+
+
+
+
+
+
+
 export const useAdminAttachmentPageApi = <T = BasePageResponse<Attachment>>(
   query: any
 ) => {
