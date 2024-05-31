@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-full p-5 flex flex-col relative overflow-hidden lg:px-16 xl:px-60"
+    class="h-full p-5 flex flex-col relative overflow-hidden lg:px-16 xl:px-60 bg-[var(--web-bg-2)]"
   >
     <!-- 专家类型 -->
 
@@ -91,17 +91,21 @@
       id="messages"
       ref="messagesRef"
     >
-      <li class="relative pb-4 group" v-for="(v, k) in messages" :key="v.id">
-        <t-avatar size="medium" shape="round">
-          {{ v.role === "user" ? "您" : "AI" }}
-        </t-avatar>
-
-        <BasePreview v-if="v.content" v-model="v.content"></BasePreview>
-
-        <div
-          v-if="!loading"
-          class="absolute bottom-0 right-5 flex justify-end mt-3 h-8"
-        >
+      <li
+        class="relative pb-4 group"
+        :style="{
+          '--web-bg-1':
+            v.role === 'user' ? 'var(--web-bg-9)' : 'var(--web-bg-2)',
+          '--gpt-justify-content':
+            v.role === 'user' ? 'flex-end' : 'flex-start',
+          '--gpt-max-width': v.role === 'user' ? '80%' : '100%',
+          '--gpt-border-radius': v.role === 'user' ? '24px' : '0px',
+        }"
+        v-for="(v, k) in messages"
+        :key="v.id"
+      >
+        <BasePreview v-model="v.content"></BasePreview>
+        <div v-if="!loading" class="flex justify-end mt-3 h-8">
           <div class="hidden group-hover:block">
             <t-space size="8px">
               <t-button v-if="v.role !== 'user'" variant="text">
@@ -451,7 +455,7 @@ const handleReSend = async () => {
 
   // 删除最后一个
   messages.value.splice(messages.value.length - 1, 1);
-  
+
   const answerOptions = {
     id: String(Math.random()),
     role: "assistant",

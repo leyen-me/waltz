@@ -8,6 +8,7 @@
   --web-bg-6: #000;
   --web-bg-7: #333;
   --web-bg-8: #393939;
+  --web-bg-9: #474747;
 
   --web-border-1: #2e2e32;
   --web-border-2: rgba(255, 255, 255, 0.1);
@@ -34,6 +35,10 @@
   --td-brand-color-active: var(--web-color-10) !important;
   --td-brand-color-light: var(--web-color-11) !important;
   --td-component-border: var(--web-border-2) !important;
+
+  --gpt-justify-content: flex-start;
+  --gpt-max-width: 100%;
+  --gpt-border-radius: 12px;
 }
 
 html,
@@ -63,7 +68,7 @@ body,
 }
 
 .v-md-editor__toolbar {
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0) !important;
   background-color: var(--web-bg-2) !important;
   padding: 12px;
 }
@@ -93,9 +98,17 @@ body,
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+.v-md-editor-preview {
+  display: flex;
+  justify-content: var(--gpt-justify-content);
+}
+
 .vuepress-markdown-body {
+  max-width: var(--gpt-max-width);
+  border-radius: var(--gpt-border-radius);
   background-color: var(--web-bg-1) !important;
   color: white !important;
+  padding: 12px 24px !important;
 }
 .vuepress-markdown-body div[class*="v-md-pre-wrapper-"] {
   background-color: var(--web-bg-3);
@@ -193,4 +206,5 @@ body,
 .vuepress-markdown-body code {
   background-color: var(--web-bg-5);
   color: var(--web-color-9);
+  margin: 0 4px;
 }
