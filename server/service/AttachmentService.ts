@@ -1,64 +1,115 @@
-import Attachment from '@/server/models/Attachment';
-import BaseService from '@/server/base/BaseService';
 import { CreationAttributes } from 'sequelize';
-import { defineUploadFile } from '../utils/fileUtil';
+import Attachment from '../models/Attachment';
+import { defineUploadFile, defineValidateFile, defineGetFileExtension, defineDeleteFile } from '../utils/fileUtil';
 
-export default class AttachmentService extends BaseService<Attachment> {
-    constructor() {
-        super(Attachment);
+export default class AttachmentService {
+
+    /**
+    * 创建文件夹
+    * @param folderName
+    * @param pid
+    * @returns
+    */
+    async createFolder(attachmentData: CreationAttributes<Attachment>, pid: number = 0): Promise<number> {
+
+        const parentFolder = await Attachment.findByPk(pid);
+        const createdFolder = await Attachment.create({
+            title: attachmentData.title,
+            url: parentFolder ? parentFolder.url + '/' + attachmentData.title : '/' + attachmentData.title,
+            pid: attachmentData.pid,
+            isFolder: 1,
+            type: 'folder',
+        });
+
+        if (!createdFolder.id) {
+            throw new Error('Failed to create folder');
+        }
+        return createdFolder.id;
     }
 
-    async selectPage(query: AttachmentQuery): Promise<BasePageResponse<Attachment>> {
-        return this.page(query);
-    }
-
-    async createAttachments(formData: FormData, baseUploadDir: string): Promise<string[]> {
-        const results: string[] = [];
+    /**
+   * 上传文件
+   * @param formData
+   * @returns
+   */
+    async uploadFiles(formData: FormData, pid: number = 0): Promise<number[]> {
+        const { NUXT_API_UPLOAD_BASE } = useRuntimeConfig().public;
+        const primaryKeys: number[] = [];
 
         await defineTransactionWrapper(async (transaction) => {
             const files = formData.getAll('files');
+            console.log(pid);
 
-            // 如果值是一个数组，则遍历数组并上传每个文件
-            for (const file of files) {
-                const fileObj = file as File;
-                const fileData = fileObj;
-                const filePath = (await defineUploadFile(fileData, baseUploadDir)).replace("public", "").replace("../", "");
+            if (pid) {
+                const parentFolder = await Attachment.findByPk(pid);
+                for (const file of files) {
+                    const fileObj = file as File;
+                    const mimeType = defineValidateFile(fileObj);
+                    const ext = defineGetFileExtension(fileObj.name);
+                    const filePath = (await defineUploadFile(fileObj, parentFolder ? NUXT_API_UPLOAD_BASE + parentFolder.url : NUXT_API_UPLOAD_BASE));
 
-                // 构建附件数据对象
-                const attachmentData = {
-                    title: fileObj.name,
-                    url: filePath,
-                    ext: defineGetFileExtension(fileObj.name),
-                    size: fileObj.size
-                };
-                // 创建附件
-                const createdAttachment = await this.create(attachmentData, { transaction });
-                if (createdAttachment) {
-                    results.push(filePath);
+                    const attachmentData = {
+                        title: fileObj.name,
+                        url: filePath,
+                        ext: ext,
+                        size: fileObj.size,
+                        pid: pid,
+                        isFolder: 0,
+                        type: mimeType
+                    };
+                    console.log(attachmentData);
+
+                    const createdAttachment = await Attachment.create(attachmentData, { transaction });
+                    if (createdAttachment && createdAttachment.id) {
+                        primaryKeys.push(createdAttachment.id);
+                    }
                 }
             }
         });
-
-        return results;
+        return primaryKeys;
     }
 
-    async updateAttachment(attachmentId: number, attachmentData: Partial<CreationAttributes<Attachment>>): Promise<void> {
-        await defineTransactionWrapper(async (transaction) => {
-            await this.update(attachmentData, { where: { id: attachmentId }, transaction });
+    /**
+     * 获取文件夹内容
+     * @param pid
+     * @returns
+     */
+    async getFolderContents(pid: number): Promise<Attachment[]> {
+        const contents = await Attachment.findAll({
+            where: { pid },
+            order: [
+                ['is_folder', 'DESC'],
+                ['title', 'ASC']
+            ]
         });
+        return contents;
     }
 
-    async deleteAttachments(attachmentIds: number[]): Promise<void> {
-        await defineTransactionWrapper(async (transaction) => {
-            await this.delete({ where: { id: attachmentIds }, transaction });
-        });
-    }
+    /**
+     * 递归删除文件夹及其内容
+     * @param id
+     * @returns
+     */
+    async deleteAttachment(id: number): Promise<void> {
+        const attachment = await Attachment.findByPk(id);
 
-    async getAttachmentById(attachmentId: number): Promise<Attachment | null> {
-        return await Attachment.findByPk(attachmentId);
-    }
+        if (!attachment) {
+            throw new Error('Attachment not found');
+        }
 
-    async getAllAttachments(title?: string): Promise<Attachment[]> {
-        return await Attachment.findAll();
+        if (attachment.isFolder) {
+            const children = await Attachment.findAll({ where: { pid: id } });
+
+            for (const child of children) {
+                if (child.id !== undefined) {
+                    await this.deleteAttachment(child.id);
+                }
+            }
+        }
+
+        if (!attachment.isFolder && attachment.url) {
+            defineDeleteFile(attachment.url);
+        }
+        await Attachment.destroy({ where: { id } });
     }
 }

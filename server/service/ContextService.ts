@@ -31,9 +31,31 @@ export default class ContextService extends BaseService<Context> {
         });
     }
 
+    async deleteContextsByChatIds(chatIds: number[]): Promise<void> {
+        await defineTransactionWrapper(async (transaction) => {
+            await this.delete({ where: { chatId: chatIds }, transaction });
+        });
+    }
+
+    async deleteLastContextByChatId(chatId: number): Promise<void> {
+        await defineTransactionWrapper(async (transaction) => {
+            const lastContext = await Context.findOne({
+                where: { chatId: chatId, role: 'assistant' },
+                order: [['createdAt', 'DESC']],
+                transaction
+            });
+
+            if (lastContext) {
+                await lastContext.destroy({ transaction });
+            }
+        });
+    }
+
     async getContextById(contextId: number): Promise<Context | null> {
         return await Context.findByPk(contextId);
     }
+
+
 
     async getAllContexts(): Promise<Context[]> {
         return Context.findAll();

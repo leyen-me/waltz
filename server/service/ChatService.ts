@@ -31,14 +31,34 @@ export default class ChatService extends BaseService<Chat> {
         });
     }
 
-    async deleteChats(chatIds: number[]): Promise<void> {
+    async deleteChats(chatIds: number[], userId: number): Promise<void> {
         await defineTransactionWrapper(async (transaction) => {
-            await this.delete({ where: { id: chatIds }, transaction });
+            await this.delete({ where: { id: chatIds, userId: userId }, transaction });
+        });
+    }
+
+    async deleteAllChat(userId: number): Promise<void> {
+        await defineTransactionWrapper(async (transaction) => {
+            const chatIdList = await this.getChatIdByUserId(userId);
+            await Chat.destroy({
+                where: {
+                    userId: userId
+                }, transaction
+            });
+            this.contextService.deleteContextsByChatIds(chatIdList);
         });
     }
 
     async getChatById(chatId: number): Promise<Chat | null> {
         return await Chat.findByPk(chatId);
+    }
+
+    async getChatIdByUserId(userId: number): Promise<number[]> {
+        const chats = await Chat.findAll({
+            where: { userId },
+            attributes: ['id']
+        });
+        return chats.map(chat => chat.getDataValue('id'));
     }
 
     async getAllChats(): Promise<Chat[]> {
@@ -48,11 +68,17 @@ export default class ChatService extends BaseService<Chat> {
             ]
         });
     }
-    
 
-    async getStream(chatId: number, prompt: string): Promise<ReadableStream> {
-        await this.contextService.createContext({ chatId, content: prompt, role: "user", status: 1 });
+    async getReStream(chatId: number, prompt: string): Promise<ReadableStream> {
+        await this.contextService.deleteLastContextByChatId(chatId);
+        return await this.getStream(chatId);
+    }
 
+
+    async getStream(chatId: number, prompt?: string): Promise<ReadableStream> {
+        if (prompt) {
+            await this.contextService.createContext({ chatId, content: prompt, role: "user", status: 1 });
+        }
         const chat = await this.getChatById(chatId);
 
         const messages: any = [];

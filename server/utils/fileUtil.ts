@@ -18,60 +18,99 @@ const getFileMimeType = (file: File): string => {
  * @param file 文件对象
  * @returns 子目录名称
  */
-const validateFile = (file: File): string => {
+export const defineValidateFile = (file: File): string => {
 
-    // 定义允许上传的最大文件大小（以字节为单位）
     const maxFileSize = 1024 * 1024 * 1024; // 1GB
 
-    // 获取文件的 MIME 类型
     const mimeType = getFileMimeType(file);
 
-    // 定义允许上传的文件 MIME 类型
-    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain', 'audio/mpeg', 'audio/mp4', 'video/mp4', 'video/avi', 'video/x-msvideo', 'audio/wav', 'audio/ogg', 'text/html', 'text/css', 'application/javascript'];
+    const allowedMimeTypes = [
+        // 图像文件
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/bmp',
+        'image/webp',
+        'image/tiff',
 
-    // 检查文件 MIME 类型是否在允许的范围内
+        // 文档文件
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.oasis.opendocument.text',
+        'application/vnd.oasis.opendocument.spreadsheet',
+        'application/vnd.oasis.opendocument.presentation',
+
+        // 音频文件
+        'audio/mpeg',
+        'audio/mp4',
+        'audio/wav',
+        'audio/ogg',
+        'audio/aac',
+
+        // 视频文件
+        'video/mp4',
+        'video/avi',
+        'video/x-msvideo',
+        'video/mpeg',
+        'video/x-flv',
+        'video/quicktime',
+        'video/x-ms-wmv',
+
+        // 压缩文件
+        'application/zip',
+        'application/x-rar-compressed',
+        'application/x-tar',
+        'application/x-7z-compressed',
+
+        // 代码文件
+        'text/plain', // 文本文件
+        'text/html', // HTML 文件
+        'text/css', // CSS 文件
+        'application/javascript', // JavaScript 文件
+        'application/xml', // XML 文件
+        'text/csv', // CSV 文件
+        'application/json', // JSON 文件
+        'application/java-archive', // Java 文件
+        'text/x-python', // Python 文件
+        'text/x-go', // Go 文件
+        'text/x-c', // C 文件
+        'text/x-c++', // C++ 文件
+        'text/x-csharp', // C# 文件
+        'application/x-swift', // Swift 文件
+        'text/x-ruby', // Ruby 文件
+        'application/x-php', // PHP 文件
+        'application/x-typescript', // TypeScript 文件
+        'text/x-rust', // Rust 文件
+        'text/x-kotlin', // Kotlin 文件
+        'application/dart', // Dart 文件
+        'text/x-shellscript', // Shell 脚本
+        'text/x-powershell', // PowerShell 脚本
+        'text/x-lua', // Lua 文件
+        'text/x-perl', // Perl 文件
+        'text/x-scala', // Scala 文件
+        'text/x-objectivec', // Objective-C 文件
+        'text/x-r-source', // R 文件
+        'text/x-matlab', // MATLAB 文件
+        'text/x-erlang', // Erlang 文件
+        'text/x-haskell', // Haskell 文件
+        'text/x-scheme', // Scheme 文件
+
+        // 应用文件
+        'application/vnd.android.package-archive', // APK 文件
+    ];
+
+
     if (!allowedMimeTypes.includes(mimeType)) {
         throw new Error('Invalid file type');
     }
 
-    // 默认子目录为 'picture'
-    let subDir = 'picture';
-
-    // 根据 MIME 类型确定子目录
-    switch (mimeType) {
-        case 'audio/mpeg':
-        case 'audio/mp4':
-        case 'audio/wav':
-        case 'audio/ogg':
-            subDir = 'audio';
-            break;
-        case 'video/mp4':
-        case 'video/avi':
-        case 'video/x-msvideo':
-            subDir = 'video';
-            break;
-        case 'application/pdf':
-        case 'application/msword':
-        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-        case 'text/plain':
-        case 'text/html':
-        case 'text/css':
-        case 'application/javascript':
-            subDir = 'document';
-            break;
-        case 'image/jpeg':
-        case 'image/png':
-        case 'image/gif':
-            subDir = 'image';
-            break;
-    }
-
-    // 检查文件大小是否符合要求
     if (file.size > maxFileSize) {
         throw new Error('File size exceeds the limit');
     }
-
-    return subDir;
+    return mimeType;
 };
 
 
@@ -83,30 +122,16 @@ const validateFile = (file: File): string => {
  * @returns 上传后的文件路径
  */
 export const defineUploadFile = async (file: File, baseUploadDir: string): Promise<string> => {
-    const fileExtension = defineGetFileExtension(file.name);
-    // 获取子目录
-    const subDir = validateFile(file);
-
-    // 拼接上传目录
-    const uploadDir = path.posix.join(baseUploadDir, subDir);
-
-    if (!uploadDir) {
-        throw new Error('Upload directory is required');
+    if (!fs.existsSync(baseUploadDir)) {
+        fs.mkdirSync(baseUploadDir, { recursive: true });
     }
 
-    // 确保上传目录存在，如果不存在则创建
-    if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-    }
+    const filePath = path.posix.join(baseUploadDir, generateUUID().replaceAll("-", "") + defineGetFileExtension(file.name));
 
-    // 构造文件路径
-    const filePath = path.posix.join(uploadDir, generateUUID().replaceAll("-", "") + defineGetFileExtension(file.name));
-
-    // 将文件保存到服务器
     const fileBuffer = await file.arrayBuffer();
     await fs.promises.writeFile(filePath, Buffer.from(fileBuffer));
 
-    return filePath;
+    return filePath.replace("public", "").replace("/attachment","").replace("./", "").replace("../", "");
 };
 
 
@@ -115,8 +140,18 @@ export const defineUploadFile = async (file: File, baseUploadDir: string): Promi
  * @param fileName 文件名
  * @returns 文件后缀名
  */
-export const defineGetFileExtension = (fileName: string) => {
+export const defineGetFileExtension = (fileName: string): string => {
     return path.extname(fileName).toLowerCase();
+};
+
+/**
+ * 删除文件
+ * @param filePath 文件路径
+ */
+export const defineDeleteFile = (filePath: string): void => {
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+    }
 };
 
 

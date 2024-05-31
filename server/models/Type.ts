@@ -29,6 +29,11 @@ export default class Type extends BaseModel<Type> {
                 type: DataTypes.TEXT({ length: 'long' }),
                 allowNull: true,
                 comment: '系统提示词',
+            },
+            desc:{
+                type: DataTypes.STRING({ length: 255 }),
+                allowNull: true,
+                comment: '描述',
             }
         };
 
