@@ -10,6 +10,15 @@ export default class Attachment extends BaseModel<Attachment> {
     declare size: number;
     declare isFolder: whetherEnum;
     declare type: string;
+    declare isFixed: whetherEnum;
+
+    toJSON() {
+        const json = super.toJSON();
+        if (json.size) {
+            json.size = Number((json.size / 1024 / 1024).toFixed(2));
+        };
+        return json;
+    }
 
     static initAttachment(sequelize: Sequelize): typeof Attachment {
         const modelAttributes = {
@@ -48,6 +57,12 @@ export default class Attachment extends BaseModel<Attachment> {
                 type: DataTypes.STRING({ length: 50 }),
                 allowNull: true,
                 comment: '附件类型',
+            },
+            isFixed: {
+                type: DataTypes.INTEGER({ length: 4 }),
+                allowNull: false,
+                defaultValue: 0,
+                comment: '是否固定',
             },
         };
 

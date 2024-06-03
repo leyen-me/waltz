@@ -34,9 +34,13 @@ export const defineValidateFile = (file: File): string => {
         'image/tiff',
 
         // 文档文件
+        'text/markdown',
         'application/pdf',
         'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         'application/vnd.ms-excel',
         'application/vnd.ms-powerpoint',
         'application/vnd.oasis.opendocument.text',
@@ -71,9 +75,10 @@ export const defineValidateFile = (file: File): string => {
         'text/css', // CSS 文件
         'application/javascript', // JavaScript 文件
         'application/xml', // XML 文件
+        'application/sql', // SQL 文件
         'text/csv', // CSV 文件
         'application/json', // JSON 文件
-        'application/java-archive', // Java 文件
+        'text/x-java-source', // Java 文件
         'text/x-python', // Python 文件
         'text/x-go', // Go 文件
         'text/x-c', // C 文件
@@ -100,7 +105,9 @@ export const defineValidateFile = (file: File): string => {
 
         // 应用文件
         'application/vnd.android.package-archive', // APK 文件
+        'application/octet-stream',//EXE文件
     ];
+    console.log(mimeType);
 
 
     if (!allowedMimeTypes.includes(mimeType)) {
@@ -113,7 +120,11 @@ export const defineValidateFile = (file: File): string => {
     return mimeType;
 };
 
-
+export const defineCreateFolder = async (createDir: string): Promise<void> => {
+    if (!fs.existsSync(createDir)) {
+        fs.mkdirSync(createDir, { recursive: true });
+    }
+}
 
 /**
  * 上传文件
@@ -131,7 +142,7 @@ export const defineUploadFile = async (file: File, baseUploadDir: string): Promi
     const fileBuffer = await file.arrayBuffer();
     await fs.promises.writeFile(filePath, Buffer.from(fileBuffer));
 
-    return filePath.replace("public", "").replace("/attachment","").replace("./", "").replace("../", "");
+    return filePath.replace("public", "").replace("/attachment", "").replace("./", "").replace("../", "");
 };
 
 
@@ -150,7 +161,7 @@ export const defineGetFileExtension = (fileName: string): string => {
  */
 export const defineDeleteFile = (filePath: string): void => {
     if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+        fs.rmSync(filePath, { recursive: true, force: true });
     }
 };
 
