@@ -75,7 +75,9 @@
     </t-collapse>
 
     <div class="mt-4">
-      <t-card style="background-color: var(--web-bg-2);--td-comp-paddingLR-xl: 16px;">
+      <t-card
+        style="background-color: var(--web-bg-2); --td-comp-paddingLR-xl: 16px"
+      >
         <BaseEditor
           v-model="formData"
           @save="handleSubmitForm"
@@ -102,8 +104,11 @@ import type Tag from "~/server/models/Tag";
 import type Article from "~/server/models/Article";
 
 const route = useRoute();
+const { NUXT_API_BASE } = useRuntimeConfig().public;
 const uploadUrl =
-  "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
+  NUXT_API_BASE +
+    "/api/admin/attachment/file?pid=1&Authorization=" +
+    Cookies.get("token") || "";
 
 const statusOptions = ref([
   { label: "草稿", value: "draft" },
@@ -187,7 +192,7 @@ const handleEditorUpload = async (event: any, insertImage: any, files: any) => {
   // @ts-ignore
   for (const item of data.value.data) {
     insertImage({
-      url: useImageUrl(item),
+      url: useImageUrl("/" + item),
       desc: "",
     });
   }
@@ -199,7 +204,7 @@ const onCoverUploadSuccess = (e: any) => {
     MessagePlugin.error(msg);
     return;
   }
-  formData.value.cover = data[0];
+  formData.value.cover = "/" + data[0];
   MessagePlugin.success("文件上传成功");
 };
 const onCoverUploadError = () => {

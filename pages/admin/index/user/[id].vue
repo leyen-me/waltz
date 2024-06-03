@@ -93,15 +93,18 @@ import {
 import { useAdminRoleListApi } from "@/api/admin/role";
 import type Role from "@/server/models/Role";
 import useHasAuth from "@/utils/auth";
-import  useImageUrl  from "@/utils/imageUrl"
+import useImageUrl from "@/utils/imageUrl";
 
 const route = useRoute();
 const router = useRouter();
 const info = ref(false);
 
 const files = ref([]);
+const { NUXT_API_BASE } = useRuntimeConfig().public;
 const uploadUrl =
-  "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
+  NUXT_API_BASE +
+    "/api/admin/attachment/file?pid=0&Authorization=" +
+    Cookies.get("token") || "";
 
 const onUploadSuccess = (e: any) => {
   const { code, msg, data } = e.response;
@@ -109,7 +112,7 @@ const onUploadSuccess = (e: any) => {
     MessagePlugin.error(msg);
     return;
   }
-  formData.value.avatar = useImageUrl(data[0]);
+  formData.value.avatar = useImageUrl("/" + data[0]);
   MessagePlugin.success("文件上传成功");
 };
 const onUploadError = () => {

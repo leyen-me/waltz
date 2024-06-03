@@ -20,3 +20,5 @@ export const useAdminChatContextSubmitApi = <T = any>(
     });
   }
 };
+
+export default {}

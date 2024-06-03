@@ -89,8 +89,9 @@ import {
 import { useAdminMenuNavApi } from "@/api/admin/menu";
 import type Menu from "~/server/models/Menu";
 import { defineTreeToList } from "~/server/utils/nodeConvert";
+
 definePageMeta({
-  middleware: "auth",
+  middleware: "admin-auth",
 });
 
 const sidebarOpen = ref(false);

@@ -1,17 +1,19 @@
-const useUserStore = defineStore('userStore', {
-    state: () => (<{
-        authorityList:string[]
-    }>{
-        // 用户信息
+const useUserStore = defineStore("userStore", {
+  state: () =>
+    <
+      {
         user: {
-            id: '',
-        },
-        // 权限列表
-        authorityList: [],
-    }),
-    actions: {
-        
-    }
-})
+          id: number;
+        };
+        authorityList: string[];
+      }
+    >{
+      user: {
+        id: 0, // 用户ID
+      },
+      authorityList: [], // 权限列表
+    },
+  actions: {},
+});
 
-export default useUserStore
+export default useUserStore;

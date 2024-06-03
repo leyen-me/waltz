@@ -1,5 +1,3 @@
-import type DictType from "~/server/models/DictType";
-
 const useAppStore = defineStore("appStore", {
   state: () =>
     <
