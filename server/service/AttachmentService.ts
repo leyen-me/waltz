@@ -1,6 +1,7 @@
+import fs from 'fs';
 import { CreationAttributes } from 'sequelize';
 import Attachment from '../models/Attachment';
-import { defineUploadFile, defineValidateFile, defineGetFileExtension, defineDeleteFile } from '../utils/fileUtil';
+import { defineUploadFile, defineValidateFile, defineGetFileExtension, defineDeleteFile, defineCreateFolder } from '../utils/fileUtil';
 
 export default class AttachmentService {
 
@@ -10,13 +11,24 @@ export default class AttachmentService {
     * @param pid
     * @returns
     */
-    async createFolder(attachmentData: CreationAttributes<Attachment>, pid: number = 0): Promise<number> {
+    async createFolder(attachmentData: CreationAttributes<Attachment>): Promise<number> {
+        const { NUXT_API_UPLOAD_BASE } = useRuntimeConfig().public;
 
-        const parentFolder = await Attachment.findByPk(pid);
+        const parentFolder = await Attachment.findByPk(attachmentData.pid);
+
+        let folderPath: string;
+        if (parentFolder) {
+            folderPath = NUXT_API_UPLOAD_BASE + parentFolder.url + '/' + attachmentData.title;
+        } else {
+            folderPath = NUXT_API_UPLOAD_BASE + '/' + attachmentData.title;
+        }
+
+        defineCreateFolder(folderPath);
+
         const createdFolder = await Attachment.create({
             title: attachmentData.title,
             url: parentFolder ? parentFolder.url + '/' + attachmentData.title : '/' + attachmentData.title,
-            pid: attachmentData.pid,
+            pid: attachmentData.pid ? attachmentData.pid : 0,
             isFolder: 1,
             type: 'folder',
         });
@@ -26,6 +38,7 @@ export default class AttachmentService {
         }
         return createdFolder.id;
     }
+
 
     /**
    * 上传文件
@@ -38,7 +51,6 @@ export default class AttachmentService {
 
         await defineTransactionWrapper(async (transaction) => {
             const files = formData.getAll('files');
-            console.log(pid);
 
             if (pid) {
                 const parentFolder = await Attachment.findByPk(pid);
@@ -57,7 +69,6 @@ export default class AttachmentService {
                         isFolder: 0,
                         type: mimeType
                     };
-                    console.log(attachmentData);
 
                     const createdAttachment = await Attachment.create(attachmentData, { transaction });
                     if (createdAttachment && createdAttachment.id) {
@@ -90,19 +101,20 @@ export default class AttachmentService {
      * @param id
      * @returns
      */
-    async deleteAttachment(id: number): Promise<void> {
+    async deleteFiles(id: number): Promise<void> {
+        const { NUXT_API_UPLOAD_BASE } = useRuntimeConfig().public;
         const attachment = await Attachment.findByPk(id);
-
         if (!attachment) {
             throw new Error('Attachment not found');
         }
 
         if (attachment.isFolder) {
+            defineDeleteFile(NUXT_API_UPLOAD_BASE + attachment.url);
             const children = await Attachment.findAll({ where: { pid: id } });
 
             for (const child of children) {
                 if (child.id !== undefined) {
-                    await this.deleteAttachment(child.id);
+                    await this.deleteFiles(child.id);
                 }
             }
         }
@@ -111,5 +123,18 @@ export default class AttachmentService {
             defineDeleteFile(attachment.url);
         }
         await Attachment.destroy({ where: { id } });
+    }
+
+    async downloadFiles(id: number): Promise<{ type: string, data: any } | null> {
+        const { NUXT_API_UPLOAD_BASE } = useRuntimeConfig().public;
+        const attachment = await Attachment.findOne({
+            where: { id },
+        });
+        if (attachment && attachment.url) {
+            const path = NUXT_API_UPLOAD_BASE + attachment.url;
+            const imageData = fs.readFileSync(path);
+            return { type: attachment.type, data: imageData };
+        }
+        return null;
     }
 }

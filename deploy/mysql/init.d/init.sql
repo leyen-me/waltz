@@ -48,9 +48,6 @@ CREATE FULLTEXT INDEX idx_title_content ON t_article(title, content) WITH PARSER
 -- Records of t_article
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_article`(`id`, `category_id`, `title`, `cover`, `content`, `html`, `author_id`, `published_at`, `status`, `views_count`, `favorites_count`, `likes_count`, `comments_count`, `sort`, `created_at`, `updated_at`) VALUES (1, 1, '美商务部发布有关人工智能安全的战略愿景，组建与盟友的合作网络', 'https://alexgurghis.com/wp-content/uploads/2023/06/jobs_demo-1020x540.webp', '美國財政部長耶倫週二表示，美國和歐洲在抵制中國工業產能過剩上需要攜手合作，並警告說，中國大量出口廉價商品對全球經濟構成嚴重威脅。耶倫是在德國的一次演講中發表這番言論的，突出了七國集團財長本週在義大利舉行會議時預計將討論的中心議題。「中國的產業政策對坐在這個房間裡的我們來說或許看起來很遙遠，但如果我們不戰略性地、團結一致地做出反應，我們兩國和世界各地的企業都會面臨生存風險，」耶倫在法蘭克福金融與管理學院接受榮譽博士學位時說。近幾個月來，中國過度生產綠色能源技術已成為大西洋兩岸面臨的一個緊迫問題。拜登政府的官員越來越擔心，他為美國國內的清潔能源和其他下一代技術製造提供資金的努力將受到中國廉價出口的削弱，中國正在生產大量的鋼鐵、電動汽車和太陽能電池板。', NULL, 1, '2024-05-21 11:14:51', 'published', 0, 0, 0, 0, 1, '2024-05-21 11:14:43', '2024-05-21 11:14:51');
-INSERT INTO `t_article`(`id`, `category_id`, `title`, `cover`, `content`, `html`, `author_id`, `published_at`, `status`, `views_count`, `favorites_count`, `likes_count`, `comments_count`, `sort`, `created_at`, `updated_at`) VALUES (2, 1, '美商务部发布有关人工智能安全的战略愿景，组建与盟友的合作网络', 'https://alexgurghis.com/wp-content/uploads/2023/06/jobs_demo-1020x540.webp', '美國財政部長耶倫週二表示，美國和歐洲在抵制中國工業產能過剩上需要攜手合作，並警告說，中國大量出口廉價商品對全球經濟構成嚴重威脅。耶倫是在德國的一次演講中發表這番言論的，突出了七國集團財長本週在義大利舉行會議時預計將討論的中心議題。「中國的產業政策對坐在這個房間裡的我們來說或許看起來很遙遠，但如果我們不戰略性地、團結一致地做出反應，我們兩國和世界各地的企業都會面臨生存風險，」耶倫在法蘭克福金融與管理學院接受榮譽博士學位時說。近幾個月來，中國過度生產綠色能源技術已成為大西洋兩岸面臨的一個緊迫問題。拜登政府的官員越來越擔心，他為美國國內的清潔能源和其他下一代技術製造提供資金的努力將受到中國廉價出口的削弱，中國正在生產大量的鋼鐵、電動汽車和太陽能電池板。', NULL, 2, '2024-05-21 11:14:51', 'published', 0, 0, 0, 0, 1, '2024-05-21 11:14:43', '2024-05-21 11:14:51');
-INSERT INTO `t_article`(`id`, `category_id`, `title`, `cover`, `content`, `html`, `author_id`, `published_at`, `status`, `views_count`, `favorites_count`, `likes_count`, `comments_count`, `sort`, `created_at`, `updated_at`) VALUES (3, 1, '美商务部发布有关人工智能安全的战略愿景，组建与盟友的合作网络', 'https://alexgurghis.com/wp-content/uploads/2023/06/jobs_demo-1020x540.webp', '美國財政部長耶倫週二表示，美國和歐洲在抵制中國工業產能過剩上需要攜手合作，並警告說，中國大量出口廉價商品對全球經濟構成嚴重威脅。耶倫是在德國的一次演講中發表這番言論的，突出了七國集團財長本週在義大利舉行會議時預計將討論的中心議題。「中國的產業政策對坐在這個房間裡的我們來說或許看起來很遙遠，但如果我們不戰略性地、團結一致地做出反應，我們兩國和世界各地的企業都會面臨生存風險，」耶倫在法蘭克福金融與管理學院接受榮譽博士學位時說。近幾個月來，中國過度生產綠色能源技術已成為大西洋兩岸面臨的一個緊迫問題。拜登政府的官員越來越擔心，他為美國國內的清潔能源和其他下一代技術製造提供資金的努力將受到中國廉價出口的削弱，中國正在生產大量的鋼鐵、電動汽車和太陽能電池板。', NULL, 3, '2024-05-21 11:14:51', 'published', 0, 0, 0, 0, 1, '2024-05-21 11:14:43', '2024-05-21 11:14:51');
 COMMIT;
 
 -- ----------------------------
@@ -70,7 +67,6 @@ CREATE TABLE `t_category`  (
 -- Records of t_category
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_category`(`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES (1, '随笔', '生活随笔', '2024-05-20 11:16:27', '2024-05-20 11:16:27');
 COMMIT;
 
 -- ----------------------------
@@ -110,9 +106,6 @@ CREATE TABLE `t_tag`  (
 -- Records of t_tag
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_tag`(`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES (1, 'JAVA', 'JAVA', '2024-05-22 11:26:36', '2024-05-22 11:26:36');
-INSERT INTO `t_tag`(`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES (2, 'PYTHON', 'PYTHON', '2024-05-22 11:27:05', '2024-05-22 11:27:05');
-INSERT INTO `t_tag`(`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES (3, 'VUE', 'VUE', '2024-05-22 11:27:35', '2024-05-22 11:27:35');
 COMMIT;
 
 -- ----------------------------
@@ -252,13 +245,14 @@ CREATE TABLE `t_attachment`  (
   `ext` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '附件扩展名',
   `size` int(0) DEFAULT NULL COMMENT '附件大小',
   `is_folder` tinyint(0) NOT NULL  COMMENT '是否是文件夹',
-  `type` varchar(50) COLLATE utf8mb4_general_ci NOT NULL COMMENT '附件类型',
+  `type` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '附件类型',
+  `is_fixed` tinyint(0) NOT NULL  COMMENT '是否固定(能否被删除)',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT='附件表';
 
-CREATE UNIQUE INDEX idx_title_type ON t_attachment(title, type);
+CREATE UNIQUE INDEX idx_pid_title_type ON t_attachment(pid,title, type);
 -- ----------------------------
 -- Records of t_attachment
 -- ----------------------------
