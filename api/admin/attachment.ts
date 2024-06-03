@@ -14,14 +14,14 @@ export const useAdminAttachmentFolderApi = <T = any>(body: any) => {
   });
 };
 
-
-
-
-
-
-
-
-
+export const useAdminAttachmentDeleteApi = <T = Attachment>(id: number) => {
+  return useApi<T>(`/api/admin/attachment/`, {
+    method: "DELETE",
+    body: JSON.stringify({
+      id,
+    }),
+  });
+};
 
 export const useAdminAttachmentPageApi = <T = BasePageResponse<Attachment>>(
   query: any
@@ -32,13 +32,6 @@ export const useAdminAttachmentPageApi = <T = BasePageResponse<Attachment>>(
       method: "GET",
     }
   );
-};
-
-export const useAdminAttachmentDeleteApi = <T = Attachment>(id: number) => {
-  return useApi<T>(`/api/admin/attachment/`, {
-    method: "DELETE",
-    body: JSON.stringify([id]),
-  });
 };
 
 export const useAdminAttachmentInfoApi = <T = Attachment>(id: number) => {

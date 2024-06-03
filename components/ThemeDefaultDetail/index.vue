@@ -11,7 +11,7 @@
     <h1
       class="text-2xl font-bold text-center mt-16 xl:mt-16 xl:text-5xl !leading-normal tracking-wider"
     >
-      {{ article.title }} #{{ String(article.sort).padStart(3, "0") }}
+      {{ article.title }}
     </h1>
 
     <p class="text-center font-time mt-8">

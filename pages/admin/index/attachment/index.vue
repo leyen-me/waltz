@@ -1,76 +1,51 @@
 <template>
   <div class="w-full h-full" @contextmenu="(e) => showMenu(e, false)">
-    <t-card title="附件管理" style="height: 100%">
-      <ul class="grid grid-cols-3 gap-4 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-12">
-        <li
-          v-if="pid !== 0"
-          class="w-full bg-[var(--web-bg-8)] p-8 cursor-pointer rounded-md flex flex-col items-center aspect-square hover:bg-[var(--web-bg-9)]"
-          @click="handleParentClick"
+    <t-card title="" style="height: 100%">
+      <div class="flex items-center">
+        <span class="mr-4">目录:</span>
+        <t-button variant="text" style="padding: 0">/</t-button>
+        <t-button
+          style="padding: 0 4px"
+          variant="text"
+          @click="handleFileClick({ id: 0, isFolder: true }, true)"
+          >root</t-button
         >
-          <t-icon name="folder" size="56px"></t-icon>
-          <span class="line-clamp-3 mt-2">返回上一级</span>
-        </li>
-        <li
-          v-for="(v, k) in list"
-          :key="v.id"
-          class="w-full h-40 bg-[var(--web-bg-8)] p-8 cursor-pointer rounded-md flex flex-col items-center hover:bg-[var(--web-bg-9)]"
-          @click="handleFileClick(v)"
-          @contextmenu="(e) => showMenu(e, true)"
-        >
-          <t-icon v-if="v.isFolder" name="folder" size="56px"></t-icon>
-          <t-icon v-else name="file" size="56px"></t-icon>
-
-          <img v-if="v.type === 'image/png'" :src="useImageUrl(v.url)" alt="" style="width: 50px;height: 50px;" />
-          <p class="w-full mt-2 line-clamp-3 text-center">
-            {{ v.title }}
-          </p>
-        </li>
-      </ul>
-
-      <!-- <template #actions>
-        <t-upload
-          name="files"
-          v-model="files"
-          :action="uploadUrl"
-          :abridge-name="[8, 6]"
-          :multiple="false"
-          :showImageFileName="false"
-          theme="custom"
-          :disabled="!useHasAuth('attachment:save')"
-          placeholder="未选择文件"
-          @success="onUploadSuccess"
-          @fail="onUploadError"
-          @remove="onUploadRemove"
-        ></t-upload>
-      </template>
-      <t-table
-        ref="tableRef"
-        row-key="id"
-        :data="list"
-        :columns="columns"
-      ></t-table>
-      <div class="mt-4">
-        <t-pagination
-          v-if="list.length > limit"
-          v-model="page"
-          v-model:pageSize="limit"
-          :total="total"
-          show-sizer
-          :page-size-options="defaultRowsPerPageOptions"
-          @page-size-change="getData"
-          @current-change="getData"
-        />
-      </div> -->
-
-      <!-- <t-button variant="outline">右击时触发</t-button> -->
+        <t-button variant="text" style="padding: 0">/</t-button>
+        <div v-for="(v, k) in currentDir" :key="v.id">
+          <t-button
+            variant="text"
+            style="padding: 0 4px"
+            @click="handleFileClick(v, true)"
+            >{{ v.title }}
+          </t-button>
+          <t-button variant="text" style="padding: 0">/</t-button>
+        </div>
+      </div>
+      <div class="mt-4 flex justify-end">
+        <t-space>
+          <t-button v-if="pid !== 0" @click="handleParentClick">返回</t-button>
+          <t-button @click="folderItems[1].onClick">上传</t-button>
+          <t-button @click="folderItems[0].onClick">新建文件夹</t-button>
+        </t-space>
+      </div>
+      <div class="mt-4 h-full">
+        <t-table
+          height="70vh"
+          ref="tableRef"
+          row-key="id"
+          :data="list"
+          :columns="columns"
+          :onRowClick="(v) => handleFileClick(v.row)"
+        ></t-table>
+      </div>
     </t-card>
   </div>
 
   <ContextMenu
+    v-model="contextShow"
     :items
     :x
     :y
-    v-model="contextShow"
     :h="contextItemHight"
     :w="contextItemWidth"
   ></ContextMenu>
@@ -78,7 +53,6 @@
   <t-dialog
     v-model:visible="addFolderVisible"
     header="新建文件夹"
-    width="40%"
     :confirm-on-enter="true"
     :on-cancel="() => (addFolderVisible = false)"
     :on-close-btn-click="() => (addFolderVisible = false)"
@@ -96,8 +70,8 @@
     header="文件上传"
     width="40%"
     :confirm-on-enter="true"
-    :cancelBtn="null"
-    :confirmBtn="null"
+    :cancelBtn="() => null"
+    :confirmBtn="() => null"
     :on-cancel="() => (uploadFileVisible = false)"
     :on-close-btn-click="() => (uploadFileVisible = false)"
     :on-overlay-click="() => (uploadFileVisible = false)"
@@ -115,7 +89,6 @@
         placeholder="未选择文件"
         @success="onUploadSuccess"
         @fail="onUploadError"
-        @remove="onUploadRemove"
       ></t-upload>
     </t-space>
   </t-dialog>
@@ -138,8 +111,9 @@ import useImageUrl from "@/utils/imageUrl";
 
 const { NUXT_API_BASE } = useRuntimeConfig().public;
 
-const pidCache = ref(0);
+const pidCache = ref<number[]>([]);
 const pid = ref(0);
+const currentDir = ref<Attachment[]>([]);
 
 const contextShow = ref(false);
 const contextItemWidth = ref(180);
@@ -153,6 +127,7 @@ const folderItems = [
     icon: "folder",
     title: "新建文件夹",
     onClick: () => {
+      addFolderName.value = "";
       contextShow.value = false;
       addFolderVisible.value = true;
     },
@@ -163,6 +138,7 @@ const folderItems = [
     title: "文件上传",
     type: "file",
     onClick: () => {
+      files.value = [];
       contextShow.value = false;
       uploadFileVisible.value = true;
     },
@@ -175,6 +151,7 @@ const fileItems = [
     title: "移动",
     onClick: () => {
       contextShow.value = false;
+      moveFileVisible.value = true;
     },
   },
   {
@@ -183,16 +160,112 @@ const fileItems = [
     title: "删除",
     onClick: () => {
       contextShow.value = false;
+      useDeleteConfirm(useAdminAttachmentDeleteApi, optionId.value, () => {
+        getData();
+      });
+    },
+  },
+];
+const columns = [
+  {
+    colKey: "title",
+    title: "文件名",
+    ellipsis: true,
+    cell: (_h: any, { row }: any) => {
+      return (
+        <div
+          className={
+            row.type === "folder"
+              ? "text-[var(--web-color-7)] font-semibold flex items-center"
+              : "text-[#FFF] flex items-center"
+          }
+        >
+          {row.type === "folder" ? (
+            <t-icon name="folder"></t-icon>
+          ) : (
+            <t-icon name="file"></t-icon>
+          )}
+          <p className={"line-clamp-1 ml-2 w-0 flex-1"}>{row.title}</p>
+        </div>
+      );
+    },
+  },
+  {
+    colKey: "size",
+    title: "大小(Mb)",
+    ellipsis: true,
+  },
+  {
+    colKey: "type",
+    title: "类型",
+    ellipsis: true,
+  },
+  {
+    colKey: "createdAt",
+    title: "创建时间",
+    ellipsis: true,
+  },
+  {
+    colKey: "operate",
+    title: "操作",
+    cell: (_h: any, { row }: any) => {
+      return (
+        <div class={"w-32"}>
+          <t-space>
+            {row.type !== "folder" ? (
+              <t-link
+                variant="text"
+                hover="color"
+                disabled={row.type === "folder"}
+                onClick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                  optionId.value = row.id;
+                  window.open(useImageUrl("/" + String(optionId.value)));
+                }}
+              >
+                下载
+              </t-link>
+            ) : (
+              <></>
+            )}
+            <t-popconfirm
+              content="确认删除吗"
+              onConfirm={async () => {
+                optionId.value = row.id;
+                try {
+                  await useAdminAttachmentDeleteApi(optionId.value);
+                  MessagePlugin.success("删除成功");
+                  getData();
+                } catch {}
+              }}
+            >
+              <t-link
+                variant="text"
+                hover="color"
+                theme="danger"
+                onClick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                }}
+              >
+                删除
+              </t-link>
+            </t-popconfirm>
+          </t-space>
+        </div>
+      );
     },
   },
 ];
 
 const items = ref([]);
 
-const showMenu = function (event: MouseEvent, show: Boolean) {
+const optionId = ref<number>(0);
+const showMenu = function (event: MouseEvent, id: number) {
   event.preventDefault();
   event.stopPropagation();
-  if (show) {
+  optionId.value = 0;
+  if (id) {
+    optionId.value = id;
     items.value = fileItems;
   } else {
     items.value = folderItems;
@@ -265,46 +338,42 @@ const onUploadError = () => {
   MessagePlugin.error("文件上传失败");
 };
 
+// 文件移动
+const moveFileVisible = ref(false);
+
 // 点击事件
 const handleParentClick = () => {
-  pid.value = pidCache.value;
+  pid.value = pidCache.value[pidCache.value.length - 1];
+  pidCache.value.splice(pidCache.value.length - 1, 1);
+  currentDir.value.splice(currentDir.value.length - 1, 1);
 };
-const handleFileClick = (v: Attachment) => {
+const handleFileClick = (v: Attachment, flag: Boolean) => {
   if (v.isFolder) {
-    pidCache.value = pid.value;
-    pid.value = v.id;
+    if (flag) {
+      console.log("=============>");
+      if (v.id !== pid.value) {
+        list.value = [];
+
+        if (v.id === 0) {
+          currentDir.value = [];
+          pidCache.value = [];
+          pid.value = 0;
+          return;
+        }
+        let index = currentDir.value.findIndex((dir) => dir.id === v.id);
+        currentDir.value.splice(index + 1);
+        pidCache.value.push(currentDir.value[currentDir.value.length - 1].pid);
+        pid.value = v.id as number;
+      }
+    } else {
+      list.value = [];
+      pidCache.value.push(pid.value);
+      currentDir.value.push(v);
+      pid.value = v.id as number;
+    }
     return;
   }
-  MessagePlugin.warning("不支持打开此文件类型");
 };
-
-// const files = ref([]);
-// const uploadUrl =
-//   "/api/admin/attachment/?Authorization=" + Cookies.get("token") || "";
-// const onUploadSuccess = (e: any) => {
-//   const { code, msg, data } = e.response;
-//   if (code !== 200) {
-//     MessagePlugin.error(msg);
-//     return;
-//   }
-//   getData();
-//   MessagePlugin.success("文件上传成功");
-// };
-// const onUploadError = () => {
-//   MessagePlugin.error("文件上传失败");
-// };
-
-// const onUploadRemove = () => {
-//   files.value = [];
-// };
-
-// const router = useRouter();
-
-// 分页
-// const page = ref(1);
-// const limit = ref(defaultRowsPerPageOptions[0]);
-
-// const total = ref(0);
 
 const list = ref<Attachment[]>([]);
 const getData = async () => {
@@ -313,66 +382,6 @@ const getData = async () => {
   });
   list.value = data;
 };
-
-// const columns = [
-//   {
-//     colKey: "id",
-//     title: "编号",
-//     ellipsis: true,
-//   },
-//   {
-//     colKey: "title",
-//     title: "附件标题",
-//     ellipsis: true,
-//   },
-//   {
-//     colKey: "url",
-//     title: "附件链接",
-//     ellipsis: true,
-//   },
-//   {
-//     colKey: "ext",
-//     title: "扩展名",
-//     ellipsis: true,
-//   },
-//   {
-//     colKey: "size",
-//     title: "附件大小",
-//     ellipsis: true,
-//   },
-//   {
-//     colKey: "operate",
-//     title: "操作",
-//     cell: (_h: any, { row }: any) => {
-//       return (
-//         <t-space>
-//           <t-popconfirm
-//             content="确认删除吗"
-//             onConfirm={() => handleDelete(row.id)}
-//           >
-//             <t-link
-//               disabled={!useHasAuth("attachment:delete")}
-//               variant="text"
-//               hover="color"
-//               theme="danger"
-//             >
-//               删除
-//             </t-link>
-//           </t-popconfirm>
-//         </t-space>
-//       );
-//     },
-//   },
-// ];
-// const handleDelete = async (id: number) => {
-//   try {
-//     await useAdminAttachmentDeleteApi(id);
-//     await getData();
-//     MessagePlugin.success("删除成功");
-//   } catch (error) {
-//     MessagePlugin.error("删除失败");
-//   }
-// };
 
 watch(
   () => pid.value,
