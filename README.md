@@ -53,9 +53,9 @@ npm run dev
 
 ## Deployment program
 
-- [source_code deploy](./docs/deploy_source_code.md)
+- [源码部署](./docs/deploy_source_code.md)
 
-- [docker deploy](./docs/deploy_docker.md)
+- [docker部署](./docs/deploy_docker.md)
 
 ## Contribute
 
