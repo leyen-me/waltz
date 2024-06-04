@@ -121,7 +121,7 @@ export default class MenuService extends BaseService<Menu> {
 
     async getAllMenus(user: User): Promise<Menu[]> {
         if (user.get("superAdmin") === 1) {
-            return Menu.findAll().then((menus: Menu[]) => {
+            return await Menu.findAll().then((menus: Menu[]) => {
                 return menus.map((item) => item.toJSON())
             });
         } else {

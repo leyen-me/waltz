@@ -4,19 +4,40 @@ import sequelize from "../db";
 
 
 export default class SiteConfig extends BaseModel<SiteConfig> {
-  declare key: string;
+  declare pid: number;
+  declare code: string;
+  declare title: string;
   declare value: string;
   declare type: SiteConfigTypeEnum;
   declare dictType: string;
   declare desc: string;
+  declare isChange: number;
   declare sort: number;
+
+  public children?: SiteConfig;
+
+
+  toJSON() {
+    const json = super.toJSON();
+    return json;
+  }
 
   static initSiteConfig(sequelize: Sequelize): typeof SiteConfig {
     const modelAttributes = {
-      key: {
+      pid: {
+        type: DataTypes.BIGINT({ length: 20 }),
+        allowNull: false,
+        comment: '父id',
+      },
+      code: {
         type: DataTypes.STRING({ length: 255 }),
         allowNull: false,
-        comment: '键',
+        comment: '编码',
+      },
+      title: {
+        type: DataTypes.STRING({ length: 255 }),
+        allowNull: false,
+        comment: '标题',
       },
       value: {
         type: DataTypes.STRING({ length: 255 }),
@@ -24,7 +45,7 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
         comment: '值',
       },
       type: {
-        type: DataTypes.ENUM({ values: ["string", "boolean", "number","textarea","dict"] }),
+        type: DataTypes.ENUM({ values: ["string", "boolean", "number", "textarea", "dict"] }),
         allowNull: false,
         comment: '类型'
       },
@@ -37,6 +58,11 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
         type: DataTypes.STRING({ length: 255 }),
         allowNull: true,
         comment: '描述'
+      },
+      isChange: {
+        type: DataTypes.TINYINT({ length: 1 }),
+        allowNull: true,
+        comment: '是否可变'
       },
       sort: {
         type: DataTypes.INTEGER({ length: 11 }),
