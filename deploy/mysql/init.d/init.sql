@@ -257,6 +257,7 @@ CREATE UNIQUE INDEX idx_pid_title_type ON t_attachment(pid,title, type);
 -- Records of t_attachment
 -- ----------------------------
 BEGIN;
+INSERT INTO `t_attachment`(`id`, `pid`, `title`, `url`, `ext`, `size`, `is_folder`, `type`, `is_fixed`, `created_at`, `updated_at`) VALUES (1, '0', '文章', '/article', NULL, NULL, 1, 'folder', 1, '2024-06-03 16:55:45', '2024-06-03 16:55:45');
 COMMIT;
 
 -- ----------------------------
