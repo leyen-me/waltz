@@ -6,6 +6,9 @@ docker run -itd -p 3000:3000 -p 3306:3306 --name blog difffffft/open-nuxt-blog:2
 
 # local
 docker run -itd -p 3000:3000 -p 3306:3306 --name blog open-nuxt-blog
+
+# if you use gpt
+docker run -itd -p 3000:3000 -p 3306:3306 --name blog difffffft/open-nuxt-blog:2.0
 ```
 
 # Build
