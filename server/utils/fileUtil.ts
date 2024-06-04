@@ -143,7 +143,7 @@ export const defineUploadFile = async (file: File, baseUploadDir: string): Promi
     const fileBuffer = await file.arrayBuffer();
     await fs.promises.writeFile(filePath, Buffer.from(fileBuffer));
 
-    return filePath.replace(NUXT_API_UPLOAD_BASE, "");
+    return filePath.replace("public/attachment", "");
 };
 
 
