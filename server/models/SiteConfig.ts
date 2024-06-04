@@ -13,6 +13,7 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
   declare desc: string;
   declare isChange: number;
   declare sort: number;
+  declare isShow: number;
 
   public children?: SiteConfig[];
 
@@ -68,6 +69,12 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
         type: DataTypes.INTEGER({ length: 11 }),
         allowNull: true,
         comment: '排序',
+      },
+      isShow: {
+        type: DataTypes.TINYINT({ length: 1 }),
+        allowNull: true,
+        defaultValue: 1,
+        comment: '是否展示(前台)'
       }
     };
 

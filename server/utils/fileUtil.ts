@@ -107,7 +107,6 @@ export const defineValidateFile = (file: File): string => {
         'application/vnd.android.package-archive', // APK 文件
         'application/octet-stream',//EXE文件
     ];
-    console.log(mimeType);
 
 
     if (!allowedMimeTypes.includes(mimeType)) {
@@ -133,22 +132,13 @@ export const defineCreateFolder = async (createDir: string): Promise<void> => {
  * @returns 上传后的文件路径
  */
 export const defineUploadFile = async (file: File, baseUploadDir: string): Promise<string> => {
-
     const { NUXT_API_UPLOAD_BASE } = useRuntimeConfig().public;
-
     if (!fs.existsSync(baseUploadDir)) {
         fs.mkdirSync(baseUploadDir, { recursive: true });
     }
-    console.log(baseUploadDir);
-
     const filePath = baseUploadDir + (generateUUID().replaceAll("-", "")) + defineGetFileExtension(file.name);
-
     const fileBuffer = await file.arrayBuffer();
     await fs.promises.writeFile(filePath, Buffer.from(fileBuffer));
-
-    console.log("originFilePath=>" + filePath);
-    console.log("changeFilePath=>" + filePath.replace(NUXT_API_UPLOAD_BASE, ""));
-
     return filePath.replace(NUXT_API_UPLOAD_BASE, "");
 };
 

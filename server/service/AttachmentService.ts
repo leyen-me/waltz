@@ -59,9 +59,9 @@ export default class AttachmentService {
                     const mimeType = defineValidateFile(fileObj);
                     const ext = defineGetFileExtension(fileObj.name);
                     const filePath = (await defineUploadFile(fileObj, parentFolder ? NUXT_API_UPLOAD_BASE + parentFolder.url + "/" : NUXT_API_UPLOAD_BASE + "/"));
-
+                    const encodedTitle = encodeURIComponent(fileObj.name);
                     const attachmentData = {
-                        title: fileObj.name,
+                        title: encodedTitle,
                         url: filePath,
                         ext: ext,
                         size: fileObj.size,
