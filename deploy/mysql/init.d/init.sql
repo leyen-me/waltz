@@ -476,6 +476,7 @@ CREATE TABLE `t_site_config`  (
   `dict_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字典类型',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
   `is_change` tinyint(1) NOT NULL DEFAULT 0  COMMENT '是否可变',
+  `is_show` tinyint(1) NOT NULL DEFAULT 0  COMMENT '是否展示',
   `sort` int(0) NOT NULL DEFAULT 0 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
@@ -486,17 +487,17 @@ CREATE TABLE `t_site_config`  (
 -- Records of t_site_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (1, 0, 'site', '站点信息', 'true', 'boolean', null, null, 0, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (2, 1, 'title', '站点名称', 'logo', 'string', null, null, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (3, 1, 'theme', '站点主题', 'Default', 'dict', 'theme', null, 1, 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (4, 1, 'desc', '站点详情', 'Here I will share insights, tips, and tutorials on website development and also thoughts on the latest trends and technologies in the field.v', 'textarea', null, null, 1, 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (5, 1, 'login', '站点登录', 'false', 'boolean', null,null, 1, 3, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (6, 1, 'comment', '站点评论', 'false', 'boolean',null, null, 1, 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (7, 1, 'footer', '站点页脚', 'false', 'boolean', null, null, 1, 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (8, 0, 'chatgpt', '大模型', 'false', 'boolean', null, null, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (9, 8, 'url', '链接', '', 'string', null, null, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (10, 8, 'model', '模型名称', '', 'string', null, null, 1, 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (11, 8, 'key', '密钥', '', 'string', null, null, 1, 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (1, 0, 'site', '站点信息', 'true', 'boolean', NULL, NULL, 0, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (2, 1, 'title', '站点名称', 'logo', 'string', NULL, NULL, 1, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (3, 1, 'theme', '站点主题', 'Default', 'dict', 'theme', NULL, 1, 1, 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (4, 1, 'desc', '站点详情', 'Here I will share insights, tips, and tutorials on website development and also thoughts on the latest trends and technologies in the field.v', 'textarea', NULL, NULL, 1, 1, 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (5, 1, 'login', '站点登录', 'false', 'boolean', NULL, NULL, 1, 1, 3, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (6, 1, 'comment', '站点评论', 'false', 'boolean', NULL, NULL, 1, 1, 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (7, 1, 'footer', '站点页脚', 'false', 'boolean', NULL, NULL, 1, 1, 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (8, 0, 'chatgpt', '大模型', 'false', 'boolean', NULL, NULL, 1, 0, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (9, 8, 'url', '链接', 'https://open.bigmodel.cn/api/paas/v4/chat/completions', 'string', NULL, NULL, 1, 0, 0, '2024-05-20 13:14:00', '2024-06-04 16:29:59');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (10, 8, 'model', '模型名称', 'glm-4', 'string', NULL, NULL, 1, 0, 1, '2024-05-20 13:14:00', '2024-06-04 16:29:43');
+INSERT INTO `t_site_config`(`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (11, 8, 'key', '密钥', 'baac303a1805a2284c607873ab22ffa6.aiDYktykHi7nxsnO', 'string', NULL, NULL, 1, 0, 2, '2024-05-20 13:14:00', '2024-06-04 16:30:26');
 COMMIT;
 
 
