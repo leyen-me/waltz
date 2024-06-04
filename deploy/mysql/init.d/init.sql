@@ -459,11 +459,6 @@ CREATE TABLE `t_role_menu`  (
 -- Records of t_role_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (1, 1, 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (2, 1, 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (3, 1, 3, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (4, 1, 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_role_menu` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES (5, 1, 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 COMMIT;
 
 -- ----------------------------
@@ -550,9 +545,7 @@ CREATE TABLE `t_user`  (
 -- Records of t_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_user` (`id`, `username`, `password`, `avatar`, `gender`, `email`, `introduction`, `super_admin`, `status`, `created_at`, `updated_at`) VALUES (1, 'LEYEN', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'men', NULL, NULL, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_user` (`id`, `username`, `password`, `avatar`, `gender`, `email`, `introduction`, `super_admin`, `status`, `created_at`, `updated_at`) VALUES (2, 'Alice', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'women', NULL, NULL, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_user` (`id`, `username`, `password`, `avatar`, `gender`, `email`, `introduction`, `super_admin`, `status`, `created_at`, `updated_at`) VALUES (3, 'Facker', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'secret', NULL, NULL, 0, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_user` (`id`, `username`, `password`, `avatar`, `gender`, `email`, `introduction`, `super_admin`, `status`, `created_at`, `updated_at`) VALUES (1, 'admin', '$2b$10$jgLIbHq678SS8Mo4caG.NOJn03kS6ku8B2rXjjdS1hoIEY.GqNWtq', NULL, 'men', NULL, NULL, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 COMMIT;
 
 -- ----------------------------
@@ -572,7 +565,6 @@ CREATE TABLE `t_user_role`  (
 -- Records of t_user_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_user_role` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`) VALUES (1, 3, 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
