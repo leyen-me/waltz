@@ -143,6 +143,11 @@ export const defineUploadFile = async (file: File, baseUploadDir: string): Promi
     const fileBuffer = await file.arrayBuffer();
     await fs.promises.writeFile(filePath, Buffer.from(fileBuffer));
 
+    console.log("originFilePath=>" + filePath);
+    console.log("changeFilePath=>" + filePath.replace("public/attachment", ""));
+
+
+
     return filePath.replace("public/attachment", "");
 };
 
