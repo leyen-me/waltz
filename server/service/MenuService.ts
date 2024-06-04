@@ -68,7 +68,7 @@ export default class MenuService extends BaseService<Menu> {
                 replacements.type = type;
             }
 
-            query += ` ORDER BY m.sort ASC;`;
+            query += ` ORDER BY m.id,m.sort ASC;`;
 
             const [results] = await sequelize.query(query, {
                 replacements
@@ -101,7 +101,7 @@ export default class MenuService extends BaseService<Menu> {
                 replacements.type = type;
             }
 
-            query += ` ORDER BY m.sort ASC;`;
+            query += ` ORDER BY m.id,m.sort ASC;`;
 
             const [results] = await sequelize.query(query, {
                 replacements
@@ -142,7 +142,7 @@ export default class MenuService extends BaseService<Menu> {
                 JOIN t_role_menu rm ON m.id = rm.menu_id  
                 JOIN t_user_role ur ON rm.role_id = ur.role_id  
                 WHERE ur.user_id = :userId  
-                ORDER BY m.sort ASC;  
+                ORDER BY m.id,m.sort ASC;  
             `;
 
             const replacements = { userId: user.id };

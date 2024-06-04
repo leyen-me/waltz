@@ -133,6 +133,7 @@ export const defineCreateFolder = async (createDir: string): Promise<void> => {
  * @returns 上传后的文件路径
  */
 export const defineUploadFile = async (file: File, baseUploadDir: string): Promise<string> => {
+    const { NUXT_API_UPLOAD_BASE } = useRuntimeConfig().public;
     if (!fs.existsSync(baseUploadDir)) {
         fs.mkdirSync(baseUploadDir, { recursive: true });
     }
@@ -142,7 +143,7 @@ export const defineUploadFile = async (file: File, baseUploadDir: string): Promi
     const fileBuffer = await file.arrayBuffer();
     await fs.promises.writeFile(filePath, Buffer.from(fileBuffer));
 
-    return filePath.replace("public", "").replace("/attachment", "").replace("./", "").replace("../", "");
+    return filePath.replace(NUXT_API_UPLOAD_BASE, "");
 };
 
 
