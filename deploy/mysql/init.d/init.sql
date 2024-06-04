@@ -239,14 +239,14 @@ COMMIT;
 DROP TABLE IF EXISTS `t_attachment`;
 CREATE TABLE `t_attachment`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `pid` varchar(20) DEFAULT NULL COMMENT '父id',
+  `pid` bigint(0) NOT NULL COMMENT '父id',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '附件标题',
   `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '附件链接',
   `ext` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '附件扩展名',
   `size` int(0) DEFAULT NULL COMMENT '附件大小',
-  `is_folder` tinyint(0) NOT NULL  COMMENT '是否是文件夹',
+  `is_folder` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否是文件夹',
   `type` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '附件类型',
-  `is_fixed` tinyint(0) NOT NULL  COMMENT '是否固定(能否被删除)',
+  `is_fixed` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否固定(能否被删除)',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -312,7 +312,7 @@ COMMIT;
 DROP TABLE IF EXISTS `t_menu`;
 CREATE TABLE `t_menu`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `pid` bigint(0) NOT NULL COMMENT '父级ID',
+  `pid` bigint(0) NOT NULL COMMENT '父级id',
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单路径',
   `title` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单标题',
   `icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
@@ -468,11 +468,14 @@ COMMIT;
 DROP TABLE IF EXISTS `t_site_config`;
 CREATE TABLE `t_site_config`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '键',
+  `pid` bigint(0) NOT NULL COMMENT '父id',
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '编码',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
   `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '值',
   `type` enum('string','boolean','number','textarea','dict') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '类型',
   `dict_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字典类型',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
+  `is_change` tinyint(1) NOT NULL DEFAULT 0  COMMENT '是否可变',
   `sort` int(0) NOT NULL DEFAULT 0 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
@@ -483,13 +486,17 @@ CREATE TABLE `t_site_config`  (
 -- Records of t_site_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (1, 'theme', 'Default', 'dict', 'theme','主题', 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (2, 'login', 'false', 'boolean','', '登录', 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (3, 'leave', 'false', 'boolean','', '评论', 3, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (4, 'chatgpt', 'false', 'boolean','', '大模型', 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (5, 'title', 'logo', 'string', '','站点名称', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (6, 'desc', 'Here I will share insights, tips, and tutorials on website development and also thoughts on the latest trends and technologies in the field.v', 'textarea','' ,'网站描述', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config` (`id`, `key`, `value`, `type`, `dict_type`, `desc`, `sort`, `created_at`, `updated_at`) VALUES (7, 'footer', 'false', 'boolean', '', '页脚', 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (1, 0, 'site', '站点信息', 'true', 'boolean', null, null, 0, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (2, 1, 'title', '站点名称', 'logo', 'string', null, null, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (3, 1, 'theme', '站点主题', 'Default', 'dict', 'theme', null, 1, 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (4, 1, 'desc', '站点详情', 'Here I will share insights, tips, and tutorials on website development and also thoughts on the latest trends and technologies in the field.v', 'textarea', null, null, 1, 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (5, 1, 'login', '站点登录', 'false', 'boolean', null,null, 1, 3, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (6, 1, 'comment', '站点评论', 'false', 'boolean',null, null, 1, 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (7, 1, 'footer', '站点页脚', 'false', 'boolean', null, null, 1, 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (8, 0, 'chatgpt', '大模型', 'false', 'boolean', null, null, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (9, 8, 'url', '链接', '', 'string', null, null, 1, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (10, 8, 'model', '模型名称', '', 'string', null, null, 1, 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config` (`id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `sort`, `created_at`, `updated_at`) VALUES (11, 8, 'key', '密钥', '', 'string', null, null, 1, 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 COMMIT;
 
 

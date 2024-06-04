@@ -44,6 +44,8 @@ export default class SiteConfigService extends BaseService<SiteConfig> {
             order: orderClause
         };
 
-        return await SiteConfig.findAll(options);
+        return await SiteConfig.findAll(options).then((siteConfigs: SiteConfig[]) => {
+            return siteConfigs.map((item) => item.toJSON())
+        });
     }
 }

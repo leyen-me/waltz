@@ -48,7 +48,7 @@ export default class Attachment extends BaseModel<Attachment> {
                 comment: '附件大小',
             },
             isFolder: {
-                type: DataTypes.INTEGER({ length: 4 }),
+                type: DataTypes.TINYINT({ length: 1 }),
                 allowNull: false,
                 defaultValue: false,
                 comment: '是否是文件夹',
@@ -59,7 +59,7 @@ export default class Attachment extends BaseModel<Attachment> {
                 comment: '附件类型',
             },
             isFixed: {
-                type: DataTypes.INTEGER({ length: 4 }),
+                type: DataTypes.TINYINT({ length: 1 }),
                 allowNull: false,
                 defaultValue: 0,
                 comment: '是否固定',
