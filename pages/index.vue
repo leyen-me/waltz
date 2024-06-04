@@ -1,6 +1,6 @@
 <template>
   <ThemeDefault
-    v-if="appStore.siteConfig.theme === 'Default'"
+    v-if="theme === 'Default'"
     :active
     :page
     :limit
@@ -21,13 +21,15 @@
 
 <script setup lang="ts">
 import { useWebArticlePageApi } from "~/api/web/article";
-import { defaultRowsPerPageOptions } from "@/constans";
+import { defaultRowsPerPageOptions } from "~/constants";
 import type Article from "~/server/models/Article";
 import useAppStore from "~/stores/appStore";
 import { useWebCategoryListApi } from "~/api/web/category";
 import type Category from "~/server/models/Category";
 import type Tag from "~/server/models/Tag";
 import { useWebTagListApi } from "~/api/web/tag";
+import { getValue } from "~/common/utils/siteConfigUtil";
+import { CONFIG_KEY } from "~/common/constants";
 
 definePageMeta({
   middleware: "web-auth",
@@ -35,6 +37,10 @@ definePageMeta({
 
 const active = ref(-1);
 const categoryList = ref<Category[]>([]);
+
+const theme = computed(() => {
+  return getValue(appStore.siteConfig, CONFIG_KEY.SITE.THEME);
+});
 
 const tagActive = ref(-1);
 const tagList = ref<Tag[]>([]);
@@ -57,7 +63,8 @@ const loading = ref(false);
 const appStore = useAppStore();
 
 window.document.title =
-  "Welcome to " + appStore.siteConfig.title || "Hello Nuxt!";
+  "Welcome to " + getValue(appStore.siteConfig, CONFIG_KEY.SITE.TITLE) ||
+  "Hello Nuxt!";
 
 const handleDetail = (v: any) => {
   router.push(`/blog/${v.id}`);

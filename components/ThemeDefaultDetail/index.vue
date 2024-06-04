@@ -1,6 +1,7 @@
 <template>
   <Header></Header>
   <div
+    style="--gpt-body-width: 100%"
     class="blog mx-auto p-4 xl:px-20 xl:max-w-screen-xl pb-10 pt-24 xl:pt-36"
   >
     <h3 class="text-center text-[var(--web-color-7)]">

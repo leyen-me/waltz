@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="tsx">
-import { defaultRowsPerPageOptions } from "@/constans";
+import { defaultRowsPerPageOptions } from "~/constants";
 import {
   useAdminAttachmentDeleteApi,
   useAdminAttachmentFolderApi,

@@ -36,7 +36,7 @@ import {
   useAdminDictTypePageApi,
   useAdminDictTypeDeleteApi,
 } from "@/api/admin/dict";
-import { defaultRowsPerPageOptions } from "@/constans";
+import { defaultRowsPerPageOptions } from "~/constants";
 import type User from "@/server/models/User";
 import useHasAuth from "@/utils/auth";
 

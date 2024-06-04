@@ -33,7 +33,7 @@
 
 <script setup lang="tsx">
 import { useAdminUserDeleteApi, useAdminUserPageApi } from "@/api/admin/user";
-import { defaultRowsPerPageOptions } from "@/constans";
+import { defaultRowsPerPageOptions } from "~/constants";
 import type User from "@/server/models/User";
 import useHasAuth from "@/utils/auth";
 

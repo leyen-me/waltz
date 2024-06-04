@@ -35,7 +35,7 @@ import {
   useAdminCategoryListApi,
   useAdminCategoryDeleteApi,
 } from "@/api/admin/category";
-import { defaultRowsPerPageOptions } from "@/constans";
+import { defaultRowsPerPageOptions } from "~/constants";
 import type Category from "@/server/models/Category";
 import useHasAuth from "@/utils/auth";
 
