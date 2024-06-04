@@ -4,10 +4,15 @@ import { CreationAttributes } from "sequelize";
 import useFetchStream from "@/utils/useFetchStream";
 import ContextService from "./ContextService";
 import TypeService from "./TypeService";
+import SiteConfigService from "./SiteConfigService";
+import { buildMap, getValue } from "@/common/utils/siteConfigUtil";
+import { CONFIG_KEY } from "@/common/constans";
+
 
 export default class ChatService extends BaseService<Chat> {
     private contextService = new ContextService();
     private typeService = new TypeService();
+    private siteConfigService = new SiteConfigService();
 
     constructor() {
         super(Chat);
@@ -82,7 +87,6 @@ export default class ChatService extends BaseService<Chat> {
         const chat = await this.getChatById(chatId);
 
         const messages: any = [];
-        const { NUXT_LLM_URL, NUXT_LLM_MODEL, NUXT_LLM_KEY } = useRuntimeConfig().public
         const contexts = await this.contextService.getContextsByChatId(chatId);
 
 
@@ -105,11 +109,14 @@ export default class ChatService extends BaseService<Chat> {
             this.contextService.createContext({ chatId, content: answer, role: "assistant", status: 1, executionTime });
         }
 
+        const siteConfigs = await this.siteConfigService.getAllSiteConfigs();
+        const map = buildMap(siteConfigs);
+
         const stream = await useFetchStream({
-            url: NUXT_LLM_URL as string,
-            authorization: `Bearer ${NUXT_LLM_KEY}`,
+            url: getValue(map, CONFIG_KEY.CHATGPT.URL),
+            authorization: `Bearer ${getValue(map, CONFIG_KEY.CHATGPT.KEY)}`,
             body: {
-                model: NUXT_LLM_MODEL,
+                model: getValue(map, CONFIG_KEY.CHATGPT.MODEL),
                 messages,
             },
             stream: true,

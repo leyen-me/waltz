@@ -88,7 +88,7 @@ import {
 } from "@headlessui/vue";
 import { useAdminMenuNavApi } from "@/api/admin/menu";
 import type Menu from "~/server/models/Menu";
-import { defineTreeToList } from "~/server/utils/nodeConvert";
+import { treeToList } from "~/common/utils/treeUtil";
 
 definePageMeta({
   middleware: "admin-auth",
@@ -103,7 +103,7 @@ const getData = async () => {
 
   //@ts-ignore
   //todo:ts语法
-  menuList.value = defineTreeToList(JSON.parse(JSON.stringify(data)));
+  menuList.value = treeToList(JSON.parse(JSON.stringify(data)));
   menus.value = data;
 };
 

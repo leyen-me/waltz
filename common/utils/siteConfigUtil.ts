@@ -1,4 +1,5 @@
-import type SiteConfig from "~/server/models/SiteConfig";
+import SiteConfig from "@/server/models/SiteConfig";
+import { listToTree } from "./treeUtil";
 
 /**
  * 树转Map
@@ -6,6 +7,7 @@ import type SiteConfig from "~/server/models/SiteConfig";
  * @returns
  */
 export const buildMap = (configArr: SiteConfig[]) => {
+  let list = listToTree(configArr, "id", "pid", 0);
   const map = new Map();
   const bl = (P_CODE: string, arr: SiteConfig[]) => {
     for (let i = 0; i < arr.length; i++) {
@@ -20,12 +22,18 @@ export const buildMap = (configArr: SiteConfig[]) => {
         default:
           break;
       }
-      map.set(P_CODE + "_" + item.code, item);
+      const key = P_CODE + (P_CODE ? "_" : '') + item.code
+      map.set(key, item);
       if (item.children && item.children.length > 0) {
-        bl(P_CODE + item.code, item.children);
+        bl(key, item.children);
       }
     }
   };
-  bl("", configArr);
+  bl("", list);
   return map;
 };
+
+
+export const getValue = (map: Map<string, SiteConfig>, key: string): any => {
+  return map.get(key)?.value
+}
