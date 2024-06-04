@@ -41,20 +41,7 @@ export default defineEventHandler(async (event) => {
 
     user.authorityList = await menuService.getUserAuthority(user);
     
-    // 把user放到上下文
     event.context.user = user
-    // console.log(event.context.user);
-
-    // console.log(event.path, event.context.user.authorityList);
-    
-    // if (!defineFilterPath(event.path, event.context.user.authorityList)) {
-    //   return defineError({ code: 403, msg: "权限不足" });
-    // }
-
-    // 检查用户权限
-    // if (!checkUserPermission(event.context.user.authorityList, event.path)) {
-    //   return defineError({ code: 403, msg: "权限不足" });
-    // }
 
   } catch (err) {
     console.log(err);
@@ -62,9 +49,3 @@ export default defineEventHandler(async (event) => {
   }
 });
 
-// 检查用户权限
-// function checkUserPermission(authorityList: string[], path: string): boolean {
-//   console.log(path);
-
-//   return authorityList.includes(path);
-// }

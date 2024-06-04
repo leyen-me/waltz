@@ -33,8 +33,16 @@ export default class SiteConfigService extends BaseService<SiteConfig> {
         return await SiteConfig.findByPk(configId);
     }
 
-    async getAllSiteConfigs(key?: string, asc: boolean = true): Promise<SiteConfig[]> {
-        const whereClause = key ? { key: { [Op.like]: `%${key}%` } } : {};
+    async getAllSiteConfigs(key?: string, asc: boolean = true, isShow?: number): Promise<SiteConfig[]> {
+        const whereClause: any = {};
+
+        if (key) {
+            whereClause.key = { [Op.like]: `%${key}%` };
+        }
+    
+        if (isShow) {
+            whereClause.isShow = isShow;
+        }
 
         const orderClause: Order = [['sort', asc ? 'ASC' : 'DESC']];
 
