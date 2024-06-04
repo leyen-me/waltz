@@ -14,7 +14,7 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
   declare isChange: number;
   declare sort: number;
 
-  public children?: SiteConfig;
+  public children?: SiteConfig[];
 
 
   toJSON() {
