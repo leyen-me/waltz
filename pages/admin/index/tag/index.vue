@@ -32,7 +32,7 @@
 
 <script setup lang="tsx">
 import { useAdminTagListApi,useAdminTagDeleteApi } from "@/api/admin/tag";
-import { defaultRowsPerPageOptions } from "@/constans";
+import { defaultRowsPerPageOptions } from "~/constants";
 import type Tag from "@/server/models/Tag";
 import useHasAuth from "@/utils/auth";
 

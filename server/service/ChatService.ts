@@ -6,7 +6,7 @@ import ContextService from "./ContextService";
 import TypeService from "./TypeService";
 import SiteConfigService from "./SiteConfigService";
 import { buildMap, getValue } from "@/common/utils/siteConfigUtil";
-import { CONFIG_KEY } from "@/common/constans";
+import { CONFIG_KEY } from "@/common/constants";
 
 
 export default class ChatService extends BaseService<Chat> {

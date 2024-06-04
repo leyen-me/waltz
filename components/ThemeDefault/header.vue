@@ -3,7 +3,7 @@
     class="header-1 px-4 h-20 fixed top-0 left-0 z-20 w-full flex items-center justify-between text-4xl font-logo xl:px-20 xl:h-28"
   >
     <div id="header-title">
-      <NuxtLink to="/">{{ appStore.siteConfig.title }}</NuxtLink>
+      <NuxtLink to="/">{{ getValue(appStore.siteConfig, CONFIG_KEY.SITE.TITLE) }}</NuxtLink>
     </div>
     <div>
       <div
@@ -62,6 +62,8 @@ import type Article from "~/server/models/Article";
 import useAppStore from "~/stores/appStore";
 import useDebounce from "~/utils/debounce";
 import { useWebArticleListApi } from "~/api/web/article";
+import { getValue } from "~/common/utils/siteConfigUtil";
+import { CONFIG_KEY } from "~/common/constants";
 
 const emits = defineEmits(["change"]);
 

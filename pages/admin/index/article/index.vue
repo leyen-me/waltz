@@ -152,7 +152,7 @@ import {
   useAdminArticleDeleteApi,
   useAdminArticlePageApi,
 } from "@/api/admin/article";
-import { defaultRowsPerPageOptions } from "@/constans";
+import { defaultRowsPerPageOptions } from "~/constants";
 import type Article from "@/server/models/Article";
 import useHasAuth from "@/utils/auth";
 import useImageUrl from "@/utils/imageUrl";

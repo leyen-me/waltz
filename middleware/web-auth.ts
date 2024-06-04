@@ -1,4 +1,5 @@
 import { useWebSiteConfigListApi } from "~/api/web/config";
+import { buildMap } from "~/common/utils/siteConfigUtil";
 import useAppStore from "~/stores/appStore";
 
 /**
@@ -9,14 +10,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   try {
     appStore.web.loading = true;
     const dbConfig = await useWebSiteConfigListApi();
-    dbConfig.map((siteConfig) => {
-      if (siteConfig.type === "boolean") {
-        siteConfig.value = (siteConfig.value === "true"
-          ? true
-          : false) as unknown as string;
-      }
-      appStore.siteConfig[siteConfig.key] = siteConfig.value;
-    });
+    const map = buildMap(dbConfig)
+    appStore.siteConfig = map
   } catch (error) {
     // todo:跳转到500
   } finally {

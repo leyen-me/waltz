@@ -1,10 +1,10 @@
 <template>
   <div
-    class="h-full p-5 flex flex-col relative overflow-hidden lg:px-16 xl:px-60 bg-[var(--web-bg-2)]"
+    class="h-full p-5 flex flex-col relative overflow-hidden lg:px-16 xl:px-60 bg-[var(--web-bg-2)] items-center"
   >
     <!-- 专家类型 -->
 
-    <div class="flex mb-8">
+    <div class="w-full flex mb-8 xl:w-[75%]">
       <t-dropdown
         :disabled="chatId ? true : false"
         :options="
@@ -87,7 +87,7 @@
     <!-- 聊天对话 -->
     <ul
       v-show="messages.length > 0"
-      class="flex-1 overflow-y-auto pb-24 scrollbar-hidden"
+      class="w-full flex-1 overflow-y-auto pb-24 scrollbar-hidden xl:w-[75%]"
       id="messages"
       ref="messagesRef"
     >
@@ -98,6 +98,7 @@
             v.role === 'user' ? 'var(--web-bg-9)' : 'var(--web-bg-2)',
           '--gpt-justify-content':
             v.role === 'user' ? 'flex-end' : 'flex-start',
+          '--gpt-body-width': v.role === 'user' ? 'auto' : '100%',
           '--gpt-max-width': v.role === 'user' ? '80%' : '100%',
           '--gpt-border-radius': v.role === 'user' ? '24px' : '0px',
         }"
@@ -133,10 +134,10 @@
     </ul>
 
     <footer
-      class="w-full fixed py-4 px-5 flex left-0 bottom-0 lg:px-16 lg:absolute xl:px-60 z-20"
+      class="w-full fixed py-4 px-5 flex left-0 bottom-0 lg:px-16 lg:absolute xl:px-60 z-20 justify-center"
     >
       <div
-        class="w-full flex bg-[var(--web-bg-8)] p-2 rounded-lg items-end border border-solid border-[var(--web-border-2)]"
+        class="w-full flex bg-[var(--web-bg-8)] p-2 rounded-lg items-end border border-solid border-[var(--web-border-2)] xl:w-[75%]"
       >
         <div
           class="flex-1 h-full relative flex items-center"

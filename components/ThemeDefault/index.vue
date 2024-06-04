@@ -13,9 +13,15 @@
         <h1 id="home-title-2" class="py-5 text-3xl xl:text-5xl">
           Welcome to
           <span class="text-[var(--web-color-7)]">{{
-            (appStore.siteConfig.title as unknown as string)
+            (
+              getValue(
+                appStore.siteConfig,
+                CONFIG_KEY.SITE.TITLE
+              ) as unknown as string
+            )
               .charAt(0)
-              .toUpperCase() + appStore.siteConfig.title.slice(1)
+              .toUpperCase() +
+            getValue(appStore.siteConfig, CONFIG_KEY.SITE.TITLE).slice(1)
           }}</span
           >!
         </h1>
@@ -23,7 +29,7 @@
           id="home-title-3"
           class="mt-4 mb-24 text-xl opacity-80 tracking-wider font-silka-regular"
         >
-          {{ appStore.siteConfig.desc }}
+          {{ getValue(appStore.siteConfig, CONFIG_KEY.SITE.DESC) }}
         </p>
       </div>
 
@@ -91,8 +97,8 @@
       </div>
     </div>
     <Footer
-      :title="appStore.siteConfig.title"
-      v-if="appStore.siteConfig.footer"
+      :title="getValue(appStore.siteConfig, CONFIG_KEY.SITE.TITLE)"
+      v-if="getValue(appStore.siteConfig, CONFIG_KEY.SITE.FOOTER)"
     ></Footer>
   </div>
 </template>
@@ -106,6 +112,8 @@ import type Article from "~/server/models/Article";
 import type Category from "~/server/models/Category";
 import { gsap } from "gsap";
 import type Tag from "~/server/models/Tag";
+import { getValue } from "~/common/utils/siteConfigUtil";
+import { CONFIG_KEY } from "~/common/constants";
 
 const emits = defineEmits([
   "itemClick",

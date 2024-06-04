@@ -3,9 +3,7 @@ const useAppStore = defineStore("appStore", {
     <
       {
         dictList: DictTypeResponse[];
-        siteConfig: {
-          [key: string]: string;
-        };
+        siteConfig: any;
         web: {
           loading: boolean;
         };
@@ -16,7 +14,7 @@ const useAppStore = defineStore("appStore", {
     >{
       // 权限列表
       dictList: [],
-      siteConfig: {},
+      siteConfig: new Map(),
       // 前台
       web: {
         loading: false,

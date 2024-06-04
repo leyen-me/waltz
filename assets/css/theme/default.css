@@ -38,6 +38,7 @@
 
   --gpt-justify-content: flex-start;
   --gpt-max-width: 100%;
+  --gpt-body-width: auto;
   --gpt-border-radius: 12px;
 }
 
@@ -99,11 +100,13 @@ body,
 }
 
 .v-md-editor-preview {
+  width: 100%;
   display: flex;
   justify-content: var(--gpt-justify-content);
 }
 
 .vuepress-markdown-body {
+  width: var(--gpt-body-width);
   max-width: var(--gpt-max-width);
   border-radius: var(--gpt-border-radius);
   background-color: var(--web-bg-1) !important;
