@@ -13,7 +13,8 @@ const useUserStore = defineStore("userStore", {
       },
       authorityList: [], // 权限列表
     },
-  actions: {},
+  actions: {
+  },
 });
 
 export default useUserStore;

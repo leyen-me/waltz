@@ -20,6 +20,9 @@ import {
 } from "@/api/admin/config";
 import useDebounce from "@/utils/debounce";
 import type SiteConfig from "~/server/models/SiteConfig";
+import useAppStore from "~/stores/appStore";
+
+const appStore = useAppStore();
 
 const list = ref<SiteConfig[]>([]);
 const getData = async () => {
@@ -27,13 +30,17 @@ const getData = async () => {
   list.value = data;
 };
 
-const save = async ({ id, value }: SiteConfig) => {
+const save = async ({ id, value, menuId }: SiteConfig) => {
   try {
     await useAdminSiteConfigSubmitApi({
       id,
       value,
     });
     MessagePlugin.success("修改成功");
+
+    if (menuId) {
+      await appStore.initSystem();
+    }
   } catch (error) {
     MessagePlugin.error("修改失败");
   }

@@ -139,7 +139,7 @@ const columns = [
           <TPopconfirm
             disabled={
               userStore.user.id === row.id ||
-              row.superAdmin ||
+              row.superAdmin === 1 ||
               !useHasAuth("user:delete")
             }
             content="确认删除吗"
@@ -148,7 +148,7 @@ const columns = [
             <TLink
               disabled={
                 userStore.user.id === row.id ||
-                row.superAdmin ||
+                row.superAdmin === 1 ||
                 !useHasAuth("user:delete")
               }
               hover="color"

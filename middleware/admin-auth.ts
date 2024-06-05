@@ -1,7 +1,6 @@
-import { useAdminUserInfoApi } from "@/api/admin/user";
-import { useAdminDictTypeListApi } from "~/api/admin/dict";
 import useAppStore from "~/stores/appStore";
 import useUserStore from "~/stores/userStore";
+import { validateChatGptRoute } from "@/utils/routerUtil";
 
 /**
  * 后台管理路由守卫
@@ -16,19 +15,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
   try {
     if (userStore.user.id) {
+      if (!validateChatGptRoute(to)) {
+        return navigateTo("/404");
+      }
       return;
     }
-    /**
-     * 获取用户基本信息/获取字典列表
-     * Obtain basic user information/obtain dictionary list
-     */
-    const [userinfo, dictList] = await Promise.all([
-      useAdminUserInfoApi(),
-      useAdminDictTypeListApi(),
-    ]);
-    userStore.user.id = userinfo.id as number;
-    userStore.authorityList = userinfo.authorityList as string[];
-    appStore.dictList = dictList;
+    await appStore.initSystem();
+    return navigateTo(to.fullPath);
   } catch (error) {
     return navigateTo("/admin/login");
   }

@@ -48,7 +48,7 @@
               </TransitionChild>
               <!-- Sidebar component, swap this element with another sidebar if you like -->
               <BaseNav
-                :items="menus"
+                :items="appStore.navTree"
                 @item-click="handleNavItemClick"
               ></BaseNav>
             </DialogPanel>
@@ -60,7 +60,10 @@
     <!-- Static sidebar for desktop -->
     <div class="hidden lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <BaseNav :items="menus" @item-click="handleNavItemClick"></BaseNav>
+      <BaseNav
+        :items="appStore.navTree"
+        @item-click="handleNavItemClick"
+      ></BaseNav>
     </div>
 
     <div
@@ -86,26 +89,14 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { useAdminMenuNavApi } from "@/api/admin/menu";
-import type Menu from "~/server/models/Menu";
-import { treeToList } from "~/common/utils/treeUtil";
+import useAppStore from "~/stores/appStore";
 
 definePageMeta({
   middleware: "admin-auth",
 });
 
+const appStore = useAppStore();
 const sidebarOpen = ref(false);
-const menus = ref<Menu[]>([]);
-const menuList = ref<Menu[]>([]);
-
-const getData = async () => {
-  const data = await useAdminMenuNavApi();
-
-  //@ts-ignore
-  //todo:ts语法
-  menuList.value = treeToList(JSON.parse(JSON.stringify(data)));
-  menus.value = data;
-};
 
 const route = useRoute();
 const router = useRouter();
@@ -116,7 +107,7 @@ if (route.path === "/admin") {
 
 const handleNavItemClick = async (path: string) => {
   let target = "_self";
-  let menu = menuList.value.find((menu) => menu.path === path);
+  let menu = appStore.navList.find((menu) => menu.path === path);
   if (menu) {
     target = menu.openStyle;
   }
@@ -132,8 +123,6 @@ const handleNavItemClick = async (path: string) => {
     sidebarOpen.value = false;
   }
 };
-
-getData();
 </script>
 
 <style scoped>
