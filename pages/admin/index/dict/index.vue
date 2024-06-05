@@ -39,6 +39,12 @@ import {
 import { defaultRowsPerPageOptions } from "~/constants";
 import type User from "@/server/models/User";
 import useHasAuth from "@/utils/auth";
+import {
+  Space as TSpace,
+  Link as TLink,
+  Icon as TIcon,
+  Popconfirm as TPopconfirm,
+} from "tdesign-vue-next";
 
 const router = useRouter();
 
@@ -88,29 +94,27 @@ const columns = [
     title: "操作",
     cell: (_h: any, { row }: any) => {
       return (
-        <t-space>
-          <t-link
-            variant="text"
+        <TSpace>
+          <TLink
             hover="color"
             disabled={!useHasAuth("dict:update")}
             onClick={() => router.push(`/admin/dict/${row.id}`)}
           >
             编辑
-          </t-link>
-          <t-popconfirm
+          </TLink>
+          <TPopconfirm
             content="确认删除吗"
             onConfirm={() => handleDelete(row.id)}
           >
-            <t-link
+            <TLink
               disabled={!useHasAuth("dict:delete")}
-              variant="text"
               hover="color"
               theme="danger"
             >
               删除
-            </t-link>
-          </t-popconfirm>
-        </t-space>
+            </TLink>
+          </TPopconfirm>
+        </TSpace>
       );
     },
   },

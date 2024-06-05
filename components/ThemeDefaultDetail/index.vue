@@ -42,21 +42,33 @@
     </section>
     <p
       v-if="article.tagList"
-      class="text-[var(--web-color-7)] mt-4 text-sm font-silka-medium"
+      class="text-[var(--web-color-7)] mt-4 text-sm font-silka-medium flex px-0 lg:px-8"
     >
       <span v-for="(v, k) in tagList" :key="v"
         ><NuxtLink :to="'/?tagId=' + tagIdList[k]">{{ v }}</NuxtLink
-        ><span v-if="k !== tagList.length - 1"> • </span></span
+        ><span v-if="k !== tagList.length - 1" class="mx-1"> • </span></span
       >
     </p>
-    <div class="flex justify-between mt-8 p-8">
+    <div class="flex justify-between mt-8 px-0 lg:px-8 items-end">
+      <NuxtLink
+        :to="'/admin/article/' + article.id"
+        target="_blank"
+        class="cursor-pointer text-[var(--web-color-7)] flex-1"
+        ><t-icon name="edit"></t-icon> Edit this page
+      </NuxtLink>
+      <span
+        class="text-sm text-[var(--web-color-13)] line-clamp-2 flex-1 text-end"
+        >{{ article.updatedAt }}</span
+      >
+    </div>
+    <div class="flex justify-between mt-6 px-0 lg:px-8">
       <NuxtLink
         :to="'/blog/' + String(adjacentInfo.previouArticle.id)"
         class="hover:no-underline"
         v-if="adjacentInfo.previouArticle"
       >
         <div
-          class="flex group flex-col border border-gray-800 border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
+          class="flex group flex-col border border-[var(--web-border-1)] border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
         >
           <span class="text-xs" style="color: rgba(235, 235, 245, 0.6)"
             >上一篇</span
@@ -67,14 +79,13 @@
         </div>
       </NuxtLink>
       <div v-else></div>
-
       <NuxtLink
         :to="'/blog/' + String(adjacentInfo.nextArticle.id)"
         class="hover:no-underline"
         v-if="adjacentInfo.nextArticle"
       >
         <div
-          class="flex group items-end flex-col border border-gray-800 border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
+          class="flex group items-end flex-col border border-[var(--web-border-1)] border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
         >
           <span class="text-xs" style="color: rgba(235, 235, 245, 0.6)"
             >下一篇</span
@@ -99,6 +110,7 @@ import Header from "../ThemeDefault/header.vue";
 import Footer from "../ThemeDefault/footer.vue";
 import type Article from "~/server/models/Article";
 import useImageUrl from "@/utils/imageUrl";
+import useUserStore from "~/stores/userStore";
 
 const props = defineProps({
   id: {

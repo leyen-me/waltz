@@ -134,6 +134,10 @@ import Nav from "./nav.vue";
 import { nanoid } from "nanoid";
 import type Chat from "~/server/models/Chat";
 
+definePageMeta({
+  middleware: "admin-auth",
+});
+
 const route = useRoute();
 const router = useRouter();
 

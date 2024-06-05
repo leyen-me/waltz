@@ -1,8 +1,10 @@
 <template>
   <template v-for="menu in menus" :key="menu.path">
+    <!-- 没有children的一级菜单不显示 -->
+    <template v-if="level <= 1 && menu.children.length <= 0"></template>
     <t-menu-item
       :value="menu.path"
-      v-if="!menu.children || (menu.children && menu.children.length <= 0)"
+      v-else-if="!menu.children || (menu.children && menu.children.length <= 0)"
       style="--td-text-color-secondary: rgba(255, 255, 255, 0.9)"
     >
       <template #icon>
@@ -11,7 +13,6 @@
       {{ menu.title }}
     </t-menu-item>
     <template v-else>
-      <!-- 二级显示 -->
       <t-menu-group
         v-if="level <= 1"
         :title="menu.title"

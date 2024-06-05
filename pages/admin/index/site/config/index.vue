@@ -2,7 +2,7 @@
   <div class="h-full flex xl:justify-center">
     <div class="w-full xl:w-[680px]">
       <t-card title="基本信息">
-        <t-form :colon="true" :label-align="'top'" @submit="handleSave">
+        <t-form :colon="true" label-align="top" @submit="handleSave">
           <BaseSiteConfig
             :children="list"
             @change="handleSave"
@@ -13,13 +13,16 @@
   </div>
 </template>
 
-<script setup lang="tsx">
+<script setup lang="ts">
 import {
   useAdminSiteConfigListApi,
   useAdminSiteConfigSubmitApi,
 } from "@/api/admin/config";
 import useDebounce from "@/utils/debounce";
 import type SiteConfig from "~/server/models/SiteConfig";
+import useAppStore from "~/stores/appStore";
+
+const appStore = useAppStore();
 
 const list = ref<SiteConfig[]>([]);
 const getData = async () => {
@@ -27,13 +30,17 @@ const getData = async () => {
   list.value = data;
 };
 
-const save = async ({ id, key, value }: SiteConfig) => {
+const save = async ({ id, value, menuId }: SiteConfig) => {
   try {
     await useAdminSiteConfigSubmitApi({
       id,
       value,
     });
     MessagePlugin.success("修改成功");
+
+    if (menuId) {
+      await appStore.initSystem();
+    }
   } catch (error) {
     MessagePlugin.error("修改失败");
   }
