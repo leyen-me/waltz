@@ -130,7 +130,9 @@ export default class ChatService extends BaseService<Chat> {
 
     async resume(chatId: number): Promise<void> {
         const contexts = await this.contextService.getContextsByChatId(chatId);
-        const { NUXT_LLM_URL, NUXT_LLM_MODEL, NUXT_LLM_KEY } = useRuntimeConfig().public
+        const siteConfigs = await this.siteConfigService.getAllSiteConfigs();
+        const map = buildMap(siteConfigs);
+
 
         const messages: any = [];
         contexts.map((item) => {
@@ -155,10 +157,10 @@ export default class ChatService extends BaseService<Chat> {
         }
 
         await useFetchStream({
-            url: NUXT_LLM_URL as string,
-            authorization: `Bearer ${NUXT_LLM_KEY}`,
+            url: getValue(map, CONFIG_KEY.CHATGPT.URL),
+            authorization: `Bearer ${getValue(map, CONFIG_KEY.CHATGPT.KEY)}`,
             body: {
-                model: NUXT_LLM_MODEL,
+                model: getValue(map, CONFIG_KEY.CHATGPT.MODEL),
                 messages,
             },
             stream: false,
