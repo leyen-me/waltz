@@ -36,6 +36,13 @@ import { useAdminUserDeleteApi, useAdminUserPageApi } from "@/api/admin/user";
 import { defaultRowsPerPageOptions } from "~/constants";
 import type User from "@/server/models/User";
 import useHasAuth from "@/utils/auth";
+import {
+  Space as TSpace,
+  Link as TLink,
+  Icon as TIcon,
+  Popconfirm as TPopconfirm,
+  Tag as TTag,
+} from "tdesign-vue-next";
 
 const router = useRouter();
 
@@ -71,7 +78,7 @@ const columns = [
     ellipsis: true,
     cell: (_h: any, { row }: any) => {
       return (
-        <t-tag
+        <TTag
           theme={
             row.gender === "men"
               ? "primary"
@@ -81,7 +88,7 @@ const columns = [
           }
         >
           {row.gender === "men" ? "男" : row.gender === "women" ? "女" : "保密"}
-        </t-tag>
+        </TTag>
       );
     },
   },
@@ -96,9 +103,9 @@ const columns = [
     ellipsis: true,
     cell: (_h: any, { row }: any) => {
       return (
-        <t-tag theme={row.superAdmin === 1 ? "primary" : "default"}>
+        <TTag theme={row.superAdmin === 1 ? "primary" : "default"}>
           {row.superAdmin === 1 ? "是" : "否"}
-        </t-tag>
+        </TTag>
       );
     },
   },
@@ -108,9 +115,9 @@ const columns = [
     ellipsis: true,
     cell: (_h: any, { row }: any) => {
       return (
-        <t-tag theme={row.status === 0 ? "primary" : "default"}>
+        <TTag theme={row.status === 0 ? "primary" : "default"}>
           {row.status === 0 ? "正常" : "停用"}
-        </t-tag>
+        </TTag>
       );
     },
   },
@@ -119,29 +126,28 @@ const columns = [
     title: "操作",
     cell: (_h: any, { row }: any) => {
       return (
-        <t-space>
-          <t-link
+        <TSpace>
+          <TLink
             variant="text"
             hover="color"
             disabled={!useHasAuth("user:update")}
             onClick={() => router.push(`/admin/user/${row.id}`)}
           >
             编辑
-          </t-link>
-          <t-popconfirm
+          </TLink>
+          <TPopconfirm
             content="确认删除吗"
             onConfirm={() => handleDelete(row.id)}
           >
-            <t-link
+            <TLink
               disabled={!useHasAuth("user:delete")}
-              variant="text"
               hover="color"
               theme="danger"
             >
               删除
-            </t-link>
-          </t-popconfirm>
-        </t-space>
+            </TLink>
+          </TPopconfirm>
+        </TSpace>
       );
     },
   },

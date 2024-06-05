@@ -20,6 +20,12 @@ import {
 } from "@/api/admin/config";
 import useDebounce from "@/utils/debounce";
 import type SiteConfig from "~/server/models/SiteConfig";
+import {
+  Space as TSpace,
+  Link as TLink,
+  Icon as TIcon,
+  Popconfirm as TPopconfirm,
+} from "tdesign-vue-next";
 
 const list = ref<SiteConfig[]>([]);
 const getData = async () => {
