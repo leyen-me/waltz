@@ -45,8 +45,7 @@ export default class MenuService extends BaseService<Menu> {
 
 
     async getNav(user: User, type: string | null): Promise<Menu[]> {
-        if (user.get("superAdmin") === 1) {
-            let query = `  
+        let query = `
             SELECT 
                 m.id,
                 m.pid,
@@ -59,57 +58,38 @@ export default class MenuService extends BaseService<Menu> {
                 m.sort,
                 DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i:%S') AS createdAt,
                 DATE_FORMAT(m.updated_at, '%Y-%m-%d %H:%i:%S') AS updatedAt
-            FROM t_menu m`;
-
-            const replacements: { [key: string]: any } = {};
-
-            if (type !== null) {
-                query += ` WHERE m.type = :type`;
-                replacements.type = type;
-            }
-
-            query += ` ORDER BY m.id,m.sort ASC;`;
-
-            const [results] = await sequelize.query(query, {
-                replacements
-            });
-
-            return results as Menu[];
+            FROM t_menu m
+            LEFT JOIN t_site_config sc ON m.id = sc.menu_id`;
+    
+        const replacements: { [key: string]: any } = {};
+    
+        if (user.get("superAdmin") !== 1) {
+            query += `
+                JOIN t_role_menu rm ON m.id = rm.menu_id
+                JOIN t_user_role ur ON rm.role_id = ur.role_id
+                WHERE ur.user_id = :userId`;
+            replacements.userId = user.id;
         } else {
-            let query = `  
-            SELECT 
-                m.id,
-                m.pid,
-                m.path,
-                m.title,
-                m.icon,
-                m.type,
-                m.open_style AS openStyle,
-                m.authority,
-                m.sort,
-                DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i:%S') AS createdAt,
-                DATE_FORMAT(m.updated_at, '%Y-%m-%d %H:%i:%S') AS updatedAt
-            FROM t_menu m  
-            JOIN t_role_menu rm ON m.id = rm.menu_id  
-            JOIN t_user_role ur ON rm.role_id = ur.role_id  
-            WHERE ur.user_id = :userId`;
-
-            const replacements: { [key: string]: any } = { userId: user.id };
-
-            if (type !== null) {
-                query += ` AND m.type = :type`;
-                replacements.type = type;
-            }
-
-            query += ` ORDER BY m.id,m.sort ASC;`;
-
-            const [results] = await sequelize.query(query, {
-                replacements
-            });
-
-            return results as Menu[];
+            query += ` WHERE 1=1`;
         }
+    
+        if (type !== null) {
+            query += ` AND m.type = :type`;
+            replacements.type = type;
+        }
+    
+        // 只排除 t_site_config.value 为 'false' 的记录
+        query += ` AND (sc.value IS NULL OR sc.value != 'false')`;
+    
+        query += ` ORDER BY m.id, m.sort ASC;`;
+    
+        const [results] = await sequelize.query(query, { replacements });
+    
+        return results as Menu[];
     }
+    
+    
+    
 
     async hasChildMenus(menuId: number): Promise<boolean> {
         const count = await Menu.count({
