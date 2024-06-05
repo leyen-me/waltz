@@ -34,5 +34,9 @@ RUN pnpm install && pnpm build
 # 暴露端口
 EXPOSE 3000 3306
 
+# 数据库持久化
+VOLUME /var/lib/mysql
+VOLUME /app/.output/public/attachment
+
 # 入口命令
 CMD ["sh", "-c", "./deploy/start.sh"]
