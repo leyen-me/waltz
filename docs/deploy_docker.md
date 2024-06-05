@@ -2,7 +2,7 @@
 
 ```bash
 # online
-docker run -itd -p 3000:3000 -p 3306:3306 --name blog difffffft/open-nuxt-blog:2.3
+docker run -itd -p 3000:3000 -p 3306:3306 --name blog difffffft/open-nuxt-blog:2.4
 
 # local
 docker run -itd -p 3000:3000 -p 3306:3306 --name blog open-nuxt-blog
