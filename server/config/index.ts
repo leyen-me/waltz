@@ -1,14 +1,17 @@
 import { Options } from "sequelize";
 
+const { NUXT_DB_HOST, NUXT_DB_DATABASE, NUXT_DB_USERNAME, NUXT_DB_PASSWORD } =
+  useRuntimeConfig().public;
+
 export const secretKey = "ijdioshai";
 
 export const whiteList = ["/api/admin/auth/**"];
 
 export const dbConfig: Options = {
-  host: "localhost",
-  username: "root",
-  password: "JGhQ83axm5ydtQEnX8B3RgtqnFIY6U3+TO5VMMVyLxA=",
-  database: "open_nuxt_blog",
+  host: NUXT_DB_HOST,
+  username: NUXT_DB_USERNAME,
+  password: NUXT_DB_PASSWORD,
+  database: NUXT_DB_DATABASE,
   dialect: "mysql",
   ssl: false,
   timezone: "+08:00",

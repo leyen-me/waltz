@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "node scripts/dev.cjs",
     "build": "node scripts/build.cjs",
+    "example": "node scripts/example.cjs",
     "dev-nuxt": "nuxt dev --dotenv .env.development",
     "build-nuxt": "nuxt build --dotenv .env.production",
+    "build-nuxt-example": "nuxt build --dotenv .env.example",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
