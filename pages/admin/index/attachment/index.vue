@@ -108,6 +108,12 @@ import useHasAuth from "@/utils/auth";
 import ContextMenu from "./ContextMenu.vue";
 import { nanoid } from "nanoid";
 import useImageUrl from "@/utils/imageUrl";
+import {
+  Space as TSpace,
+  Link as TLink,
+  Icon as TIcon,
+  Popconfirm as TPopconfirm,
+} from "tdesign-vue-next";
 
 const { NUXT_API_BASE } = useRuntimeConfig().public;
 
@@ -174,18 +180,18 @@ const columns = [
     cell: (_h: any, { row }: any) => {
       return (
         <div
-          className={
+          class={
             row.type === "folder"
               ? "text-[var(--web-color-7)] font-semibold flex items-center"
               : "text-[#FFF] flex items-center"
           }
         >
           {row.type === "folder" ? (
-            <t-icon name="folder"></t-icon>
+            <TIcon name="folder"></TIcon>
           ) : (
-            <t-icon name="file"></t-icon>
+            <TIcon name="file"></TIcon>
           )}
-          <p className={"line-clamp-1 ml-2 w-0 flex-1"}>{row.title}</p>
+          <p class={"line-clamp-1 ml-2 w-0 flex-1"}>{row.title}</p>
         </div>
       );
     },
@@ -211,9 +217,9 @@ const columns = [
     cell: (_h: any, { row }: any) => {
       return (
         <div class={"w-32"}>
-          <t-space>
+          <TSpace>
             {row.type !== "folder" ? (
-              <t-link
+              <TLink
                 variant="text"
                 hover="color"
                 disabled={row.type === "folder"}
@@ -224,11 +230,11 @@ const columns = [
                 }}
               >
                 下载
-              </t-link>
+              </TLink>
             ) : (
               <></>
             )}
-            <t-popconfirm
+            <TPopconfirm
               content="确认删除吗"
               onConfirm={async () => {
                 optionId.value = row.id;
@@ -239,7 +245,7 @@ const columns = [
                 } catch {}
               }}
             >
-              <t-link
+              <TLink
                 variant="text"
                 hover="color"
                 theme="danger"
@@ -248,9 +254,9 @@ const columns = [
                 }}
               >
                 删除
-              </t-link>
-            </t-popconfirm>
-          </t-space>
+              </TLink>
+            </TPopconfirm>
+          </TSpace>
         </div>
       );
     },

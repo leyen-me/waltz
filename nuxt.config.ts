@@ -1,3 +1,7 @@
+import { readEnvs, readNumber, readString } from "./common/utils/envUtil";
+
+const envs = readEnvs();
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: ["@/assets/css/main.css"],
@@ -16,8 +20,8 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   pages: true,
   devServer: {
-    host: "0.0.0.0",
-    port: 3000,
+    host: readString(envs, "NUXT_SERVER_HOST"),
+    port: readNumber(envs, "NUXT_SERVER_PORT"),
   },
   routeRules: {
     "/": { ssr: false },
@@ -31,12 +35,6 @@ export default defineNuxtConfig({
      * 读取 .env 文件中配置变量
      * Reading configuration variables from .env files
      */
-    public: {
-      ...Object.entries(process.env).reduce(
-        (acc, [key, value]) =>
-          key.startsWith("NUXT_") ? { ...acc, [key]: value } : acc,
-        {}
-      ),
-    },
+    public: envs,
   },
 });
