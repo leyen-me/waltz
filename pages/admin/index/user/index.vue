@@ -43,12 +43,14 @@ import {
   Popconfirm as TPopconfirm,
   Tag as TTag,
 } from "tdesign-vue-next";
+import useUserStore from "~/stores/userStore";
 
 const router = useRouter();
 
 // 分页
 const page = ref(1);
 const limit = ref(defaultRowsPerPageOptions[0]);
+const userStore = useUserStore();
 
 const total = ref(0);
 const list = ref<User[]>([]);
@@ -128,7 +130,6 @@ const columns = [
       return (
         <TSpace>
           <TLink
-            variant="text"
             hover="color"
             disabled={!useHasAuth("user:update")}
             onClick={() => router.push(`/admin/user/${row.id}`)}
@@ -136,11 +137,20 @@ const columns = [
             编辑
           </TLink>
           <TPopconfirm
+            disabled={
+              userStore.user.id === row.id ||
+              row.superAdmin ||
+              !useHasAuth("user:delete")
+            }
             content="确认删除吗"
             onConfirm={() => handleDelete(row.id)}
           >
             <TLink
-              disabled={!useHasAuth("user:delete")}
+              disabled={
+                userStore.user.id === row.id ||
+                row.superAdmin ||
+                !useHasAuth("user:delete")
+              }
               hover="color"
               theme="danger"
             >

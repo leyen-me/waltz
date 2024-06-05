@@ -26,6 +26,7 @@
   --web-color-10: rgba(215, 180, 134, 0.5);
   --web-color-11: rgba(215, 180, 134, 0.3);
   --web-color-12: rgb(232, 141, 21);
+  --web-color-13: rgba(235, 235, 245, .6);
 
   --td-bg-color-container: rgb(43, 43, 43) !important;
   --td-brand-color: var(--web-color-7) !important;

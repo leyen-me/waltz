@@ -42,7 +42,7 @@
           clearable
         ></t-input>
       </t-form-item>
-      <template v-if="v.children && v.children.length > 0">
+      <template v-if="v.value === 'true' && v.children && v.children.length > 0">
         <BaseSiteConfig
           :children="v.children"
           @change="(e) => handleSave(e)"
