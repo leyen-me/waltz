@@ -5,6 +5,7 @@ import sequelize from "../db";
 
 export default class SiteConfig extends BaseModel<SiteConfig> {
   declare pid: number;
+  declare menuId: number;
   declare code: string;
   declare title: string;
   declare value: string;
@@ -29,6 +30,11 @@ export default class SiteConfig extends BaseModel<SiteConfig> {
         type: DataTypes.BIGINT({ length: 20 }),
         allowNull: false,
         comment: '父id',
+      },
+      menuId: {
+        type: DataTypes.BIGINT({ length: 20 }),
+        allowNull: true,
+        comment: '菜单id',
       },
       code: {
         type: DataTypes.STRING({ length: 255 }),

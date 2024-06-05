@@ -2,8 +2,10 @@ import Role from '@/server/models/Role';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes } from 'sequelize';
 import RoleMenuService from './RoleMenuService';
+import UserRoleService from './UserRoleService';
 
 export default class RoleService extends BaseService<Role> {
+    private userRoleService = new UserRoleService();
     private roleMenuService = new RoleMenuService();
     constructor() {
         super(Role);
@@ -31,6 +33,8 @@ export default class RoleService extends BaseService<Role> {
     async deleteRoles(roleIds: number[]): Promise<void> {
         await defineTransactionWrapper(async (transaction) => {
             await this.delete({ where: { id: roleIds }, transaction });
+            await this.userRoleService.deleteByRoleIdList(roleIds);
+            await this.roleMenuService.deleteByRoleIdList(roleIds);
         });
     }
     
