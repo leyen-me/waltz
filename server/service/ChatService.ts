@@ -66,8 +66,11 @@ export default class ChatService extends BaseService<Chat> {
         return chats.map(chat => chat.getDataValue('id'));
     }
 
-    async getAllChats(): Promise<Chat[]> {
+    async getAllChats(userId: number): Promise<Chat[]> {
         return Chat.findAll({
+            where: {
+                userId: userId
+            },
             order: [
                 ['created_at', 'DESC']
             ]
