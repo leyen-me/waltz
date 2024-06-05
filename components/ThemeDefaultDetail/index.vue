@@ -42,14 +42,14 @@
     </section>
     <p
       v-if="article.tagList"
-      class="text-[var(--web-color-7)] mt-4 text-sm font-silka-medium flex px-8"
+      class="text-[var(--web-color-7)] mt-4 text-sm font-silka-medium flex px-0 lg:px-8"
     >
       <span v-for="(v, k) in tagList" :key="v"
         ><NuxtLink :to="'/?tagId=' + tagIdList[k]">{{ v }}</NuxtLink
         ><span v-if="k !== tagList.length - 1" class="mx-1"> • </span></span
       >
     </p>
-    <div class="flex justify-between mt-8 px-8 items-end">
+    <div class="flex justify-between mt-8 px-0 lg:px-8 items-end">
       <NuxtLink
         :to="'/admin/article/' + article.id"
         target="_blank"
@@ -61,7 +61,7 @@
         >{{ article.updatedAt }}</span
       >
     </div>
-    <div class="flex justify-between mt-6 px-8">
+    <div class="flex justify-between mt-6 px-0 lg:px-8">
       <NuxtLink
         :to="'/blog/' + String(adjacentInfo.previouArticle.id)"
         class="hover:no-underline"
