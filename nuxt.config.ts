@@ -10,7 +10,6 @@ export default defineNuxtConfig({
       link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
     },
   },
-  buildDir: "dist",
   modules: ["@tdesign-vue-next/nuxt", "@pinia/nuxt"],
   postcss: {
     plugins: {
