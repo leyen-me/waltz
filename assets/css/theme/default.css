@@ -301,5 +301,4 @@ body,
 .vuepress-markdown-body code {
   background-color: var(--web-bg-5);
   color: var(--web-color-9);
-  margin: 0 4px;
 }
