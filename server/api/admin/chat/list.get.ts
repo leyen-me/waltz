@@ -5,6 +5,7 @@ const chatService = new ChatService();
 export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "chat:list")
 
-    const result = await chatService.getAllChats();
+    const userId = event.context.user.id;
+    const result = await chatService.getAllChats(Number(userId));
     return defineOk({ data: result });
 });
