@@ -96,6 +96,8 @@
         :style="{
           '--web-bg-1':
             v.role === 'user' ? 'var(--web-bg-9)' : 'var(--web-bg-2)',
+          '--web-vuepress-markdown-body-bg':
+            v.role === 'user' ? 'var(--web-bg-9)' : 'var(--web-bg-2)',
           '--gpt-justify-content':
             v.role === 'user' ? 'flex-end' : 'flex-start',
           '--gpt-body-width': v.role === 'user' ? 'auto' : '100%',
