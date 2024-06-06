@@ -5,7 +5,7 @@
 # First run
 mkdir -p /usr/local/blog/attachment
 mkdir -p /usr/local/blog/mysql
-docker run -itd -p 3000:3000 -p 3306:3306 --name blog difffffft/open-nuxt-blog:2.4
+docker run -itd -p 3000:3000 -p 3306:3306 --name blog difffffft/open-nuxt-blog:2.5
 docker cp blog:/app/.output/public/attachment /usr/local/blog/attachment
 docker cp blog:/var/lib/mysql /usr/local/blog/mysql
 docker stop blog
@@ -17,7 +17,7 @@ docker run \
 --name blog \
 -v /usr/local/blog/attachment:/app/.output/public/attachment \
 -v /usr/local/blog/mysql:/var/lib/mysql \
--itd open-nuxt-blog:2.4
+-itd open-nuxt-blog:2.5
 
 
 # 版本升级
@@ -29,7 +29,7 @@ docker run \
 --name blog \
 -v /usr/local/blog/attachment:/app/.output/public/attachment \
 -v /usr/local/blog/mysql:/var/lib/mysql \
--itd open-nuxt-blog:2.4
+-itd open-nuxt-blog:2.5
 ```
 
 # Build
