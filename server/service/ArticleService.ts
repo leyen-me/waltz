@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import archiver from "archiver";
+import archiver, { ArchiverError } from "archiver";
 import AdmZip from "adm-zip";
 import Article from "@/server/models/Article";
 import BaseService from "@/server/base/BaseService";
@@ -401,33 +401,39 @@ export default class ArticleService extends BaseService<Article> {
   async exportArticle() {
     const { NUXT_TEMP_FOLDER, NUXT_PUBLIC_FOLDER } = useRuntimeConfig().public;
     // zip
-    const zipPath = NUXT_TEMP_FOLDER + "/" + nanoid() + ".zip";
-    fs.close(fs.openSync(zipPath, "w"));
+    const zipPath = path.resolve(NUXT_TEMP_FOLDER + "/" + nanoid() + ".zip");
+    defineCreateFolder(path.resolve(NUXT_TEMP_FOLDER));
+    fs.writeFileSync(zipPath, "");
 
     // 导出所有跟文章相关的表
-    this.exportModels.forEach(async (model) => {
-      //@ts-ignore
-      const list = (await model.findAll()).map((item) => {
-        return item.toJSON();
-      });
-      let modelJsonPath = NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json";
-      fs.writeFileSync(modelJsonPath, JSON.stringify(list));
+    const promises = this.exportModels.map(async (model:any) => {
+      const list = (await model.findAll()).map((item:any) => item.toJSON());
+      const modelJsonPath = path.resolve(NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json");
+      return fs.promises.writeFile(modelJsonPath, JSON.stringify(list));
     });
+  
+    await Promise.all(promises)
 
     const output = fs.createWriteStream(zipPath);
     const archive = archiver("zip", { zlib: { level: 9 } });
     archive.pipe(output);
     // 压缩指定文件夹
-    archive.directory(NUXT_PUBLIC_FOLDER as string, false);
+    archive.directory(path.resolve(NUXT_PUBLIC_FOLDER) as string, false);
     // 开始
     archive.finalize();
 
     function wait() {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         archive.on("close", () => {
           setTimeout(() => {
             resolve(true);
-          }, 500);
+          }, 2000);
+        });
+        archive.on("error", (e: ArchiverError) => {
+          setTimeout(() => {
+            console.error(e);
+            reject(false);
+          }, 2000);
         });
       });
     }
