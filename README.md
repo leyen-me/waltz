@@ -77,8 +77,3 @@ Thank you to all the people who already contributed to Blog!
 [MIT](https://opensource.org/licenses/MIT)
 
 Copyright (c) 2024-present, LeYen
-
-## 待开发
-附件改文件管理系统
-在线考试
-
