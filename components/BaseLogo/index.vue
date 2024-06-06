@@ -1,5 +1,5 @@
 <template>
-  <div class="flex  text-[var(--web-color-7)] items-center">
+  <div class="flex text-[var(--web-color-7)] items-center">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 234.32 169.95"

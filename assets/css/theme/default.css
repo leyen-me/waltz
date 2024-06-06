@@ -26,7 +26,7 @@
   --web-color-10: rgba(215, 180, 134, 0.5);
   --web-color-11: rgba(215, 180, 134, 0.3);
   --web-color-12: rgb(232, 141, 21);
-  --web-color-13: rgba(235, 235, 245, .6);
+  --web-color-13: rgba(235, 235, 245, 0.6);
 
   --td-bg-color-container: rgb(43, 43, 43) !important;
   --td-brand-color: var(--web-color-7) !important;
@@ -41,6 +41,8 @@
   --gpt-max-width: 100%;
   --gpt-body-width: auto;
   --gpt-border-radius: 12px;
+
+  --web-vuepress-markdown-body-bg: var(--web-bg-1);
 }
 
 html,
@@ -58,20 +60,47 @@ body,
   border-radius: 6px;
 }
 
-.v-md-editor__left-area {
-  background-color: var(--web-bg-1) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-}
-.v-md-editor__left-area-title {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-.v-md-editor__toc-nav-item {
-  color: rgba(255, 255, 255, 0.8) !important;
+/* markdown editor */
+.v-md-editor {
+  box-shadow: none !important;
 }
 
+/* markdown editor toolbar custom plugin icon */
+@font-face {
+  font-family: v-md-custom-iconfont;
+  src: url("//at.alicdn.com/t/c/font_4576255_bzplysne7bp.woff2?t=1717639648776")
+      format("woff2"),
+    url("//at.alicdn.com/t/c/font_4576255_bzplysne7bp.woff?t=1717639648776")
+      format("woff"),
+    url("//at.alicdn.com/t/c/font_4576255_bzplysne7bp.ttf?t=1717639648776")
+      format("truetype");
+}
+
+[class*="v-md-custom-icon-"] {
+  font-size: 16px;
+  font-family: v-md-custom-iconfont !important;
+  font-style: normal !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.v-md-custom-icon-info:before {
+  content: "\e60a";
+}
+
+.v-md-editor-info-drawer .t-drawer__content-wrapper {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* markdown editor toolbar */
 .v-md-editor__toolbar {
-  border-color: rgba(255, 255, 255, 0) !important;
-  background-color: var(--web-bg-2) !important;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  z-index: 49;
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--web-bg-1);
   padding: 12px;
 }
 .v-md-editor__toolbar-item {
@@ -86,19 +115,81 @@ body,
 .v-md-editor__toolbar-item--active {
   background: var(--web-bg-7);
 }
+.v-md-editor__toolbar-right-wrapper {
+  display: none;
+}
+
+/* markdown editor left */
+.v-md-editor__left-area {
+  background-color: var(--web-bg-2) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.v-md-editor__left-area-title {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+.v-md-editor__toc-nav-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
 
 .v-md-textarea-editor pre,
 .v-md-textarea-editor textarea {
   min-height: 80vh;
-  background-color: var(--web-bg-1) !important;
+  background-color: var(--web-bg-2) !important;
   color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .v-md-editor__editor-wrapper,
 .v-md-editor__preview-wrapper {
-  background-color: var(--web-bg-1) !important;
+  background-color: var(--web-bg-2) !important;
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
+
+.v-md-editor--editable .v-md-editor__editor-wrapper {
+  border-right: none;
+}
+
+/* markdown editor preview */
+.v-md-editor__preview-wrapper {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .v-md-editor__preview-wrapper {
+    display: block;
+  }
+
+  .v-md-editor__toolbar-right-wrapper {
+    display: block;
+  }
+}
+@media (min-width: 1280px) {
+  .v-md-editor__toolbar {
+    top: 0;
+    z-index: 20;
+  }
+  .v-md-editor--editable .v-md-editor__editor-wrapper {
+    border-right: 1px solid #ddd;
+  }
+
+  .v-md-editor__preview-wrapper {
+    display: block;
+  }
+
+  .v-md-editor__toolbar-right-wrapper {
+    display: block;
+  }
+
+  .search-dialog .t-dialog {
+    width: 50% !important;
+  }
+
+  .v-md-editor-info-drawer .t-drawer__content-wrapper {
+    width: 20% !important;
+    height: 100% !important;
+  }
+}
+
+/* markdown preview */
 
 .v-md-editor-preview {
   width: 100%;
@@ -110,7 +201,7 @@ body,
   width: var(--gpt-body-width);
   max-width: var(--gpt-max-width);
   border-radius: var(--gpt-border-radius);
-  background-color: var(--web-bg-1) !important;
+  background-color: var(--web-vuepress-markdown-body-bg) !important;
   color: white !important;
   padding: 12px 24px !important;
 }

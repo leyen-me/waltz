@@ -10,15 +10,15 @@
           <ul class="w-full flex flex-wrap gap-2">
             <li
               @click="categoryActive = -1"
-              :class="categoryActive === -1 ? 'bg-white text-black' : ''"
-              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+              :class="categoryActive === -1 ? 'bg-[var(--web-color-7)] text-black' : ''"
+              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:bg-[var(---web-color-10)]"
             >
               全部
             </li>
             <li
               @click="categoryActive = k"
-              :class="categoryActive === k ? 'bg-white text-black' : ''"
-              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+              :class="categoryActive === k ? 'bg-[var(--web-color-7)] text-black' : ''"
+              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:bg-[var(--web-color-10)]"
               v-for="(v, k) in categoryList"
               :key="v.id"
             >

@@ -43,30 +43,6 @@ a:hover {
   display: none;
 }
 
-.v-md-editor {
-  box-shadow: none !important;
-}
 .github-markdown-body img {
   width: 100%;
-}
-
-.v-md-editor__preview-wrapper {
-  display: none;
-}
-.v-md-editor__toolbar-right-wrapper {
-  display: none;
-}
-
-@media (min-width: 1280px) {
-  .v-md-editor__preview-wrapper {
-    display: block;
-  }
-
-  .v-md-editor__toolbar-right-wrapper {
-    display: block;
-  }
-
-  .search-dialog .t-dialog {
-    width: 50% !important;
-  }
 }

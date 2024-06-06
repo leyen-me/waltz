@@ -1,6 +1,101 @@
 <template>
-  <div>
-    <t-collapse>
+  <div
+    class="w-full mt-40 xl:mt-16"
+    style="--web-vuepress-markdown-body-bg: var(--web-bg-2)"
+  >
+    <BaseEditor
+      v-model="formData"
+      @save="handleSubmitForm"
+      @info="handleShowInfo"
+      @upload="handleEditorUpload"
+    ></BaseEditor>
+  </div>
+
+  <t-drawer
+    v-model:visible="infoVisible"
+    header="基本信息"
+    class="v-md-editor-info-drawer"
+    :confirmBtn="'保存'"
+    :onConfirm="handleSubmitForm"
+  >
+    <t-form
+      ref="form"
+      :data="formData"
+      :rules="formRules"
+      :colon="true"
+      :label-align="'top'"
+      @submit="handleSave"
+    >
+      <t-form-item name="title" label="文章标题">
+        <t-input
+          v-model="formData.title"
+          clearable
+          placeholder="请输入文章标题"
+        >
+        </t-input>
+      </t-form-item>
+      <t-form-item name="cover" label="文章封面">
+        <t-input
+          v-model="formData.cover"
+          clearable
+          placeholder="请输入文章封面"
+        >
+        </t-input>
+        <div class="ml-2">
+          <t-upload
+            name="files"
+            v-model="files"
+            :action="uploadUrl"
+            :abridge-name="[8, 6]"
+            :multiple="false"
+            theme="custom"
+            :showImageFileName="false"
+            placeholder="未选择文件"
+            :disabled="!useHasAuth('attachment:save')"
+            @success="onCoverUploadSuccess"
+            @fail="onCoverUploadError"
+          ></t-upload>
+        </div>
+      </t-form-item>
+      <t-form-item name="categoryId" label="分类">
+        <t-select
+          v-model="formData.categoryId"
+          :options="categoryList"
+          :keys="{ label: 'title', value: 'id' }"
+          placeholder="请选择"
+        />
+      </t-form-item>
+      <t-form-item name="tagIdList" label="标签">
+        <t-select
+          v-model="formData.tagIdList"
+          :options="tagList"
+          :keys="{ label: 'title', value: 'id' }"
+          placeholder="请选择"
+          multiple
+        />
+      </t-form-item>
+      <t-form-item name="status" label="文章状态">
+        <t-radio-group variant="default-filled" v-model="formData.status">
+          <t-radio-button
+            :value="v.value"
+            v-for="(v, k) in statusOptions"
+            :key="v.value"
+            >{{ v.label }}</t-radio-button
+          >
+        </t-radio-group>
+      </t-form-item>
+    </t-form>
+  </t-drawer>
+
+  <!-- <div
+    class="w-full"
+    style="
+      --td-comp-paddingLR-xl: 16px;
+      --td-comp-paddingLR-l: 16px;
+      --td-comp-paddingTB-m: 16px;
+    "
+  > -->
+  <!-- <t-collapse defaultExpandAll>
       <t-collapse-panel header="基本信息">
         <div class="pb-4">
           <t-form
@@ -72,20 +167,16 @@
           </t-form>
         </div>
       </t-collapse-panel>
-    </t-collapse>
+    </t-collapse> -->
 
-    <div class="mt-4">
+  <!-- <div class="mt-16">
       <t-card
-        style="background-color: var(--web-bg-2); --td-comp-paddingLR-xl: 16px"
+        style="background-color: var(--web-bg-2);"
       >
-        <BaseEditor
-          v-model="formData"
-          @save="handleSubmitForm"
-          @upload="handleEditorUpload"
-        ></BaseEditor>
+        
       </t-card>
-    </div>
-  </div>
+    </div> -->
+  <!-- </div> -->
 </template>
 
 <script setup lang="ts">
@@ -160,10 +251,12 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
         history.replaceState({}, "", newPath);
       }
       MessagePlugin.success("保存成功");
+      infoVisible.value = false;
     } catch (e) {
       MessagePlugin.error("保存失败");
     }
   } else {
+    infoVisible.value = true
     console.log("Validate Errors: ", firstError, validateResult);
     firstError && MessagePlugin.warning(firstError);
   }
@@ -254,6 +347,12 @@ const getData = async () => {
     categoryList.value = _categoryList;
     reset();
   }
+};
+
+// info
+const infoVisible = ref(false);
+const handleShowInfo = () => {
+  infoVisible.value = true;
 };
 
 onBeforeRouteUpdate(() => {

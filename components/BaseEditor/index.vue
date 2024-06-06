@@ -8,6 +8,7 @@
     placeholder="文章内容"
     :disabled-menus="[]"
     @save="emits('save')"
+    @info="emits('info')"
     @upload-image="(event:any, insertImage:any, files:any) => emits('upload', event, insertImage, files)"
   ></v-md-editor>
 </template>
@@ -50,7 +51,12 @@ import createHighlightLinesPlugin from "@kangc/v-md-editor/lib/plugins/highlight
  */
 import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
 
-const emits = defineEmits(["update:modelValue", "save", "upload"]);
+/**
+ * 基础信息
+ */
+import createInfoPlugin from "./plugins/info";
+
+const emits = defineEmits(["update:modelValue", "save", "info", "upload"]);
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -75,9 +81,10 @@ VMdEditor.use(createEmojiPlugin());
 VMdEditor.use(createLineNumbertPlugin());
 VMdEditor.use(createHighlightLinesPlugin());
 VMdEditor.use(createCopyCodePlugin());
+VMdEditor.use(createInfoPlugin());
 
 const leftToolbar = ref(
-  "bold clear code emoji h hr image-manager italic link ol quote strikethrough table ul tip image redo undo save"
+  "bold clear code emoji h hr italic link ol quote strikethrough table ul tip image redo undo save info"
 );
 const rightToolbar = ref("preview sync-scroll fullscreen");
 </script>
