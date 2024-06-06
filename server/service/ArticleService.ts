@@ -378,11 +378,10 @@ export default class ArticleService extends BaseService<Article> {
     const filePath = await defineUploadFile(file, NUXT_TEMP_FOLDER + "/");
     // 解压文件到附件
     const zip = new AdmZip(path.resolve(filePath));
-    zip.extractAllToAsync(path.resolve(NUXT_PUBLIC_FOLDER), true);
+    zip.extractAllToAsync(path.resolve(NUXT_PUBLIC_FOLDER as string), true);
 
-    this.exportModels.forEach(async (model) => {
+    this.exportModels.forEach(async (model: any) => {
       // 清除表
-      //@ts-ignore
       await model.destroy({
         where: {},
       });
@@ -419,7 +418,7 @@ export default class ArticleService extends BaseService<Article> {
     const archive = archiver("zip", { zlib: { level: 9 } });
     archive.pipe(output);
     // 压缩指定文件夹
-    archive.directory(NUXT_PUBLIC_FOLDER, false);
+    archive.directory(NUXT_PUBLIC_FOLDER as string, false);
     // 开始
     archive.finalize();
 
