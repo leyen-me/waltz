@@ -2,7 +2,7 @@
   <div
     class="h-full overflow-hidden bg-black flex w-full border-r border-solid border-[var(--td-component-stroke)]"
   >
-    <t-menu @change="handleClick" v-model="menuActive" width="100%">
+    <t-menu @change="handleClick" v-model="menuActive" width="100%"  style="--td-comp-size-xxxl:66.67px;">
       <template #logo>
         <BaseLogo></BaseLogo>
       </template>

@@ -3,22 +3,53 @@
     <!-- 筛选 -->
     <t-card title="检索条件">
       <template #actions>
-        <t-button @click="getData">查询</t-button>
+        <t-space>
+          <!-- <t-button @click="getData" theme="default">
+            <template #icon>
+              <t-icon name="file-import"></t-icon>
+            </template>
+            导入
+          </t-button> -->
+          <t-upload
+            name="files"
+            v-model="files"
+            :action="uploadUrl"
+            :abridge-name="[8, 6]"
+            :multiple="false"
+            theme="custom"
+            :showImageFileName="false"
+            placeholder="未选择文件"
+            @success="onUploadSuccess"
+            @fail="onUploadError"
+          ></t-upload>
+          <t-button @click="handleArticleExport">
+            <template #icon>
+              <t-icon name="file-export"></t-icon>
+            </template>
+            导出
+          </t-button>
+        </t-space>
       </template>
       <t-form ref="form" :colon="true" :label-align="'left'">
         <t-form-item label="分类">
           <ul class="w-full flex flex-wrap gap-2">
             <li
               @click="categoryActive = -1"
-              :class="categoryActive === -1 ? 'bg-white text-black' : ''"
-              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+              :class="
+                categoryActive === -1
+                  ? 'bg-[var(--web-color-7)] text-black'
+                  : ''
+              "
+              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:bg-[var(---web-color-10)]"
             >
               全部
             </li>
             <li
               @click="categoryActive = k"
-              :class="categoryActive === k ? 'bg-white text-black' : ''"
-              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white"
+              :class="
+                categoryActive === k ? 'bg-[var(--web-color-7)] text-black' : ''
+              "
+              class="rounded px-6 py-2 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:bg-[var(--web-color-10)]"
               v-for="(v, k) in categoryList"
               :key="v.id"
             >
@@ -159,7 +190,9 @@ import useImageUrl from "@/utils/imageUrl";
 import type Category from "~/server/models/Category";
 import { useAdminCategoryListApi } from "~/api/admin/category";
 import useDebounce from "~/utils/debounce";
+import Cookies from "js-cookie";
 
+const { NUXT_API_BASE } = useRuntimeConfig().public;
 const router = useRouter();
 
 // 分页
@@ -182,6 +215,39 @@ const handleGoDetail = (article: Article) => {
     return;
   }
   router.push(`/admin/article/${article.id}`);
+};
+
+// 文件导入
+const files = ref([]);
+const uploadUrl =
+  NUXT_API_BASE +
+    "/api/admin/article/import?Authorization=" +
+    Cookies.get("token") || "";
+
+const onUploadSuccess = async (e: any) => {
+  const { code, msg, data } = e.response;
+  if (code !== 200) {
+    MessagePlugin.error(msg);
+    return;
+  }
+  MessagePlugin.success("导入成功");
+  files.value = []
+  await getData();
+};
+const onUploadError = () => {
+  files.value = []
+  MessagePlugin.error("文件上传失败");
+};
+
+const handleArticleExport = async () => {
+  const Authorization = useCookie("token", {
+    default: () => "",
+    watch: false,
+  });
+  window.open(
+    NUXT_API_BASE +
+      `/api/admin/article/export?Authorization=${Authorization.value}`
+  );
 };
 
 const handleDelete = async (id: number) => {
