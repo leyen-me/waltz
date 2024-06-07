@@ -18,6 +18,7 @@ export default class Article extends BaseModel<Article> {
   declare commentsCount: number;
   declare sort: number;
   declare html: string;
+  declare isPrivate: whetherEnum;
 
   public author?: string;
   public categoryTitle?: string;
@@ -111,6 +112,12 @@ export default class Article extends BaseModel<Article> {
         type: DataTypes.INTEGER({ length: 11 }),
         defaultValue: 1,
         comment: '排序',
+      },
+      isPrivate: {
+        type: DataTypes.TINYINT({ length: 1 }),
+        allowNull: false,
+        defaultValue: 0,
+        comment: '文章是否私有',
       }
     };
     const modelOptions = {

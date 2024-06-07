@@ -34,7 +34,7 @@ export default class ArticleService extends BaseService<Article> {
     super(Article);
   }
 
-  async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
+  async selectPage(query: ArticleQuery, userId: number, superAdmin: number): Promise<BasePageResponse<Article>> {
     let { page, limit, order, asc, tagId, title, ...items } = query;
 
     page = Number(page);
@@ -73,6 +73,18 @@ export default class ArticleService extends BaseService<Article> {
         sequelize.literal(
           `EXISTS (SELECT 1 FROM t_article_tag at WHERE at.article_id = Article.id AND at.tag_id = :tagId)`
         )
+      );
+    }
+
+    // 确保私有文章只对作者和超级管理员可见
+    if (superAdmin !== 1) {
+      whereConditions.push(
+        {
+          [Op.or]: [
+            { isPrivate: 0 },
+            { authorId: userId }
+          ]
+        }
       );
     }
 
@@ -353,11 +365,31 @@ export default class ArticleService extends BaseService<Article> {
     return { previouArticle, nextArticle };
   }
 
-  async getAllArticles(title: string): Promise<Article[]> {
+  async getAllArticles(title: string, userId: number, superAdmin: number, articleStatus?: string): Promise<Article[]> {
     // 构建全文搜索查询条件
     const condition = literal(
       "MATCH(title,content) AGAINST(:title IN BOOLEAN MODE)"
     );
+
+    // 构建查询条件数组
+    const whereConditions: any[] = [condition];
+
+    // 添加权限检查条件
+    if (superAdmin !== 1) {
+      whereConditions.push(
+        {
+          [Op.or]: [
+            { isPrivate: 0 },
+            { authorId: userId }
+          ]
+        }
+      );
+    }
+
+    // 如果传递了文章状态参数，拼接到查询条件中
+    if (articleStatus) {
+      whereConditions.push({ status: articleStatus });
+    }
 
     // 执行 findAll 方法并传递查询条件
     const articles = await Article.findAll({
@@ -366,6 +398,8 @@ export default class ArticleService extends BaseService<Article> {
     });
     return articles;
   }
+
+
 
   /**
    * 导入
