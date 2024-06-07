@@ -8,12 +8,15 @@
 
 ### Project Profile
 
+```
 This project is an open source blog system based on Nuxt.js , using Sequelize for database management , the use of TDesign and v-md-editor to achieve interface beautification and Markdown editing functions.
+```
 
-本项目是一个基于 Nuxt.js 的开源博客系统，采用 Sequelize 进行数据库管理，使用 TDesign 和 v-md-editor 实现界面美化和 Markdown 编辑功能。
+本项目是一个基于 `Nuxt.js` 的开源博客系统，采用 `Sequelize` 进行数据库管理，使用 `TDesign` 和 `v-md-editor` 实现界面美化和 Markdown 编辑功能。
 
 ### Project Features
 
+```
 - MIT open source agreement, completely open source, feel free to modify
 - Front-end using a new technology stack Vue3, Nuxt, TypeScript, Tailwindcss, Gsap, Pinia, Tdesign, Prismjs
 - Backend technology stack H3, Sequelize
@@ -23,6 +26,7 @@ This project is an open source blog system based on Nuxt.js , using Sequelize fo
 - Application framework: article management, category management, tag management, comment management, ChatGpt, Agent management.
 - Customizable themes, site data backup, Mysql full-text retrieval.
 - Support foolproof Docker + Mysql one-click deployment, out-of-the-box, also supports source code deployment, the speed flies.
+```
 
 - MIT开源协议，完全开源， 随意修改
 - 前端使用全新技术栈 Vue3、Nuxt、TypeScript、Tailwindcss、Gsap、Pinia、Tdesign、Prismjs
@@ -62,13 +66,17 @@ npm run dev
 
 ### Contribute
 
+```
 You are welcome to contribute code, ask questions and make suggestions, and you can participate in the project by submitting Pull Requests or Issues.
+```
 
 欢迎贡献代码，提出问题和建议，您可以通过提交 Pull Request 或 Issue 的方式参与到项目中来。
 
 ### Thanks
 
+```
 Thank you to all the people who already contributed to Blog!
+```
 
 感谢所有已经为 Blog 做出贡献的人！
 
