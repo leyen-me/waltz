@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full mt-40 xl:mt-16"
+    class="m-editor-wrap w-full mt-40 lg:mt-28"
     style="--web-vuepress-markdown-body-bg: var(--web-bg-2)"
   >
     <BaseEditor

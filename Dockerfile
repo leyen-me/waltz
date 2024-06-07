@@ -21,9 +21,6 @@ mysql -u root -e  "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_pa
 mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "use mysql;update user set host='%' where user='root';FLUSH PRIVILEGES;" && \
 mysql -u root -p${MYSQL_ROOT_PASSWORD} < /etc/mysql/init.d/init.sql
 
-# 声明数据卷
-VOLUME ["/var/lib/mysql", "/app/.output/public/attachment"]
-
 # 拷贝源码
 RUN mkdir -p /app
 COPY . /app

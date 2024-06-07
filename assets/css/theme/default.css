@@ -96,12 +96,16 @@ body,
 /* markdown editor toolbar */
 .v-md-editor__toolbar {
   position: fixed;
-  top: 56px;
+
   left: 0;
   z-index: 49;
   border-color: rgba(255, 255, 255, 0.1);
   background-color: var(--web-bg-1);
   padding: 12px;
+  padding-left: 0;
+
+  /* phone */
+  top: 56px;
 }
 .v-md-editor__toolbar-item {
   color: rgba(255, 255, 255, 0.8);
@@ -153,7 +157,18 @@ body,
   display: none;
 }
 
-@media (min-width: 768px) {
+.v-md-editor--fullscreen .v-md-editor__toolbar{
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .v-md-editor__toolbar {
+    padding-left: calc(285.33px + 22px);
+    top: 0;
+    padding-top: 56px;
+    z-index: 20;
+  }
+
   .v-md-editor__preview-wrapper {
     display: block;
   }
@@ -161,28 +176,13 @@ body,
   .v-md-editor__toolbar-right-wrapper {
     display: block;
   }
-}
-@media (min-width: 1280px) {
-  .v-md-editor__toolbar {
-    top: 0;
-    z-index: 20;
-  }
+
   .v-md-editor--editable .v-md-editor__editor-wrapper {
     border-right: 1px solid #ddd;
   }
-
-  .v-md-editor__preview-wrapper {
-    display: block;
-  }
-
-  .v-md-editor__toolbar-right-wrapper {
-    display: block;
-  }
-
   .search-dialog .t-dialog {
     width: 50% !important;
   }
-
   .v-md-editor-info-drawer .t-drawer__content-wrapper {
     width: 20% !important;
     height: 100% !important;
