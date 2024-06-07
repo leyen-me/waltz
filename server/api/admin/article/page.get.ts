@@ -6,7 +6,7 @@ export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "article:page")
 
     const query: ArticleQuery = getQuery(event);
-    query.title = decodeURIComponent(getQuery(event).title as string);
+    query.title = decodeURIComponent(query.title as string);
     const result = await articleService.selectPage(query);
     return defineOk({ data: result });
 });

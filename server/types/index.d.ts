@@ -71,6 +71,7 @@ interface ArticleQuery extends BaseQuery {
   status?: string;
   order?: string;
   asc?: boolean;
+  isPrivate?: number;
 }
 
 interface CategoryQuery extends BaseQuery {

@@ -34,8 +34,8 @@ export default class ArticleService extends BaseService<Article> {
     super(Article);
   }
 
-  async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
-    let { page, limit, order, asc, tagId, title, ...items } = query;
+  async selectPage(query: ArticleQuery, userId?: number, superAdmin?: number): Promise<BasePageResponse<Article>> {
+    let { page, limit, order, asc, tagId, title, isPrivate, ...items } = query;
 
     page = Number(page);
     limit = Number(limit);
@@ -76,6 +76,22 @@ export default class ArticleService extends BaseService<Article> {
       );
     }
 
+    // 处理私有文章条件
+    if (isPrivate !== undefined) {
+      if (isPrivate === 0) {
+        whereConditions.push({ is_private: isPrivate });
+      } else if (userId && superAdmin && superAdmin !== 1) {
+        whereConditions.push({
+          [Op.or]: [
+            { is_private: 0 },
+            { author_id: userId }
+          ]
+        });
+      }
+    }
+
+
+
     // 构建查询条件
     const options: FindAndCountOptions = {
       offset,
@@ -90,6 +106,7 @@ export default class ArticleService extends BaseService<Article> {
         "title",
         "cover",
         "content",
+        "isPrivate",
         "html",
         [
           sequelize.literal(
@@ -121,6 +138,7 @@ export default class ArticleService extends BaseService<Article> {
         "updatedAt",
       ],
     };
+
 
     const { rows, count } = await Article.findAndCountAll(options);
 
@@ -267,105 +285,178 @@ export default class ArticleService extends BaseService<Article> {
 
   async getArticleById(
     articleId: number,
-    isCount: boolean
+    isCount: boolean,
+    userId?: number,
+    superAdmin?: number,
+    isPrivate?: number
   ): Promise<Article | null> {
-    const query = `
-            SELECT a.*, 
-                u.username AS author,
-                c.title AS categoryTitle,
-                GROUP_CONCAT(DISTINCT t.title) AS tagList,
-                GROUP_CONCAT(DISTINCT at.tag_id) as tagIdList,
-                COUNT(DISTINCT f.id) AS favoritesCount,
-                COUNT(DISTINCT l.id) AS likesCount,
-                COUNT(DISTINCT cmt.id) AS commentsCount
-            FROM t_article a
-            JOIN t_user u ON a.author_id = u.id
-            LEFT JOIN t_favorite f ON a.id = f.article_id
-            LEFT JOIN t_like l ON a.id = l.article_id
-            LEFT JOIN t_comment cmt ON a.id = cmt.article_id
-            LEFT JOIN t_category c ON a.category_id = c.id
-            LEFT JOIN t_article_tag at ON a.id = at.article_id
-            LEFT JOIN t_tag t ON at.tag_id = t.id
-            WHERE a.id = :articleId
-            GROUP BY a.id
-        `;
+    // 构建基本查询
+    let query = `
+      SELECT a.*, 
+        u.username AS author,
+        c.title AS categoryTitle,
+        GROUP_CONCAT(DISTINCT t.title) AS tagList,
+        GROUP_CONCAT(DISTINCT at.tag_id) as tagIdList,
+        COUNT(DISTINCT f.id) AS favoritesCount,
+        COUNT(DISTINCT l.id) AS likesCount,
+        COUNT(DISTINCT cmt.id) AS commentsCount
+      FROM t_article a
+      JOIN t_user u ON a.author_id = u.id
+      LEFT JOIN t_favorite f ON a.id = f.article_id
+      LEFT JOIN t_like l ON a.id = l.article_id
+      LEFT JOIN t_comment cmt ON a.id = cmt.article_id
+      LEFT JOIN t_category c ON a.category_id = c.id
+      LEFT JOIN t_article_tag at ON a.id = at.article_id
+      LEFT JOIN t_tag t ON at.tag_id = t.id
+      WHERE a.id = :articleId
+    `;
 
+    // 根据 isPrivate、userId 和 superAdmin 添加筛选条件
+    if (isPrivate === 0) {
+      query += ` AND a.is_private = 0`;
+    } else if (userId && superAdmin !== 1) {
+      query += ` AND (a.is_private = 0 OR a.author_id = :userId)`;
+    }
+
+    // 完成查询
+    query += ` GROUP BY a.id`;
+
+    // 构建参数
+    const replacements: any = { articleId };
+    if (userId && superAdmin !== 1) {
+      replacements.userId = userId;
+    }
+
+    // 执行查询
     const result = await sequelize.query(query, {
-      replacements: { articleId },
+      replacements,
       model: Article,
       mapToModel: true,
     });
 
+    // 更新浏览次数
     if (isCount) {
       this.updateViewsCount(articleId);
     }
 
+    // 返回结果
     return result.length ? result[0] : null;
   }
 
+
   async getPreviousAndNextArticles(
     articleId: number,
-    categoryId: number
+    categoryId: number,
+    userId?: number,
+    superAdmin?: number,
+    isPrivate?: number
   ): Promise<PreviouAndNextArticleResponse> {
+    // 获取当前文章
     const currentArticle = await Article.findOne({
       where: { id: articleId, categoryId },
-      attributes: ["id", "title", "sort", "publishedAt"],
+      attributes: ["id", "title", "publishedAt"],
     });
 
     if (!currentArticle) {
       return { previouArticle: null, nextArticle: null };
     }
 
-    const { sort, publishedAt } = currentArticle;
+    const { publishedAt } = currentArticle;
 
-    const previouArticle = (await Article.findOne({
+    // 构建公共条件
+    const baseConditions: any = { categoryId };
+
+    // 根据权限添加条件
+    if (isPrivate === 0) {
+      baseConditions.is_private = 0;
+    } else if (userId && superAdmin !== 1) {
+      baseConditions[Op.or] = [
+        { is_private: 0 },
+        { author_id: userId }
+      ];
+    }
+
+    // 获取前一篇文章
+    const previouArticle = await Article.findOne({
       where: {
-        categoryId,
+        ...baseConditions,
         [Op.or]: [
-          { sort: { [Op.lt]: sort } },
-          { sort: sort, publishedAt: { [Op.lt]: publishedAt } },
+          { publishedAt: { [Op.lt]: publishedAt } },
+          { publishedAt: publishedAt, id: { [Op.lt]: articleId } } // 在publishedAt相同时，确保ID也小于当前文章的ID
         ],
+        id: { [Op.ne]: articleId },
       },
       order: [
-        ["sort", "DESC"],
         ["publishedAt", "DESC"],
+        ["id", "DESC"] // 添加 ID 的倒序排序
       ],
       attributes: ["id", "title"],
       limit: 1,
-    })) as Article;
+    }) as Article;
 
-    const nextArticle = (await Article.findOne({
+    // 获取下一篇文章
+    const nextArticle = await Article.findOne({
       where: {
-        categoryId,
+        ...baseConditions,
         [Op.or]: [
-          { sort: { [Op.gt]: sort } },
-          { sort: sort, publishedAt: { [Op.gt]: publishedAt } },
+          { publishedAt: { [Op.gt]: publishedAt } },
+          { publishedAt: publishedAt, id: { [Op.gt]: articleId } } // 在publishedAt相同时，确保ID也大于当前文章的ID
         ],
+        id: { [Op.ne]: articleId },
       },
       order: [
-        ["sort", "ASC"],
         ["publishedAt", "ASC"],
+        ["id", "ASC"] // 添加 ID 的正序排序
       ],
       attributes: ["id", "title"],
       limit: 1,
-    })) as Article;
+    }) as Article;
 
     return { previouArticle, nextArticle };
   }
 
-  async getAllArticles(title: string): Promise<Article[]> {
+
+
+
+
+
+  async getAllArticles(title: string, userId?: number, superAdmin?: number, articleStatus?: string, isPrivate?: number): Promise<Article[]> {
     // 构建全文搜索查询条件
     const condition = literal(
       "MATCH(title,content) AGAINST(:title IN BOOLEAN MODE)"
     );
 
+    // 构建查询条件数组
+    const whereConditions: any[] = [condition];
+
+    // 处理私有文章条件
+    if (isPrivate === 0) {
+      whereConditions.push({ is_private: isPrivate });
+    } else if (userId && superAdmin && superAdmin !== 1) {
+      whereConditions.push({
+        [Op.or]: [
+          { is_private: 0 },
+          { author_id: userId }
+        ]
+      });
+    }
+
+
+    // 如果传递了文章状态参数，拼接到查询条件中
+    if (articleStatus) {
+      whereConditions.push({ status: articleStatus });
+    }
+
     // 执行 findAll 方法并传递查询条件
     const articles = await Article.findAll({
-      where: condition,
+      where: whereConditions,
       replacements: { title: `${title}` },
     });
+
     return articles;
   }
+
+
 
   /**
    * 导入
@@ -406,12 +497,12 @@ export default class ArticleService extends BaseService<Article> {
     fs.writeFileSync(zipPath, "");
 
     // 导出所有跟文章相关的表
-    const promises = this.exportModels.map(async (model:any) => {
-      const list = (await model.findAll()).map((item:any) => item.toJSON());
+    const promises = this.exportModels.map(async (model: any) => {
+      const list = (await model.findAll()).map((item: any) => item.toJSON());
       const modelJsonPath = path.resolve(NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json");
       return fs.promises.writeFile(modelJsonPath, JSON.stringify(list));
     });
-  
+
     await Promise.all(promises)
 
     const output = fs.createWriteStream(zipPath);

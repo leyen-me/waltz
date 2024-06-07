@@ -13,6 +13,7 @@
         row-key="id"
         :data="list"
         :columns="columns"
+        :hover = "false"
       ></t-table>
       <div class="mt-4">
         <t-pagination
