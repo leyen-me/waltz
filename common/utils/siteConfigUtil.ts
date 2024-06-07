@@ -12,17 +12,21 @@ export const buildMap = (configArr: SiteConfig[]) => {
   const bl = (P_CODE: string, arr: SiteConfig[]) => {
     for (let i = 0; i < arr.length; i++) {
       const item = arr[i];
-      switch (item.type) {
-        case "boolean":
-          item.value = item.value === "true" ? true : false;
-          break;
-        case "number":
-          item.value = Number(item.value);
-          break;
-        default:
-          break;
+
+      // 此BUG，前所未见
+      if (process.browser) {
+        switch (item.type) {
+          case "boolean":
+            item.value = item.value === "true" ? true : false;
+            break;
+          case "number":
+            item.value = Number(item.value);
+            break;
+          default:
+            break;
+        }
       }
-      const key = P_CODE + (P_CODE ? "_" : '') + item.code
+      const key = P_CODE + (P_CODE ? "_" : "") + item.code;
       map.set(key, item);
       if (item.children && item.children.length > 0) {
         bl(key, item.children);
@@ -33,7 +37,6 @@ export const buildMap = (configArr: SiteConfig[]) => {
   return map;
 };
 
-
 export const getValue = (map: Map<string, SiteConfig>, key: string): any => {
-  return map.get(key)?.value
-}
+  return map.get(key)?.value;
+};

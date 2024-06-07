@@ -157,8 +157,10 @@ body,
   display: none;
 }
 
-.v-md-editor--fullscreen .v-md-editor__toolbar{
+.v-md-editor--fullscreen .v-md-editor__toolbar {
   position: relative;
+  padding-top: 12px;
+  padding-left: 12px;
 }
 
 @media (min-width: 1024px) {

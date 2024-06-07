@@ -7,7 +7,7 @@
       background-size: 32%;
     "
   >
-    <t-card title="登录">
+    <t-card title="注册">
       <div
         class="flex flex-col justify-center items-center sm:mx-auto sm:w-full sm:max-w-sm"
       >
@@ -15,7 +15,7 @@
         <h2
           class="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-white"
         >
-          登录您的账号
+          注册您的账号
         </h2>
       </div>
 
@@ -26,7 +26,7 @@
           :rules="formRules"
           :colon="true"
           :label-align="'top'"
-          @submit="handleLogin"
+          @submit="handleRegister"
         >
           <t-form-item name="username" label="账户">
             <t-input
@@ -53,7 +53,19 @@
               </template>
             </t-input>
           </t-form-item>
-
+          <t-form-item name="rePassword" label="重复密码">
+            <t-input
+              v-model="formData.rePassword"
+              type="password"
+              size="large"
+              clearable
+              placeholder="请重新输入密码"
+            >
+              <template #prefix-icon>
+                <lock-on-icon />
+              </template>
+            </t-input>
+          </t-form-item>
           <t-form-item>
             <t-button
               theme="primary"
@@ -61,11 +73,17 @@
               block
               style="margin-bottom: 20px"
               size="large"
-              >登录</t-button
+              >注册</t-button
             >
           </t-form-item>
           <t-form-item>
-            <span class="w-full flex">没有账号？去<NuxtLink class="text-[var(--web-color-7)]" :to="'/admin/register?redirect=' + route.query.redirect">注册</NuxtLink> </span>
+            <span class="w-full flex"
+              >已经有账号？去<NuxtLink
+                class="text-[var(--web-color-7)]"
+                :to="'/admin/login'"
+                >登录</NuxtLink
+              >
+            </span>
           </t-form-item>
         </t-form>
       </div>
@@ -75,9 +93,7 @@
 
 <script setup lang="ts">
 import { DesktopIcon, LockOnIcon } from "tdesign-icons-vue-next";
-
-import Cookies from "js-cookie";
-import { useAdminLoginApi } from "@/api/admin/auth";
+import { useAdminRegisterApi } from "@/api/admin/auth";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
 
 const route = useRoute();
@@ -86,24 +102,32 @@ const router = useRouter();
 const formData = ref({
   username: "",
   password: "",
+  rePassword: "",
 });
+
+const rePassword = (val: any) =>
+  new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      resolve(formData.value.password === val);
+      clearTimeout(timer);
+    });
+  });
 const formRules = ref({
   username: [{ required: true, message: "账号必填" }],
   password: [{ required: true, message: "密码必填" }],
+  rePassword: [
+    { required: true, message: "密码必填" },
+    { validator: rePassword, message: "两次密码不一致" },
+  ],
 });
 
-const handleLogin = async ({ validateResult, firstError }: SubmitContext) => {
+const handleRegister = async ({ validateResult, firstError }: SubmitContext) => {
   if (validateResult === true) {
     try {
-      const { token } = await useAdminLoginApi(formData.value);
-      // 存储
-      Cookies.set("token", token);
-      // 回到主页
-      if (route.query.redirect) {
-        router.replace(decodeURIComponent(route.query.redirect as string));
-      } else {
-        router.replace("/admin");
-      }
+      await useAdminRegisterApi(formData.value);
+      router.replace(
+        ("/admin/login?redirect=" + route.query.redirect) as string
+      );
     } catch (error: any) {}
   } else {
     console.log("Validate Errors: ", firstError, validateResult);

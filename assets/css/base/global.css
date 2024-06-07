@@ -35,6 +35,17 @@ a {
 a:hover {
   text-decoration: underline;
 }
+input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+}
 .scrollbar-hidden {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -42,7 +53,7 @@ a:hover {
 .scrollbar-hidden::-webkit-scrollbar {
   display: none;
 }
-
-.github-markdown-body img {
-  width: 100%;
+.t-table .t-tooltip.t-tooltip--default.t-table__ellipsis-content {
+  display: none;
 }
+

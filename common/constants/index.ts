@@ -7,6 +7,7 @@ export const CONFIG_KEY = {
     DESC: "site_desc",
     FOOTER: "site_footer",
     THEME: "site_theme",
+    LOGIN: "site_login",
   },
   CHATGPT: {
     KEY: "chatgpt_key",

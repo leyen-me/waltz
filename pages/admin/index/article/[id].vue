@@ -74,6 +74,16 @@
           multiple
         />
       </t-form-item>
+      <t-form-item name="isPrivate" label="私有">
+        <t-radio-group variant="default-filled" v-model="formData.isPrivate">
+          <t-radio-button
+            :value="v.value"
+            v-for="(v, k) in privateOptions"
+            :key="v.value"
+            >{{ v.label }}</t-radio-button
+          >
+        </t-radio-group>
+      </t-form-item>
       <t-form-item name="status" label="文章状态">
         <t-radio-group variant="default-filled" v-model="formData.status">
           <t-radio-button
@@ -86,97 +96,6 @@
       </t-form-item>
     </t-form>
   </t-drawer>
-
-  <!-- <div
-    class="w-full"
-    style="
-      --td-comp-paddingLR-xl: 16px;
-      --td-comp-paddingLR-l: 16px;
-      --td-comp-paddingTB-m: 16px;
-    "
-  > -->
-  <!-- <t-collapse defaultExpandAll>
-      <t-collapse-panel header="基本信息">
-        <div class="pb-4">
-          <t-form
-            ref="form"
-            :data="formData"
-            :rules="formRules"
-            :colon="true"
-            :label-align="'top'"
-            @submit="handleSave"
-          >
-            <t-form-item name="title" label="文章标题">
-              <t-input
-                v-model="formData.title"
-                clearable
-                placeholder="请输入文章标题"
-              >
-              </t-input>
-            </t-form-item>
-            <t-form-item name="cover" label="文章封面">
-              <t-input
-                v-model="formData.cover"
-                clearable
-                placeholder="请输入文章封面"
-              >
-              </t-input>
-              <div class="ml-2">
-                <t-upload
-                  name="files"
-                  v-model="files"
-                  :action="uploadUrl"
-                  :abridge-name="[8, 6]"
-                  :multiple="false"
-                  theme="custom"
-                  :showImageFileName="false"
-                  placeholder="未选择文件"
-                  :disabled="!useHasAuth('attachment:save')"
-                  @success="onCoverUploadSuccess"
-                  @fail="onCoverUploadError"
-                ></t-upload>
-              </div>
-            </t-form-item>
-            <t-form-item name="categoryId" label="分类">
-              <t-select
-                v-model="formData.categoryId"
-                :options="categoryList"
-                :keys="{ label: 'title', value: 'id' }"
-                placeholder="请选择"
-              />
-            </t-form-item>
-            <t-form-item name="tagIdList" label="标签">
-              <t-select
-                v-model="formData.tagIdList"
-                :options="tagList"
-                :keys="{ label: 'title', value: 'id' }"
-                placeholder="请选择"
-                multiple
-              />
-            </t-form-item>
-            <t-form-item name="status" label="文章状态">
-              <t-radio-group variant="default-filled" v-model="formData.status">
-                <t-radio-button
-                  :value="v.value"
-                  v-for="(v, k) in statusOptions"
-                  :key="v.value"
-                  >{{ v.label }}</t-radio-button
-                >
-              </t-radio-group>
-            </t-form-item>
-          </t-form>
-        </div>
-      </t-collapse-panel>
-    </t-collapse> -->
-
-  <!-- <div class="mt-16">
-      <t-card
-        style="background-color: var(--web-bg-2);"
-      >
-        
-      </t-card>
-    </div> -->
-  <!-- </div> -->
 </template>
 
 <script setup lang="ts">
@@ -206,6 +125,11 @@ const statusOptions = ref([
   { label: "发布", value: "published" },
 ]);
 
+const privateOptions = ref([
+  { label: "公开", value: 0 },
+  { label: "私有", value: 1 },
+]);
+
 const categoryList = ref<Category[]>([]);
 const tagList = ref<Tag[]>([]);
 
@@ -218,6 +142,7 @@ const formData = ref<Article>({
   content: "",
   status: "",
   html: "",
+  isPrivate: 0,
 
   // @ts-ignore
   categoryId: "",
@@ -256,7 +181,7 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
       MessagePlugin.error("保存失败");
     }
   } else {
-    infoVisible.value = true
+    infoVisible.value = true;
     console.log("Validate Errors: ", firstError, validateResult);
     firstError && MessagePlugin.warning(firstError);
   }
@@ -310,6 +235,7 @@ const reset = () => {
   formData.value.cover = "";
   formData.value.content = "";
   formData.value.status = statusOptions.value[0].value;
+  formData.value.isPrivate = privateOptions.value[0].value;
 
   // @ts-ignore
   formData.value.categoryId = "";
@@ -333,6 +259,7 @@ const getData = async () => {
     formData.value.content = _article.content;
     formData.value.status = _article.status;
     formData.value.categoryId = _article.categoryId;
+    formData.value.isPrivate = _article.isPrivate;
 
     // @ts-ignore
     formData.value.tagIdList = _article.tagIdList

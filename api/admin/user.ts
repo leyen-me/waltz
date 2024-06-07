@@ -34,6 +34,10 @@ export const useAdminUserInfoApi = <T = User>() => {
   return useApi<T>("/api/admin/user/info", { method: "GET" });
 };
 
+export const useWebUserInfoApi = <T = User>() => {
+  return useApi<T>("/api/admin/user/info", { method: "GET" }, false);
+};
+
 export const useAdminUserDeleteApi = <T = User>(id: number) => {
   return useApi<T>(`/api/admin/user/`, {
     method: "DELETE",

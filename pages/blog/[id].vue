@@ -22,9 +22,3 @@ const route = useRoute();
 const id = Number(route.params.id);
 const appStore = useAppStore();
 </script>
-
-<style scoped>
-v-deep(.vuepress-markdown-body){
-  width: 100% !important;
-}
-</style>
