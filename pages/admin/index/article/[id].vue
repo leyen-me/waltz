@@ -24,7 +24,7 @@
         <t-select v-model="formData.categoryId" :options="categoryList" :keys="{ label: 'title', value: 'id' }"
           placeholder="请选择" />
         <div class="ml-2">
-          <t-button theme="default" variant="outline" @click="handleAddCategoryShow">
+          <t-button theme="default" variant="outline" @click="handleAddCategoryShow" :disabled="!useHasAuth('category:save')">
             <template #icon>
               <t-icon name="collection" size="16"></t-icon>
             </template>
@@ -36,7 +36,7 @@
         <t-select v-model="formData.tagIdList" :options="tagList" :keys="{ label: 'title', value: 'id' }"
           placeholder="请选择" multiple />
         <div class="ml-2">
-          <t-button theme="default" variant="outline"  @click="handleAddTagShow">
+          <t-button theme="default" variant="outline"  @click="handleAddTagShow" :disabled="!useHasAuth('tag:save')">
             <template #icon>
               <t-icon name="discount" size="16"></t-icon>
             </template>
