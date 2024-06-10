@@ -4,19 +4,11 @@
       <div class="flex items-center">
         <span class="mr-4">目录:</span>
         <t-button variant="text" style="padding: 0">/</t-button>
-        <t-button
-          style="padding: 0 4px"
-          variant="text"
-          @click="handleFileClick({ id: 0, isFolder: true }, true)"
-          >root</t-button
-        >
+        <t-button style="padding: 0 4px" variant="text"
+          @click="handleFileClick({ id: 0, isFolder: true }, true)">root</t-button>
         <t-button variant="text" style="padding: 0">/</t-button>
         <div v-for="(v, k) in currentDir" :key="v.id">
-          <t-button
-            variant="text"
-            style="padding: 0 4px"
-            @click="handleFileClick(v, true)"
-            >{{ v.title }}
+          <t-button variant="text" style="padding: 0 4px" @click="handleFileClick(v, true)">{{ v.title }}
           </t-button>
           <t-button variant="text" style="padding: 0">/</t-button>
         </div>
@@ -29,69 +21,36 @@
         </t-space>
       </div>
       <div class="mt-4 h-full">
-        <t-table
-          height="70vh"
-          ref="tableRef"
-          row-key="id"
-          :data="list"
-          :columns="columns"
-          :onRowClick="(v) => handleFileClick(v.row)"
-        ></t-table>
+        <t-table height="70vh" ref="tableRef" row-key="id" :data="list" :columns="columns"
+          :onRowClick="(v) => handleFileClick(v.row)"></t-table>
       </div>
     </t-card>
   </div>
 
-  <ContextMenu
-    v-model="contextShow"
-    :items
-    :x
-    :y
-    :h="contextItemHight"
-    :w="contextItemWidth"
-  ></ContextMenu>
+  <ContextMenu v-model="contextShow" :items :x :y :h="contextItemHight" :w="contextItemWidth"></ContextMenu>
 
-  <t-dialog
-    v-model:visible="addFolderVisible"
-    header="新建文件夹"
-    :confirm-on-enter="true"
-    :on-cancel="() => (addFolderVisible = false)"
-    :on-close-btn-click="() => (addFolderVisible = false)"
-    :on-overlay-click="() => (addFolderVisible = false)"
-    :on-close="() => (addFolderVisible = false)"
-    :on-confirm="handleAddFolderVisibleConfirm"
-  >
+  <t-dialog v-model:visible="addFolderVisible" header="新建文件夹" :confirm-on-enter="true"
+    :on-cancel="() => (addFolderVisible = false)" :on-close-btn-click="() => (addFolderVisible = false)"
+    :on-overlay-click="() => (addFolderVisible = false)" :on-close="() => (addFolderVisible = false)"
+    :on-confirm="handleAddFolderVisibleConfirm">
     <t-space direction="vertical" style="width: 100%">
       <t-input v-model="addFolderName" placeholder="文件夹名称"></t-input>
     </t-space>
   </t-dialog>
 
-  <t-dialog
-    v-model:visible="uploadFileVisible"
-    header="文件上传"
-    width="40%"
-    :confirm-on-enter="true"
-    :cancelBtn="() => null"
-    :confirmBtn="() => null"
-    :on-cancel="() => (uploadFileVisible = false)"
-    :on-close-btn-click="() => (uploadFileVisible = false)"
-    :on-overlay-click="() => (uploadFileVisible = false)"
-    :on-close="() => (uploadFileVisible = false)"
-  >
+  <t-dialog v-model:visible="uploadFileVisible" header="文件上传" width="40%" :confirm-on-enter="true"
+    :cancelBtn="() => null" :confirmBtn="() => null" :on-cancel="() => (uploadFileVisible = false)"
+    :on-close-btn-click="() => (uploadFileVisible = false)" :on-overlay-click="() => (uploadFileVisible = false)"
+    :on-close="() => (uploadFileVisible = false)">
     <t-space direction="vertical" style="width: 100%">
-      <t-upload
-        name="files"
-        v-model="files"
-        :action="uploadUrl"
-        :abridge-name="[8, 6]"
-        :multiple="true"
-        :max="10"
-        theme="file-flow"
-        placeholder="未选择文件"
-        @success="onUploadSuccess"
-        @fail="onUploadError"
-      ></t-upload>
+      <t-upload name="files" v-model="files" :action="uploadUrl" :abridge-name="[8, 6]" :multiple="true" :max="10"
+        theme="file-flow" placeholder="未选择文件" @success="onUploadSuccess" @fail="onUploadError"></t-upload>
     </t-space>
   </t-dialog>
+
+  <t-image-viewer showOverlay :closeOnOverlay="true" v-model:visible="imageViewerVisible" draggable mode="modal"
+    :images="[imageViewerUrl]">
+  </t-image-viewer>
 </template>
 
 <script setup lang="tsx">
@@ -114,8 +73,14 @@ import {
   Icon as TIcon,
   Popconfirm as TPopconfirm,
 } from "tdesign-vue-next";
+import { imageMimeTypes } from '@/common/utils/fileUtil';
+import { copyText } from "@/common/utils/clipboardUtil";
 
-const { NUXT_API_BASE } = useRuntimeConfig().public;
+// 图片预览
+const imageViewerVisible = ref(false)
+const imageViewerUrl = ref("")
+
+const { NUXT_API_BASE, NUXT_API_STATIC_BASE } = useRuntimeConfig().public;
 
 const pidCache = ref<number[]>([]);
 const pid = ref(0);
@@ -174,6 +139,29 @@ const fileItems = [
 ];
 const columns = [
   {
+    colKey: "id",
+    title: "ID",
+    ellipsis: true,
+  },
+  {
+    colKey: "id",
+    title: "预览",
+    ellipsis: true,
+    cell: (_h: any, { row }: any) => {
+      return (
+        <div class="h-full flex item-center">
+          {
+            imageMimeTypes.includes(row.type) ? (
+              <img class="w-8 h-8" src={NUXT_API_STATIC_BASE + '/' + row.id} onclick={() => { imageViewerUrl.value = NUXT_API_STATIC_BASE + '/' + row.id; imageViewerVisible.value = true }} />
+            ) : (
+              <></>
+            )
+          }
+        </div>
+      );
+    },
+  },
+  {
     colKey: "title",
     title: "文件名",
     ellipsis: true,
@@ -224,6 +212,20 @@ const columns = [
                 hover="color"
                 disabled={row.type === "folder"}
                 onClick={(e: MouseEvent) => {
+                  copyText(NUXT_API_STATIC_BASE + '/' + row.id)
+                }}
+              >
+                复制
+              </TLink>
+            ) : (
+              <></>
+            )}
+            {row.type !== "folder" ? (
+              <TLink
+                variant="text"
+                hover="color"
+                disabled={row.type === "folder"}
+                onClick={(e: MouseEvent) => {
                   e.stopPropagation();
                   optionId.value = row.id;
                   window.open(useImageUrl("/" + String(optionId.value)));
@@ -242,7 +244,7 @@ const columns = [
                   await useAdminAttachmentDeleteApi(optionId.value);
                   MessagePlugin.success("删除成功");
                   getData();
-                } catch {}
+                } catch { }
               }}
             >
               <TLink
@@ -324,9 +326,9 @@ const uploadFileVisible = ref(false);
 const files = ref([]);
 const uploadUrl = ref(
   NUXT_API_BASE +
-    `/api/admin/attachment/file?pid=${pid.value}&Authorization=${Cookies.get(
-      "token"
-    )}`
+  `/api/admin/attachment/file?pid=${pid.value}&Authorization=${Cookies.get(
+    "token"
+  )}`
 );
 
 const onUploadSuccess = (e: any) => {
@@ -356,10 +358,8 @@ const handleParentClick = () => {
 const handleFileClick = (v: Attachment, flag: Boolean) => {
   if (v.isFolder) {
     if (flag) {
-      console.log("=============>");
       if (v.id !== pid.value) {
         list.value = [];
-
         if (v.id === 0) {
           currentDir.value = [];
           pidCache.value = [];

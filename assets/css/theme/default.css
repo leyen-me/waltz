@@ -68,12 +68,9 @@ body,
 /* markdown editor toolbar custom plugin icon */
 @font-face {
   font-family: v-md-custom-iconfont;
-  src: url("//at.alicdn.com/t/c/font_4576255_bzplysne7bp.woff2?t=1717639648776")
-      format("woff2"),
-    url("//at.alicdn.com/t/c/font_4576255_bzplysne7bp.woff?t=1717639648776")
-      format("woff"),
-    url("//at.alicdn.com/t/c/font_4576255_bzplysne7bp.ttf?t=1717639648776")
-      format("truetype");
+  src: url('//at.alicdn.com/t/c/font_4576255_7zmoenry554.woff2?t=1717987201241') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4576255_7zmoenry554.woff?t=1717987201241') format('woff'),
+       url('//at.alicdn.com/t/c/font_4576255_7zmoenry554.ttf?t=1717987201241') format('truetype');
 }
 
 [class*="v-md-custom-icon-"] {
@@ -82,6 +79,10 @@ body,
   font-style: normal !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.v-md-custom-icon-video:before {
+  content: "\e715";
 }
 
 .v-md-custom-icon-info:before {

@@ -1,101 +1,92 @@
 <template>
-  <div
-    class="m-editor-wrap w-full mt-40 lg:mt-28"
-    style="--web-vuepress-markdown-body-bg: var(--web-bg-2)"
-  >
-    <BaseEditor
-      v-model="formData"
-      @save="handleSubmitForm"
-      @info="handleShowInfo"
-      @upload="handleEditorUpload"
-    ></BaseEditor>
+  <div class="m-editor-wrap w-full mt-40 lg:mt-28" style="--web-vuepress-markdown-body-bg: var(--web-bg-2)">
+    <BaseEditor v-model="formData" @save="handleSubmitForm" @info="handleShowInfo" @upload="handleEditorUpload"
+      @video="handleVideoUpload"></BaseEditor>
   </div>
 
-  <t-drawer
-    v-model:visible="infoVisible"
-    header="基本信息"
-    class="v-md-editor-info-drawer"
-    :confirmBtn="'保存'"
-    :onConfirm="handleSubmitForm"
-  >
-    <t-form
-      ref="form"
-      :data="formData"
-      :rules="formRules"
-      :colon="true"
-      :label-align="'top'"
-      @submit="handleSave"
-    >
+  <t-drawer v-model:visible="infoVisible" header="基本信息" class="v-md-editor-info-drawer" :confirmBtn="'保存'"
+    :onConfirm="handleSubmitForm">
+    <t-form ref="form" :data="formData" :rules="formRules" :colon="true" :label-align="'top'" @submit="handleSave">
       <t-form-item name="title" label="文章标题">
-        <t-input
-          v-model="formData.title"
-          clearable
-          placeholder="请输入文章标题"
-        >
+        <t-input v-model="formData.title" clearable placeholder="请输入文章标题">
         </t-input>
       </t-form-item>
       <t-form-item name="cover" label="文章封面">
-        <t-input
-          v-model="formData.cover"
-          clearable
-          placeholder="请输入文章封面"
-        >
+        <t-input v-model="formData.cover" clearable placeholder="请输入文章封面">
         </t-input>
         <div class="ml-2">
-          <t-upload
-            name="files"
-            v-model="files"
-            :action="uploadUrl"
-            :abridge-name="[8, 6]"
-            :multiple="false"
-            theme="custom"
-            :showImageFileName="false"
-            placeholder="未选择文件"
-            :disabled="!useHasAuth('attachment:save')"
-            @success="onCoverUploadSuccess"
-            @fail="onCoverUploadError"
-          ></t-upload>
+          <t-upload name="files" v-model="files" :action="uploadUrl" :abridge-name="[8, 6]" :multiple="false"
+            theme="custom" :showImageFileName="false" placeholder="未选择文件" :disabled="!useHasAuth('attachment:save')"
+            @success="onCoverUploadSuccess" @fail="onCoverUploadError"></t-upload>
         </div>
       </t-form-item>
       <t-form-item name="categoryId" label="分类">
-        <t-select
-          v-model="formData.categoryId"
-          :options="categoryList"
-          :keys="{ label: 'title', value: 'id' }"
-          placeholder="请选择"
-        />
+        <t-select v-model="formData.categoryId" :options="categoryList" :keys="{ label: 'title', value: 'id' }"
+          placeholder="请选择" />
+        <div class="ml-2">
+          <t-button theme="default" variant="outline" @click="handleAddCategoryShow">
+            <template #icon>
+              <t-icon name="collection" size="16"></t-icon>
+            </template>
+            新增分类
+          </t-button>
+        </div>
       </t-form-item>
       <t-form-item name="tagIdList" label="标签">
-        <t-select
-          v-model="formData.tagIdList"
-          :options="tagList"
-          :keys="{ label: 'title', value: 'id' }"
-          placeholder="请选择"
-          multiple
-        />
+        <t-select v-model="formData.tagIdList" :options="tagList" :keys="{ label: 'title', value: 'id' }"
+          placeholder="请选择" multiple />
+        <div class="ml-2">
+          <t-button theme="default" variant="outline"  @click="handleAddTagShow">
+            <template #icon>
+              <t-icon name="discount" size="16"></t-icon>
+            </template>
+            新增标签
+          </t-button>
+        </div>
       </t-form-item>
       <t-form-item name="isPrivate" label="私有">
         <t-radio-group variant="default-filled" v-model="formData.isPrivate">
-          <t-radio-button
-            :value="v.value"
-            v-for="(v, k) in privateOptions"
-            :key="v.value"
-            >{{ v.label }}</t-radio-button
-          >
+          <t-radio-button :value="v.value" v-for="(v, k) in privateOptions" :key="v.value">{{ v.label
+            }}</t-radio-button>
         </t-radio-group>
       </t-form-item>
       <t-form-item name="status" label="文章状态">
         <t-radio-group variant="default-filled" v-model="formData.status">
-          <t-radio-button
-            :value="v.value"
-            v-for="(v, k) in statusOptions"
-            :key="v.value"
-            >{{ v.label }}</t-radio-button
-          >
+          <t-radio-button :value="v.value" v-for="(v, k) in statusOptions" :key="v.value">{{ v.label }}</t-radio-button>
         </t-radio-group>
       </t-form-item>
     </t-form>
   </t-drawer>
+
+  <t-dialog v-model:visible="addCategoryVisible" header="新建分类" :confirm-on-enter="true"
+    :on-cancel="() => (addCategoryVisible = false)" :on-close-btn-click="() => (addCategoryVisible = false)"
+    :on-overlay-click="() => (addCategoryVisible = false)" :on-close="() => (addCategoryVisible = false)"
+    :on-confirm="handleAddCategoryConfirm">
+    <t-form ref="addCategoryForm" :data="addCategoryFormData" :rules="addCategoryFormRules" :colon="true"
+      :label-align="'top'" @submit="handleAddCategorySave">
+      <t-form-item name="title" label="名称">
+        <t-input v-model="addCategoryFormData.title" clearable> </t-input>
+      </t-form-item>
+      <t-form-item name="desc" label="备注">
+        <t-input v-model="addCategoryFormData.desc" clearable> </t-input>
+      </t-form-item>
+    </t-form>
+  </t-dialog>
+
+  <t-dialog v-model:visible="addTagVisible" header="新建标签" :confirm-on-enter="true"
+    :on-cancel="() => (addTagVisible = false)" :on-close-btn-click="() => (addTagVisible = false)"
+    :on-overlay-click="() => (addTagVisible = false)" :on-close="() => (addTagVisible = false)"
+    :on-confirm="handleAddTagConfirm">
+    <t-form ref="addTagForm" :data="addTagFormData" :rules="addTagFormRules" :colon="true"
+      :label-align="'top'" @submit="handleAddTagSave">
+      <t-form-item name="title" label="名称">
+        <t-input v-model="addTagFormData.title" clearable> </t-input>
+      </t-form-item>
+      <t-form-item name="desc" label="备注">
+        <t-input v-model="addTagFormData.desc" clearable> </t-input>
+      </t-form-item>
+    </t-form>
+  </t-dialog>
 </template>
 
 <script setup lang="ts">
@@ -112,13 +103,17 @@ import { useAdminCategoryListApi } from "~/api/admin/category";
 import type Category from "~/server/models/Category";
 import type Tag from "~/server/models/Tag";
 import type Article from "~/server/models/Article";
+import {
+  useAdminCategorySubmitApi,
+} from "@/api/admin/category";
+import { useAdminTagSubmitApi } from "@/api/admin/tag";
 
 const route = useRoute();
 const { NUXT_API_BASE } = useRuntimeConfig().public;
 const uploadUrl =
   NUXT_API_BASE +
-    "/api/admin/attachment/file?pid=1&Authorization=" +
-    Cookies.get("token") || "";
+  "/api/admin/attachment/file?pid=1&Authorization=" +
+  Cookies.get("token") || "";
 
 const statusOptions = ref([
   { label: "草稿", value: "draft" },
@@ -187,12 +182,34 @@ const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
   }
 };
 
-const handleEditorUpload = async (event: any, insertImage: any, files: any) => {
+
+const handleVideoUpload = async (editor: any) => {
+  const fileInput = document.createElement('input');
+  fileInput.setAttribute('type', 'file');
+  fileInput.setAttribute('id', 'fileVideoInput')
+  fileInput.style.position = "absolute";
+  fileInput.style.left = "-9999px";
+
+  const insertVideo = ({ url }: { url: string }) => {
+    editor.insert(() => {
+      return {
+        text: `<video src="${url}" width="100%" height="auto" controls></video>\n`
+      };
+    })
+  }
+
+  fileInput.addEventListener('change', () => {
+    handleEditorUpload(null, insertVideo, fileInput.files)
+  })
+  document.body.appendChild(fileInput);
+  fileInput.click()
+}
+
+const handleEditorUpload = async (event: any, insert: any, files: any) => {
   const formData = new FormData();
   for (const file of files) {
     formData.append("files", file);
   }
-
   const { data, error } = await useFetch(uploadUrl, {
     method: "POST",
     body: formData,
@@ -209,7 +226,7 @@ const handleEditorUpload = async (event: any, insertImage: any, files: any) => {
   }
   // @ts-ignore
   for (const item of data.value.data) {
-    insertImage({
+    insert({
       url: useImageUrl("/" + item),
       desc: "",
     });
@@ -281,6 +298,93 @@ const infoVisible = ref(false);
 const handleShowInfo = () => {
   infoVisible.value = true;
 };
+
+// add category
+const addCategoryForm = ref(null)
+const addCategoryVisible = ref(false)
+const addCategoryFormData = ref({
+  title: "",
+  desc: "",
+})
+const addCategoryFormRules = ref({
+  title: [{ required: true, message: "名称必填" }],
+});
+const handleAddCategoryShow = () => {
+  addCategoryFormData.value = {
+    title: '',
+    desc: '',
+  }
+  addCategoryVisible.value = true
+}
+const handleAddCategoryConfirm = () => {
+  addCategoryForm.value.submit();
+}
+const handleAddCategorySave = async ({ validateResult, firstError }: SubmitContext) => {
+  if (validateResult === true) {
+    try {
+      const _categoryId = await useAdminCategorySubmitApi(addCategoryFormData.value);
+      MessagePlugin.success("保存成功");
+      addCategoryVisible.value = false;
+      if (_categoryId) {
+        formData.value.categoryId = _categoryId
+      }
+      // 回显
+      const _categoryList = await useAdminCategoryListApi();
+      categoryList.value = _categoryList;
+    } catch (e) {
+      MessagePlugin.error("保存失败");
+    }
+  } else {
+    addCategoryVisible.value = true;
+    console.log("Validate Errors: ", firstError, validateResult);
+    firstError && MessagePlugin.warning(firstError);
+  }
+};
+
+// add tag
+const addTagForm = ref(null)
+const addTagVisible = ref(false)
+const addTagFormData = ref({
+  title: "",
+  desc: "",
+})
+const addTagFormRules = ref({
+  title: [{ required: true, message: "名称必填" }],
+});
+const handleAddTagShow = () => {
+  addTagFormData.value = {
+    title: '',
+    desc: '',
+  }
+  addTagVisible.value = true
+}
+const handleAddTagConfirm = () => {
+  addTagForm.value.submit();
+}
+const handleAddTagSave = async ({ validateResult, firstError }: SubmitContext) => {
+  if (validateResult === true) {
+    try {
+      const _TagId = await useAdminTagSubmitApi(addTagFormData.value);
+      MessagePlugin.success("保存成功");
+      addTagVisible.value = false;
+      if (_TagId) {
+        formData.value.tagIdList.push(_TagId)
+      }
+      // 回显
+      const _TagList = await useAdminTagListApi();
+      tagList.value = _TagList;
+    } catch (e) {
+      MessagePlugin.error("保存失败");
+    }
+  } else {
+    addTagVisible.value = true;
+    console.log("Validate Errors: ", firstError, validateResult);
+    firstError && MessagePlugin.warning(firstError);
+  }
+};
+
+
+
 
 onBeforeRouteUpdate(() => {
   reset();

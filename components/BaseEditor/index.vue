@@ -1,5 +1,6 @@
 <template>
   <v-md-editor
+    ref="editor"
     v-model="modelValue.content"
     :left-toolbar
     :rightToolbar
@@ -9,6 +10,7 @@
     :disabled-menus="[]"
     @save="emits('save')"
     @info="emits('info')"
+    @video="emits('video', editor)"
     @upload-image="(event:any, insertImage:any, files:any) => emits('upload', event, insertImage, files)"
   ></v-md-editor>
 </template>
@@ -55,8 +57,9 @@ import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index
  * 基础信息
  */
 import createInfoPlugin from "./plugins/info";
+import createVideoPlugin from "./plugins/video";
 
-const emits = defineEmits(["update:modelValue", "save", "info", "upload"]);
+const emits = defineEmits(["update:modelValue", "save", "info", "video", "upload"]);
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -65,6 +68,8 @@ const props = defineProps({
     },
   },
 });
+
+const editor = ref(null)
 
 VMdEditor.use(vuepressTheme, {
   Prism,
@@ -82,9 +87,10 @@ VMdEditor.use(createLineNumbertPlugin());
 VMdEditor.use(createHighlightLinesPlugin());
 VMdEditor.use(createCopyCodePlugin());
 VMdEditor.use(createInfoPlugin());
+VMdEditor.use(createVideoPlugin());
 
 const leftToolbar = ref(
-  "bold clear code emoji h hr italic link ol quote strikethrough table ul tip image redo undo save info"
+  "bold clear code emoji h hr italic link ol quote strikethrough table ul tip image video redo undo save info"
 );
 const rightToolbar = ref("preview sync-scroll fullscreen");
 </script>

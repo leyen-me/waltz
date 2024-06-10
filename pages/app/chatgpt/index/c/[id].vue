@@ -117,7 +117,7 @@
               <t-button
                 shape="square"
                 variant="text"
-                @click="handleCopy(v.content)"
+                @click="copyText(v.content)"
               >
                 <t-icon name="copy"></t-icon>
               </t-button>
@@ -206,6 +206,7 @@ import type Type from "~/server/models/Type";
 import type Context from "~/server/models/Context";
 import type { TextareaValue } from "tdesign-vue-next/es/textarea";
 import { nanoid } from "nanoid";
+import { copyText } from "@/common/utils/clipboardUtil";
 
 const route = useRoute();
 const router = useRouter();
@@ -256,32 +257,6 @@ const scrollBottom = (time = 500) => {
   });
 };
 
-const handleCopy = async (text: string) => {
-  try {
-    // 尝试使用现代剪贴板API
-    await navigator.clipboard.writeText(text);
-    MessagePlugin.success("已复制");
-  } catch (e) {
-    // 如果剪贴板API不可用，使用降级方案
-    const input = document.getElementById("clipboardInput");
-    if (input) {
-      //@ts-ignore
-      input.value = text;
-      //@ts-ignore
-      input.select();
-    }
-    try {
-      const result = document.execCommand("copy");
-      if (result) {
-        MessagePlugin.success("已复制");
-      } else {
-        MessagePlugin.error("复制失败");
-      }
-    } catch (err) {
-      MessagePlugin.error("复制失败");
-    }
-  }
-};
 
 function handleWheel(event: WheelEvent) {
   wheel.value = true;

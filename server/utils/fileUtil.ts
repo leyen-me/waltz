@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import mime from 'mime';
+import { imageMimeTypes } from '~/common/utils/fileUtil';
 
 
 /**
@@ -24,15 +25,7 @@ export const defineValidateFile = (file: File): string => {
 
     const mimeType = getFileMimeType(file);
 
-    const allowedMimeTypes = [
-        // 图像文件
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-        'image/bmp',
-        'image/webp',
-        'image/tiff',
-
+    let allowedMimeTypes = [
         // 文档文件
         'text/markdown',
         'application/pdf',
@@ -108,6 +101,8 @@ export const defineValidateFile = (file: File): string => {
         'application/octet-stream',//EXE文件
     ];
 
+    // 图像文件
+    allowedMimeTypes = allowedMimeTypes.concat(imageMimeTypes)
 
     if (!allowedMimeTypes.includes(mimeType)) {
         throw new Error('Invalid file type');

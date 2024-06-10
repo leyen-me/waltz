@@ -21,7 +21,13 @@
             placeholder="未选择文件"
             @success="onUploadSuccess"
             @fail="onUploadError"
-          ></t-upload>
+          >
+          <t-button theme="primary">
+            <template #icon>
+              <t-icon name="file-import"></t-icon>
+            </template>
+            导入</t-button>
+        </t-upload>
           <t-button @click="handleArticleExport">
             <template #icon>
               <t-icon name="file-export"></t-icon>
