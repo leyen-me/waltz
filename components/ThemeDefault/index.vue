@@ -36,7 +36,7 @@
       <!-- 分类 -->
       <ul class="w-full flex flex-wrap gap-2">
         <li
-          class="hidden rounded-full px-6 py-4 transition duration-500 ease cursor-pointer hover:bg-[rgb(37,37,37)] hover:text-white lg:block"
+          class="hidden rounded-full px-6 py-4 transition duration-500 ease cursor-pointer lg:block"
         >
           分类：
         </li>
