@@ -1,4 +1,4 @@
-import { ArticleTag } from '@/server/models/ArticleTag';
+import ArticleTag from '@/server/models/ArticleTag';
 import BaseService from '@/server/base/BaseService';
 import { Op } from 'sequelize';
 

@@ -10,8 +10,21 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  // 非后台管理的直接通过
-  if (!event.path.startsWith("/api/admin")) {
+  // web的直接通过
+  if (event.path.startsWith("/api/web")) {
+    const token = event.headers.get("Authorization") || getQuery(event).Authorization as string;
+    try {
+      const decoded = jwt.verify(token, secretKey) as { id: string };
+      const userId = decoded.id;
+      const user = await User.findOne({
+        where: {
+          id: userId,
+        },
+      });
+      event.context.user = user
+    } catch (err) {
+      event.context.user = null;
+    }
     return;
   }
 

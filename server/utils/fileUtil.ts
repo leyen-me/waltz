@@ -126,15 +126,16 @@ export const defineCreateFolder = async (createDir: string): Promise<void> => {
  * @param uploadDir 上传目录
  * @returns 上传后的文件路径
  */
-export const defineUploadFile = async (file: File, baseUploadDir: string): Promise<string> => {
+export const defineUploadFile = async (file: File, baseUploadDir: string): Promise<{ filePath: string, fileTitle: string }> => {
     const { NUXT_API_UPLOAD_BASE } = useRuntimeConfig().public;
     if (!fs.existsSync(baseUploadDir)) {
         fs.mkdirSync(baseUploadDir, { recursive: true });
     }
-    const filePath = baseUploadDir + (generateUUID().replaceAll("-", "")) + defineGetFileExtension(file.name);
+    const UUID = generateUUID().replaceAll("-", "");
+    const filePath = baseUploadDir + UUID + defineGetFileExtension(file.name);
     const fileBuffer = await file.arrayBuffer();
     await fs.promises.writeFile(filePath, Buffer.from(fileBuffer));
-    return filePath.replace(NUXT_API_UPLOAD_BASE, "");
+    return { filePath: filePath.replace(NUXT_API_UPLOAD_BASE, ""), fileTitle: UUID };
 };
 
 

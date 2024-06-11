@@ -7,14 +7,10 @@ export default defineWrappedResponseHandler(async (event) => {
 
     const query: ArticleQuery = getQuery(event);
     query.status = ArticleStatus.values[1];
-    let result = null;
-
     if (event.context.user) {
-        const { id, superAdmin } = event.context.user;
-        result = await articleService.selectPage(query, id, superAdmin)
-    } else {
-        query.isPrivate = 0;
-        result = await articleService.selectPage(query);
+        query.isSuperAdmin = event.context.user.superAdmin as number;
+        query.userId = event.context.user.id as number;
     }
+    const result = await articleService.selectPage(query)
     return defineOk({ data: result });
 });

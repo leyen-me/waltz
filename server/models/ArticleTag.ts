@@ -2,7 +2,7 @@ import BaseModel from "../base/BaseModel";
 import { DataTypes, Sequelize } from "sequelize";
 import sequelize from "../db";
 
-export class ArticleTag extends BaseModel<ArticleTag> {
+export default class ArticleTag extends BaseModel<ArticleTag> {
     declare articleId: number;
     declare tagId: number;
   

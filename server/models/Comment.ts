@@ -8,9 +8,11 @@ export default class Comment extends BaseModel<Comment> {
   declare userId: number;
   declare content: string;
   declare likesCount: number;
+  declare status: CommentStatusEnum;
 
   public articleTitle?: string;
   public username?: string;
+  public parentUsername?: string;
   public parentComment?: string;
 
   static initComment(sequelize: Sequelize): typeof Comment {
@@ -39,6 +41,11 @@ export default class Comment extends BaseModel<Comment> {
         type: DataTypes.INTEGER({ length: 11 }),
         defaultValue: 0,
         comment: "点赞数",
+      },
+      status: {
+        type: DataTypes.ENUM({ values: ["nopass", "ing", "pass"] }),
+        allowNull: true,
+        comment: '状态',
       }
     };
 

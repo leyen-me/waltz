@@ -47,7 +47,7 @@ export default class MenuService extends BaseService<Menu> {
     async getNav(user: User, type: string | null): Promise<Menu[]> {
         let query = `
             SELECT 
-                m.id,
+               DISTINCT m.id,
                 m.pid,
                 m.path,
                 m.title,
@@ -60,10 +60,10 @@ export default class MenuService extends BaseService<Menu> {
                 DATE_FORMAT(m.updated_at, '%Y-%m-%d %H:%i:%S') AS updatedAt
             FROM t_menu m
             LEFT JOIN t_site_config sc ON m.id = sc.menu_id`;
-    
+
         const replacements: { [key: string]: any } = {};
-    
-        if (user.get("superAdmin") !== 1) {
+
+        if (!user.superAdmin) {
             query += `
                 JOIN t_role_menu rm ON m.id = rm.menu_id
                 JOIN t_user_role ur ON rm.role_id = ur.role_id
@@ -72,24 +72,24 @@ export default class MenuService extends BaseService<Menu> {
         } else {
             query += ` WHERE 1=1`;
         }
-    
+
         if (type !== null) {
             query += ` AND m.type = :type`;
             replacements.type = type;
         }
-    
+
         // 只排除 t_site_config.value 为 'false' 的记录
         query += ` AND (sc.value IS NULL OR sc.value != 'false')`;
-    
+
         query += ` ORDER BY m.id, m.sort ASC;`;
-    
+
         const [results] = await sequelize.query(query, { replacements });
-    
+
         return results as Menu[];
     }
-    
-    
-    
+
+
+
 
     async hasChildMenus(menuId: number): Promise<boolean> {
         const count = await Menu.count({
@@ -100,7 +100,7 @@ export default class MenuService extends BaseService<Menu> {
 
 
     async getAllMenus(user: User): Promise<Menu[]> {
-        if (user.get("superAdmin") === 1) {
+        if (user.superAdmin) {
             return await Menu.findAll().then((menus: Menu[]) => {
                 return menus.map((item) => item.toJSON())
             });

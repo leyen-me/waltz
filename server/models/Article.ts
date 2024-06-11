@@ -18,11 +18,11 @@ export default class Article extends BaseModel<Article> {
   declare commentsCount: number;
   declare sort: number;
   declare html: string;
-  declare isPrivate: whetherEnum;
 
   public author?: string;
   public categoryTitle?: string;
   public tagList?: string[];
+  public roleIdList?: string[];
   public tagIdList?: string;
   public publishedAtDetails!: ArticlePublishedAtDetail;
 
@@ -113,12 +113,6 @@ export default class Article extends BaseModel<Article> {
         defaultValue: 1,
         comment: '排序',
       },
-      isPrivate: {
-        type: DataTypes.TINYINT({ length: 1 }),
-        allowNull: false,
-        defaultValue: 0,
-        comment: '文章是否私有',
-      }
     };
     const modelOptions = {
       sequelize,

@@ -4,12 +4,7 @@ import archiver, { ArchiverError } from "archiver";
 import AdmZip from "adm-zip";
 import Article from "@/server/models/Article";
 import BaseService from "@/server/base/BaseService";
-import {
-  CreationAttributes,
-  FindAndCountOptions,
-  Op,
-  literal,
-} from "sequelize";
+import { CreationAttributes, FindAndCountOptions, Op, literal } from "sequelize";
 import { ArticleStatus } from "../enum";
 import sequelize from "../db";
 import ArticleTagService from "./ArticleTagService";
@@ -17,13 +12,16 @@ import FavoriteService from "./FavoriteService";
 import CommentService from "./CommentService";
 import LikeService from "./LikeService";
 import { nanoid } from "nanoid";
-import { ArticleTag } from "../models/ArticleTag";
+import ArticleTag from "../models/ArticleTag";
 import Category from "../models/Category";
 import Comment from "../models/Comment";
 import Tag from "../models/Tag";
+import ArticleRoleService from "./ArticleRoleService";
+import User from "../models/User";
 
 export default class ArticleService extends BaseService<Article> {
   private articleTagService = new ArticleTagService();
+  private articleRoleService = new ArticleRoleService();
   private favoriteService = new FavoriteService();
   private commentService = new CommentService();
   private likeService = new LikeService();
@@ -34,8 +32,8 @@ export default class ArticleService extends BaseService<Article> {
     super(Article);
   }
 
-  async selectPage(query: ArticleQuery, userId?: number, superAdmin?: number): Promise<BasePageResponse<Article>> {
-    let { page, limit, order, asc, tagId, title, isPrivate, ...items } = query;
+  async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
+    let { page, limit, order, asc, tagId, title, isSuperAdmin, userId, ...items } = query;
 
     page = Number(page);
     limit = Number(limit);
@@ -76,21 +74,44 @@ export default class ArticleService extends BaseService<Article> {
       );
     }
 
-    // 处理私有文章条件
-    if (isPrivate !== undefined) {
-      if (isPrivate === 0) {
-        whereConditions.push({ is_private: isPrivate });
-      } else if (userId && superAdmin && superAdmin !== 1) {
-        whereConditions.push({
-          [Op.or]: [
-            { is_private: 0 },
-            { author_id: userId }
-          ]
-        });
+    // 如果是超级管理员，不需要添加额外的条件
+    if (userId) {
+      if (!isSuperAdmin) {
+        whereConditions.push(
+          sequelize.literal(
+              `EXISTS (
+                SELECT
+                  1
+                FROM
+                  t_article_role ar2
+                  INNER JOIN t_user_role ur ON ar2.role_id = ur.role_id
+                WHERE
+                  ar2.article_id = Article.id
+                  AND ur.user_id = :userId
+              )
+              OR NOT EXISTS (
+                SELECT
+                  1
+                FROM
+                  t_article_role ar3
+                WHERE
+                  ar3.article_id = Article.id
+              )`
+          )
+        );
       }
+    } else {
+      // web
+      whereConditions.push(
+        sequelize.literal(
+          `NOT EXISTS (
+            SELECT 1
+            FROM t_article_role ar2
+            WHERE ar2.article_id = Article.id
+          )`
+        )
+      );
     }
-
-
 
     // 构建查询条件
     const options: FindAndCountOptions = {
@@ -100,13 +121,12 @@ export default class ArticleService extends BaseService<Article> {
       where: {
         [Op.and]: whereConditions,
       },
-      replacements: { title, tagId },
+      replacements: { title, tagId, userId },
       attributes: [
         "id",
         "title",
         "cover",
         "content",
-        "isPrivate",
         "html",
         [
           sequelize.literal(
@@ -126,6 +146,12 @@ export default class ArticleService extends BaseService<Article> {
           ),
           "tagList",
         ],
+        [
+          sequelize.literal(
+            "(SELECT GROUP_CONCAT(ar.role_id) FROM t_article_role ar WHERE ar.article_id = Article.id)"
+          ),
+          "roleIdList",
+        ],
         "authorId",
         "categoryId",
         "publishedAt",
@@ -134,11 +160,11 @@ export default class ArticleService extends BaseService<Article> {
         "likesCount",
         "commentsCount",
         "sort",
+        "status",
         "createdAt",
         "updatedAt",
       ],
     };
-
 
     const { rows, count } = await Article.findAndCountAll(options);
 
@@ -162,22 +188,16 @@ export default class ArticleService extends BaseService<Article> {
       async (transaction) => {
         if (articleData.status === ArticleStatus.values[1]) {
           articleData.publishedAt = new Date();
-
-          // // 获取文章的发布年份
-          // const publishedYear = new Date(articleData.publishedAt).getFullYear();
-
-          // // 获取当年发布的文章数量
-          // const count = await Article.count({
-          //     where: sequelize.where(
-          //         sequelize.fn('YEAR', sequelize.col('published_at')),
-          //         publishedYear
-          //     )
-          // });
-          // 设置排序编号
-          // articleData.sort = count + 1;
         }
         const createdArticle = await this.create(articleData, { transaction });
-        // 如果有标签ID列表，保存或更新文章与标签的关联关系
+
+        if (articleData.roleIdList) {
+          await this.articleRoleService.saveOrUpdate(
+            createdArticle.id as number,
+            articleData.roleIdList
+          );
+        }
+
         if (articleData.tagIdList) {
           await this.articleTagService.saveOrUpdate(
             createdArticle.id as number,
@@ -197,28 +217,16 @@ export default class ArticleService extends BaseService<Article> {
     await defineTransactionWrapper(async (transaction) => {
       if (articleData.status === ArticleStatus.values[1]) {
         articleData.publishedAt = new Date();
-
-        // const articleInfo = await this.getArticleById(articleId, false);
-
-        // if (articleInfo) {
-        //     if (articleInfo.status != articleData.status) {
-        //         // 获取文章的发布年份
-        //         const publishedYear = new Date(articleData.publishedAt).getFullYear();
-
-        //         // 获取当年发布的文章数量
-        //         const count = await Article.count({
-        //             where: sequelize.where(
-        //                 sequelize.fn('YEAR', sequelize.col('published_at')),
-        //                 publishedYear
-        //             )
-        //         });
-        //         // 设置排序编号
-        //         articleData.sort = count + 1;
-        //     }
-        // }
       }
       await this.update(articleData, { where: { id: articleId }, transaction });
-      // 如果有标签ID列表，保存或更新文章与标签的关联关系
+
+      if (articleData.roleIdList) {
+        await this.articleRoleService.saveOrUpdate(
+          articleId,
+          articleData.roleIdList
+        );
+      }
+
       if (articleData.tagIdList) {
         await this.articleTagService.saveOrUpdate(
           articleId,
@@ -257,38 +265,15 @@ export default class ArticleService extends BaseService<Article> {
 
   async deleteArticles(articleIds: number[]): Promise<void> {
     await defineTransactionWrapper(async (transaction) => {
-      // 查询待删除文章的年份和排序编号
-      // const articlesToDelete = await Article.findAll({ attributes: ['id', 'publishedAt', 'sort'], where: { id: articleIds }, transaction });
-
       // 删除文章
       await this.delete({ where: { id: articleIds }, transaction });
-
-      // // 更新后续文章的排序编号
-      // for (const article of articlesToDelete) {
-      //     const year = new Date(article.publishedAt).getFullYear();
-
-      //     // 更新后续文章的排序编号
-      //     await Article.update({ sort: sequelize.literal('sort - 1') }, {
-      //         where: {
-      //             publishedAt: {
-      //                 [Op.gte]: new Date(`${year}-01-01`),
-      //                 [Op.lt]: new Date(`${year + 1}-01-01`)
-      //             },
-      //             status: ArticleStatus.values[1], // 只更新状态为已发布的文章
-      //             sort: { [Op.gt]: article.sort }, // 只更新排序编号大于当前文章的文章
-      //         },
-      //         transaction
-      //     });
-      // }
     });
   }
 
   async getArticleById(
     articleId: number,
-    isCount: boolean,
-    userId?: number,
-    superAdmin?: number,
-    isPrivate?: number
+    user: User | null,
+    isCount: boolean
   ): Promise<Article | null> {
     // 构建基本查询
     let query = `
@@ -297,39 +282,52 @@ export default class ArticleService extends BaseService<Article> {
         c.title AS categoryTitle,
         GROUP_CONCAT(DISTINCT t.title) AS tagList,
         GROUP_CONCAT(DISTINCT at.tag_id) as tagIdList,
+        GROUP_CONCAT(DISTINCT ar.role_id) as roleIdList,
         COUNT(DISTINCT f.id) AS favoritesCount,
         COUNT(DISTINCT l.id) AS likesCount,
         COUNT(DISTINCT cmt.id) AS commentsCount
-      FROM t_article a
-      JOIN t_user u ON a.author_id = u.id
-      LEFT JOIN t_favorite f ON a.id = f.article_id
-      LEFT JOIN t_like l ON a.id = l.article_id
-      LEFT JOIN t_comment cmt ON a.id = cmt.article_id
-      LEFT JOIN t_category c ON a.category_id = c.id
-      LEFT JOIN t_article_tag at ON a.id = at.article_id
-      LEFT JOIN t_tag t ON at.tag_id = t.id
-      WHERE a.id = :articleId
+        FROM t_article a
+        JOIN t_user u ON a.author_id = u.id
+        LEFT JOIN t_favorite f ON a.id = f.article_id
+        LEFT JOIN t_like l ON a.id = l.article_id
+        LEFT JOIN t_comment cmt ON a.id = cmt.article_id
+        LEFT JOIN t_category c ON a.category_id = c.id
+        LEFT JOIN t_article_role ar ON a.id = ar.article_id
+        LEFT JOIN t_article_tag at ON a.id = at.article_id
+        LEFT JOIN t_tag t ON at.tag_id = t.id
+        WHERE a.id = :articleId
     `;
 
-    // 根据 isPrivate、userId 和 superAdmin 添加筛选条件
-    if (isPrivate === 0) {
-      query += ` AND a.is_private = 0`;
-    } else if (userId && superAdmin !== 1) {
-      query += ` AND (a.is_private = 0 OR a.author_id = :userId)`;
+    // 添加用户权限条件
+    if (user) {
+      if (!user.superAdmin) {
+        query += `
+          AND (
+            EXISTS (
+              SELECT 1 
+              FROM t_article_role ar2 
+              INNER JOIN t_user_role ur ON ar2.role_id = ur.role_id 
+              WHERE ar2.article_id = a.id AND ur.user_id = :userId
+            )
+          )
+        `;
+      }
+    } else {
+      query += `
+        AND NOT EXISTS (
+          SELECT 1
+          FROM t_article_role ar4
+          WHERE ar4.article_id = a.id
+        )
+      `;
     }
+
+
+    const options = user ? { userId: user.id } : {}
 
     // 完成查询
-    query += ` GROUP BY a.id`;
-
-    // 构建参数
-    const replacements: any = { articleId };
-    if (userId && superAdmin !== 1) {
-      replacements.userId = userId;
-    }
-
-    // 执行查询
     const result = await sequelize.query(query, {
-      replacements,
+      replacements: { articleId, ...options },
       model: Article,
       mapToModel: true,
     });
@@ -346,10 +344,8 @@ export default class ArticleService extends BaseService<Article> {
 
   async getPreviousAndNextArticles(
     articleId: number,
-    categoryId: number,
-    userId?: number,
-    superAdmin?: number,
-    isPrivate?: number
+    user: User,
+    categoryId: number
   ): Promise<PreviouAndNextArticleResponse> {
     // 获取当前文章
     const currentArticle = await Article.findOne({
@@ -365,21 +361,39 @@ export default class ArticleService extends BaseService<Article> {
 
     // 构建公共条件
     const baseConditions: any = { categoryId };
+    const whereConditions: any[] = []; // 添加额外的条件数组
 
-    // 根据权限添加条件
-    if (isPrivate === 0) {
-      baseConditions.is_private = 0;
-    } else if (userId && superAdmin !== 1) {
-      baseConditions[Op.or] = [
-        { is_private: 0 },
-        { author_id: userId }
-      ];
+    // 添加用户权限条件
+    if (user) {
+      if (!user.superAdmin) {
+        whereConditions.push(
+          sequelize.literal(
+            `EXISTS (
+                SELECT 1 
+                FROM t_article_role ar 
+                INNER JOIN t_user_role ur ON ar.role_id = ur.role_id 
+                WHERE ar.article_id = Article.id AND ur.user_id = :userId
+              )`
+          )
+        );
+      }
+    } else {
+      whereConditions.push(
+        sequelize.literal(
+          `NOT EXISTS (
+              SELECT 1
+              FROM t_article_role ar2
+              WHERE ar2.article_id = Article.id
+            )`
+        )
+      );
     }
 
     // 获取前一篇文章
     const previouArticle = await Article.findOne({
       where: {
         ...baseConditions,
+        ...whereConditions, // 添加用户权限条件
         [Op.or]: [
           { publishedAt: { [Op.lt]: publishedAt } },
           { publishedAt: publishedAt, id: { [Op.lt]: articleId } } // 在publishedAt相同时，确保ID也小于当前文章的ID
@@ -398,6 +412,7 @@ export default class ArticleService extends BaseService<Article> {
     const nextArticle = await Article.findOne({
       where: {
         ...baseConditions,
+        ...whereConditions, // 添加用户权限条件
         [Op.or]: [
           { publishedAt: { [Op.gt]: publishedAt } },
           { publishedAt: publishedAt, id: { [Op.gt]: articleId } } // 在publishedAt相同时，确保ID也大于当前文章的ID
@@ -416,11 +431,7 @@ export default class ArticleService extends BaseService<Article> {
   }
 
 
-
-
-
-
-  async getAllArticles(title: string, userId?: number, superAdmin?: number, articleStatus?: string, isPrivate?: number): Promise<Article[]> {
+  async getAllArticles(title: string, user: User, articleStatus?: string): Promise<Article[]> {
     // 构建全文搜索查询条件
     const condition = literal(
       "MATCH(title,content) AGAINST(:title IN BOOLEAN MODE)"
@@ -429,34 +440,47 @@ export default class ArticleService extends BaseService<Article> {
     // 构建查询条件数组
     const whereConditions: any[] = [condition];
 
-    // 处理私有文章条件
-    if (isPrivate === 0) {
-      whereConditions.push({ is_private: isPrivate });
-    } else if (userId && superAdmin && superAdmin !== 1) {
-      whereConditions.push({
-        [Op.or]: [
-          { is_private: 0 },
-          { author_id: userId }
-        ]
-      });
-    }
-
-
     // 如果传递了文章状态参数，拼接到查询条件中
     if (articleStatus) {
       whereConditions.push({ status: articleStatus });
     }
 
+    if (user) {
+      // 如果是超级管理员，不需要添加额外的条件
+      if (!user.superAdmin) {
+        // 处理用户权限条件
+        whereConditions.push(
+          sequelize.literal(
+            `EXISTS (
+                SELECT 1 
+                FROM t_article_role ar 
+                INNER JOIN t_user_role ur ON ar.role_id = ur.role_id 
+                WHERE ar.article_id = Article.id AND ur.user_id = :userId
+              )`
+          )
+        );
+      }
+    } else {
+      whereConditions.push(
+        sequelize.literal(
+          `NOT EXISTS (
+              SELECT 1
+              FROM t_article_role ar2
+              WHERE ar2.article_id = Article.id
+            )`
+        )
+      );
+    }
+
+
     // 执行 findAll 方法并传递查询条件
     const articles = await Article.findAll({
       where: whereConditions,
-      replacements: { title: `${title}` },
+      replacements: { title, userId: user ? user.id : null },
     });
 
     return articles;
   }
-
-
 
   /**
    * 导入
@@ -466,7 +490,7 @@ export default class ArticleService extends BaseService<Article> {
     // 解压压缩文件
     const file = formData.getAll("files")[0] as File;
     // 保存zip到磁盘
-    const filePath = await defineUploadFile(file, NUXT_TEMP_FOLDER + "/");
+    const { filePath } = await defineUploadFile(file, NUXT_TEMP_FOLDER + "/");
     // 解压文件到附件
     const zip = new AdmZip(path.resolve(filePath));
     zip.extractAllToAsync(path.resolve(NUXT_PUBLIC_FOLDER as string), true);
@@ -496,7 +520,6 @@ export default class ArticleService extends BaseService<Article> {
     defineCreateFolder(path.resolve(NUXT_TEMP_FOLDER));
     fs.writeFileSync(zipPath, "");
 
-    // 导出所有跟文章相关的表
     const promises = this.exportModels.map(async (model: any) => {
       const list = (await model.findAll()).map((item: any) => item.toJSON());
       const modelJsonPath = path.resolve(NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json");
@@ -508,9 +531,7 @@ export default class ArticleService extends BaseService<Article> {
     const output = fs.createWriteStream(zipPath);
     const archive = archiver("zip", { zlib: { level: 9 } });
     archive.pipe(output);
-    // 压缩指定文件夹
     archive.directory(path.resolve(NUXT_PUBLIC_FOLDER) as string, false);
-    // 开始
     archive.finalize();
 
     function wait() {
@@ -537,3 +558,4 @@ export interface PreviouAndNextArticleResponse {
   previouArticle: Article | null;
   nextArticle: Article | null;
 }
+

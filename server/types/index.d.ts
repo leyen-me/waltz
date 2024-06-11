@@ -64,6 +64,8 @@ interface BaseQuery {
 }
 
 interface ArticleQuery extends BaseQuery {
+  userId: number;
+  isSuperAdmin: number;
   title?: string;
   authorId?: number;
   categoryId?: number;
@@ -71,7 +73,6 @@ interface ArticleQuery extends BaseQuery {
   status?: string;
   order?: string;
   asc?: boolean;
-  isPrivate?: number;
 }
 
 interface CategoryQuery extends BaseQuery {
@@ -85,6 +86,8 @@ interface TagQuery extends BaseQuery {
 interface CommentQuery extends BaseQuery {
   articleId?: number;
   userId?: number;
+  content?: string;
+  status: CommentStatusEnum;
 }
 
 interface UserQuery extends BaseQuery {
@@ -143,6 +146,7 @@ type ChatRoleEnum = "user" | "assitant" | "system";
 type SiteConfigTypeEnum = "string" | "boolean" | "number" | "textarea" | "dict";
 type MenuTypeEnum = "menu" | "button" | "interface";
 type MenuOpenStyleEnum = "_self" | "_blank";
+type CommentStatusEnum = "unpass" | "ing" | "pass"
 
 type QuestionLevelEnum = "simple" | "general" | "intermediate" | "challenging" | "arduous";
 type QuestionAnswerStatusEnum = "right" | "wrong";

@@ -1,14 +1,10 @@
 import ArticleService from '@/server/service/ArticleService';
+import User from '@/server/models/User';
 const articleService = new ArticleService();
 
 export default defineWrappedResponseHandler(async (event) => {
     const { id, categoryId } = getQuery(event);
-    let result = null;
-    if (event.context.user) {
-        const { id, superAdmin } = event.context.user;
-        result = await articleService.getPreviousAndNextArticles(Number(id), Number(categoryId), id, superAdmin);
-    } else {
-        result = await articleService.getPreviousAndNextArticles(Number(id), Number(categoryId), undefined, undefined, 0);
-    }
+    const user: User = event.context.user;
+    const result = await articleService.getPreviousAndNextArticles(Number(id), user, Number(categoryId));
     return defineOk({ data: result });
 });

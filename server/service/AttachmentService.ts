@@ -58,15 +58,15 @@ export default class AttachmentService {
                     const fileObj = file as File;
                     const mimeType = defineValidateFile(fileObj);
                     const ext = defineGetFileExtension(fileObj.name);
-                    const filePath = (await defineUploadFile(fileObj, parentFolder ? NUXT_API_UPLOAD_BASE + parentFolder.url + "/" : NUXT_API_UPLOAD_BASE + "/"));
-                    
-                    let title = "";
-                    if (!/[^\u0000-\u00ff]/.test(fileObj.name)) {
-                        title = Buffer.from(fileObj.name, 'latin1').toString('utf8');
-                    }
-                    
+                    const { filePath, fileTitle } = (await defineUploadFile(fileObj, parentFolder ? NUXT_API_UPLOAD_BASE + parentFolder.url + "/" : NUXT_API_UPLOAD_BASE + "/"));
+
+                    // let title = "";
+                    // if (!/[^\u0000-\u00ff]/.test(fileObj.name)) {
+                    //     title = Buffer.from(fileObj.name, 'latin1').toString('utf8');
+                    // }
+
                     const attachmentData = {
-                        title: title,
+                        title: fileTitle,
                         url: filePath,
                         ext: ext,
                         size: fileObj.size,
