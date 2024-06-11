@@ -24,7 +24,10 @@ export const useWebArticleListApi = <T = Article[]>(title: string) => {
   });
 };
 
-export const useWebArticleAdjacentApi = <T = Article>(
+export const useWebArticleAdjacentApi = <T = {
+  previouArticle: Article | null;
+  nextArticle: Article | null;
+}>(
   id: number,
   categoryId: number
 ) => {

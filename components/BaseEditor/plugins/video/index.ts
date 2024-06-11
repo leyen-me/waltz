@@ -8,7 +8,7 @@ export default function createImageManagerPlugin({
 } = {}) {
   const toolbar = createToolbar({
     commandName: name,
-    title: (editor) => `${editor.langConfig.task.toolbar}`,
+    title: (editor) => `${editor.langConfig.video.toolbar}`,
     text,
     icon,
   });
@@ -46,13 +46,13 @@ export default function createImageManagerPlugin({
 
         VMdEditor.lang.add({
           "zh-CN": {
-            task: {
+            video: {
               toolbar: "视频",
               placeholder: "视频",
             },
           },
           "en-US": {
-            task: {
+            video: {
               toolbar: "Video",
               placeholder: "Video",
             },

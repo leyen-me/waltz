@@ -27,6 +27,7 @@
   --web-color-11: rgba(215, 180, 134, 0.3);
   --web-color-12: rgb(232, 141, 21);
   --web-color-13: rgba(235, 235, 245, 0.6);
+  --web-color-14: rgba(255, 255, 245, 0.86);
 
   --td-bg-color-container: rgb(43, 43, 43) !important;
   --td-brand-color: var(--web-color-7) !important;
@@ -52,6 +53,37 @@ body,
   color: var(--web-color-1);
 }
 
+@font-face {
+  font-family: "Logo";
+  src: url("/assets/font/logo.ttf");
+}
+
+@font-face {
+  font-family: "Time";
+  src: url("/assets/font/time.otf");
+}
+
+@font-face {
+  font-family: "silka-regular";
+  src: url("/assets/font/silka-regular-webfont.ttf");
+}
+
+@font-face {
+  font-family: "silka-medium";
+  src: url("/assets/font/silka-medium-webfont.ttf");
+}
+
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+.t-table .t-tooltip.t-tooltip--default.t-table__ellipsis-content {
+  display: none;
+}
+
 .t-card--bordered,
 .t-collapse,
 .t-collapse-panel__header,
@@ -68,9 +100,12 @@ body,
 /* markdown editor toolbar custom plugin icon */
 @font-face {
   font-family: v-md-custom-iconfont;
-  src: url('//at.alicdn.com/t/c/font_4576255_7zmoenry554.woff2?t=1717987201241') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4576255_7zmoenry554.woff?t=1717987201241') format('woff'),
-       url('//at.alicdn.com/t/c/font_4576255_7zmoenry554.ttf?t=1717987201241') format('truetype');
+  src: url("//at.alicdn.com/t/c/font_4576255_7zmoenry554.woff2?t=1717987201241")
+      format("woff2"),
+    url("//at.alicdn.com/t/c/font_4576255_7zmoenry554.woff?t=1717987201241")
+      format("woff"),
+    url("//at.alicdn.com/t/c/font_4576255_7zmoenry554.ttf?t=1717987201241")
+      format("truetype");
 }
 
 [class*="v-md-custom-icon-"] {
@@ -205,8 +240,8 @@ body,
   max-width: var(--gpt-max-width);
   border-radius: var(--gpt-border-radius);
   background-color: var(--web-vuepress-markdown-body-bg) !important;
-  color: white !important;
-  padding: 12px 24px !important;
+  color: var(--web-color-14) !important;
+  padding: 48px 32px 0 !important;
 }
 .vuepress-markdown-body div[class*="v-md-pre-wrapper-"] {
   background-color: var(--web-bg-3);
@@ -217,8 +252,21 @@ body,
   background-color: var(--web-bg-3);
 }
 
+.vuepress-markdown-body h1 {
+  letter-spacing: -0.02em;
+  line-height: 40px;
+  font-size: 32px;
+}
+
 .vuepress-markdown-body h2 {
   border-bottom: 1px solid var(--web-border-1);
+}
+
+.vuepress-markdown-body h3 {
+  margin: 32px 0 0;
+  letter-spacing: -0.01em;
+  line-height: 28px;
+  font-size: 20px;
 }
 
 .vuepress-markdown-body blockquote {
@@ -252,6 +300,21 @@ body,
 
 .vuepress-markdown-body tbody tr:nth-child(2n) {
   background-color: var(--web-bg-4);
+}
+
+.vuepress-markdown-body p {
+  margin: 16px 0;
+  line-height: 28px;
+  overflow-wrap: break-word;
+  font-size: 16px;
+  font-synthesis: style;
+  text-rendering: optimizeLegibility;
+  font-weight: 400;
+}
+
+.vuepress-markdown-body p img {
+  width: 100%;
+  height: auto;
 }
 
 .v-md-plugin-tip.tip {
@@ -299,6 +362,12 @@ body,
 
 .vuepress-markdown-body h2 {
   border: none;
+  margin: 48px 0 16px;
+  border-top: 1px solid var(--web-border-2);
+  padding-top: 24px;
+  letter-spacing: -0.02em;
+  line-height: 32px;
+  font-size: 24px;
 }
 
 .vuepress-markdown-body code {

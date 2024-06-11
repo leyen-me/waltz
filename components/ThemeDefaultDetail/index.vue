@@ -38,7 +38,7 @@
       class="mt-2 leading-[1.6] tracking-[0.5px] xl:leading-[1.5] text-justify"
     >
       <div v-if="!browser" v-html="article && article.html"></div>
-      <BasePreview v-else v-model="article.content"></BasePreview>
+      <BasePreview v-else-if="article" v-model="article.content"></BasePreview>
     </section>
     <p
       v-if="article && article.tagList"
@@ -63,9 +63,9 @@
     </div>
     <div class="flex justify-between mt-6 px-0 lg:px-8">
       <NuxtLink
-        :to="'/blog/' + String(article && adjacentInfo.previouArticle.id)"
+        :to="'/blog/' + String(adjacentInfo.previouArticle.id)"
         class="hover:no-underline"
-        v-if="article && adjacentInfo.previouArticle"
+        v-if="adjacentInfo.previouArticle"
       >
         <div
           class="flex group flex-col border border-[var(--web-border-1)] border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
@@ -74,15 +74,15 @@
             >上一篇</span
           ><span
             class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--web-color-7)] transition duration-500 ease"
-            >{{ article && adjacentInfo.previouArticle.title }}</span
+            >{{ adjacentInfo.previouArticle.title }}</span
           >
         </div>
       </NuxtLink>
       <div v-else></div>
       <NuxtLink
-        :to="'/blog/' + String(article && adjacentInfo.nextArticle.id)"
+        :to="'/blog/' + String(adjacentInfo.nextArticle.id)"
         class="hover:no-underline"
-        v-if="article && adjacentInfo.nextArticle"
+        v-if="adjacentInfo.nextArticle"
       >
         <div
           class="flex group items-end flex-col border border-[var(--web-border-1)] border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
@@ -91,13 +91,18 @@
             >下一篇</span
           ><span
             class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--web-color-7)] transition duration-500 ease"
-            >{{ article && adjacentInfo.nextArticle.title }}</span
+            >{{ adjacentInfo.nextArticle.title }}</span
           >
         </div>
       </NuxtLink>
       <div v-else></div>
     </div>
+
+    <div class="mt-32 px-0 lg:px-8" v-if="isShowComment">
+      <MComment></MComment>
+    </div>
   </div>
+
   <Footer :title="String(article && article.author)"></Footer>
 </template>
 
@@ -110,7 +115,13 @@ import Header from "../ThemeDefault/header.vue";
 import Footer from "../ThemeDefault/footer.vue";
 import type Article from "~/server/models/Article";
 import useImageUrl from "@/utils/imageUrl";
-import useUserStore from "~/stores/userStore";
+import useAppStore from "~/stores/appStore";
+import { CONFIG_KEY } from "~/common/constants";
+import { getValue } from "~/common/utils/siteConfigUtil";
+import MComment from "./comment.vue";
+import { defaultRowsPerPageOptions } from "~/constants";
+import { useWebCommentPageApi } from "~/api/web/comment";
+import type Comment from "@/server/models/Comment";
 
 const props = defineProps({
   id: {
@@ -120,21 +131,74 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const appStore = useAppStore();
 
-// @ts-ignore
-const adjacentInfo = ref<Article>(null);
 const browser = computed(() => process.browser);
+const isShowComment = ref(
+  getValue(appStore.siteConfig, CONFIG_KEY.SITE.COMMENT)
+);
 
+// 评论
+const commmentList = ref<Comment[]>([]);
+const commentLoading = ref(false);
+const commentPage = ref(1);
+const commentLimit = ref(defaultRowsPerPageOptions[0]);
+
+const commentTotal = ref(0);
+const commentTotalPages = ref(0);
+
+const getComment = async () => {
+  try {
+    commentLoading.value = true;
+    const _list = await useWebCommentPageApi({
+      page: commentPage.value,
+      limit: commentLimit.value,
+    });
+    _list.data.map((item) => commmentList.value.push(item));
+    commentTotal.value = _list.meta.totalItems;
+    commentTotalPages.value = _list.meta.totalPages;
+  } catch {
+    commentPage.value -= 1;
+  } finally {
+    commentLoading.value = false;
+  }
+};
+
+// 文章详情
 // @ts-ignore
 const article = ref<Article>(null);
 
-let res = null;
-let res_1 = null;
+// 上一篇下一篇
+// @ts-ignore
+const adjacentInfo = ref<{
+  previouArticle: Article | null;
+  nextArticle: Article | null;
+}>({
+  previouArticle: {
+    id: 0,
+    title: "",
+  } as Article,
+  nextArticle: {
+    id: 0,
+    title: "",
+  } as Article,
+});
 
 try {
-  res = await useWebArticleInfoApi(props.id);
-  res_1 = await useWebArticleAdjacentApi(props.id, res.categoryId);
+  const articleRes = await useWebArticleInfoApi(props.id);
+  const adjacentRes = await useWebArticleAdjacentApi(
+    props.id,
+    articleRes.categoryId
+  );
+  article.value = articleRes;
+  adjacentInfo.value = adjacentRes;
+  if (isShowComment.value) {
+    try {
+      await getComment();
+    } catch (error) {}
+  }
 } catch (error) {
+  console.error(error);
   if (process.browser) {
     router.push("/404");
   }
@@ -143,16 +207,11 @@ try {
 // @ts-ignore
 const tagList = computed(() => article.value.tagList!.split(","));
 const tagIdList = computed(() => article.value.tagIdList!.split(","));
-if (res) {
-  article.value = res;
-}
-if (res_1) {
-  adjacentInfo.value = res_1;
-}
 
 if (process.browser) {
-  if (res) {
-    window.document.title = res.author + "-" + res.title;
+  if (article.value) {
+    // @ts-ignore
+    window.document.title = article.value.author + "-" + article.value.title;
   }
 }
 </script>

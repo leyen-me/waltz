@@ -65,7 +65,13 @@
             >
           </t-form-item>
           <t-form-item>
-            <span class="w-full flex">没有账号？去<NuxtLink class="text-[var(--web-color-7)]" :to="'/admin/register?redirect=' + route.query.redirect">注册</NuxtLink> </span>
+            <span class="w-full flex"
+              >没有账号？去<NuxtLink
+                class="text-[var(--web-color-7)]"
+                :to="'/admin/register?redirect=' + route.query.redirect"
+                >注册</NuxtLink
+              >
+            </span>
           </t-form-item>
         </t-form>
       </div>
@@ -79,9 +85,11 @@ import { DesktopIcon, LockOnIcon } from "tdesign-icons-vue-next";
 import Cookies from "js-cookie";
 import { useAdminLoginApi } from "@/api/admin/auth";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
+import useUserStore from "~/stores/userStore";
 
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
 
 const formData = ref({
   username: "",
@@ -98,6 +106,8 @@ const handleLogin = async ({ validateResult, firstError }: SubmitContext) => {
       const { token } = await useAdminLoginApi(formData.value);
       // 存储
       Cookies.set("token", token);
+      // 清除用户
+      userStore.user.id = 0;
       // 回到主页
       if (route.query.redirect) {
         router.replace(decodeURIComponent(route.query.redirect as string));

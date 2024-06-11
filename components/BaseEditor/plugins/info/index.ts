@@ -9,7 +9,7 @@ export default function createImageManagerPlugin({
 } = {}) {
   const toolbar = createToolbar({
     commandName: name,
-    title: (editor) => `${editor.langConfig.task.toolbar}`,
+    title: (editor) => `${editor.langConfig.info.toolbar}`,
     text,
     icon,
   });
@@ -47,13 +47,13 @@ export default function createImageManagerPlugin({
 
         VMdEditor.lang.add({
           "zh-CN": {
-            task: {
+            info: {
               toolbar: "基本信息",
               placeholder: "基本信息",
             },
           },
           "en-US": {
-            task: {
+            info: {
               toolbar: "Base Info",
               placeholder: "Base Info",
             },

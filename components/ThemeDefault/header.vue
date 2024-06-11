@@ -156,12 +156,6 @@ const show = ref(false);
 const browser = computed(() => process.browser);
 
 const showLogin = computed(() => {
-  console.log(
-    appStore.siteConfig,
-    CONFIG_KEY.SITE.LOGIN,
-    getValue(appStore.siteConfig, CONFIG_KEY.SITE.LOGIN)
-  );
-
   if (getValue(appStore.siteConfig, CONFIG_KEY.SITE.LOGIN)) {
     if (userStore.user.id) {
       // 不显示
