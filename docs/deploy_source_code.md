@@ -1,7 +1,9 @@
 # MySql
 ```bash
 sudo apt-get install -y docker.io
-sudo docker run -idt -p 3306:3306 --privileged=true \
+sudo docker run -idt -p 3306:3306 \
+--restart=always \
+--privileged=true \
 -e TZ=Asia/Shanghai \
 -e MYSQL_DATABASE=open_nuxt_blog \
 -e MYSQL_ROOT_PASSWORD=JGhQ83axm5ydtQEnX8B3RgtqnFIY6U3+TO5VMMVyLxA= \
@@ -39,11 +41,11 @@ sudo pnpm build
 cd .output/server/
 
 # 后台运行
-nohup sudo node index.mjs &
+sudo node index.mjs &
 
 # 当你需要停止服务时
-ps -ef | grep nohup
-sudo kill <nohup_pid>
+ps -ef | grep index.mjs
+sudo kill <process_id>
 ```
 
 # Domain
