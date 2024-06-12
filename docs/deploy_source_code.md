@@ -44,7 +44,7 @@ cd .output/server/
 sudo node index.mjs &
 
 # 当你需要停止服务时
-ps -ef | grep index.mjs
+ps aux
 sudo kill <process_id>
 ```
 
@@ -75,6 +75,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        client_max_body_size 1024m;
     }
 }
 
