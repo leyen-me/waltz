@@ -170,6 +170,10 @@ const showLogin = computed(() => {
 });
 
 const handleGoBlog = (item: Article) => {
+  if (route.path === "/blog/" + item.id) {
+    show.value = false;
+    return;
+  }
   router.push("/blog/" + item.id);
 };
 const handleGoLogIn = () => {

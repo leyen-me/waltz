@@ -1,8 +1,8 @@
 <template>
   <div
-    class="w-full h-[550px] md:w-0 md:flex-[0.25] md:h-full bg-[var(--web-bg-2)] md:ml-4 md:mt-0  mt-4 p-8 rounded-md"
+    class="w-full h-[550px] md:w-0 md:flex-[0.25] md:h-full bg-[var(--web-bg-2)] md:ml-4 md:mt-0 mt-4 p-8 rounded-md"
   >
-    <h4>统计数据</h4>
+    <h4>分类占比</h4>
     <div id="percentage-completion" class="h-[550px] md:h-full"></div>
   </div>
 </template>
@@ -28,6 +28,9 @@ const update = () => {
     legend: {
       top: "5%",
       left: "center",
+      textStyle: {
+        color: "#FFF",
+      },
     },
     series: [
       {
@@ -41,6 +44,7 @@ const update = () => {
         emphasis: {
           label: {
             show: true,
+            color: "#FFF",
             fontSize: 32,
             fontWeight: "bold",
           },

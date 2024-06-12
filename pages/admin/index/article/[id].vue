@@ -278,6 +278,7 @@ const handleVideoUpload = async (editor: any) => {
   const fileInput = document.createElement("input");
   fileInput.setAttribute("type", "file");
   fileInput.setAttribute("id", "fileVideoInput");
+  fileInput.setAttribute("accept", "video/mp4")
   fileInput.style.position = "absolute";
   fileInput.style.left = "-9999px";
 
@@ -318,7 +319,7 @@ const handleEditorUpload = async (event: any, insert: any, files: any) => {
   // @ts-ignore
   for (const item of data.value.data) {
     insert({
-      url: useImageUrl("/" + item),
+      url: useImageUrl("/" + item, false),
       desc: "",
     });
   }

@@ -34,11 +34,13 @@
           <p>Posted by {{ v.author }}</p>
           <p>
             {{
-              v.publishedAtDetails.month.english +
-              " " +
-              v.publishedAtDetails.day +
-              "," +
-              v.publishedAtDetails.year
+              v.publishedAtDetails
+                ? v.publishedAtDetails.month.english +
+                  " " +
+                  v.publishedAtDetails.day +
+                  "," +
+                  v.publishedAtDetails.year
+                : "未发布"
             }}
           </p>
         </div>

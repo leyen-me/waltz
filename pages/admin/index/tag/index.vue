@@ -16,7 +16,7 @@
       ></t-table>
       <div class="mt-4">
         <t-pagination
-          v-if="list.length > limit"
+          
           v-model="page"
           v-model:pageSize="limit"
           :total="total"

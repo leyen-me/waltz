@@ -22,12 +22,13 @@
             @success="onUploadSuccess"
             @fail="onUploadError"
           >
-          <t-button theme="primary">
-            <template #icon>
-              <t-icon name="file-import"></t-icon>
-            </template>
-            导入</t-button>
-        </t-upload>
+            <t-button theme="primary">
+              <template #icon>
+                <t-icon name="file-import"></t-icon>
+              </template>
+              导入</t-button
+            >
+          </t-upload>
           <t-button @click="handleArticleExport">
             <template #icon>
               <t-icon name="file-export"></t-icon>
@@ -148,7 +149,11 @@
                 @confirm="handleDelete(v.id as number)"
                 :disabled="!useHasAuth('article:delete')"
               >
-                <t-button shape="rectangle" variant="text" @click.stop=""
+                <t-button
+                  :disabled="!useHasAuth('article:delete')"
+                  shape="rectangle"
+                  variant="text"
+                  @click.stop=""
                   >删除</t-button
                 >
               </t-popconfirm>
@@ -169,7 +174,7 @@
 
       <div class="mt-4">
         <t-pagination
-          v-if="list.length > limit"
+          
           v-model="page"
           v-model:pageSize="limit"
           :total="total"
@@ -237,11 +242,11 @@ const onUploadSuccess = async (e: any) => {
     return;
   }
   MessagePlugin.success("导入成功");
-  files.value = []
+  files.value = [];
   await getData();
 };
 const onUploadError = () => {
-  files.value = []
+  files.value = [];
   MessagePlugin.error("文件上传失败");
 };
 

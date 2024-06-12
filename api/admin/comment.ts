@@ -39,6 +39,8 @@ export const useAdminCommentSubmitApi = <T = any>(body: Partial<Comment>) => {
 export const useAdminCommentDeleteApi = <T = Comment>(id: number) => {
   return useApi<T>(`/api/admin/comment/`, {
     method: "DELETE",
-    body: JSON.stringify([id]),
+    body: JSON.stringify({
+      id,
+    }),
   });
 };

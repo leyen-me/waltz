@@ -2,8 +2,8 @@
   <div
     class="w-full md:w-0 md:flex-[0.835] md:h-full bg-[var(--web-bg-2)] p-8 rounded-md"
   >
-    <h4>统计数据</h4>
-    <div id="statistical-data" class="h-[550px] md:h-full"></div>
+    <h4>文章数量(每月)</h4>
+    <div ref="chart" id="statistical-data" class="h-[550px] md:h-full"></div>
   </div>
 </template>
 
@@ -24,16 +24,21 @@ const update = () => {
   const option = {
     xAxis: {
       type: "category",
-      boundaryGap: false,
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      boundaryGap: true,
+      data: props.articleList.map((item) => item.name),
     },
     yAxis: {
       type: "value",
+      splitLine: {
+        lineStyle: {
+          color: "rgba(255,255,255,0.2)",
+        },
+      },
     },
     series: [
       {
         type: "bar",
-        data: props.articleList,
+        data: props.articleList.map((item) => item.value),
       },
     ],
   };

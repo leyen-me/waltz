@@ -15,12 +15,13 @@
       {{ title }}
     </span>
     <span class="font-logo text-[64px]">
-      {{ num }}
+      {{  tweened.num.toFixed(0) }}
     </span>
   </div>
 </template>
 
 <script setup lang="ts">
+import { gsap } from "gsap";
 const props = defineProps({
   icon: {
     type: Object,
@@ -43,4 +44,15 @@ const props = defineProps({
     required: true,
   },
 });
+
+let tweened = reactive({
+  num: 0
+})
+
+watch(
+  () => props.num,
+  (newValue, oldValue) => {
+    gsap.to(tweened, { duration: 0.75, num: newValue });
+  }
+);
 </script>

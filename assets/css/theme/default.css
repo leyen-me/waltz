@@ -199,34 +199,6 @@ body,
   padding-left: 12px;
 }
 
-@media (min-width: 1024px) {
-  .v-md-editor__toolbar {
-    padding-left: calc(285.33px + 22px);
-    top: 0;
-    padding-top: 56px;
-    z-index: 20;
-  }
-
-  .v-md-editor__preview-wrapper {
-    display: block;
-  }
-
-  .v-md-editor__toolbar-right-wrapper {
-    display: block;
-  }
-
-  .v-md-editor--editable .v-md-editor__editor-wrapper {
-    border-right: 1px solid #ddd;
-  }
-  .search-dialog .t-dialog {
-    width: 50% !important;
-  }
-  .v-md-editor-info-drawer .t-drawer__content-wrapper {
-    width: 20% !important;
-    height: 100% !important;
-  }
-}
-
 /* markdown preview */
 
 .v-md-editor-preview {
@@ -241,8 +213,9 @@ body,
   border-radius: var(--gpt-border-radius);
   background-color: var(--web-vuepress-markdown-body-bg) !important;
   color: var(--web-color-14) !important;
-  padding: 48px 32px 0 !important;
+  padding: 16px !important;
 }
+
 .vuepress-markdown-body div[class*="v-md-pre-wrapper-"] {
   background-color: var(--web-bg-3);
 }
@@ -259,7 +232,13 @@ body,
 }
 
 .vuepress-markdown-body h2 {
-  border-bottom: 1px solid var(--web-border-1);
+  border: none;
+  margin: 48px 0 16px;
+  border-top: 1px solid var(--web-border-2);
+  padding-top: 24px;
+  letter-spacing: -0.02em;
+  line-height: 32px;
+  font-size: 24px;
 }
 
 .vuepress-markdown-body h3 {
@@ -276,7 +255,7 @@ body,
 }
 
 .vuepress-markdown-body hr {
-  border-top: 1px solid var(--web-border-1);
+  border-color:  var(--web-border-2);
   margin: 16px 0;
 }
 
@@ -360,17 +339,40 @@ body,
   color: var(--web-color-2);
 }
 
-.vuepress-markdown-body h2 {
-  border: none;
-  margin: 48px 0 16px;
-  border-top: 1px solid var(--web-border-2);
-  padding-top: 24px;
-  letter-spacing: -0.02em;
-  line-height: 32px;
-  font-size: 24px;
-}
-
 .vuepress-markdown-body code {
   background-color: var(--web-bg-5);
   color: var(--web-color-9);
+}
+
+
+@media (min-width: 1024px) {
+  .v-md-editor__toolbar {
+    padding-left: calc(285.33px + 22px);
+    top: 0;
+    padding-top: 56px;
+    z-index: 20;
+  }
+
+  .v-md-editor__preview-wrapper {
+    display: block;
+  }
+
+  .v-md-editor__toolbar-right-wrapper {
+    display: block;
+  }
+
+  .v-md-editor--editable .v-md-editor__editor-wrapper {
+    border-right: 1px solid #ddd;
+  }
+  .search-dialog .t-dialog {
+    width: 50% !important;
+  }
+  .v-md-editor-info-drawer .t-drawer__content-wrapper {
+    width: 20% !important;
+    height: 100% !important;
+  }
+
+  .vuepress-markdown-body {
+    padding: 48px 32px 0 !important;
+  }
 }
