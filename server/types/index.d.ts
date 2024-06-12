@@ -71,7 +71,6 @@ interface ArticleQuery extends BaseQuery {
   categoryId?: number;
   tagId?: number;
   status?: string;
-  order?: string;
   asc?: boolean;
 }
 
@@ -85,6 +84,7 @@ interface TagQuery extends BaseQuery {
 
 interface CommentQuery extends BaseQuery {
   articleId?: number;
+  pid?: number;
   userId?: number;
   content?: string;
   status: CommentStatusEnum;

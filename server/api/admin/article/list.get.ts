@@ -5,7 +5,7 @@ const articleService = new ArticleService();
 
 export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "article:list")
-    const user:User = event.context.user;
-    const result = await articleService.getAllArticles(decodeURIComponent(getQuery(event).title as string),user);
+    const user: User | null = event.context.user;
+    const result = await articleService.getAllArticles(decodeURIComponent(getQuery(event).title as string), user);
     return defineOk({ data: result });
 });
