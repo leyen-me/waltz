@@ -1,10 +1,11 @@
 import Menu from '@/server/models/Menu';
 import BaseService from '@/server/base/BaseService';
-import { CreationAttributes } from 'sequelize';
+import { CreationAttributes, QueryTypes } from 'sequelize';
 import User from '../models/User';
 import UserRoleService from './UserRoleService';
 import sequelize from '../db';
 import RoleMenuService from './RoleMenuService';
+import RoleMenu from '../models/RoleMenu';
 
 
 export default class MenuService extends BaseService<Menu> {
@@ -81,11 +82,14 @@ export default class MenuService extends BaseService<Menu> {
         // 只排除 t_site_config.value 为 'false' 的记录
         query += ` AND (sc.value IS NULL OR sc.value != 'false')`;
 
-        query += ` ORDER BY m.id, m.sort ASC;`;
+        query += ` ORDER BY m.id, m.sort ASC`;
 
-        const [results] = await sequelize.query(query, { replacements });
+        const results: Menu[] = await sequelize.query(query, {
+            replacements: replacements,
+            type: QueryTypes.SELECT
+        });
 
-        return results as Menu[];
+        return results;
     }
 
 
@@ -127,10 +131,12 @@ export default class MenuService extends BaseService<Menu> {
 
             const replacements = { userId: user.id };
 
-            const [results] = await sequelize.query(query, {
-                replacements
+            const results: Menu[] = await sequelize.query(query, {
+                replacements: replacements,
+                type: QueryTypes.SELECT
             });
-            return results as Menu[]
+
+            return results
         }
     }
 
@@ -152,11 +158,12 @@ export default class MenuService extends BaseService<Menu> {
                 WHERE rm.role_id IN (:roleIds);  
             `;
 
-            const [results] = await sequelize.query(query, {
-                replacements: { roleIds: roleIdList }
+            const results: Menu[] = await sequelize.query(query, {
+                replacements: { roleIds: roleIdList },
+                type: QueryTypes.SELECT
             });
 
-            authorities = results.map((row: any) => row.authority);
+            authorities = results.map((row: Menu) => row.authority);
         }
 
         authorities = authorities.filter(authority => authority !== "");

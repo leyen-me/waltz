@@ -340,11 +340,11 @@ CREATE TABLE `t_menu`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `pid` bigint(0) NOT NULL COMMENT '父级id',
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单路径',
-  `title` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单标题',
-  `icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+  `title` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单标题',
+  `icon` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
   `type` enum('menu','button','interface') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '菜单类型',
   `open_style` enum('_self','_blank') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '打开方式',
-  `authority` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '授权标识',
+  `authority` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '授权标识',
   `sort` int(0) NULL DEFAULT 0 COMMENT '排序',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NOT NULL COMMENT '修改时间',
@@ -430,7 +430,7 @@ INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (73, 68, '', '删除', 'delete', 'button', '_self', 'dict:delete', 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (74, 68, '', '详情', 'info-circle', 'button', '_self', 'dict:info', 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (75, 0, '', '应用中心', '', 'menu', '_self', '', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (76, 75, '/app/chatgpt', 'ChatGPT', 'chart-3d', 'menu', '_blank', '', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (76, 75, '/app/chatgpt', 'ChatGPT', 'logo-adobe-illustrate', 'menu', '_blank', '', 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (77, 76, '', '列表', 'list', 'button', '_self', 'chat:list', 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (78, 76, '', '新增', 'add', 'button', '_self', 'chat:save', 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_menu` (`id`, `pid`, `path`, `title`, `icon`, `type`, `open_style`, `authority`, `sort`, `created_at`, `updated_at`) VALUES (79, 76, '', '修改', 'edit', 'button', '_self', 'chat:update', 3, '2024-05-20 13:14:00', '2024-05-20 13:14:00');

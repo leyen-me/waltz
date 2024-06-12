@@ -13,7 +13,6 @@ export default class Comment extends BaseModel<Comment> {
   public articleTitle?: string;
   public username?: string;
   public parentUsername?: string;
-  public parentComment?: string;
 
   static initComment(sequelize: Sequelize): typeof Comment {
     const modelAttributes = {
@@ -25,7 +24,8 @@ export default class Comment extends BaseModel<Comment> {
       pid: {
         type: DataTypes.BIGINT({ length: 20 }),
         allowNull: true,
-        comment: "父评论ID,允许为空",
+        defaultValue: 0,
+        comment: "父评论ID",
       },
       userId: {
         type: DataTypes.BIGINT({ length: 20 }),
@@ -45,6 +45,7 @@ export default class Comment extends BaseModel<Comment> {
       status: {
         type: DataTypes.ENUM({ values: ["nopass", "ing", "pass"] }),
         allowNull: true,
+        defaultValue: "ing",
         comment: '状态',
       }
     };

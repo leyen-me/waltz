@@ -4,7 +4,7 @@ import archiver, { ArchiverError } from "archiver";
 import AdmZip from "adm-zip";
 import Article from "@/server/models/Article";
 import BaseService from "@/server/base/BaseService";
-import { CreationAttributes, FindAndCountOptions, Op, literal } from "sequelize";
+import { CreationAttributes, FindAndCountOptions, Op, QueryTypes, literal } from "sequelize";
 import { ArticleStatus } from "../enum";
 import sequelize from "../db";
 import ArticleTagService from "./ArticleTagService";
@@ -33,7 +33,7 @@ export default class ArticleService extends BaseService<Article> {
   }
 
   async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
-    let { page, limit, order, asc, tagId, title, isSuperAdmin, userId, ...items } = query;
+    let { page, limit, asc, tagId, title, isSuperAdmin, userId, ...items } = query;
 
     page = Number(page);
     limit = Number(limit);
@@ -79,7 +79,8 @@ export default class ArticleService extends BaseService<Article> {
       if (!isSuperAdmin) {
         whereConditions.push(
           sequelize.literal(
-              `EXISTS (
+            `(
+              EXISTS (
                 SELECT
                   1
                 FROM
@@ -96,6 +97,7 @@ export default class ArticleService extends BaseService<Article> {
                   t_article_role ar3
                 WHERE
                   ar3.article_id = Article.id
+                )
               )`
           )
         );
@@ -167,6 +169,7 @@ export default class ArticleService extends BaseService<Article> {
     };
 
     const { rows, count } = await Article.findAndCountAll(options);
+
 
     const totalPages = Math.ceil(count / limit);
 
@@ -298,37 +301,48 @@ export default class ArticleService extends BaseService<Article> {
         WHERE a.id = :articleId
     `;
 
-    // 添加用户权限条件
+    // 构建用户权限条件
+    const whereConditions: string[] = [];
+
     if (user) {
       if (!user.superAdmin) {
-        query += `
-          AND (
-            EXISTS (
-              SELECT 1 
-              FROM t_article_role ar2 
-              INNER JOIN t_user_role ur ON ar2.role_id = ur.role_id 
-              WHERE ar2.article_id = a.id AND ur.user_id = :userId
-            )
-          )
-        `;
+        whereConditions.push(`
+        EXISTS (
+          SELECT 1 
+          FROM t_article_role ar2 
+          INNER JOIN t_user_role ur ON ar2.role_id = ur.role_id 
+          WHERE ar2.article_id = a.id AND ur.user_id = :userId
+        )
+      `);
+        whereConditions.push(`
+        NOT EXISTS (
+          SELECT 1
+          FROM t_article_role ar3
+          WHERE ar3.article_id = a.id
+        )
+      `);
       }
     } else {
-      query += `
-        AND NOT EXISTS (
-          SELECT 1
-          FROM t_article_role ar4
-          WHERE ar4.article_id = a.id
-        )
-      `;
+      whereConditions.push(`
+      NOT EXISTS (
+        SELECT 1
+        FROM t_article_role ar4
+        WHERE ar4.article_id = a.id
+      )
+    `);
     }
 
-
-    const options = user ? { userId: user.id } : {}
+    // 将条件添加到查询中
+    if (whereConditions.length > 0) {
+      query += ` AND (${whereConditions.join(' OR ')})`;
+    }
 
     // 完成查询
     const result = await sequelize.query(query, {
-      replacements: { articleId, ...options },
+      replacements: { articleId, userId: user ? user.id : null },
       model: Article,
+      type: QueryTypes.SELECT,
+      plain: true,
       mapToModel: true,
     });
 
@@ -338,13 +352,13 @@ export default class ArticleService extends BaseService<Article> {
     }
 
     // 返回结果
-    return result.length ? result[0] : null;
+    return result ? result : null;
   }
 
 
   async getPreviousAndNextArticles(
     articleId: number,
-    user: User,
+    user: User | null,
     categoryId: number
   ): Promise<PreviouAndNextArticleResponse> {
     // 获取当前文章
@@ -361,7 +375,9 @@ export default class ArticleService extends BaseService<Article> {
 
     // 构建公共条件
     const baseConditions: any = { categoryId };
-    const whereConditions: any[] = []; // 添加额外的条件数组
+    // 添加额外的条件数组
+    const whereConditions: any[] = [];
+
 
     // 添加用户权限条件
     if (user) {
@@ -389,11 +405,13 @@ export default class ArticleService extends BaseService<Article> {
       );
     }
 
+    const replacements = { userId: user ? user.id : null };
+
     // 获取前一篇文章
     const previouArticle = await Article.findOne({
       where: {
         ...baseConditions,
-        ...whereConditions, // 添加用户权限条件
+        ...whereConditions,
         [Op.or]: [
           { publishedAt: { [Op.lt]: publishedAt } },
           { publishedAt: publishedAt, id: { [Op.lt]: articleId } } // 在publishedAt相同时，确保ID也小于当前文章的ID
@@ -402,9 +420,10 @@ export default class ArticleService extends BaseService<Article> {
       },
       order: [
         ["publishedAt", "DESC"],
-        ["id", "DESC"] // 添加 ID 的倒序排序
+        ["id", "DESC"]
       ],
       attributes: ["id", "title"],
+      replacements,
       limit: 1,
     }) as Article;
 
@@ -412,7 +431,7 @@ export default class ArticleService extends BaseService<Article> {
     const nextArticle = await Article.findOne({
       where: {
         ...baseConditions,
-        ...whereConditions, // 添加用户权限条件
+        ...whereConditions,
         [Op.or]: [
           { publishedAt: { [Op.gt]: publishedAt } },
           { publishedAt: publishedAt, id: { [Op.gt]: articleId } } // 在publishedAt相同时，确保ID也大于当前文章的ID
@@ -421,9 +440,10 @@ export default class ArticleService extends BaseService<Article> {
       },
       order: [
         ["publishedAt", "ASC"],
-        ["id", "ASC"] // 添加 ID 的正序排序
+        ["id", "ASC"]
       ],
       attributes: ["id", "title"],
+      replacements,
       limit: 1,
     }) as Article;
 
@@ -431,7 +451,7 @@ export default class ArticleService extends BaseService<Article> {
   }
 
 
-  async getAllArticles(title: string, user: User, articleStatus?: string): Promise<Article[]> {
+  async getAllArticles(title: string, user: User | null, articleStatus?: string): Promise<Article[]> {
     // 构建全文搜索查询条件
     const condition = literal(
       "MATCH(title,content) AGAINST(:title IN BOOLEAN MODE)"

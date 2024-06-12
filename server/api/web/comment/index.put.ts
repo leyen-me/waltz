@@ -1,10 +1,9 @@
 import CommentService from '@/server/service/CommentService';
-
 const commentService = new CommentService();
 
 export default defineWrappedResponseHandler(async (event) => {
-    defineHasAuthority(event, "comment:delete")
-    const {id} = await readBody(event);
-    await commentService.deleteComment(id);
+
+    const { id, ...updatedCommentData } = await readBody(event);
+    await commentService.updateComment(id, updatedCommentData);
     return defineOk({});
 });
