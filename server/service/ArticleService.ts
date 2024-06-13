@@ -12,12 +12,9 @@ import FavoriteService from "./FavoriteService";
 import CommentService from "./CommentService";
 import LikeService from "./LikeService";
 import { nanoid } from "nanoid";
-import ArticleTag from "../models/ArticleTag";
-import Category from "../models/Category";
-import Comment from "../models/Comment";
-import Tag from "../models/Tag";
 import ArticleRoleService from "./ArticleRoleService";
 import User from "../models/User";
+import { getAllModels } from "../utils/merge";
 
 export default class ArticleService extends BaseService<Article> {
   private articleTagService = new ArticleTagService();
@@ -25,8 +22,6 @@ export default class ArticleService extends BaseService<Article> {
   private favoriteService = new FavoriteService();
   private commentService = new CommentService();
   private likeService = new LikeService();
-  // 备份时需要导出的表
-  private exportModels = [Article, ArticleTag, Category, Tag];
 
   constructor() {
     super(Article);
@@ -129,7 +124,6 @@ export default class ArticleService extends BaseService<Article> {
         "title",
         "cover",
         "content",
-        "html",
         [
           sequelize.literal(
             "(SELECT t1.title FROM t_category t1 left join t_article t2 on t1.id = t2.category_id LIMIT 1)"
@@ -515,7 +509,7 @@ export default class ArticleService extends BaseService<Article> {
     const zip = new AdmZip(path.resolve(filePath));
     zip.extractAllToAsync(path.resolve(NUXT_PUBLIC_FOLDER as string), true);
 
-    this.exportModels.forEach(async (model: any) => {
+    getAllModels().forEach(async (model: any) => {
       // 清除表
       await model.destroy({
         where: {},
@@ -531,6 +525,13 @@ export default class ArticleService extends BaseService<Article> {
       //@ts-ignore
       await model.bulkCreate(modelDatas);
     });
+
+    // 删除上传的zip文件
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error("Error deleting the zip file:", err);
+      }
+    });
   }
 
   async exportArticle() {
@@ -540,7 +541,7 @@ export default class ArticleService extends BaseService<Article> {
     defineCreateFolder(path.resolve(NUXT_TEMP_FOLDER));
     fs.writeFileSync(zipPath, "");
 
-    const promises = this.exportModels.map(async (model: any) => {
+    const promises = getAllModels().map(async (model: any) => {
       const list = (await model.findAll()).map((item: any) => item.toJSON());
       const modelJsonPath = path.resolve(NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json");
       return fs.promises.writeFile(modelJsonPath, JSON.stringify(list));
@@ -570,7 +571,16 @@ export default class ArticleService extends BaseService<Article> {
       });
     }
     await wait();
-    return fs.readFileSync(zipPath);
+    const zipFileContent = fs.readFileSync(zipPath);
+
+    // 删除导出的zip文件
+    fs.unlink(zipPath, (err) => {
+      if (err) {
+        console.error("Error deleting the zip file:", err);
+      }
+    });
+
+    return zipFileContent;
   }
 }
 

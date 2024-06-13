@@ -120,10 +120,7 @@ export default class ChatService extends BaseService<Chat> {
             authorization: `Bearer ${getValue(map, CONFIG_KEY.CHATGPT.KEY)}`,
             body: {
                 model: getValue(map, CONFIG_KEY.CHATGPT.MODEL),
-                messages,
-                temperature: 0.3, // 设置采样温度
-                top_p: 0.85, // 设置核采样概率
-                max_tokens: 8192
+                messages
             },
             stream: true,
             success

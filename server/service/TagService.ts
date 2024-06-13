@@ -36,6 +36,6 @@ export default class TagService extends BaseService<Tag> {
     }
 
     async getAllTags(): Promise<Tag[]> {
-        return Tag.findAll();
+        return await Tag.findAll();
     }
 }

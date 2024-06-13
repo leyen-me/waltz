@@ -1,6 +1,6 @@
 import Type from "@/server/models/Type";
 import BaseService from "@/server/base/BaseService";
-import { CreationAttributes } from "sequelize";
+import { CreationAttributes, FindAndCountOptions, Op } from "sequelize";
 
 export default class TypeService extends BaseService<Type> {
     constructor() {
@@ -8,8 +8,37 @@ export default class TypeService extends BaseService<Type> {
     }
 
     async selectPage(query: TypeQuery): Promise<BasePageResponse<Type>> {
-        return await this.page(query);
+        const { userId, page = 1, limit = 10, asc = true } = query;
+
+        const offset = (Number(page) - 1) * Number(limit);
+
+        const condition = {
+            [Op.or]: [{ userId }, { userId: null }]
+        };
+
+        // Initialize the main query options
+        const mainQueryOptions: FindAndCountOptions = {
+            offset,
+            limit: Number(limit),
+            order: [["createdAt", asc ? "ASC" : "DESC"]],
+            where: condition,
+        };
+
+        const { rows, count } = await Type.findAndCountAll(mainQueryOptions);
+
+        const totalPages = Math.ceil(count / Number(limit));
+
+        return {
+            data: rows,
+            meta: {
+                totalPages,
+                currentPage: Number(page),
+                pageSize: Number(limit),
+                totalItems: count,
+            },
+        };
     }
+
 
     async createType(typeData: CreationAttributes<Type>): Promise<BaseCreateResponse> {
         const createdTypeId = await defineTransactionWrapper(async (transaction) => {
@@ -44,6 +73,6 @@ export default class TypeService extends BaseService<Type> {
     }
 
     async getAllTypes(): Promise<Type[]> {
-        return Type.findAll();
+        return await Type.findAll();
     }
 }

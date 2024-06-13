@@ -49,7 +49,6 @@ export default class CommentService extends BaseService<Comment> {
         const { rows, count } = await Comment.findAndCountAll(options);
 
         const totalPages = Math.ceil(count / limit);
-        console.log(rows);
 
         return {
             data: rows,
@@ -196,7 +195,6 @@ export default class CommentService extends BaseService<Comment> {
         const { rows, count } = await Comment.findAndCountAll(options);
 
         const totalPages = Math.ceil(count / limit);
-        console.log(rows);
 
         return {
             data: rows,

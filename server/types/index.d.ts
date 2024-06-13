@@ -137,6 +137,7 @@ interface ContextQuery extends BaseQuery {
 }
 
 interface TypeQuery extends BaseQuery {
+  userId: number;
   name?: string;
   code?: string;
 }
