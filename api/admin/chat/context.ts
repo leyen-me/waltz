@@ -1,12 +1,11 @@
 import useApi from "@/utils/api";
-import type Context from "~/server/models/Context";
 
-export const useAdminChatContextListApi = <T = Context[]>(chatId: number) => {
+export const useAdminChatContextListApi = <T = any[]>(chatId: number) => {
   return useApi<T>(`/api/admin/context/chat/${chatId}`, { method: "GET" });
 };
 
 export const useAdminChatContextSubmitApi = <T = any>(
-  body: Partial<Context>
+  body: Partial<any>
 ) => {
   if (body.id) {
     return useApi<T>(`/api/admin/context/`, {

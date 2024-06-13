@@ -3,7 +3,7 @@
     class="h-full flex w-full flex-col border-r border-gray-200 overflow-y-hidden text-[var(--web-color-1)]"
     style="border-right: 1px solid var(--web-border-2)"
   >
-    <div class="border-b">
+    <div>
       <a
         class="cursor-pointer flex items-center gap-x-3 px-6 py-5 text-sm font-semibold leading-6 hover:bg-[var(--web-bg-3)]"
         @click.prevent="emits('add')"
@@ -25,6 +25,16 @@
         新增聊天
       </a>
     </div>
+    <div>
+      <a
+        class="cursor-pointer flex items-center gap-x-3 px-6 py-5 text-sm font-semibold leading-6 hover:bg-[var(--web-bg-3)]"
+        @click.prevent="emits('gpts')"
+      >
+        <t-icon name="blockchain"></t-icon>
+        助手中心
+      </a>
+    </div>
+    <div style="border: solid 1px var(--web-border-2);"></div>
     <div class="w-full flex-1 overflow-hidden relative">
       <ul
         class="flex w-full h-full flex-col overflow-y-auto py-4 px-2 gap-y-2 scrollbar-hidden"
@@ -109,5 +119,5 @@ const props = defineProps({
     required: true,
   },
 });
-const emits = defineEmits(["add", "delete", "deleteAll", "navClick"]);
+const emits = defineEmits(["add", "delete", "deleteAll", "navClick", "gpts"]);
 </script>

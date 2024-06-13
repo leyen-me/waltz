@@ -119,8 +119,6 @@ const formData = ref({
 const form = ref(null);
 const formRules = ref({
   title: [{ required: true, message: "菜单名称必填" }],
-  path: [{ required: true, message: "路径必填" }],
-  icon: [{ required: true, message: "图标必填" }],
 });
 
 const getData = async () => {

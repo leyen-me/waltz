@@ -36,7 +36,7 @@ This project is an open source blog system based on Nuxt.js , using Sequelize fo
 - 基础框架：菜单管理、角色管理、用户管理、附件管理、站点配置、数据字典、登录注册
 - 应用框架：文章管理、分类管理、标签管理、评论管理、ChatGpt、Agent 管理
 - 可自定义主题、站点数据备份、Mysql 全文检索
-- 支持傻瓜式[Docker一键部署](./docs/deploy_source_code.md)，开箱即用，也支持[源码部署](./docs/deploy_docker.md)，速度飞起。
+- 支持傻瓜式[Docker一键部署](./docs/deploy_docker.md)，开箱即用，也支持[源码部署](./docs/deploy_source_code.md)，速度飞起。
 
 ### Env
 

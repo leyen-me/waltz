@@ -56,6 +56,7 @@
                 :currentChatId
                 :chatList
                 @add="handleAdd"
+                @gpts="handleGoGpts"
                 @deleteAll="handleDeleteAll"
                 @navClick="handleOpenChat"
                 @delete="handleDelete"
@@ -73,6 +74,7 @@
         :currentChatId
         :chatList
         @add="handleAdd"
+        @gpts="handleGoGpts"
         @deleteAll="handleDeleteAll"
         @navClick="handleOpenChat"
         @delete="handleDelete"
@@ -171,6 +173,10 @@ const handleOpenChat = (chat: Chat) => {
   sidebarOpen.value = false;
 };
 
+const handleGoGpts = () => {
+  router.push("/app/chatgpt/gpts/");
+};
+
 const getData = async () => {
   try {
     const response = await useAdminChatChatListApi();
@@ -221,7 +227,9 @@ const handleDelete = (chat: Chat) => {
 };
 
 if (!currentChatId.value) {
-  handleAdd();
+  if (!query) {
+    handleAdd();
+  }
 }
 getData();
 </script>

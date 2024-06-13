@@ -24,7 +24,11 @@ const update = () => {
   const option = {
     xAxis: {
       type: "category",
-      boundaryGap: true,
+      axisLabel: {
+        interval: 0, // 显示所有标签
+        rotate: 45
+      },
+      // boundaryGap: true,
       data: props.articleList.map((item) => item.name),
     },
     yAxis: {

@@ -1,7 +1,7 @@
 <template>
   <div
     class="m-editor-wrap w-full mt-40 lg:mt-28"
-    style="--web-vuepress-markdown-body-bg: var(--web-bg-2)"
+    style="--web-vuepress-markdown-body-bg: var(--web-bg-2); --web-vuepress-markdown-body-padding: 32px;"
   >
     <BaseEditor
       v-model="formData"
@@ -227,8 +227,6 @@ const formData = ref<Article>({
   cover: "",
   content: "",
   status: "",
-  html: "",
-
   // @ts-ignore
   categoryId: "",
 
@@ -249,9 +247,6 @@ const handleSubmitForm = () => {
 };
 
 const handleSave = async ({ validateResult, firstError }: SubmitContext) => {
-  // @ts-ignore
-  let html = window.document.querySelector(".v-md-editor-preview").outerHTML;
-  formData.value.html = html;
   if (validateResult === true) {
     try {
       const res = await useAdminArticleSubmitApi(formData.value);

@@ -15,18 +15,6 @@
         :columns="columns"
         :hover = "false"
       ></t-table>
-      <div class="mt-4">
-        <t-pagination
-          
-          v-model="page"
-          v-model:pageSize="limit"
-          :total="total"
-          show-sizer
-          :page-size-options="defaultRowsPerPageOptions"
-          @page-size-change="getData"
-          @current-change="getData"
-        />
-      </div>
     </t-card>
   </div>
 </template>
@@ -48,11 +36,6 @@ import {
 
 const router = useRouter();
 
-// 分页
-const page = ref(1);
-const limit = ref(defaultRowsPerPageOptions[0]);
-
-const total = ref(0);
 const list = ref<Category[]>([]);
 const getData = async () => {
   const data = await useAdminCategoryListApi();

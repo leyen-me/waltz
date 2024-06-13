@@ -34,10 +34,11 @@
         alt=""
       />
     </div>
+    <!-- 48px 32px 0 -->
     <section
-      class="mt-2 leading-[1.6] tracking-[0.5px] xl:leading-[1.5] text-justify"
+      class="mt-2 leading-[1.6] tracking-[0.5px] xl:leading-[1.5] text-justify px-0 lg:px-8 pt-8"
     >
-      <div v-if="!browser" v-html="article && article.html"></div>
+      <div v-if="!browser" v-html="article && article.content"></div>
       <BasePreview v-else-if="article" v-model="article.content"></BasePreview>
     </section>
     <p
@@ -49,6 +50,8 @@
         ><span v-if="k !== tagList.length - 1" class="mx-1"> • </span></span
       >
     </p>
+
+    <!-- 编辑文章 -->
     <div class="flex justify-between mt-8 px-0 lg:px-8 items-end">
       <NuxtLink
         :to="'/admin/article/' + (article && article.id)"
@@ -61,6 +64,8 @@
         >{{ article && article.updatedAt }}</span
       >
     </div>
+
+    <!-- 上一篇下一篇 -->
     <div class="flex justify-between mt-6 px-0 lg:px-8">
       <NuxtLink
         :to="'/blog/' + String(adjacentInfo.previouArticle.id)"
@@ -395,18 +400,14 @@ try {
   const articleRes = await useWebArticleInfoApi(props.id);
   article.value = articleRes;
 
-  try {
-    const adjacentRes = await useWebArticleAdjacentApi(
-      props.id,
-      article.value.categoryId
-    );
-    adjacentInfo.value = adjacentRes;
-  } catch (error) {}
+  useWebArticleAdjacentApi(props.id, article.value.categoryId).then(
+    (adjacentRes) => {
+      adjacentInfo.value = adjacentRes;
+    }
+  );
 
   if (isShowComment.value) {
-    try {
-      await getComment();
-    } catch (error) {}
+    getComment();
   }
 } catch (error) {
   console.error(error);

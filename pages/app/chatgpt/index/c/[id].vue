@@ -5,7 +5,7 @@
     <!-- 专家类型 -->
 
     <div class="w-full flex mb-8 xl:w-[75%]">
-      <t-dropdown
+      <!-- <t-dropdown
         :disabled="chatId ? true : false"
         :options="
           typeList.map((type) => {
@@ -23,7 +23,14 @@
             <t-icon name="chevron-down-s" size="16"></t-icon>
           </template>
         </t-button>
-      </t-dropdown>
+      </t-dropdown> -->
+
+      <t-button variant="text"
+        >{{ typeName }}
+        <template #suffix>
+          <t-icon name="chevron-down-s" size="16"></t-icon>
+        </template>
+      </t-button>
     </div>
 
     <!-- 没有任何聊天对话的时候 -->
@@ -103,6 +110,7 @@
           '--gpt-body-width': v.role === 'user' ? 'auto' : '100%',
           '--gpt-max-width': v.role === 'user' ? '80%' : '100%',
           '--gpt-border-radius': v.role === 'user' ? '24px' : '0px',
+          '--web-vuepress-markdown-body-padding': '10px 20px',
         }"
         v-for="(v, k) in messages"
         :key="v.id"
@@ -191,7 +199,6 @@
 </template>
 
 <script setup lang="ts">
-import useUserStore from "~/stores/userStore";
 import { useAdminChatTypeListApi } from "@/api/admin/chat/type";
 import {
   useAdminChatChatInfoApi,
@@ -210,7 +217,6 @@ import { copyText } from "@/common/utils/clipboardUtil";
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore();
 
 const chatId = ref<number>(0);
 const wheel = ref(false);
@@ -221,8 +227,9 @@ const messagesRef = ref();
 const prompt = ref("");
 const typeList = ref<Type[]>([]);
 const typeCode = ref("");
-const dialogGptsVisible = ref(false);
 const { NUXT_API_BASE } = useRuntimeConfig().public;
+
+// 指定使用哪个
 
 const isNewChat = () => {
   return chatId.value === 0;
@@ -257,7 +264,6 @@ const scrollBottom = (time = 500) => {
   });
 };
 
-
 function handleWheel(event: WheelEvent) {
   wheel.value = true;
 }
@@ -266,8 +272,11 @@ const getTypeData = async () => {
   try {
     const response = await useAdminChatTypeListApi();
     typeList.value = response;
+    // 默认使用第一个通用的
     if (typeList.value.length > 0) {
-      typeCode.value = typeList.value[0].code;
+      if (!typeCode.value) {
+        typeCode.value = typeList.value[0].code;
+      }
     }
   } catch (error) {}
 };
@@ -431,8 +440,11 @@ const handleReSend = async () => {
   }
   let stop = false;
 
-  // 删除最后一个
-  messages.value.splice(messages.value.length - 1, 1);
+  // 如果最后一个是AI，删除最后一个
+  const lastMessage = messages.value[messages.value.length - 1];
+  if (lastMessage.role === "assistant") {
+    messages.value.splice(messages.value.length - 1, 1);
+  }
 
   const answerOptions = {
     id: String(Math.random()),
@@ -470,6 +482,7 @@ const handleReSend = async () => {
       const decoder = new TextDecoder();
       while (true) {
         const { done, value } = await reader.read();
+
         if (done) {
           break;
         }
@@ -533,15 +546,16 @@ const sendMessage = async (
 };
 
 onMounted(async () => {
-  await getTypeData();
-
-  nextTick(async () => {
+  setTimeout(async () => {
     chatId.value = Number(route.params.id);
+    typeCode.value = route.query.typeCode || "";
+
+    await getTypeData();
     if (chatId.value) {
       chatLoading.value = true;
       await getChatData(chatId.value);
       await getContextData(chatId.value);
     }
-  });
+  }, 300);
 });
 </script>

@@ -22,7 +22,7 @@
             @success="onUploadSuccess"
             @fail="onUploadError"
           >
-            <t-button theme="primary">
+            <t-button theme="default">
               <template #icon>
                 <t-icon name="file-import"></t-icon>
               </template>

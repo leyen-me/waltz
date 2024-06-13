@@ -44,6 +44,7 @@
   --gpt-border-radius: 12px;
 
   --web-vuepress-markdown-body-bg: var(--web-bg-1);
+  --web-vuepress-markdown-body-padding: 0;
 }
 
 html,
@@ -213,7 +214,7 @@ body,
   border-radius: var(--gpt-border-radius);
   background-color: var(--web-vuepress-markdown-body-bg) !important;
   color: var(--web-color-14) !important;
-  padding: 16px !important;
+  padding: var(--web-vuepress-markdown-body-padding) !important;
 }
 
 .vuepress-markdown-body div[class*="v-md-pre-wrapper-"] {
@@ -255,7 +256,7 @@ body,
 }
 
 .vuepress-markdown-body hr {
-  border-color:  var(--web-border-2);
+  border-color: var(--web-border-2);
   margin: 16px 0;
 }
 
@@ -344,7 +345,6 @@ body,
   color: var(--web-color-9);
 }
 
-
 @media (min-width: 1024px) {
   .v-md-editor__toolbar {
     padding-left: calc(285.33px + 22px);
@@ -372,7 +372,8 @@ body,
     height: 100% !important;
   }
 
+  /* 电脑端显示 */
   .vuepress-markdown-body {
-    padding: 48px 32px 0 !important;
+    /* --web-vuepress-markdown-body-padding: 48px 32px 0; */
   }
 }
