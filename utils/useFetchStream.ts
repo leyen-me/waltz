@@ -34,6 +34,8 @@ const useFetchStream = async ({
     },
     body: JSON.stringify({ ...body, stream }),
   });
+
+  
   if (!stream) {
     answer = (await res.json()).choices[0].message?.content;
     if (success) {
@@ -54,6 +56,7 @@ const useFetchStream = async ({
           }
           try {
             const json = JSON.parse(data);
+            
             const text = json.choices[0].delta?.content || "";
             // check if it receives chunked data from chatgpt API
             if (counter < 2 && (text.match(/\n/) || []).length) {

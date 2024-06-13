@@ -17,7 +17,6 @@ export default class Article extends BaseModel<Article> {
   declare likesCount: number;
   declare commentsCount: number;
   declare sort: number;
-  declare html: string;
 
   public author?: string;
   public categoryTitle?: string;
@@ -66,11 +65,6 @@ export default class Article extends BaseModel<Article> {
         type: DataTypes.TEXT({ length: 'long' }),
         allowNull: false,
         comment: "文章内容",
-      },
-      html: {
-        type: DataTypes.TEXT({ length: 'long' }),
-        allowNull: false,
-        comment: "文章HTML",
       },
       authorId: {
         type: DataTypes.BIGINT({ length: 20 }),
