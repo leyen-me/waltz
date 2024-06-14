@@ -1,4 +1,5 @@
 # MySql
+
 ```bash
 sudo apt-get install -y docker.io
 sudo docker run -idt -p 3306:3306 \
@@ -41,7 +42,7 @@ sudo pnpm build
 cd .output/server/
 
 # 后台运行
-sudo node index.mjs &
+nohup sudo node index.mjs &
 
 # 当你需要停止服务时
 ps aux
