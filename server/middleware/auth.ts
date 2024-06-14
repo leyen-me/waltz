@@ -2,8 +2,11 @@ import { secretKey, whiteList } from "../config";
 import User from "../models/User";
 import jwt from "jsonwebtoken";
 import MenuService from "../service/MenuService";
+import AuthNoAuthorizationError from "../error/sys/auth/AuthNoAuthorizationError";
+import AuthUserError from "../error/sys/auth/AuthUserError";
+import AuthInvalidError from "../error/sys/auth/AuthInvalidError";
 
-export default defineEventHandler(async (event) => {
+export default defineWrappedResponseHandler(async (event) => {
   // 拦截所有api请求
   // 非api请求直接通过
   if (!event.path.startsWith("/api")) {
@@ -12,7 +15,9 @@ export default defineEventHandler(async (event) => {
 
   // web的直接通过
   if (event.path.startsWith("/api/web")) {
-    const token = event.headers.get("Authorization") || getQuery(event).Authorization as string;
+    const token =
+      event.headers.get("Authorization") ||
+      (getQuery(event).Authorization as string);
     try {
       const decoded = jwt.verify(token, secretKey) as { id: string };
       const userId = decoded.id;
@@ -21,7 +26,7 @@ export default defineEventHandler(async (event) => {
           id: userId,
         },
       });
-      event.context.user = user
+      event.context.user = user;
     } catch (err) {
       event.context.user = null;
     }
@@ -33,12 +38,15 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  const token = event.headers.get("Authorization") || getQuery(event).Authorization as string;
+  const token =
+    event.headers.get("Authorization") ||
+    (getQuery(event).Authorization as string);
   if (!token) {
-    return defineError({ code: 401, msg: "请先登录" })
+    throw new AuthNoAuthorizationError();
   }
 
   try {
+    // 解析TOKEN
     const decoded = jwt.verify(token, secretKey) as { id: string };
     const userId = decoded.id;
     const user = await User.findOne({
@@ -46,19 +54,17 @@ export default defineEventHandler(async (event) => {
         id: userId,
       },
     });
-    
+
+    // 认证
     if (!user) {
-      return defineError({ code: 401, msg: "用户不存在" })
+      throw new AuthUserError();
     }
+
+    // 权限
     const menuService = new MenuService();
-
     user.authorityList = await menuService.getUserAuthority(user);
-    
-    event.context.user = user
-
+    event.context.user = user;
   } catch (err) {
-    console.log(err);
-    return defineError({ code: 401, msg: "token无效" })
+    throw new AuthInvalidError();
   }
 });
-

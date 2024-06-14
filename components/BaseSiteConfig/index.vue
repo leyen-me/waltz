@@ -25,6 +25,7 @@
 
         <!-- dict -->
         <t-select
+          @change="handleSave(v)"
           v-else-if="v.type === 'dict'"
           :disabled="!v.isChange"
           v-model="v.value"
@@ -42,7 +43,9 @@
           clearable
         ></t-input>
       </t-form-item>
-      <template v-if="v.value === 'true' && v.children && v.children.length > 0">
+      <template
+        v-if="v.value === 'true' && v.children && v.children.length > 0"
+      >
         <BaseSiteConfig
           :children="v.children"
           @change="(e) => handleSave(e)"

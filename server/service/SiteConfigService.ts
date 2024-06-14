@@ -1,6 +1,7 @@
 import SiteConfig from '@/server/models/SiteConfig';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes, Op, Order } from 'sequelize';
+import { getAllSiteConfigs } from '../utils/siteConfigUtil';
 
 export default class SiteConfigService extends BaseService<SiteConfig> {
     constructor() {
@@ -21,6 +22,8 @@ export default class SiteConfigService extends BaseService<SiteConfig> {
         await defineTransactionWrapper(async (transaction) => {
             await this.update(configData, { where: { id: configId }, transaction });
         });
+        // 强制更新缓存
+        await getAllSiteConfigs({ update:true })
     }
 
     async deleteSiteConfig(configIds: number[]): Promise<void> {
@@ -36,10 +39,12 @@ export default class SiteConfigService extends BaseService<SiteConfig> {
     async getAllSiteConfigs(key?: string, asc: boolean = true, isShow?: number): Promise<SiteConfig[]> {
         const whereClause: any = {};
 
+        // 检索
         if (key) {
             whereClause.key = { [Op.like]: `%${key}%` };
         }
-    
+        
+        // 防止密码泄露
         if (isShow) {
             whereClause.isShow = isShow;
         }

@@ -1,10 +1,7 @@
-import SiteConfigService from '@/server/service/SiteConfigService';
-import { listToTree } from '~/common/utils/treeUtil';
-
-const siteConfigService = new SiteConfigService();
+import { listToTree } from "~/common/utils/treeUtil";
+import { getAllSiteConfigs } from "~/server/utils/siteConfigUtil";
 
 export default defineWrappedResponseHandler(async (event) => {
-    const { key } = getQuery(event);
-    let result = await siteConfigService.getAllSiteConfigs(key as string, true, 1);
-    return defineOk({ data: listToTree(result, "id", "pid", 0) });
+  const { sceretSiteList } = await getAllSiteConfigs({});
+  return defineOk({ data: listToTree(sceretSiteList, "id", "pid", 0) });
 });

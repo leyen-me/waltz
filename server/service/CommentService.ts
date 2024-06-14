@@ -3,6 +3,8 @@ import BaseService from "@/server/base/BaseService";
 import { CreationAttributes, Op, QueryTypes } from "sequelize";
 import User from "../models/User";
 import sequelize from "../db";
+import CommentNotFoundError from "../error/art/comment/CommentNoFoundError";
+import CommentDeleteHasChildError from "../error/art/comment/CommentDeleteHasChildError";
 
 export default class CommentService extends BaseService<Comment> {
     constructor() {
@@ -227,13 +229,13 @@ export default class CommentService extends BaseService<Comment> {
             const comment = await Comment.findByPk(commentId, { transaction });
 
             if (!comment) {
-                throw new Error(`找不到 ID 为 ${commentId} 的评论。`);
+                throw new CommentNotFoundError()
             }
 
             const childrenCount = await Comment.count({ where: { pid: commentId }, transaction });
 
             if (childrenCount > 0) {
-                throw new Error(`无法删除 ID 为 ${commentId} 的评论，因为它有子评论。`);
+                throw new CommentDeleteHasChildError()
             }
 
             // 删除评论
@@ -247,7 +249,7 @@ export default class CommentService extends BaseService<Comment> {
         // 检查评论是否存在以及是否属于当前用户
         const comment = await Comment.findOne({ where: { articleId, userId } });
         if (!comment) {
-            throw new Error('评论不存在!');
+            throw new CommentNotFoundError()
         }
         // 删除评论
         await this.delete({ where: { articleId, userId } });

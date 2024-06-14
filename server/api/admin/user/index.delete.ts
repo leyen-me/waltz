@@ -1,4 +1,5 @@
 import UserService from '@/server/service/UserService';
+import UserDeleteSelfError from '~/server/error/sys/user/UserDeleteSelfError';
 
 const userService = new UserService();
 
@@ -7,9 +8,8 @@ export default defineWrappedResponseHandler(async (event) => {
 
     const ids: number[] = await readBody(event);
     if (ids.includes(event.context.user.id)) {
-        return defineError({ msg: "不能删除当前登录用户" });
+        throw new UserDeleteSelfError()
     }
-
     await userService.deleteUsers(ids);
     return defineOk({});
 });

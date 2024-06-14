@@ -1,6 +1,7 @@
 import User from "@/server/models/User";
 import jwt from "jsonwebtoken";
 import { secretKey } from "@/server/config";
+import AuthNoAuthorizationError from "~/server/error/sys/auth/AuthUsernameOrPasswordError";
 
 export default defineWrappedResponseHandler(async (event) => {
   // 账号/密码
@@ -15,11 +16,11 @@ export default defineWrappedResponseHandler(async (event) => {
 
   // 没有用户
   if (!user) {
-    return defineError({ msg: "账号或密码错误" });
+    throw new AuthNoAuthorizationError()
   }
 
   // 密码校验
-  await defineVerifyHash(password, user.password, "账号或密码错误");
+  await defineVerifyHash(password, user.password);
 
   // 用户信息
   const userInfo = {

@@ -1,4 +1,5 @@
 import MenuService from '@/server/service/MenuService';
+import MenuDeleteHasChildError from '~/server/error/sys/menu/MenuDeleteHasChildError';
 
 const menuService = new MenuService();
 
@@ -7,7 +8,7 @@ export default defineWrappedResponseHandler(async (event) => {
     const id: number = await readBody(event);
     const hasChildStatus = await menuService.hasChildMenus(id);
     if (hasChildStatus) {
-        return defineError({ msg: "该菜单下有子菜单，不能直接删除父菜单" });
+        throw new MenuDeleteHasChildError()
     }
     await menuService.deleteMenu(id);
     return defineOk({});

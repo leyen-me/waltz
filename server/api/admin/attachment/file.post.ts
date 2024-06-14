@@ -7,13 +7,9 @@ export default defineWrappedResponseHandler(async (event) => {
 
   const attachmentsData = await readFormData(event);
   const { pid } = getQuery(event);
-
-  if (!attachmentsData) {
-    return defineError({ msg: "请选择需要上传的文件" });
-  }
-
   const result = await attachmentService.uploadFiles(
-    attachmentsData, pid as number
+    attachmentsData,
+    pid as number
   );
   return defineOk({ data: result });
 });

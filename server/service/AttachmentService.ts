@@ -2,6 +2,7 @@ import fs from 'fs';
 import { CreationAttributes } from 'sequelize';
 import Attachment from '../models/Attachment';
 import { defineUploadFile, defineValidateFile, defineGetFileExtension, defineDeleteFile, defineCreateFolder } from '../utils/fileUtil';
+import AttachmentNotFoundError from '../error/sys/attachment/AttachmentNotFoundError';
 
 export default class AttachmentService {
 
@@ -33,10 +34,7 @@ export default class AttachmentService {
             type: 'folder',
         });
 
-        if (!createdFolder.id) {
-            throw new Error('Failed to create folder');
-        }
-        return createdFolder.id;
+        return createdFolder.id as number;
     }
 
 
@@ -110,7 +108,7 @@ export default class AttachmentService {
         const { NUXT_API_UPLOAD_BASE } = useRuntimeConfig().public;
         const attachment = await Attachment.findByPk(id);
         if (!attachment) {
-            throw new Error('Attachment not found');
+            throw new AttachmentNotFoundError()
         }
 
         if (attachment.isFolder) {

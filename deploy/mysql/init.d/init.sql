@@ -221,6 +221,7 @@ COMMIT;
 -- ----------------------------
 -- Table structure for t_favorite
 -- ----------------------------
+DROP TABLE IF EXISTS `t_favorite`;
 CREATE TABLE `t_favorite` (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `user_id` bigint(0) NOT NULL COMMENT '用户id',
@@ -240,6 +241,7 @@ COMMIT;
 -- ----------------------------
 -- Table structure for t_like
 -- ----------------------------
+DROP TABLE IF EXISTS `t_like`;
 CREATE TABLE `t_like` (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `user_id` bigint(0) NOT NULL COMMENT '用户id',
@@ -306,6 +308,8 @@ CREATE TABLE `t_dict_data`  (
 -- ----------------------------
 BEGIN;
 INSERT INTO `t_dict_data`(`id`, `type_id`, `label`, `value`, `label_class`, `remark`, `sort`, `created_at`, `updated_at`) VALUES (1, 1, '默认', 'Default', 'primary', '默认主题', 0, '2024-05-21 17:04:19', '2024-05-21 17:04:19');
+INSERT INTO `t_dict_data`(`id`, `type_id`, `label`, `value`, `label_class`, `remark`, `sort`, `created_at`, `updated_at`) VALUES (2, 2, '发布时间', 'published_at', 'primary', '发布时间', 0, '2024-05-21 17:04:19', '2024-05-21 17:04:19');
+INSERT INTO `t_dict_data`(`id`, `type_id`, `label`, `value`, `label_class`, `remark`, `sort`, `created_at`, `updated_at`) VALUES (3, 2, '创建时间', 'created_at', 'primary', '创建时间', 0, '2024-05-21 17:04:19', '2024-05-21 17:04:19');
 COMMIT;
 
 -- ----------------------------
@@ -328,6 +332,7 @@ CREATE TABLE `t_dict_type`  (
 -- ----------------------------
 BEGIN;
 INSERT INTO `t_dict_type`(`id`, `dict_type`, `dict_name`, `remark`, `sort`, `created_at`, `updated_at`) VALUES (1, 'theme', '主题', '主题', 0, '2024-05-21 17:03:07', '2024-05-21 17:03:07');
+INSERT INTO `t_dict_type`(`id`, `dict_type`, `dict_name`, `remark`, `sort`, `created_at`, `updated_at`) VALUES (2, 'article_sort', '文章排序', '文章排序', 0, '2024-05-21 17:03:07', '2024-05-21 17:03:07');
 COMMIT;
 
 -- ----------------------------
@@ -520,12 +525,13 @@ INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `t
 INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (3, NULL, 1, 'theme', '站点主题', 'Default', 'dict', 'theme', NULL, 1, 1, 1, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (4, NULL, 1, 'desc', '站点详情', 'Here I will share insights, tips, and tutorials on website development and also thoughts on the latest trends and technologies in the field.v', 'textarea', NULL, NULL, 1, 1, 2, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (5, NULL, 1, 'login', '站点登录', 'false', 'boolean', NULL, NULL, 1, 1, 3, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (6, NULL, 1, 'comment', '站点评论', 'false', 'boolean', NULL, NULL, 1, 1, 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (6, 27, 1, 'comment', '站点评论', 'false', 'boolean', NULL, NULL, 1, 1, 4, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (7, NULL, 1, 'footer', '站点页脚', 'false', 'boolean', NULL, NULL, 1, 1, 5, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (8, 76, 0, 'chatgpt', '大模型', 'false', 'boolean', NULL, NULL, 1, 0, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
-INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (9, NULL, 8, 'url', '链接', '', 'string', NULL, NULL, 1, 0, 0, '2024-05-20 13:14:00', '2024-06-04 16:29:59');
-INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (10, NULL, 8, 'model', '模型名称', '', 'string', NULL, NULL, 1, 0, 1, '2024-05-20 13:14:00', '2024-06-04 16:29:43');
-INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (11, NULL, 8, 'key', '密钥', '', 'string', NULL, NULL, 1, 0, 2, '2024-05-20 13:14:00', '2024-06-04 16:30:26');
+INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (8, NULL, 1, 'sort', '文章排序', 'published_at', 'dict', 'article_sort', NULL, 1, 1, 6, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (9, 76, 0, 'chatgpt', '大模型', 'false', 'boolean', NULL, NULL, 1, 0, 0, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (10, NULL, 9, 'url', '链接', '', 'string', NULL, NULL, 1, 0, 0, '2024-05-20 13:14:00', '2024-06-04 16:29:59');
+INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (11, NULL, 9, 'model', '模型名称', '', 'string', NULL, NULL, 1, 0, 1, '2024-05-20 13:14:00', '2024-06-04 16:29:43');
+INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (12, NULL, 9, 'key', '密钥', '', 'string', NULL, NULL, 1, 0, 2, '2024-05-20 13:14:00', '2024-06-04 16:30:26');
 COMMIT;
 
 

@@ -4,7 +4,13 @@ import archiver, { ArchiverError } from "archiver";
 import AdmZip from "adm-zip";
 import Article from "@/server/models/Article";
 import BaseService from "@/server/base/BaseService";
-import { CreationAttributes, FindAndCountOptions, Op, QueryTypes, literal } from "sequelize";
+import {
+  CreationAttributes,
+  FindAndCountOptions,
+  Op,
+  QueryTypes,
+  literal,
+} from "sequelize";
 import { ArticleStatus } from "../enum";
 import sequelize from "../db";
 import ArticleTagService from "./ArticleTagService";
@@ -15,6 +21,10 @@ import { nanoid } from "nanoid";
 import ArticleRoleService from "./ArticleRoleService";
 import User from "../models/User";
 import { getAllModels } from "../utils/merge";
+import { getAllSiteConfigs } from "../utils/siteConfigUtil";
+import { getValue } from "~/common/utils/siteConfigUtil";
+import { CONFIG_KEY } from "~/common/constants";
+import { underscoreToCamelCase } from "~/common/utils/stringUtil";
 
 export default class ArticleService extends BaseService<Article> {
   private articleTagService = new ArticleTagService();
@@ -28,7 +38,8 @@ export default class ArticleService extends BaseService<Article> {
   }
 
   async selectPage(query: ArticleQuery): Promise<BasePageResponse<Article>> {
-    let { page, limit, asc, tagId, title, isSuperAdmin, userId, ...items } = query;
+    let { page, limit, asc, tagId, title, isSuperAdmin, userId, ...items } =
+      query;
 
     page = Number(page);
     limit = Number(limit);
@@ -110,11 +121,18 @@ export default class ArticleService extends BaseService<Article> {
       );
     }
 
+    const { siteConfigs } = await getAllSiteConfigs({});
+
     // 构建查询条件
     const options: FindAndCountOptions = {
       offset,
       limit,
-      order: [["published_at", asc ? "ASC" : "DESC"]],
+      order: [
+        [
+          getValue(siteConfigs, CONFIG_KEY.SITE.ARTICLE_SORT),
+          asc ? "ASC" : "DESC",
+        ],
+      ],
       where: {
         [Op.and]: whereConditions,
       },
@@ -163,7 +181,6 @@ export default class ArticleService extends BaseService<Article> {
     };
 
     const { rows, count } = await Article.findAndCountAll(options);
-
 
     const totalPages = Math.ceil(count / limit);
 
@@ -328,7 +345,7 @@ export default class ArticleService extends BaseService<Article> {
 
     // 将条件添加到查询中
     if (whereConditions.length > 0) {
-      query += ` AND (${whereConditions.join(' OR ')})`;
+      query += ` AND (${whereConditions.join(" OR ")})`;
     }
 
     // 完成查询
@@ -349,40 +366,63 @@ export default class ArticleService extends BaseService<Article> {
     return result ? result : null;
   }
 
-
   async getPreviousAndNextArticles(
     articleId: number,
     user: User | null,
     categoryId: number
   ): Promise<PreviouAndNextArticleResponse> {
+    // 从数据库动态拿配置
+    const { siteConfigs } = await getAllSiteConfigs({});
+    const articleOrderBy = underscoreToCamelCase(
+      getValue(siteConfigs, CONFIG_KEY.SITE.ARTICLE_SORT)
+    );
+
     // 获取当前文章
     const currentArticle = await Article.findOne({
       where: { id: articleId, categoryId },
-      attributes: ["id", "title", "publishedAt"],
+      attributes: ["id", "title", articleOrderBy],
     });
 
     if (!currentArticle) {
       return { previouArticle: null, nextArticle: null };
     }
 
-    const { publishedAt } = currentArticle;
+    // const { publishedAt = null, createdAt = null } = currentArticle;
+
+    let time: string | null = null;
+    if (currentArticle) {
+      time = currentArticle[articleOrderBy];
+    }
 
     // 构建公共条件
     const baseConditions: any = { categoryId };
     // 添加额外的条件数组
     const whereConditions: any[] = [];
 
-
     // 添加用户权限条件
     if (user) {
       if (!user.superAdmin) {
         whereConditions.push(
           sequelize.literal(
-            `EXISTS (
-                SELECT 1 
-                FROM t_article_role ar 
-                INNER JOIN t_user_role ur ON ar.role_id = ur.role_id 
-                WHERE ar.article_id = Article.id AND ur.user_id = :userId
+            `(
+              EXISTS (
+                SELECT
+                  1
+                FROM
+                  t_article_role ar2
+                  INNER JOIN t_user_role ur ON ar2.role_id = ur.role_id
+                WHERE
+                  ar2.article_id = Article.id
+                  AND ur.user_id = :userId
+              )
+              OR NOT EXISTS (
+                SELECT
+                  1
+                FROM
+                  t_article_role ar3
+                WHERE
+                  ar3.article_id = Article.id
+                )
               )`
           )
         );
@@ -402,50 +442,53 @@ export default class ArticleService extends BaseService<Article> {
     const replacements = { userId: user ? user.id : null };
 
     // 获取前一篇文章
-    const previouArticle = await Article.findOne({
+    const previouArticle = (await Article.findOne({
       where: {
         ...baseConditions,
         ...whereConditions,
         [Op.or]: [
-          { publishedAt: { [Op.lt]: publishedAt } },
-          { publishedAt: publishedAt, id: { [Op.lt]: articleId } } // 在publishedAt相同时，确保ID也小于当前文章的ID
+          { [articleOrderBy]: { [Op.lt]: time } },
+          { [articleOrderBy]: time, id: { [Op.lt]: articleId } }, // 在publishedAt相同时，确保ID也小于当前文章的ID
         ],
         id: { [Op.ne]: articleId },
       },
       order: [
-        ["publishedAt", "DESC"],
-        ["id", "DESC"]
+        [articleOrderBy, "DESC"],
+        ["id", "DESC"],
       ],
       attributes: ["id", "title"],
       replacements,
       limit: 1,
-    }) as Article;
+    })) as Article;
 
     // 获取下一篇文章
-    const nextArticle = await Article.findOne({
+    const nextArticle = (await Article.findOne({
       where: {
         ...baseConditions,
         ...whereConditions,
         [Op.or]: [
-          { publishedAt: { [Op.gt]: publishedAt } },
-          { publishedAt: publishedAt, id: { [Op.gt]: articleId } } // 在publishedAt相同时，确保ID也大于当前文章的ID
+          { [articleOrderBy]: { [Op.gt]: time } },
+          { [articleOrderBy]: time, id: { [Op.gt]: articleId } }, // 在publishedAt相同时，确保ID也大于当前文章的ID
         ],
         id: { [Op.ne]: articleId },
       },
       order: [
-        ["publishedAt", "ASC"],
-        ["id", "ASC"]
+        [articleOrderBy, "ASC"],
+        ["id", "ASC"],
       ],
       attributes: ["id", "title"],
       replacements,
       limit: 1,
-    }) as Article;
+    })) as Article;
 
     return { previouArticle, nextArticle };
   }
 
-
-  async getAllArticles(title: string, user: User | null, articleStatus?: string): Promise<Article[]> {
+  async getAllArticles(
+    title: string,
+    user: User | null,
+    articleStatus?: string
+  ): Promise<Article[]> {
     // 构建全文搜索查询条件
     const condition = literal(
       "MATCH(title,content) AGAINST(:title IN BOOLEAN MODE)"
@@ -486,7 +529,6 @@ export default class ArticleService extends BaseService<Article> {
       );
     }
 
-
     // 执行 findAll 方法并传递查询条件
     const articles = await Article.findAll({
       where: whereConditions,
@@ -521,9 +563,23 @@ export default class ArticleService extends BaseService<Article> {
       );
       const modelDatas = JSON.parse(data.toString());
 
-      // JSON导入到数据库
-      //@ts-ignore
-      await model.bulkCreate(modelDatas);
+      for (const data of modelDatas) {
+        // 检查是否存在ID
+        if (data.id) {
+          // 如果存在ID，则尝试更新
+          const existingRecord = await model.findByPk(data.id);
+          if (existingRecord) {
+            // 如果找到现有记录，则更新它
+            await existingRecord.update(data);
+          } else {
+            // 如果未找到现有记录，则创建新记录
+            await model.create(data);
+          }
+        } else {
+          // 如果不存在ID，则创建新记录
+          await model.create(data);
+        }
+      }
     });
 
     // 删除上传的zip文件
@@ -543,11 +599,13 @@ export default class ArticleService extends BaseService<Article> {
 
     const promises = getAllModels().map(async (model: any) => {
       const list = (await model.findAll()).map((item: any) => item.toJSON());
-      const modelJsonPath = path.resolve(NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json");
+      const modelJsonPath = path.resolve(
+        NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json"
+      );
       return fs.promises.writeFile(modelJsonPath, JSON.stringify(list));
     });
 
-    await Promise.all(promises)
+    await Promise.all(promises);
 
     const output = fs.createWriteStream(zipPath);
     const archive = archiver("zip", { zlib: { level: 9 } });
@@ -588,4 +646,3 @@ export interface PreviouAndNextArticleResponse {
   previouArticle: Article | null;
   nextArticle: Article | null;
 }
-

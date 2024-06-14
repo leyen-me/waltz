@@ -25,11 +25,11 @@ const useApi = async <T>(
   if (res === null) {
     let msg = "请求错误，请检查网络或服务器";
     error && MessagePlugin.error(msg);
-    throw Error(msg);
+    throw new Error(msg);
   }
   if (res.code === 500 || res.code === 403) {
     error && MessagePlugin.error(res.msg as string);
-    throw Error(res.msg);
+    throw new Error(res.msg);
   }
   if (res.code === 401) {
     if (error) {
@@ -37,7 +37,7 @@ const useApi = async <T>(
       useRouter().push("/admin/login");
     }
     // 重定向
-    throw Error(res.msg);
+    throw new Error(res.msg);
   }
   return res.data as T;
 };

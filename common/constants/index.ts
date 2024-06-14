@@ -9,6 +9,7 @@ export const CONFIG_KEY = {
     THEME: "site_theme",
     LOGIN: "site_login",
     COMMENT: "site_comment",
+    ARTICLE_SORT: "site_sort",
   },
   CHATGPT: {
     KEY: "chatgpt_key",

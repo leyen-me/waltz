@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import mime from 'mime';
 import { imageMimeTypes } from '~/common/utils/fileUtil';
+import AttachmentTypeInvalidError from '../error/sys/attachment/AttachmentTypeInvalidError';
+import AttachmentSizeExceedsLimitError from '../error/sys/attachment/AttachmentSizeExceedsLimitError';
 
 
 /**
@@ -105,11 +107,11 @@ export const defineValidateFile = (file: File): string => {
     allowedMimeTypes = allowedMimeTypes.concat(imageMimeTypes)
 
     if (!allowedMimeTypes.includes(mimeType)) {
-        throw new Error('Invalid file type');
+        throw new AttachmentTypeInvalidError()
     }
 
     if (file.size > maxFileSize) {
-        throw new Error('File size exceeds the limit');
+        throw new AttachmentSizeExceedsLimitError()
     }
     return mimeType;
 };

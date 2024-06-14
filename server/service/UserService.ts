@@ -2,6 +2,9 @@ import User from '@/server/models/User';
 import BaseService from '@/server/base/BaseService';
 import { CreationAttributes } from 'sequelize';
 import UserRoleService from '@/server/service/UserRoleService';
+import UserAlreadyExistsError from '../error/sys/user/UserAlreadyExistsError';
+import UserEmailAlreadyExistsError from '../error/sys/user/UserEmailAlreadyExistsError';
+import UserNameAlreadyExistsError from '../error/sys/user/UserNameAlreadyExistsError';
 
 export default class UserService extends BaseService<User> {
 
@@ -21,7 +24,7 @@ export default class UserService extends BaseService<User> {
             if (userData.username) {
                 const existingUserByUsername = await this.getByUsername(userData.username);
                 if (existingUserByUsername) {
-                    throw new Error("用户名已存在");
+                    throw new UserAlreadyExistsError()
                 }
             }
 
@@ -29,7 +32,7 @@ export default class UserService extends BaseService<User> {
             if (userData.email) {
                 const existingUserByEmail = await this.getByEmail(userData.email);
                 if (existingUserByEmail) {
-                    throw new Error("邮箱已存在");
+                    throw new UserEmailAlreadyExistsError()
                 }
             }
 
@@ -40,7 +43,10 @@ export default class UserService extends BaseService<User> {
             }
 
             const createUser = await this.create(userData, { transaction });
-            await this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
+
+            if(userData.roleIdList){
+                await this.userRoleService.saveOrUpdate(createUser.id as number, userData.roleIdList);
+            }
             return createUser.id as number;
         });
     }
@@ -51,7 +57,7 @@ export default class UserService extends BaseService<User> {
             if (userData.username) {
                 const existingUserByUsername = await this.getByUsername(userData.username);
                 if (existingUserByUsername && existingUserByUsername.id !== userId) {
-                    throw new Error("用户名已存在");
+                    throw new UserNameAlreadyExistsError()
                 }
             }
 
@@ -59,7 +65,7 @@ export default class UserService extends BaseService<User> {
             if (userData.email) {
                 const existingUserByEmail = await this.getByEmail(userData.email);
                 if (existingUserByEmail && existingUserByEmail.id !== userId) {
-                    throw new Error("邮箱已存在");
+                    throw new UserEmailAlreadyExistsError()
                 }
             }
 
