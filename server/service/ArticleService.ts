@@ -231,6 +231,8 @@ export default class ArticleService extends BaseService<Article> {
     await defineTransactionWrapper(async (transaction) => {
       if (articleData.status === ArticleStatus.values[1]) {
         articleData.publishedAt = new Date();
+      }else{
+        articleData.publishedAt = null
       }
       await this.update(articleData, { where: { id: articleId }, transaction });
 
