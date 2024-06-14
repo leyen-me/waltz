@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import archiver, { ArchiverError } from "archiver";
+import archiver, { ArchiverError, EntryData } from "archiver";
 import AdmZip from "adm-zip";
 import Article from "@/server/models/Article";
 import BaseService from "@/server/base/BaseService";
@@ -553,7 +553,7 @@ export default class ArticleService extends BaseService<Article> {
       path.resolve(NUXT_PUBLIC_FOLDER as string),
       true,
       false,
-      () => {
+      async () => {
         getAllModels().forEach(async (model: any) => {
           // 清除表
           // await model.destroy({
@@ -585,6 +585,8 @@ export default class ArticleService extends BaseService<Article> {
           }
         });
 
+        // 更新缓存
+        const { siteList } = await getAllSiteConfigs({});
         // 删除上传的zip文件
         fs.unlinkSync(filePath);
       }
@@ -611,7 +613,16 @@ export default class ArticleService extends BaseService<Article> {
     const output = fs.createWriteStream(zipPath);
     const archive = archiver("zip", { zlib: { level: 9 } });
     archive.pipe(output);
-    archive.directory(path.resolve(NUXT_PUBLIC_FOLDER) as string, false);
+    archive.directory(
+      path.resolve(NUXT_PUBLIC_FOLDER) as string,
+      false,
+      (entry) => {
+        if (entry.name.includes("_nuxt")) {
+          return false;
+        }
+        return entry;
+      }
+    );
     archive.finalize();
 
     function wait() {

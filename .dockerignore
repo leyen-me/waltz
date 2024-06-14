@@ -22,4 +22,5 @@ logs
 # public static resources
 public/attachment
 public/*.json
+public/_nuxt
 !public/
