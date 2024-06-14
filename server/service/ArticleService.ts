@@ -549,45 +549,46 @@ export default class ArticleService extends BaseService<Article> {
     const { filePath } = await defineUploadFile(file, NUXT_TEMP_FOLDER + "/");
     // 解压文件到附件
     const zip = new AdmZip(path.resolve(filePath));
-    zip.extractAllToAsync(path.resolve(NUXT_PUBLIC_FOLDER as string), true);
+    zip.extractAllToAsync(
+      path.resolve(NUXT_PUBLIC_FOLDER as string),
+      true,
+      false,
+      () => {
+        getAllModels().forEach(async (model: any) => {
+          // 清除表
+          // await model.destroy({
+          //   where: {},
+          // });
 
-    getAllModels().forEach(async (model: any) => {
-      // 清除表
-      await model.destroy({
-        where: {},
-      });
+          // 读取数据
+          const data = fs.readFileSync(
+            path.resolve(NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json")
+          );
+          const modelDatas = JSON.parse(data.toString());
 
-      // 读取数据
-      const data = fs.readFileSync(
-        path.resolve(NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json")
-      );
-      const modelDatas = JSON.parse(data.toString());
-
-      for (const data of modelDatas) {
-        // 检查是否存在ID
-        if (data.id) {
-          // 如果存在ID，则尝试更新
-          const existingRecord = await model.findByPk(data.id);
-          if (existingRecord) {
-            // 如果找到现有记录，则更新它
-            await existingRecord.update(data);
-          } else {
-            // 如果未找到现有记录，则创建新记录
-            await model.create(data);
+          for (const data of modelDatas) {
+            // 检查是否存在ID
+            if (data.id) {
+              // 如果存在ID，则尝试更新
+              const existingRecord = await model.findByPk(data.id);
+              if (existingRecord) {
+                // 如果找到现有记录，则更新它
+                await existingRecord.update(data);
+              } else {
+                // 如果未找到现有记录，则创建新记录
+                await model.create(data);
+              }
+            } else {
+              // 如果不存在ID，则创建新记录
+              await model.create(data);
+            }
           }
-        } else {
-          // 如果不存在ID，则创建新记录
-          await model.create(data);
-        }
-      }
-    });
+        });
 
-    // 删除上传的zip文件
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.error("Error deleting the zip file:", err);
+        // 删除上传的zip文件
+        fs.unlinkSync(filePath);
       }
-    });
+    );
   }
 
   async exportArticle() {
@@ -632,12 +633,7 @@ export default class ArticleService extends BaseService<Article> {
     const zipFileContent = fs.readFileSync(zipPath);
 
     // 删除导出的zip文件
-    fs.unlink(zipPath, (err) => {
-      if (err) {
-        console.error("Error deleting the zip file:", err);
-      }
-    });
-
+    fs.unlinkSync(zipPath);
     return zipFileContent;
   }
 }
