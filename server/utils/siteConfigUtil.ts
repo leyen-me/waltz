@@ -25,6 +25,8 @@ export const getAllSiteConfigs = async ({
   if ((!siteConfigs && siteList.length == 0) || update) {
     siteList = await siteConfigService.getAllSiteConfigs();
     sceretSiteList = await siteConfigService.getAllSiteConfigs("", true, 1);
+
+    
     siteConfigs = buildMap(siteList);
   }
   return {

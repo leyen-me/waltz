@@ -19,6 +19,14 @@ import createHighlightLinesPlugin from "@kangc/v-md-editor/lib/plugins/highlight
 // 支持复制代码
 import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
 
+import "prismjs/components/prism-java"
+import "prismjs/components/prism-bash"
+import "prismjs/components/prism-typescript"
+import "prismjs/components/prism-sql"
+import "prismjs/components/prism-python"
+import "prismjs/components/prism-docker"
+import "@/components/BaseEditor/languages/vue"
+
 const emits = defineEmits(["update:modelValue", "save"]);
 const props = defineProps({
   modelValue: {

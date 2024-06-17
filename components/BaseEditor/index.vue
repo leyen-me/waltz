@@ -59,6 +59,14 @@ import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index
 import createInfoPlugin from "./plugins/info";
 import createVideoPlugin from "./plugins/video";
 
+import "prismjs/components/prism-java"
+import "prismjs/components/prism-bash"
+import "prismjs/components/prism-typescript"
+import "prismjs/components/prism-sql"
+import "prismjs/components/prism-python"
+import "prismjs/components/prism-docker"
+import "./languages/vue"
+
 const emits = defineEmits(["update:modelValue", "save", "info", "video", "upload"]);
 const props = defineProps({
   modelValue: {
