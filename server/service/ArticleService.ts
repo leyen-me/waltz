@@ -144,7 +144,7 @@ export default class ArticleService extends BaseService<Article> {
         "content",
         [
           sequelize.literal(
-            "(SELECT t1.title FROM t_category t1 left join t_article t2 on t1.id = t2.category_id LIMIT 1)"
+            "(SELECT t1.title FROM t_category t1 WHERE t1.id = Article.category_id LIMIT 1)"
           ),
           "categoryTitle",
         ],
@@ -231,8 +231,8 @@ export default class ArticleService extends BaseService<Article> {
     await defineTransactionWrapper(async (transaction) => {
       if (articleData.status === ArticleStatus.values[1]) {
         articleData.publishedAt = new Date();
-      }else{
-        articleData.publishedAt = null
+      } else {
+        articleData.publishedAt = null;
       }
       await this.update(articleData, { where: { id: articleId }, transaction });
 
@@ -587,8 +587,8 @@ export default class ArticleService extends BaseService<Article> {
           }
         });
 
-        // 更新缓存
-        const { siteList } = await getAllSiteConfigs({});
+        // 强制更新缓存
+        await getAllSiteConfigs({ update: true });
         // 删除上传的zip文件
         fs.unlinkSync(filePath);
       }

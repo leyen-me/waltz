@@ -20,8 +20,8 @@ export const getAllSiteConfigs = async ({
   sceretSiteList: SiteConfig[];
   siteConfigs: Map<any, any>;
 }> => {
+
   // 没有缓存就获取
-  //todo：修改的时候记得更新缓存
   if ((!siteConfigs && siteList.length == 0) || update) {
     siteList = await siteConfigService.getAllSiteConfigs();
     sceretSiteList = await siteConfigService.getAllSiteConfigs("", true, 1);

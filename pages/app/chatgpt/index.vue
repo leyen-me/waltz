@@ -84,15 +84,6 @@
     <div
       class="sticky top-0 z-40 flex items-center gap-x-6 px-4 py-4 shadow-sm sm:px-6 lg:hidden bg-[var(--web-bg-7)]"
     >
-      <!-- <button
-        type="button"
-        class="-m-2.5 p-2.5 lg:hidden"
-        @click="sidebarOpen = true"
-      >
-        <span class="sr-only">Open sidebar</span>
-        <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-      </button> -->
-
       <t-button
         @click="sidebarOpen = true"
         shape="square"
@@ -101,15 +92,13 @@
       >
         <t-icon name="system-3"></t-icon>
       </t-button>
-      标题
-
-      <!-- <el-text truncated class="flex-1 text-sm font-semibold leading-6 text-gray-900">
-            {{
+      <span class="w-full line-clamp-1 pr-4">
+        {{
           chatList.find((chat) => chat.id === currentChatId)
             ? chatList.find((chat) => chat.id === currentChatId).title
             : ""
-            }}
-          </el-text> -->
+        }}
+      </span>
     </div>
 
     <main class="flex-1 lg:w-0" :key>
@@ -226,10 +215,13 @@ const handleDelete = (chat: Chat) => {
   });
 };
 
-if (!currentChatId.value) {
-  if (!query) {
-    handleAdd();
+onMounted(() => {
+  if (!currentChatId.value) {
+    if (!query.value.typeCode) {
+      handleAdd();
+    }
   }
-}
-getData();
+
+  getData();
+});
 </script>

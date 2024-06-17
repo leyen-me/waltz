@@ -114,10 +114,12 @@
           </div>
           <div class="mt-10 flex">
             <span>{{ v.categoryTitle }}</span
-            ><span class="mx-2">/</span
-            ><span class="text-[var(--web-color-1)] w-0 flex-1 line-clamp-1">
-              {{ v.tagList && String(v.tagList).split(",").join(" • ") }}
-            </span>
+            >  
+          <template v-if="v.tagList">
+              <span class="mx-2">/</span><span class="text-[var(--web-color-1)] w-0 flex-1 line-clamp-1">
+                {{ v.tagList && String(v.tagList).split(",").join(" • ") }}
+              </span>
+          </template>
           </div>
           <div class="mt-3 relative">
             <h2
@@ -241,7 +243,7 @@ const onUploadSuccess = async (e: any) => {
     MessagePlugin.error(msg);
     return;
   }
-  MessagePlugin.success("导入成功");
+  MessagePlugin.success("导入成功, 请刷新页面");
   files.value = [];
   await getData();
 };

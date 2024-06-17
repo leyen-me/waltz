@@ -27,9 +27,9 @@
         </h1>
         <p
           id="home-title-3"
-          class="mt-4 mb-24 text-xl opacity-80 tracking-wider font-silka-regular"
+          class="mt-4 mb-24 text-xl opacity-80 tracking-wider font-silka-regular min-h-7"
         >
-          {{ getValue(appStore.siteConfig, CONFIG_KEY.SITE.DESC) }}
+          <Typewriter :text="siteDesc"></Typewriter>
         </p>
       </div>
 
@@ -172,6 +172,10 @@ const appStore = useAppStore();
 
 const route = useRoute();
 const _categoryId = ref(route.query.categoryId);
+
+const siteDesc = computed(() => {
+  return getValue(appStore.siteConfig, CONFIG_KEY.SITE.DESC);
+});
 
 onBeforeRouteUpdate((n, o) => {
   _categoryId.value = "";

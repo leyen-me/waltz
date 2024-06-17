@@ -41,6 +41,7 @@ const save = async ({ id, value, menuId }: SiteConfig) => {
     if (menuId) {
       await appStore.initSystem();
     }
+    // await getData()
   } catch (error) {
     MessagePlugin.error("修改失败");
   }
