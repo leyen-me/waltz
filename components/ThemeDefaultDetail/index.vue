@@ -195,6 +195,9 @@ import {
 import type Comment from "@/server/models/Comment";
 import type { SubmitContext } from "tdesign-vue-next/es/form";
 import useUserStore from "~/stores/userStore";
+import { gsap } from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 
 const props = defineProps({
   id: {
@@ -426,14 +429,26 @@ const tagIdList = computed(() => article.value.tagIdList!.split(","));
 
 onMounted(() => {
   if (process.browser) {
+
+    // 修改网站标题
     if (article.value) {
       // @ts-ignore
       window.document.title = article.value.author + "-" + article.value.title;
     }
+
+    // 隐藏滚动条
     const html = document.querySelector("html");
     if (html) {
       html.classList.add("scrollbar-hidden");
     }
+
+    // 添加滚动特效
+    const lenis = new Lenis();
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
   }
 });
 </script>
