@@ -115,7 +115,12 @@
         v-for="(v, k) in messages"
         :key="v.id"
       >
-        <BasePreview v-model="v.content"></BasePreview>
+        <div class="w-full flex justify-end" v-if="v.role === 'user'">
+          <p class="bg-[var(--web-bg-1)] px-6 py-4 mr-0 rounded-md lg:mr-5 whitespace-pre-wrap">
+            {{ v.content }}
+          </p>
+        </div>
+        <BasePreview v-else v-model="v.content"></BasePreview>
         <div v-if="!loading" class="flex justify-end mt-3 h-8">
           <div class="hidden group-hover:block">
             <t-space size="8px">
