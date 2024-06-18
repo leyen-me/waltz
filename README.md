@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/difffffft/open-nuxt-blog.git/" target="_blank">
+  <a href="https://github.com/difffffft/walzt.git/" target="_blank">
     <img alt="TDesign Logo" height="26" src="./public/favicon.svg">
     <span style="font-size:34px;font-weight:900;">Walzt</span>
   </a>
@@ -43,7 +43,7 @@ mysql v5.7+
 # 📦 Installation and Usage
 
 ```shell
-git clone https://github.com/difffffft/open-nuxt-blog.git
+git clone https://github.com/difffffft/walzt.git
 
 pnpm i
 
