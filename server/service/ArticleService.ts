@@ -141,7 +141,7 @@ export default class ArticleService extends BaseService<Article> {
         "id",
         "title",
         "cover",
-        "content",
+        // "content",
         [
           sequelize.literal(
             "(SELECT t1.title FROM t_category t1 WHERE t1.id = Article.category_id LIMIT 1)"
