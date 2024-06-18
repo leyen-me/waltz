@@ -13,9 +13,15 @@
           <t-button variant="text" style="padding: 0">/</t-button>
         </div>
       </div>
-      <div class="mt-4 flex justify-end">
+      <div class="mt-4 flex justify-between">
+        <t-button v-if="pid !== 0" @click="handleParentClick" theme="default" variant="text">
+          <template #icon>
+            <t-icon name="rollback"></t-icon>
+          </template>
+          返回
+        </t-button>
+        <div v-else></div>
         <t-space>
-          <t-button v-if="pid !== 0" @click="handleParentClick">返回</t-button>
           <t-button @click="folderItems[1].onClick">上传</t-button>
           <t-button @click="folderItems[0].onClick">新建文件夹</t-button>
         </t-space>
@@ -250,6 +256,7 @@ const columns = [
               <TLink
                 variant="text"
                 hover="color"
+                disabled={row.id === 1}
                 theme="danger"
                 onClick={(e: MouseEvent) => {
                   e.stopPropagation();
