@@ -100,6 +100,9 @@
       :title="getValue(appStore.siteConfig, CONFIG_KEY.SITE.TITLE)"
       v-if="getValue(appStore.siteConfig, CONFIG_KEY.SITE.FOOTER)"
     ></Footer>
+
+    <!-- 光标 -->
+    <Cursor :list home v-if="getValue(appStore.siteConfig, CONFIG_KEY.SITE.CURSOR)"></Cursor>
   </div>
 </template>
 
@@ -107,6 +110,7 @@
 import Header from "./header.vue";
 import Footer from "./footer.vue";
 import List from "./list.vue";
+import Cursor from "./cursor.vue";
 import useAppStore from "~/stores/appStore";
 import type Article from "~/server/models/Article";
 import type Category from "~/server/models/Category";

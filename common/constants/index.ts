@@ -10,6 +10,7 @@ export const CONFIG_KEY = {
     LOGIN: "site_login",
     COMMENT: "site_comment",
     ARTICLE_SORT: "site_sort",
+    CURSOR: "site_cursor",
   },
   CHATGPT: {
     KEY: "chatgpt_key",

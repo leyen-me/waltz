@@ -170,6 +170,7 @@
   </div>
 
   <Footer :title="String(article && article.author)"></Footer>
+  <Cursor :list="[]" :home="false" v-if="browser && isShowCursor"></Cursor>
 </template>
 
 <script setup lang="ts">
@@ -179,6 +180,7 @@ import {
 } from "~/api/web/article";
 import Header from "../ThemeDefault/header.vue";
 import Footer from "../ThemeDefault/footer.vue";
+import Cursor from "../ThemeDefault/cursor.vue";
 import type Article from "~/server/models/Article";
 import useImageUrl from "@/utils/imageUrl";
 import useAppStore from "~/stores/appStore";
@@ -210,6 +212,8 @@ const browser = computed(() => process.browser);
 const isShowComment = ref(
   getValue(appStore.siteConfig, CONFIG_KEY.SITE.COMMENT)
 );
+
+const isShowCursor = ref(getValue(appStore.siteConfig, CONFIG_KEY.SITE.CURSOR));
 
 // 评论
 const commmentList = ref<Comment[]>([]);

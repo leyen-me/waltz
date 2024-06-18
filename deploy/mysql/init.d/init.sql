@@ -531,7 +531,8 @@ INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `t
 INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (9, NULL, 8, 'url', '链接', '', 'string', NULL, NULL, 1, 0, 0, '2024-05-20 13:14:00', '2024-06-04 16:29:59');
 INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (10, NULL, 8, 'model', '模型名称', '', 'string', NULL, NULL, 1, 0, 1, '2024-05-20 13:14:00', '2024-06-04 16:29:43');
 INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (11, NULL, 8, 'key', '密钥', '', 'string', NULL, NULL, 1, 0, 2, '2024-05-20 13:14:00', '2024-06-04 16:30:26');
-INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (12, NULL, 1, 'sort', '文章排序', 'published_at', 'dict', 'article_sort', NULL, 1, 1, 6, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (12, NULL, 1, 'sort', '文章排序', 'published_at', 'dict', 'article_sort', NULL, 1, 1, 7, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
+INSERT INTO `t_site_config`(`id`, `menu_id`, `pid`, `code`, `title`, `value`, `type`, `dict_type`, `desc`, `is_change`, `is_show`, `sort`, `created_at`, `updated_at`) VALUES (13, NULL, 1, 'cursor', '鼠标特效', 'false', 'boolean', NULL, NULL, 1, 1, 6, '2024-05-20 13:14:00', '2024-05-20 13:14:00');
 COMMIT;
 
 
