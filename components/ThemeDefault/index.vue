@@ -111,9 +111,11 @@ import useAppStore from "~/stores/appStore";
 import type Article from "~/server/models/Article";
 import type Category from "~/server/models/Category";
 import { gsap } from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import type Tag from "~/server/models/Tag";
 import { getValue } from "~/common/utils/siteConfigUtil";
 import { CONFIG_KEY } from "~/common/constants";
+import Lenis from "lenis";
 
 const emits = defineEmits([
   "itemClick",
@@ -201,6 +203,16 @@ onMounted(() => {
   tl.to("#home-title-1", { duration: 1, y: 0, opacity: 1 });
   tl.to("#home-title-2", { duration: 1, y: 0, opacity: 1 }, "-=1");
   tl.to("#home-title-3", { duration: 1, y: 0, opacity: 1 }, "-=1");
+
+  const lenis = new Lenis();
+
+  console.log(ScrollTrigger);
+
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
 });
 </script>
 
