@@ -424,10 +424,16 @@ try {
 const tagList = computed(() => article.value.tagList!.split(","));
 const tagIdList = computed(() => article.value.tagIdList!.split(","));
 
-if (process.browser) {
-  if (article.value) {
-    // @ts-ignore
-    window.document.title = article.value.author + "-" + article.value.title;
+onMounted(() => {
+  if (process.browser) {
+    if (article.value) {
+      // @ts-ignore
+      window.document.title = article.value.author + "-" + article.value.title;
+    }
+    const html = document.querySelector("html");
+    if (html) {
+      html.classList.add("scrollbar-hidden");
+    }
   }
-}
+});
 </script>

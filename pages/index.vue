@@ -142,4 +142,11 @@ const handleReadMore = () => {
 };
 
 getData();
+
+onMounted(() => {
+  const html = document.querySelector("html");  
+  if (html) {
+    html.classList.add("scrollbar-hidden");
+  }
+});
 </script>
