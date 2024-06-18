@@ -238,6 +238,10 @@ html.lenis {
   padding: var(--web-vuepress-markdown-body-padding) !important;
 }
 
+.vuepress-markdown-body li {
+  list-style: disc;
+}
+
 .vuepress-markdown-body div[class*="v-md-pre-wrapper-"] {
   background-color: var(--web-bg-3);
 }
