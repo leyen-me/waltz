@@ -2,6 +2,7 @@
   <v-md-editor
     ref="editor"
     v-model="modelValue.content"
+    :tab-size="4"
     :left-toolbar
     :rightToolbar
     height="auto"
@@ -58,6 +59,7 @@ import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index
  */
 import createInfoPlugin from "./plugins/info";
 import createVideoPlugin from "./plugins/video";
+import createTabManagerPlugin from "./plugins/tab";
 
 import "prismjs/components/prism-java"
 import "prismjs/components/prism-bash"
@@ -96,6 +98,7 @@ VMdEditor.use(createHighlightLinesPlugin());
 VMdEditor.use(createCopyCodePlugin());
 VMdEditor.use(createInfoPlugin());
 VMdEditor.use(createVideoPlugin());
+VMdEditor.use(createTabManagerPlugin());
 
 const leftToolbar = ref(
   "bold clear code emoji h hr italic link ol quote strikethrough table ul tip image video redo undo save info"
