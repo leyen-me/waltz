@@ -8,10 +8,21 @@
       @click="emits('click', v)"
     >
       <div class="w-full aspect-video overflow-hidden">
-        <img
+        <!-- <img
           class="w-full h-full object-cover transition duration-300 ease-in-out group-hover:scale-110"
           :src="useImageUrl(v.cover)"
-        />
+        /> -->
+
+        <div
+          class="w-full h-full transition duration-300 ease-in-out group-hover:scale-110"
+        >
+          <t-image
+            :src="useImageUrl(v.cover)"
+            fit="cover"
+            :style="{ width: '100%', height: '100%' }"
+            :lazy="true"
+          />
+        </div>
       </div>
       <div class="text-[var(--web-color-7)] mt-10 flex">
         <span>{{ v.categoryTitle }}</span
