@@ -551,67 +551,101 @@ export default class ArticleService extends BaseService<Article> {
     const { filePath } = await defineUploadFile(file, NUXT_TEMP_FOLDER + "/");
     // 解压文件到附件
     const zip = new AdmZip(path.resolve(filePath));
-    zip.extractAllToAsync(
-      path.resolve(NUXT_PUBLIC_FOLDER as string),
-      true,
-      false,
-      async () => {
-        getAllModels().forEach(async (model: any) => {
-          // 清除表
-          // await model.destroy({
-          //   where: {},
-          // });
-
-          // 读取数据
-          const data = fs.readFileSync(
-            path.resolve(NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json")
-          );
-          const modelDatas = JSON.parse(data.toString());
-
-          for (const data of modelDatas) {
-            // 检查是否存在ID
-            if (data.id) {
-              // 如果存在ID，则尝试更新
-              const existingRecord = await model.findByPk(data.id);
-              if (existingRecord) {
-                // 如果找到现有记录，则更新它
-                await existingRecord.update(data);
-              } else {
-                // 如果未找到现有记录，则创建新记录
-                await model.create(data);
-              }
-            } else {
-              // 如果不存在ID，则创建新记录
-              await model.create(data);
-            }
+    const extractEnd = () => {
+      return new Promise((resolve, reject) => {
+        zip.extractAllToAsync(
+          path.resolve(NUXT_PUBLIC_FOLDER as string),
+          true,
+          false,
+          async () => {
+            resolve(true);
           }
-        });
+        );
+      });
+    };
 
-        // 强制更新缓存
-        await getAllSiteConfigs({ update: true });
-        // 删除上传的zip文件
-        fs.unlinkSync(filePath);
-      }
+    await extractEnd();
+    const models: any = getAllModels();
+    const data = fs.readFileSync(
+      path.resolve(NUXT_PUBLIC_FOLDER + "/" + "data.json")
     );
+    const modelDatas = JSON.parse(data.toString());
+
+    const hasTable = (tableName: string) => {
+      for (let i = 0; i < models.length; i++) {
+        let model = models[i];
+        if (model.tableName === tableName) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const getModel = (tableName: string) => {
+      for (let i = 0; i < models.length; i++) {
+        let model = models[i];
+        if (model.tableName === tableName) {
+          return model;
+        }
+      }
+      return null;
+    };
+
+    for (const tableName in modelDatas) {
+      // 如果数据库中有该表，则开始导入数据
+      const model = getModel(tableName);
+      const modelData = modelDatas[tableName];
+
+      if (!hasTable(tableName)) {
+        continue;
+      }
+
+      for (const data of modelData) {
+        // 检查是否存在ID
+        if (data.id) {
+          // 如果存在ID，则尝试更新
+          const existingRecord = await model.findByPk(data.id);
+          if (existingRecord) {
+            // 如果找到现有记录，则更新它
+            await existingRecord.update(data);
+          } else {
+            // 如果未找到现有记录，则创建新记录
+            await model.create(data);
+          }
+        } else {
+          // 如果不存在ID，则创建新记录
+          await model.create(data);
+        }
+      }
+    }
+
+    // 强制更新缓存
+    await getAllSiteConfigs({ update: true });
+    // 删除上传的zip文件
+    fs.unlinkSync(filePath);
   }
 
   async exportArticle() {
     const { NUXT_TEMP_FOLDER, NUXT_PUBLIC_FOLDER } = useRuntimeConfig().public;
     // zip
     const zipPath = path.resolve(NUXT_TEMP_FOLDER + "/" + nanoid() + ".zip");
-    defineCreateFolder(path.resolve(NUXT_TEMP_FOLDER));
+    await defineCreateFolder(path.resolve(NUXT_TEMP_FOLDER));
     fs.writeFileSync(zipPath, "");
 
-    const promises = getAllModels().map(async (model: any) => {
-      const list = (await model.findAll()).map((item: any) => item.toJSON());
-      const modelJsonPath = path.resolve(
-        NUXT_PUBLIC_FOLDER + "/" + model.tableName + ".json"
+    // modelMap
+    const modelMap: any = {};
+    const models: any = getAllModels();
+
+    for (let i = 0; i < models.length; i++) {
+      const model = models[i];
+      const tableName = model.tableName;
+      const tableData = (await model.findAll()).map((item: any) =>
+        item.toJSON()
       );
-      return fs.promises.writeFile(modelJsonPath, JSON.stringify(list));
-    });
-
-    await Promise.all(promises);
-
+      modelMap[tableName] = tableData;
+    }
+    const modelJsonPath = path.resolve(NUXT_PUBLIC_FOLDER + "/" + "data.json");
+    fs.promises.writeFile(modelJsonPath, JSON.stringify(modelMap));
     const output = fs.createWriteStream(zipPath);
     const archive = archiver("zip", { zlib: { level: 9 } });
     archive.pipe(output);
@@ -625,29 +659,23 @@ export default class ArticleService extends BaseService<Article> {
         return entry;
       }
     );
-    archive.finalize();
 
-    function wait() {
+    const archiveEnd = () => {
       return new Promise((resolve, reject) => {
-        archive.on("close", () => {
-          setTimeout(() => {
-            resolve(true);
-          }, 2000);
+        output.on("end", function () {
+          resolve(true);
         });
-        archive.on("error", (e: ArchiverError) => {
-          setTimeout(() => {
-            console.error(e);
-            reject(false);
-          }, 2000);
+
+        output.on("close", function () {
+          resolve(true);
         });
       });
-    }
-    await wait();
-    const zipFileContent = fs.readFileSync(zipPath);
+    };
 
-    // 删除导出的zip文件
-    fs.unlinkSync(zipPath);
-    return zipFileContent;
+    archive.finalize();
+    await archiveEnd();
+
+    return fs.readFileSync(zipPath);
   }
 }
 
