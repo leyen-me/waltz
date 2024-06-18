@@ -24,3 +24,6 @@ public/attachment
 public/*.json
 public/_nuxt
 !public/
+
+# lock
+pnpm-lock.yaml
