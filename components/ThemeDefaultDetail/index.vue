@@ -66,7 +66,7 @@
     </div>
 
     <!-- 上一篇下一篇 -->
-    <div class="flex justify-between mt-6 px-0 lg:px-8">
+    <div class="flex justify-between mt-6 px-0 lg:px-8" v-if="browser">
       <NuxtLink
         :to="'/blog/' + String(adjacentInfo.previouArticle.id)"
         class="hover:no-underline"
@@ -106,7 +106,7 @@
     <div
       class="mt-32 px-0 lg:px-8"
       style="--td-comp-size-xxxl: 44px; --td-comp-margin-xxl: 12px"
-      v-if="isShowComment"
+      v-if="isShowComment && browser"
     >
       <div class="flex flex-col items-end">
         <t-textarea
