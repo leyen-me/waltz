@@ -9,6 +9,7 @@ const useAppStore = defineStore("appStore", {
   state: () =>
     <
       {
+        ssr: boolean;
         dictList: DictTypeResponse[];
 
         navTree: Menu[];
@@ -22,6 +23,9 @@ const useAppStore = defineStore("appStore", {
         };
       }
     >{
+      // blog页面SSR模式
+      ssr: true,
+
       // 权限列表
       dictList: [],
       navTree: [],

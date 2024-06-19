@@ -40,10 +40,14 @@
                 <div
                   class="absolute left-full top-0 flex w-16 justify-center pt-5"
                 >
-                  <IconXmark
-                    class="!text-white"
+                  <t-button
                     @click="sidebarOpen = false"
-                  ></IconXmark>
+                    shape="square"
+                    variant="text"
+                    class="-m-2.5 p-2.5 lg:hidden"
+                  >
+                    <t-icon name="close" size="24px"></t-icon>
+                  </t-button>
                 </div>
               </TransitionChild>
               <!-- Sidebar component, swap this element with another sidebar if you like -->
@@ -69,7 +73,14 @@
     <div
       class="sticky top-0 z-40 flex items-center gap-x-6 px-4 py-4 shadow-sm sm:px-6 lg:hidden dark:bg-[var(--surface-ground)]"
     >
-      <IconMenu class="p-[2px]" @click="sidebarOpen = true"></IconMenu>
+      <t-button
+        @click="sidebarOpen = true"
+        shape="square"
+        variant="text"
+        class="-m-2.5 p-2.5 lg:hidden"
+      >
+        <t-icon name="system-3"></t-icon>
+      </t-button>
       <span truncated class="flex-1 text-sm font-semibold leading-6">
         <span class="sr-only">手机端标题</span>
       </span>

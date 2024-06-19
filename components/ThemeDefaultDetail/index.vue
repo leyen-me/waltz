@@ -1,4 +1,5 @@
 <template>
+  <!-- ssr-browser  -->
   <Header></Header>
   <div
     style="--gpt-body-width: 100%"
@@ -38,8 +39,8 @@
     <section
       class="mt-2 leading-[1.6] tracking-[0.5px] xl:leading-[1.5] text-justify px-0 lg:px-8 pt-8"
     >
-      <div v-if="!browser" v-html="article && article.content"></div>
-      <BasePreview v-else-if="article" v-model="article.content"></BasePreview>
+      <!-- <div v-if="appStore.ssr" v-html="article && article.content"></div> -->
+      <BasePreview v-model="article.content"></BasePreview>
     </section>
     <p
       v-if="article && article.tagList"
@@ -68,9 +69,9 @@
     <!-- 上一篇下一篇 -->
     <div class="flex justify-between mt-6 px-0 lg:px-8" v-if="browser">
       <NuxtLink
-        :to="'/blog/' + String(adjacentInfo.previouArticle.id)"
+        :to="'/blog/' + String(articleAdjacent.previouArticle.id)"
         class="hover:no-underline"
-        v-if="adjacentInfo.previouArticle"
+        v-if="articleAdjacent.previouArticle"
       >
         <div
           class="flex group flex-col border border-[var(--web-border-1)] border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
@@ -79,15 +80,15 @@
             >上一篇</span
           ><span
             class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--web-color-7)] transition duration-500 ease"
-            >{{ adjacentInfo.previouArticle.title }}</span
+            >{{ articleAdjacent.previouArticle.title }}</span
           >
         </div>
       </NuxtLink>
       <div v-else></div>
       <NuxtLink
-        :to="'/blog/' + String(adjacentInfo.nextArticle.id)"
+        :to="'/blog/' + String(articleAdjacent.nextArticle.id)"
         class="hover:no-underline"
-        v-if="adjacentInfo.nextArticle"
+        v-if="articleAdjacent.nextArticle"
       >
         <div
           class="flex group items-end flex-col border border-[var(--web-border-1)] border-solid p-4 rounded-md cursor-pointer hover:border-[var(--web-color-7)] transition duration-500 ease"
@@ -96,7 +97,7 @@
             >下一篇</span
           ><span
             class="w-28 xl:w-60 line-clamp-1 mt-2 group-hover:text-[var(--web-color-7)] transition duration-500 ease"
-            >{{ adjacentInfo.nextArticle.title }}</span
+            >{{ articleAdjacent.nextArticle.title }}</span
           >
         </div>
       </NuxtLink>
@@ -125,7 +126,7 @@
         </div>
       </div>
       <ThemeDefaultComment
-        :commmentList
+        :commentList
         @reply="handleCommentReply"
         @like="handleCommentLike"
         @expand="handleCommentExpand"
@@ -174,10 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  useWebArticleAdjacentApi,
-  useWebArticleInfoApi,
-} from "~/api/web/article";
+import { useWebArticleAdjacentApi } from "~/api/web/article";
 import Header from "../ThemeDefault/header.vue";
 import Footer from "../ThemeDefault/footer.vue";
 import Cursor from "../ThemeDefault/cursor.vue";
@@ -199,8 +197,34 @@ import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
+const emits = defineEmits(["loadMoreComment"])
 const props = defineProps({
-  id: {
+  article: {
+    type: Object,
+    required: true,
+  },
+  articleAdjacent: {
+    type: Object,
+    required: true,
+  },
+  commentList: {
+    type: Array,
+    required: true,
+  },
+
+  commentPage: {
+    type: Number,
+    required: true,
+  },
+  commentLimit: {
+    type: Number,
+    required: true,
+  },
+  commentTotal: {
+    type: Number,
+    required: true,
+  },
+  commentTotalPages: {
     type: Number,
     required: true,
   },
@@ -217,45 +241,6 @@ const isShowComment = ref(
 );
 
 const isShowCursor = ref(getValue(appStore.siteConfig, CONFIG_KEY.SITE.CURSOR));
-
-// 评论
-const commmentList = ref<Comment[]>([]);
-
-const commentLoading = ref(false);
-const commentPage = ref(1);
-const commentLimit = ref(defaultRowsPerPageOptions[0]);
-
-const commentTotal = ref(0);
-const commentTotalPages = ref(0);
-
-const getComment = async () => {
-  try {
-    commentLoading.value = true;
-    const _data = await useWebCommentArticlePageApi({
-      articleId: props.id,
-      page: commentPage.value,
-      limit: commentLimit.value,
-    });
-
-    _data.data.map((item) => {
-      // @ts-ignore
-      item._page = 0;
-      item._limit = defaultRowsPerPageOptions[0];
-      item._total = 0;
-      item._total_page = 0;
-      item.children = [];
-      commmentList.value.push(item);
-      return item;
-    });
-
-    commentTotal.value = _data.meta.totalItems;
-    commentTotalPages.value = _data.meta.totalPages;
-  } catch {
-    commentPage.value -= 1;
-  } finally {
-    commentLoading.value = false;
-  }
-};
 
 const getPidComment = async (item: any) => {
   try {
@@ -280,8 +265,7 @@ const getPidComment = async (item: any) => {
 };
 const replyText = ref("");
 const handleLoadMoreComment = () => {
-  commentPage.value += 1;
-  getComment();
+  emits("loadMoreComment")
 };
 const handleLoadMorePidComment = async (c: Comment) => {
   c._page += 1;
@@ -317,7 +301,7 @@ const handleCommentReplyArticle = async () => {
   replyText.value = "";
   try {
     await useWebCommentSubmitApi({
-      articleId: props.id,
+      articleId: props.article.id,
       content,
     });
     MessagePlugin.success("回复成功");
@@ -328,17 +312,17 @@ const handleCommentReplyArticle = async () => {
 };
 
 const handleCommentExpand = async (id: number) => {
-  const commment = commmentList.value.find((commment) => commment.id === id);
-  if (commment.children.length !== 0) {
-    commment.children = [];
+  const comment = props.commentList.find((comment) => comment.id === id);
+  if (comment.children.length !== 0) {
+    comment.children = [];
     return;
   }
-  if (commment) {
+  if (comment) {
     // 清空
-    commment.children = [];
+    comment.children = [];
     // 请求
-    commment._page = 1;
-    await getPidComment(commment);
+    comment._page = 1;
+    await getPidComment(comment);
   }
 };
 
@@ -347,7 +331,7 @@ const addReplyForm = ref(null);
 const addReplyVisible = ref(false);
 const addReplyFormData = ref({
   pid: 0,
-  articleId: props.id,
+  articleId: props.article.id,
   content: "",
 });
 const addReplyFormRules = ref({
@@ -357,7 +341,7 @@ const handleAddReplyShow = (id: number) => {
   validateLogin();
   addReplyFormData.value = {
     pid: id,
-    articleId: props.id,
+    articleId: props.article.id,
     content: "",
   };
   addReplyVisible.value = true;
@@ -384,71 +368,27 @@ const handleAddReplySave = async ({
   }
 };
 
-// 文章详情
-const article = ref<Article>(null);
-
-// 上一篇下一篇
-// @ts-ignore
-const adjacentInfo = ref<{
-  previouArticle: Article | null;
-  nextArticle: Article | null;
-}>({
-  previouArticle: {
-    id: 0,
-    title: "",
-  } as Article,
-  nextArticle: {
-    id: 0,
-    title: "",
-  } as Article,
-});
-
-try {
-  const articleRes = await useWebArticleInfoApi(props.id);
-  article.value = articleRes;
-
-  useWebArticleAdjacentApi(props.id, article.value.categoryId).then(
-    (adjacentRes) => {
-      adjacentInfo.value = adjacentRes;
-    }
-  );
-
-  if (isShowComment.value) {
-    getComment();
-  }
-} catch (error) {
-  console.error(error);
-  if (process.browser) {
-    router.push("/404");
-  }
-}
-
-// @ts-ignore
-const tagList = computed(() => article.value.tagList!.split(","));
-const tagIdList = computed(() => article.value.tagIdList!.split(","));
+const tagList = computed(() => props.article.tagList!.split(","));
+const tagIdList = computed(() => props.article.tagIdList!.split(","));
 
 onMounted(() => {
-  if (process.browser) {
-
-    // 修改网站标题
-    if (article.value) {
-      // @ts-ignore
-      window.document.title = article.value.author + "-" + article.value.title;
-    }
-
-    // 隐藏滚动条
-    const html = document.querySelector("html");
-    if (html) {
-      html.classList.add("scrollbar-hidden");
-    }
-
-    // 添加滚动特效
-    const lenis = new Lenis();
-    lenis.on("scroll", ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-    gsap.ticker.lagSmoothing(0);
+  // 修改网站标题
+  if (props.article) {
+    window.document.title = props.article.author + "-" + props.article.title;
   }
+
+  // 隐藏滚动条
+  const html = document.querySelector("html");
+  if (html) {
+    html.classList.add("scrollbar-hidden");
+  }
+
+  // 添加滚动特效
+  const lenis = new Lenis();
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
 });
 </script>

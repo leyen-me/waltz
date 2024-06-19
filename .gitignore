@@ -27,3 +27,6 @@ public/_nuxt
 
 # lock
 pnpm-lock.yaml
+
+# build analyze
+stats.html

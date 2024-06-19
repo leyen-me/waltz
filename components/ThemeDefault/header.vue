@@ -110,7 +110,7 @@
               }}</span>
             </div>
             <div class="w-6 h-6 text-white">
-              <IconRtArrow></IconRtArrow>
+              <t-icon name="arrow-right-up" size="24px"></t-icon>
             </div>
           </li>
         </ul>

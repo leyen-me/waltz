@@ -165,10 +165,6 @@
                 :disabled="!useHasAuth('article:update')"
                 >编辑</t-button
               >
-              <div class="mr-2"></div>
-              <IconRtArrow2
-                class="text-white group-hover:text-[var(--web-color-7)] group-hover:-rotate-45 transition duration-300 ease"
-              ></IconRtArrow2>
             </div>
           </div>
         </div>

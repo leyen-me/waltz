@@ -67,6 +67,7 @@ window.document.title =
   "Hello Nuxt!";
 
 const handleDetail = (v: any) => {
+  appStore.ssr = true;
   router.push(`/blog/${v.id}`);
 };
 
@@ -144,7 +145,7 @@ const handleReadMore = () => {
 getData();
 
 onMounted(() => {
-  const html = document.querySelector("html");  
+  const html = document.querySelector("html");
   if (html) {
     html.classList.add("scrollbar-hidden");
   }

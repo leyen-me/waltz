@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(v, k) in commmentList" :key="v.id" class="mt-8">
+  <div v-for="(v, k) in commentList" :key="v.id" class="mt-8">
     <t-comment
       avatar="https://tdesign.gtimg.com/site/avatar.jpg"
       :datetime="v.createdAt"
@@ -52,7 +52,7 @@
 
       <template #reply v-if="v.children && v.children.length !== 0">
         <ThemeDefaultComment
-          :commmentList="v.children"
+          :commentList="v.children"
           :pid="v.id"
           :level="level + 1"
           @reply="(e) => emits('reply', e)"
@@ -75,7 +75,7 @@
 <script setup lang="ts">
 const emits = defineEmits(["reply", "like", "expand", "loadMorePidComment"]);
 const props = defineProps({
-  commmentList: {
+  commentList: {
     type: Array,
     required: true,
   },

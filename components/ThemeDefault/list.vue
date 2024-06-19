@@ -68,7 +68,6 @@
               阅读
             </span>
           </div>
-          <IconRtArrow2></IconRtArrow2>
         </div>
       </div>
     </div>
