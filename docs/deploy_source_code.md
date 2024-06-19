@@ -30,8 +30,8 @@ sudo n 18.9.1
 # Build
 
 ```bash
-sudo git clone https://github.com/difffffft/walzt.git
-cd /walzt
+sudo git clone https://github.com/difffffft/waltz.git
+cd /waltz
 sudo pnpm i
 sudo pnpm build
 ```

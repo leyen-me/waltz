@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="https://github.com/difffffft/walzt.git/" target="_blank">
+  <a href="https://github.com/difffffft/waltz.git/" target="_blank">
     <img alt="TDesign Logo" height="26" src="./public/favicon.svg">
-    <span style="font-size:34px;font-weight:900;">Walzt</span>
+    <span style="font-size:34px;font-weight:900;">waltz</span>
   </a>
 </p>
 
@@ -19,7 +19,7 @@
 
 English | [简体中文](./README-zh_CN.md)
 
-Walzt is a completely open source blog system.
+waltz is a completely open source blog system.
 
 # 🎉 Features
 
@@ -43,7 +43,7 @@ mysql v5.7+
 # 📦 Installation and Usage
 
 ```shell
-git clone https://github.com/difffffft/walzt.git
+git clone https://github.com/difffffft/waltz.git
 
 pnpm i
 
@@ -69,7 +69,7 @@ You are welcome to contribute code, ask questions and make suggestions, and you 
 
 # Thanks
 
-Thank you to all the people who already contributed to `Walzt`!
+Thank you to all the people who already contributed to `waltz`!
 
 <a href="https://github.com/difffffft"><img src="https://avatars.githubusercontent.com/u/40122873?s=64&v=4" /></a>
 <a href="https://github.com/Beaumon"><img src="https://avatars.githubusercontent.com/u/61904805?s=64&v=4" /></a>

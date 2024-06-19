@@ -1,7 +1,7 @@
 <p align="center">
-  <a href="https://github.com/difffffft/walzt.git/" target="_blank">
+  <a href="https://github.com/difffffft/waltz.git/" target="_blank">
     <img alt="TDesign Logo" height="26" src="./public/favicon.svg">
-    <span style="font-size:34px;font-weight:900;">Walzt</span>
+    <span style="font-size:34px;font-weight:900;">waltz</span>
   </a>
 </p>
 
@@ -19,7 +19,7 @@
 
 [English](./README.md) | 简体中文
 
-Walzt 是一个完全开源的博客系统。
+waltz 是一个完全开源的博客系统。
 
 # 🎉 Features
 
@@ -43,7 +43,7 @@ mysql v5.7+
 # 📦 安装和使用
 
 ```shell
-git clone https://github.com/difffffft/walzt.git
+git clone https://github.com/difffffft/waltz.git
 
 pnpm i
 
@@ -69,7 +69,7 @@ pnpm run build
 
 # 感谢
 
-感谢所有已经为`Walzt`做出贡献的人！
+感谢所有已经为`waltz`做出贡献的人！
 
 <a href="https://github.com/difffffft"><img src="https://avatars.githubusercontent.com/u/40122873?s=64&v=4" /></a>
 <a href="https://github.com/Beaumon"><img src="https://avatars.githubusercontent.com/u/61904805?s=64&v=4" /></a>
