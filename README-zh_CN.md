@@ -1,7 +1,6 @@
 <p align="center">
   <a href="https://github.com/difffffft/waltz.git/" target="_blank">
-    <img alt="TDesign Logo" height="26" src="./public/favicon.svg">
-    <span style="font-size:34px;font-weight:900;">waltz</span>
+    <img alt="Waltz Logo" height="40" src="./docs/logo/logo-github.png">
   </a>
 </p>
 
