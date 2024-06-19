@@ -6,6 +6,6 @@ export default defineWrappedResponseHandler(async (event) => {
     defineHasAuthority(event, "attachment:delete")
     const { id } = await readBody(event);
 
-    await attachmentService.deleteAttachment(Number(id));
+    await attachmentService.deleteFiles(Number(id));
     return defineOk({});
 });
