@@ -105,7 +105,7 @@ const handleLogin = async ({ validateResult, firstError }: SubmitContext) => {
     try {
       const { token } = await useAdminLoginApi(formData.value);
       // 存储
-      Cookies.set("token", token);
+      Cookies.set("token", token, { expires: 365 });
       // 清除用户
       userStore.user.id = 0;
       // 回到主页

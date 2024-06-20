@@ -13,13 +13,16 @@
 import "@/utils/banner";
 import BaseLoadingIndicator from "@/components/BaseLoadingIndicator";
 
-const route = useRoute()
+const route = useRoute();
 
-// 二级以上路由不显示 
-const showLoading = computed(()=>{
-  const routeName = route.name?.toString() as string
-  return routeName.startsWith("admin") || routeName.startsWith("app")
-})
+// 二级以上路由不显示
+const showLoading = computed(() => {
+  if (!route.name) {
+    return true;
+  }
+  const routeName = route.name?.toString() as string;
+  return routeName.startsWith("admin") || routeName.startsWith("app");
+});
 
 onMounted(() => {
   document.documentElement.setAttribute("theme-mode", "dark");
