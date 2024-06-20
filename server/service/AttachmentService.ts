@@ -3,6 +3,7 @@ import { CreationAttributes } from 'sequelize';
 import Attachment from '../models/Attachment';
 import { defineUploadFile, defineValidateFile, defineGetFileExtension, defineDeleteFile, defineCreateFolder } from '../utils/fileUtil';
 import AttachmentNotFoundError from '../error/sys/attachment/AttachmentNotFoundError';
+import { nanoid } from 'nanoid';
 
 export default class AttachmentService {
 
@@ -18,17 +19,18 @@ export default class AttachmentService {
         const parentFolder = await Attachment.findByPk(attachmentData.pid);
 
         let folderPath: string;
+        let attachmentName = nanoid()
         if (parentFolder) {
-            folderPath = NUXT_API_UPLOAD_BASE + parentFolder.url + '/' + attachmentData.title;
+            folderPath = NUXT_API_UPLOAD_BASE + parentFolder.url + '/' + attachmentName;
         } else {
-            folderPath = NUXT_API_UPLOAD_BASE + '/' + attachmentData.title;
+            folderPath = NUXT_API_UPLOAD_BASE + '/' + attachmentName;
         }
 
         defineCreateFolder(folderPath);
 
         const createdFolder = await Attachment.create({
             title: attachmentData.title,
-            url: parentFolder ? parentFolder.url + '/' + attachmentData.title : '/' + attachmentData.title,
+            url: parentFolder ? parentFolder.url + '/' + attachmentName : '/' + attachmentName,
             pid: attachmentData.pid ? attachmentData.pid : 0,
             isFolder: 1,
             type: 'folder',
