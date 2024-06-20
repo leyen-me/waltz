@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 80036
  Source Host           : localhost:3306
- Source Schema         : open_nuxt_blog
+ Source Schema         : waltz
 
  Target Server Type    : MySQL
  Target Server Version : 80036
@@ -13,9 +13,9 @@
 
  Date: 20/05/2024 13:52:17
 */
-CREATE DATABASE IF NOT EXISTS open_nuxt_blog CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS waltz CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-USE open_nuxt_blog;
+USE waltz;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
