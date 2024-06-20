@@ -12,8 +12,15 @@ const props = defineProps({
   },
 });
 
-const textIndex = ref(0);
+function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 const textList = ref(props.text.split("&"));
+
+const textIndex = ref(getRandomInt(0, textList.value.length));
 const displayedText = ref("");
 
 let index = ref(0);
@@ -57,7 +64,7 @@ watch(
           if (textIndex.value >= textList.value.length - 1) {
             textIndex.value = 0;
           } else {
-            textIndex.value += 1;
+            textIndex.value += getRandomInt(0, textList.value.length);
           }
           if (t2) {
             clearInterval(t2);
@@ -70,9 +77,14 @@ watch(
 );
 
 onMounted(() => {
-  // 默认显示第一条
+  // 默认显示一条
   displayedText.value = textList.value[textIndex.value];
   index.value = textList.value[textIndex.value].length - 1;
+
+  // 小于一条就不打字了
+  if(textList.value.length <= 1){
+    return
+  }
 
   // 2秒后切换下一条
   t4 = setTimeout(() => {

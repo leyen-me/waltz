@@ -20,6 +20,10 @@
           v-else-if="v.type === 'textarea'"
           :disabled="!v.isChange"
           v-model="v.value"
+          :autosize="{
+            minRows: 3,
+            maxRows: 5,
+          }"
           clearable
         ></t-textarea>
 
